@@ -1,0 +1,7 @@
+{
+  "schemaType": "LAUNCHER",
+  "id": "launcher",
+  "displayName": "Pathpoint",
+  "description": "Monitor workflows",
+  "rootNerdletId": "home"
+}
