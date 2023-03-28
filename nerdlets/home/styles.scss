@@ -1,3 +1,7 @@
-.my-nerdlet {
-  outline: 1px solid black;
+.container {
+  display: flex;
+  height: 100%;
+  background-color: #f3f4f4;
+  gap: 8px;
+  flex-direction: column;
 }

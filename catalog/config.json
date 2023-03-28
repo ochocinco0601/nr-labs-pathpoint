@@ -1,0 +1,19 @@
+{
+  "tagline": "Project Hedgehog",
+  "repository": "https://github.com/newrelic/nr-labs-hedgehog.git",
+  "details": "Monitor workflows using New Relic service levels",
+  "categoryTerms": [],
+  "keywords": ["hedgehog", "sli"],
+  "support": {
+    "issues": {
+      "url": "https://github.com/newrelic/nr-labs-hedgehog/issues"
+    },
+    "email": {
+      "address": "opensource+nr-labs-hedgehog@newrelic.com"
+    },
+    "community": {
+      "url": "https://discuss.newrelic.com/"
+    }
+  },
+  "whatsNew": "- Version 1: unreleased\n- Pre version 1: setting up"
+}
