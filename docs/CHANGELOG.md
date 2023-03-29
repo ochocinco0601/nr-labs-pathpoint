@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.0.0...v1.1.0) (2023-03-29)
+
+
+### Features
+
+* adding an icons library component ([983e0bb](https://github.com/newrelic/nr-labs-hedgehog/commit/983e0bb305cdcdb418dc9dc67fd3482a6dd3b1bd))
+
 # 1.0.0 (2023-03-28)
 
 
