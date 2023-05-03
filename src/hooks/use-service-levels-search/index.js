@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNerdGraphQuery } from 'nr1';
 
-import { serviceLevelsSearchQuery as query } from '../queries';
+import { serviceLevelsSearchQuery as query } from '../../queries';
 
 const serviceLevelsFromData = (data) => {
   const {
