@@ -1,4 +1,2 @@
-import useFetchFlows from './useFetchFlows';
-import useServiceLevelsSearch from './useServiceLevelsSearch';
-
-export { useFetchFlows, useServiceLevelsSearch };
+export { default as useFetchFlows } from './use-fetch-flows';
+export { default as useServiceLevelsSearch } from './use-service-levels-search';
