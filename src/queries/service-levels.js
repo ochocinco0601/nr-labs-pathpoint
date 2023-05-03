@@ -32,4 +32,4 @@ const serviceLevelsSearchQuery = ngql`{
     }
   }`;
 
-export default serviceLevelsSearchQuery;
+export { serviceLevelsSearchQuery };
