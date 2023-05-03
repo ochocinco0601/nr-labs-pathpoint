@@ -1,3 +1,1 @@
-import serviceLevelsSearchQuery from './service-levels';
-
-export { serviceLevelsSearchQuery };
+export * from './service-levels';
