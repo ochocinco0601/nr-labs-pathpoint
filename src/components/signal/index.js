@@ -2,19 +2,17 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { StatusIcon } from '@newrelic/nr-labs-components';
+import { signalStatus } from '../../utils';
 
 const Signal = ({ name, attainment, target }) => {
-  const signalStatus = useMemo(() => {
-    if ((!attainment && attainment !== 0) || !target)
-      return StatusIcon.STATUSES.UNKNOWN;
-
-    if (attainment >= target) return StatusIcon.STATUSES.SUCCESS;
-    return StatusIcon.STATUSES.CRITICAL;
-  }, [attainment, target]);
+  const status = useMemo(
+    () => signalStatus({ attainment, target }),
+    [attainment, target]
+  );
 
   return (
     <div className="signal">
-      <StatusIcon status={signalStatus} />
+      <StatusIcon status={status} />
       <span className="name">{name}</span>
     </div>
   );
