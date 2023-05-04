@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.3.0...v1.4.0) (2023-05-04)
+
+
+### Features
+
+* signals list component ([064bb09](https://github.com/newrelic/nr-labs-hedgehog/commit/064bb0974be70c8a2bbf6be6233192c2761e4a78))
+
 # [1.3.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.2.0...v1.3.0) (2023-05-04)
 
 
