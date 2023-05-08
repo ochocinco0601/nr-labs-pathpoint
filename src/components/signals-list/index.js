@@ -6,8 +6,8 @@ import Signal from '../signal';
 const SignalsList = ({ signals = [] }) => {
   return (
     <div className="signals-list">
-      {signals.map(({ name, attainment, target }, i) => (
-        <Signal key={i} name={name} attainment={attainment} target={target} />
+      {signals.map((signal, i) => (
+        <Signal key={i} {...signal} />
       ))}
     </div>
   );
@@ -16,9 +16,10 @@ const SignalsList = ({ signals = [] }) => {
 SignalsList.propTypes = {
   signals: PropTypes.arrayOf(
     PropTypes.shape({
+      type: PropTypes.string,
       name: PropTypes.string,
-      attainment: PropTypes.number,
-      target: PropTypes.number,
+      attainment: PropTypes.number, // for type === service_level
+      target: PropTypes.number, // for type === service_level
     })
   ),
 };
