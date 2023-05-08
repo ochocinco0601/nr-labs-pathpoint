@@ -1,18 +1,24 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
 
+import { serviceLevelStatus } from './service-levels';
+
 const {
-  STATUSES: { UNKNOWN, CRITICAL, SUCCESS },
+  STATUSES: { UNKNOWN },
 } = StatusIcon;
 
-const signalStatus = (signal) => {
-  if (!signal) return UNKNOWN;
-
-  const { attainment, target } = signal;
-
-  if ((!attainment && attainment !== 0) || !target) return UNKNOWN;
-
-  if (attainment >= target) return SUCCESS;
-  return CRITICAL;
+export const SIGNAL_TYPES = {
+  SERVICE_LEVEL: 'service_level',
 };
 
-export { signalStatus };
+export const signalStatus = (signal) => {
+  if (!signal) return UNKNOWN;
+
+  const { type = '' } = signal;
+
+  if (type === SIGNAL_TYPES.SERVICE_LEVEL) {
+    const { attainment, target } = signal;
+    return serviceLevelStatus({ attainment, target });
+  }
+
+  return UNKNOWN;
+};
