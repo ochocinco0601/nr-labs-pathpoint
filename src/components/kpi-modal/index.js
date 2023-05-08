@@ -21,7 +21,7 @@ import {
   SimpleBillboard,
 } from '@newrelic/nr-labs-components';
 
-import { nrqlQueries } from '../../hooks/fetch-kpi-values';
+import nrqlQueries from '../../hooks/fetch-kpi-values';
 
 const KpiModal = ({
   kpi,

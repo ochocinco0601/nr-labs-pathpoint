@@ -1,41 +1,4 @@
-import { useEffect, useState } from 'react';
-import { NerdGraphQuery, useNerdGraphQuery } from 'nr1';
-
-const useFetchKpis = ({ kpis }) => {
-  console.log('### useFetchKpis: kpis: ', kpis.length);
-  const [skip, setSkip] = useState(true);
-  const [queryResults, setQueryResults] = useState([]);
-  const query = buildNrqlQuery(kpis);
-
-  const { data, error, loading } = useNerdGraphQuery({
-    skip,
-    query,
-  });
-
-  useEffect(() => {
-    if (kpis && kpis.length) setSkip(false);
-  }, [kpis]);
-
-  useEffect(() => {
-    if (error) console.error('Error fetching service levels', error);
-  }, [error]);
-
-  useEffect(() => {
-    if (data && !loading) {
-      console.log('### useFetchKpis: data size: ', JSON.stringify(data));
-      setQueryResults(
-        kpis.map((kpi, index) => {
-          return {
-            ...kpi,
-            ...mapQueryResult(data.actor[`nrql${index}`].results),
-          };
-        })
-      );
-    }
-  }, [data, loading]);
-
-  return queryResults;
-};
+import { NerdGraphQuery } from 'nr1';
 
 const buildNrqlQuery = (kpis) => {
   return (
@@ -106,4 +69,4 @@ const mapQueryResult = (result) => {
   }
 };
 
-export { useFetchKpis, nrqlQueries, mapQueryResult };
+export default nrqlQueries;
