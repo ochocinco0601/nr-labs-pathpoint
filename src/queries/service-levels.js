@@ -32,4 +32,48 @@ const serviceLevelsSearchQuery = ngql`{
     }
   }`;
 
-export { serviceLevelsSearchQuery };
+const serviceLevelEntityFragment = ngql`
+  fragment EntityFragmentExtension on ExternalEntityOutline {
+    serviceLevel {
+      indicators {
+        objectives {
+          resultQueries {
+            attainment {
+              nrql
+            }
+          }
+          target
+          timeWindow {
+            rolling {
+              count
+              unit
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const attainmentGQL = (entities = []) => ngql`{
+  actor {
+    ${
+      entities.length
+        ? entities
+            .reduce(
+              (acc, { accountId, guid, nrql }) => [
+                ...acc,
+                `
+      ${guid}: nrql(accounts: [${accountId}], query: "${nrql}") {
+        results
+      }`,
+              ],
+              []
+            )
+            .join(' ')
+        : 'user { id }'
+    }
+  }
+}`;
+
+export { serviceLevelsSearchQuery, serviceLevelEntityFragment, attainmentGQL };
