@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.0...v1.4.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* warning status for service levels; add type to signal ([bb38697](https://github.com/newrelic/nr-labs-hedgehog/commit/bb386970aa096de291db3587b60aea4c787c8253))
+
 # [1.4.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.3.0...v1.4.0) (2023-05-04)
 
 
