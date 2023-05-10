@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useRef,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -21,7 +15,7 @@ import {
   SimpleBillboard,
 } from '@newrelic/nr-labs-components';
 
-import nrqlQueries from '../../hooks/fetch-kpi-values';
+import useFetchKpis from '../../hooks/fetch-kpi-values';
 
 const KpiModal = ({
   kpi,
@@ -29,37 +23,20 @@ const KpiModal = ({
   kpiMode, // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
   showModal,
   setShowModal,
-  setModalMounted,
   updateKpiArray,
 }) => {
   const [accountId, setAccountId] = useState(
-    useContext(PlatformStateContext).accountId
+    Number(useContext(PlatformStateContext).accountId)
+      ? useContext(PlatformStateContext).accountId
+      : kpi.accountIds[0]
   );
-  if (!accountId && kpi.accountIds[0])
-    useContext(PlatformStateContext).accountId = kpi.accountIds[0];
 
   const [name, setName] = useState(
     ['edit', 'delete'].includes(kpiMode) ? kpi.name : ''
   );
   const [nrqlQuery, setNrqlQuery] = useState(
-    ['edit', 'delete'].includes(kpiMode) ? kpi.nrqlQuery : ''
-  ); // SK TODO - trigger refreshPreview() !!??
-
-  // values passed to render Perview
-  const [kpiValues, setKpiValues] = useState({
-    name: kpi.name,
-    value: '',
-    previousValue: '',
-    error: null,
-  });
-
-  // ready to run query / save kpi
-  const [previewEnabled, setPreviewEnabled] = useState(
-    Boolean(kpi.name && kpi.nrqlQuery && kpi.accountIds[0])
+    kpiMode === 'edit' ? kpi.nrqlQuery : ''
   );
-
-  // last nrql query empty or failed with error
-  const [nrqlSuccessful, setNrqlSuccessful] = useState(false);
 
   const nameRef = useRef('name');
 
@@ -68,54 +45,22 @@ const KpiModal = ({
     setNrqlQuery(kpi.nrqlQuery);
   }, [kpi]);
 
-  useEffect(() => {
-    setPreviewEnabled(Boolean(name && nrqlQuery && accountId));
-    previewEnabled &&
-      refreshPreview({ accountId: kpi.accountIds[0], query: nrqlQuery });
-  }, [name, nrqlQuery, accountId]);
-
-  const refreshPreview = useCallback(async (res) => {
-    if (!res.query) {
-      setNrqlSuccessful(false);
-      setPreviewEnabled(false);
-    } else {
-      const result = await nrqlQueries(
-        {
-          index: kpiIndex,
-          accountIds: [res.accountId],
-          nrqlQuery: res.query,
-        },
-        true // map nrql result to kpi value & previousValue
-      );
-
-      if (result.graphQLErrors) {
-        setNrqlSuccessful(false);
-        setKpiValues({
-          error: result.graphQLErrors[0].message,
-        });
-      } else {
-        setNrqlSuccessful(true);
-        setKpiValues({
-          value: (result || [])[0].value || '',
-          previousValue: (result || [])[0].previousValue || '',
-          error: null,
-        });
-      }
-      setPreviewEnabled(true);
-    }
-  }, []);
+  const hookData = useFetchKpis({
+    kpiData: [
+      {
+        index: kpiIndex,
+        accountIds: [accountId],
+        nrqlQuery: nrqlQuery,
+      },
+    ],
+  });
 
   return (
-    <Modal
-      hidden={!showModal}
-      onHideEnd={() => setModalMounted(false)}
-      onClose={() => setShowModal(false)}
-    >
+    <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
       <div className="modal-component">
         <div
           className={`${kpiMode !== 'delete' && 'modal-component-kpi-title'}`}
         ></div>
-
         <div className={`${kpiMode !== 'delete' && 'modal-component-detail'}`}>
           {kpiMode === 'delete' ? (
             <div>
@@ -136,7 +81,6 @@ const KpiModal = ({
                   />
                 </div>
               </div>
-
               <div className="modal-component-nrql-editor">
                 <NrqlEditor
                   className="test-class"
@@ -146,7 +90,6 @@ const KpiModal = ({
                   onSave={(res) => {
                     setAccountId(res.accountId);
                     setNrqlQuery(res.query);
-                    refreshPreview(res);
                   }}
                 />
               </div>
@@ -155,7 +98,7 @@ const KpiModal = ({
                   Preview:
                 </HeadingText>
               </div>
-              {!previewEnabled || kpiValues.error ? (
+              {!accountId || !nrqlQuery || hookData?.error ? (
                 <div className="modal-component-empty-state">
                   <EmptyState
                     fullWidth
@@ -164,15 +107,15 @@ const KpiModal = ({
                         .INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER
                     }
                     title={
-                      kpiValues.error ? 'Error!' : 'No preview available yet'
+                      hookData.error ? 'Error!' : 'No preview available yet'
                     }
                     description={
-                      !previewEnabled
+                      !accountId || !nrqlQuery
                         ? 'Run a query to view the preview'
-                        : kpiValues.error
+                        : hookData.error.graphQLErrors[0].message
                     }
                     type={
-                      !previewEnabled
+                      !accountId || !nrqlQuery
                         ? EmptyState.TYPE.NORMAL
                         : EmptyState.TYPE.ERROR
                     }
@@ -186,8 +129,8 @@ const KpiModal = ({
                 <div className="kpi-data">
                   <SimpleBillboard
                     metric={{
-                      value: kpiValues.value,
-                      previousValue: kpiValues.previousValue,
+                      value: (hookData?.kpis || [])[0]?.value,
+                      previousValue: (hookData?.kpis || [])[0]?.previousValue,
                       className: 'modal-component-metric-value',
                     }}
                     statusTrend={{
@@ -203,7 +146,6 @@ const KpiModal = ({
             </>
           )}
         </div>
-
         <div className="kpi-modal-button-bar">
           <Button
             className={`kpi-modal-buttons ${
@@ -216,7 +158,7 @@ const KpiModal = ({
             }
             sizeType={Button.SIZE_TYPE.LARGE}
             spacingType={[Button.SPACING_TYPE.EXTRA_LARGE]}
-            disabled={!(name && accountId && nrqlQuery && nrqlSuccessful)}
+            disabled={!(name && accountId && nrqlQuery)}
             onClick={() => {
               switch (kpiMode) {
                 case 'add':
@@ -250,7 +192,6 @@ const KpiModal = ({
               ? 'Save changes'
               : 'Delete KPI'}
           </Button>
-
           {kpiMode === 'delete' && (
             <Button
               className={`kpi-modal-buttons cancel`}
@@ -274,7 +215,6 @@ KpiModal.propTypes = {
   kpiMode: PropTypes.string,
   showModal: PropTypes.bool,
   setShowModal: PropTypes.func,
-  setModalMounted: PropTypes.func,
   updateKpiArray: PropTypes.func,
 };
 
