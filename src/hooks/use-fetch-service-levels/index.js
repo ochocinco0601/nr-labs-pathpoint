@@ -53,38 +53,14 @@ const useFetchServiceLevels = ({ guids = [] }) => {
 
   useEffect(() => {
     if (!aqLoading && aqData) {
-      const serviceLevelsWithAttainments = Object.keys(aqData).reduce(
-        (acc, guid) => {
-          if (!(guid in serviceLevels.current)) return acc;
-          const {
-            results: [res],
-          } = aqData[guid];
-          return {
-            ...acc,
-            [guid]: {
-              ...serviceLevels.current[guid],
-              attainment:
-                Object.values(res).length === 1 ? Object.values(res)[0] : 0,
-            },
-          };
-        },
-        {}
-      );
+      const slAttainments = attainmentsFromData(aqData, serviceLevels.current);
 
-      setData((d) => ({
-        ...d,
-        ...serviceLevelsWithAttainments,
+      setData((data) => ({
+        ...data,
+        ...slAttainments,
       }));
     }
   }, [aqData, aqLoading]);
-
-  /* eslint-disable no-console */
-  useEffect(() => {
-    if (slError) console.error('Error fetching service levels', slError);
-    if (aqError)
-      console.error('Error fetching service level attainments', aqError);
-  }, [slError, aqError]);
-  /* eslint-enable no-console */
 
   const batchGuids = () => {
     const index = guidsIndexMarker.current;
@@ -115,13 +91,7 @@ const useFetchServiceLevels = ({ guids = [] }) => {
     }
   };
 
-  const refetch = () => {
-    guidsIndexMarker.current = 0;
-    qryIndexMarker.current = 0;
-    batchGuids();
-  };
-
-  return { data };
+  return { data, error: slError || aqError, loading: slLoading || aqLoading };
 };
 
 const serviceLevelsFromEntities = (entities, existing) =>
@@ -161,5 +131,20 @@ const serviceLevelsFromEntities = (entities, existing) =>
     }),
     existing || {}
   );
+
+const attainmentsFromData = (data, lookup) =>
+  Object.keys(data).reduce((acc, guid) => {
+    if (!(guid in lookup)) return acc;
+    const { results: [res] = {} } = data[guid];
+    return {
+      ...acc,
+      [guid]: {
+        ...lookup[guid],
+        attainment: attainmentValue(Object.values(res)),
+      },
+    };
+  }, {});
+
+const attainmentValue = (values = []) => (values.length === 1 ? values[0] : 0);
 
 export default useFetchServiceLevels;
