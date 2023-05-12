@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.1...v1.5.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* cleaning up useFetchServiceLevels hook ([3a9f3a3](https://github.com/newrelic/nr-labs-hedgehog/commit/3a9f3a31212d1840f16fea6dc2ca713e1a59331b))
+
+
+### Features
+
+* useFetchServiceLevels hook ([e099a39](https://github.com/newrelic/nr-labs-hedgehog/commit/e099a398dd5cc259b77e264f739f5559d94aa47e))
+
 ## [1.4.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.0...v1.4.1) (2023-05-08)
 
 

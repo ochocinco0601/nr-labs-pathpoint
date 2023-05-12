@@ -32,4 +32,27 @@ const serviceLevelsSearchQuery = ngql`{
     }
   }`;
 
-export { serviceLevelsSearchQuery };
+const serviceLevelEntityFragment = ngql`
+  fragment EntityFragmentExtension on ExternalEntityOutline {
+    serviceLevel {
+      indicators {
+        objectives {
+          resultQueries {
+            attainment {
+              nrql
+            }
+          }
+          target
+          timeWindow {
+            rolling {
+              count
+              unit
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export { serviceLevelsSearchQuery, serviceLevelEntityFragment };
