@@ -55,25 +55,4 @@ const serviceLevelEntityFragment = ngql`
   }
 `;
 
-const attainmentGQL = (entities = []) => ngql`{
-  actor {
-    ${
-      entities.length
-        ? entities
-            .reduce(
-              (acc, { accountId, guid, nrql }) => [
-                ...acc,
-                `
-      ${guid}: nrql(accounts: [${accountId}], query: "${nrql}") {
-        results
-      }`,
-              ],
-              []
-            )
-            .join(' ')
-        : 'user { id }'
-    }
-  }
-}`;
-
-export { serviceLevelsSearchQuery, serviceLevelEntityFragment, attainmentGQL };
+export { serviceLevelsSearchQuery, serviceLevelEntityFragment };
