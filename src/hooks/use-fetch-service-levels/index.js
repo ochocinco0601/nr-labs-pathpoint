@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useEntitiesByGuidsQuery, useNerdGraphQuery } from 'nr1';
 
 import {
-  attainmentGQL,
+  queriesGQL,
   serviceLevelEntityFragment as entityFragmentExtension,
 } from '../../queries';
 
@@ -11,7 +11,7 @@ const MAX_ITEMS_IN_BATCH = 25;
 const useFetchServiceLevels = ({ guids = [] }) => {
   const [data, setData] = useState({});
   const [entityGuids, setEntityGuids] = useState([]);
-  const [query, setQuery] = useState(attainmentGQL());
+  const [query, setQuery] = useState(queriesGQL());
   const guidsSet = useRef(new Set([]));
   const guidsIndexMarker = useRef(0);
   const serviceLevels = useRef({});
@@ -84,17 +84,17 @@ const useFetchServiceLevels = ({ guids = [] }) => {
         ) || []
       ).map((guid) => {
         const { accountId, nrql } = serviceLevels.current[guid];
-        return { accountId, guid, nrql };
+        return { accounts: accountId, alias: guid, query: nrql };
       });
       serviceLevelsIndexMarker.current = index + slicedQueries.length;
-      setQuery(attainmentGQL(slicedQueries));
+      setQuery(queriesGQL(slicedQueries));
     }
   };
 
   return { data, error: slError || aqError, loading: slLoading || aqLoading };
 };
 
-const serviceLevelsFromEntities = (entities, existing) =>
+const serviceLevelsFromEntities = (entities = [], existing = {}) =>
   entities.reduce(
     (
       acc,
@@ -129,10 +129,10 @@ const serviceLevelsFromEntities = (entities, existing) =>
         },
       },
     }),
-    existing || {}
+    existing
   );
 
-const attainmentsFromData = (data, lookup) =>
+const attainmentsFromData = (data = {}, lookup = {}) =>
   Object.keys(data).reduce((acc, guid) => {
     if (!(guid in lookup)) return acc;
     const { results: [res] = {} } = data[guid];
