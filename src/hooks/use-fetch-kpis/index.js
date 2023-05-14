@@ -16,7 +16,7 @@ const valueFromResult = (result = {}) => {
 
 const kpisFromData = ({ actor = {} } = {}) =>
   Object.keys(actor).reduce((acc, key) => {
-    if (!key.startsWith('q')) return acc;
+    if (!key.startsWith('q') || !actor[key]) return acc;
     const index = key.substring(1);
     const { results: [first, second, ...rest] = [] } = actor[key];
     if (!rest.length) {
