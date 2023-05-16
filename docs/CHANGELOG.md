@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.5.0...v1.6.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* null actor kyes ([b091568](https://github.com/newrelic/nr-labs-hedgehog/commit/b09156854d2448b51f12c03de308e8bb2280f9eb))
+
+
+### Features
+
+* useFetchKpiValues hook ([1749fbd](https://github.com/newrelic/nr-labs-hedgehog/commit/1749fbd7ed1c65df2040c225e881797ea54e3b3a))
+
 # [1.5.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.1...v1.5.0) (2023-05-12)
 
 
