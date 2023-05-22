@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
+import Step from '../step';
 import { MODES } from '../../constants';
 import { statusFromStatuses } from '../../utils';
-import Step from '../step';
 
 const StepGroup = ({ order = 0, steps = [], mode = MODES.KIOSK }) => {
   const { statuses, elements } = useMemo(
