@@ -4,5 +4,4 @@ export { default as EditStepModal } from './edit-step-modal';
 export { default as Signal } from './signal';
 export { default as SignalsList } from './signals-list';
 export { default as Step } from './step';
-
-// export { IconsLib, NoFlows };
+export { default as StepGroup } from './step-group';

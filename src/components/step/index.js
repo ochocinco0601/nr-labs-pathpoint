@@ -2,19 +2,20 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
-import { StatusIconsLayout } from '@newrelic/nr-labs-components';
+import { StatusIcon, StatusIconsLayout } from '@newrelic/nr-labs-components';
 
 import Signal from '../signal';
-import { signalStatus } from '../../utils';
 import { MODES } from '../../constants';
 
 const Step = ({ signals = [], title = 'Step', mode = MODES.KIOSK }) => {
   const SignalsGrid = memo(
     () => (
       <StatusIconsLayout
-        statuses={signals.map((signal) => ({
-          status: signalStatus(signal),
-        }))}
+        statuses={signals.map(
+          ({ status = StatusIcon.STATUSES.UNKNOWN } = {}) => ({
+            status,
+          })
+        )}
       />
     ),
     [signals]
@@ -22,7 +23,10 @@ const Step = ({ signals = [], title = 'Step', mode = MODES.KIOSK }) => {
   SignalsGrid.displayName = 'SignalsGrid';
 
   const SignalsList = memo(
-    () => signals.map((signal, i) => <Signal key={i} {...signal} />),
+    () =>
+      signals.map(({ name, status }, i) => (
+        <Signal key={i} name={name} status={status} />
+      )),
     [signals]
   );
   SignalsList.displayName = 'SignalsList';

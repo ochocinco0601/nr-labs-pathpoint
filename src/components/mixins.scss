@@ -1,0 +1,20 @@
+@use "sass:meta";
+
+@mixin status-colors($statuses...) {
+  @each $status, $name in meta.keywords($statuses) {
+    &.#{$name} {
+      @if $status == 'critical' {
+        background-color: $critical;
+        color: #FAFBFB;
+      } @else if $status == 'success' {
+        background-color: $success;
+        color: #FAFBFB;
+      } @else if $status == 'unknown' {
+        background-color: $unknown;
+        color: #FAFBFB;
+      } @else if $status == 'warning' {
+        background-color: $warning;
+      }
+    }
+  }
+}
