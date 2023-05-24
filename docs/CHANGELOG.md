@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.7.0...v1.8.0) (2023-05-24)
+
+
+### Features
+
+* step group component ([6098a12](https://github.com/newrelic/nr-labs-hedgehog/commit/6098a120de342c6b34601f610f79a593e2a979fe))
+
 # [1.7.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.6.0...v1.7.0) (2023-05-18)
 
 
