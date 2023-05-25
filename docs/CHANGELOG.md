@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.1...v1.9.0) (2023-05-25)
+
+
+### Features
+
+* stage component ([4fad7db](https://github.com/newrelic/nr-labs-hedgehog/commit/4fad7dba4d4f599da81f1c214a30abb4dfc9f296))
+
 ## [1.8.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.0...v1.8.1) (2023-05-25)
 
 
