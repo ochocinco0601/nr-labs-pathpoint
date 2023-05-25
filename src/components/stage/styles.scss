@@ -1,0 +1,82 @@
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 270px;
+  height: calc(100vh - 90px);
+
+  .head {
+    flex: 0 0 auto;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px 4px 0px 0px;
+
+    h4 {
+      color: inherit;
+    }
+
+    @include status-colors(
+      $critical: 'critical',
+      $success: 'success',
+      $unknown: 'unknown',
+      $warning: 'warning',
+    );
+
+    &.has-source {
+      clip-path: polygon(100% 0, 100% 100%, 0% 100%, 10% 50%, 0% 0%);
+      border-radius: 0;
+    }
+
+    &.has-target {
+      clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+      border-radius: 0;
+    }
+
+    &.has-target.has-source {
+      clip-path: polygon(90% 0, 100% 50%, 90% 100%, 0% 100%, 10% 50%, 0% 0%);
+      border-radius: 0;
+    }
+  }
+
+  .body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.02), 0px 8px 16px 8px rgba(2, 3, 3, 0.05);
+    border-radius: 0px 0px 4px 4px;
+    display: flex;
+    flex-direction: column;
+
+    .section-title {
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .step-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 16px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      overflow-y: auto;
+
+      .has-signals {
+        height: 75%;
+      }
+    }
+    
+    .signals-listing {
+        height: 30%;
+        overflow-y: auto;
+        margin-bottom: 16px;
+        padding: 0 16px 16px;
+        box-sizing: border-box;
+      }
+
+    
+  }
+  
+}
