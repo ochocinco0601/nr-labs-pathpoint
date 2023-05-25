@@ -10,7 +10,7 @@ import { MODES, STATUSES } from '../../constants';
 const Step = ({
   title = 'Step',
   signals = [],
-  status = '',
+  status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
 }) => {
   const SignalsGrid = memo(
