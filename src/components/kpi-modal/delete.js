@@ -16,8 +16,7 @@ const KpiModalDeleteContent = ({
 
   return (
     <>
-      <div className=""></div>
-      <div className="">
+      <div>
         <div>
           <HeadingText type={HeadingText.TYPE.HEADING_3}>
             Are you sure you want to delete &quot;{kpi.name}&quot; KPI ?

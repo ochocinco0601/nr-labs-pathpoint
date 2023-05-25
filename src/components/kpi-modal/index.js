@@ -17,7 +17,7 @@ import { KPI_MODES } from '../../constants';
 const KpiModal = ({
   kpi = {},
   kpiIndex = 0,
-  kpiMode = 'view', // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
+  kpiMode = KPI_MODES.VIEW, // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
   showModal = false,
   setShowModal = setShowModal ? setShowModal : () => null,
   updateKpiArray = updateKpiArray ? updateKpiArray : () => null,
@@ -28,10 +28,10 @@ const KpiModal = ({
   );
 
   const [name, setName] = useState(
-    ['edit', 'delete'].includes(kpiMode) ? kpi.name : ''
+    [KPI_MODES.ADD, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
   );
   const [nrqlQuery, setNrqlQuery] = useState(
-    ['edit', 'delete'].includes(kpiMode) ? kpi.nrqlQuery : ''
+    [KPI_MODES.ADD, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
   );
 
   const [previewOk, setPreviewOk] = useState(false);
@@ -40,13 +40,13 @@ const KpiModal = ({
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
-    ['add', 'edit'].includes(kpiMode) && setName(kpi.name);
-    ['add', 'edit'].includes(kpiMode) && setNrqlQuery(kpi.nrqlQuery);
+    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setName(kpi.name);
+    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setNrqlQuery(kpi.nrqlQuery);
   }, [kpi, kpiMode]);
 
   const hookData = useFetchKpis({
     kpiData:
-      accountId && accountId !== 'cross-account' && nrqlQuery
+    Number.isInteger(accountId) && nrqlQuery
         ? [
             {
               index: kpiIndex,
@@ -59,8 +59,7 @@ const KpiModal = ({
 
   useEffect(() => {
     if (
-      accountId &&
-      accountId !== 'cross-account' &&
+      Number.isInteger(accountId) &&
       nrqlQuery &&
       !hookData?.error
     ) {
@@ -111,8 +110,7 @@ const KpiModal = ({
                     Preview:
                   </HeadingText>
                 </div>
-                {!accountId ||
-                accountId === 'cross-account' ||
+                {!Number.isInteger(accountId) ||
                 !nrqlQuery ||
                 hookData?.error ? (
                   <div className="modal-component-empty-state">

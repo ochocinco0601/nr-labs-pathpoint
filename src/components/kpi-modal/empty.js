@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { EmptyState } from 'nr1';
 
 const KpiModalEmptyState = ({ accountId, nrqlQuery, error }) => {
-  const accountValid = accountId > 0 && accountId !== 'cross-account';
+  const accountValid = Number.isInteger(accountId);
 
   const desc = !accountValid
     ? 'At least one account must be selected'
