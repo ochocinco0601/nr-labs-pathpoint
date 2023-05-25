@@ -15,45 +15,100 @@ import {
   SimpleBillboard,
 } from '@newrelic/nr-labs-components';
 
-import useFetchKpis from '../../hooks/fetch-kpi-values';
+import { useFetchKpis } from '../../hooks';
+
+const kpiEmptyState = (props) => {
+  const accountValid =
+    props.accountId > 0 && props.accountId !== 'cross-account';
+
+  const desc = !accountValid
+    ? 'At least one account must be selected'
+    : !props.nrqlQuery
+    ? 'Enter and run a query to preview the result'
+    : props.error && props.error.graphQLErrors[0].message;
+
+  return (
+    <EmptyState
+      fullWidth
+      iconType={EmptyState.ICON_TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
+      title={
+        !accountValid || !props.nrqlQuery
+          ? 'No preview available yet'
+          : 'Error!'
+      }
+      description={desc}
+      type={
+        !accountValid || !props.nrqlQuery
+          ? EmptyState.TYPE.NORMAL
+          : EmptyState.TYPE.ERROR
+      }
+      additionalInfoLink={{
+        label: 'See our NRQL reference',
+        to: 'https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/get-started/nrql-syntax-clauses-functions/',
+      }}
+    />
+  );
+};
 
 const KpiModal = ({
-  kpi,
-  kpiIndex,
-  kpiMode, // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
-  showModal,
-  setShowModal,
-  updateKpiArray,
+  kpi = {},
+  kpiIndex = 0,
+  kpiMode = 'view', // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
+  showModal = false,
+  setShowModal = setShowModal ? setShowModal : () => null,
+  updateKpiArray = updateKpiArray ? updateKpiArray : () => null,
 }) => {
+  const { accountId: platformAcctId } =
+    useContext(PlatformStateContext).accountId;
   const [accountId, setAccountId] = useState(
-    Number(useContext(PlatformStateContext).accountId)
-      ? useContext(PlatformStateContext).accountId
-      : kpi.accountIds[0]
+    platformAcctId > 0
+      ? platformAcctId
+      : kpi?.accountIds?.length
+      ? kpi.accountIds[0]
+      : ''
   );
 
   const [name, setName] = useState(
     ['edit', 'delete'].includes(kpiMode) ? kpi.name : ''
   );
   const [nrqlQuery, setNrqlQuery] = useState(
-    kpiMode === 'edit' ? kpi.nrqlQuery : ''
+    ['edit', 'delete'].includes(kpiMode) ? kpi.nrqlQuery : ''
   );
+
+  const [previewOk, setPreviewOk] = useState(false);
 
   const nameRef = useRef('name');
 
   useEffect(() => {
-    setName(kpi.name);
-    setNrqlQuery(kpi.nrqlQuery);
+    ['add', 'edit'].includes(kpiMode) && setName(kpi.name);
+    ['add', 'edit'].includes(kpiMode) && setNrqlQuery(kpi.nrqlQuery);
   }, [kpi]);
 
   const hookData = useFetchKpis({
-    kpiData: [
-      {
-        index: kpiIndex,
-        accountIds: [accountId],
-        nrqlQuery: nrqlQuery,
-      },
-    ],
+    kpiData:
+      accountId && accountId !== 'cross-account' && nrqlQuery
+        ? [
+            {
+              index: kpiIndex,
+              accountIds: [accountId],
+              nrqlQuery: nrqlQuery,
+            },
+          ]
+        : [],
   });
+
+  useEffect(() => {
+    if (
+      accountId &&
+      accountId !== 'cross-account' &&
+      nrqlQuery &&
+      !hookData?.error
+    ) {
+      setPreviewOk(true);
+    } else {
+      setPreviewOk(false);
+    }
+  }, [accountId, nrqlQuery, hookData]);
 
   return (
     <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
@@ -73,7 +128,6 @@ const KpiModal = ({
               <div className="modal-component-edit-in-place">
                 <div className="modal-component-kpi-name">
                   <EditInPlace
-                    className="test-class"
                     value={name}
                     setValue={setName}
                     ref={nameRef}
@@ -83,7 +137,6 @@ const KpiModal = ({
               </div>
               <div className="modal-component-nrql-editor">
                 <NrqlEditor
-                  className="test-class"
                   query={kpi.nrqlQuery}
                   accountId={accountId}
                   saveButtonText="Preview"
@@ -98,32 +151,16 @@ const KpiModal = ({
                   Preview:
                 </HeadingText>
               </div>
-              {!accountId || !nrqlQuery || hookData?.error ? (
+              {!accountId ||
+              accountId === 'cross-account' ||
+              !nrqlQuery ||
+              hookData?.error ? (
                 <div className="modal-component-empty-state">
-                  <EmptyState
-                    fullWidth
-                    iconType={
-                      EmptyState.ICON_TYPE
-                        .INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER
-                    }
-                    title={
-                      hookData.error ? 'Error!' : 'No preview available yet'
-                    }
-                    description={
-                      !accountId || !nrqlQuery
-                        ? 'Run a query to view the preview'
-                        : hookData.error.graphQLErrors[0].message
-                    }
-                    type={
-                      !accountId || !nrqlQuery
-                        ? EmptyState.TYPE.NORMAL
-                        : EmptyState.TYPE.ERROR
-                    }
-                    additionalInfoLink={{
-                      label: 'See our NRQL reference',
-                      to: 'https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/get-started/nrql-syntax-clauses-functions/',
-                    }}
-                  />
+                  {kpiEmptyState({
+                    accountId,
+                    nrqlQuery,
+                    error: hookData?.error,
+                  })}
                 </div>
               ) : (
                 <div className="kpi-data">
@@ -158,7 +195,7 @@ const KpiModal = ({
             }
             sizeType={Button.SIZE_TYPE.LARGE}
             spacingType={[Button.SPACING_TYPE.EXTRA_LARGE]}
-            disabled={!(name && accountId && nrqlQuery)}
+            disabled={!previewOk}
             onClick={() => {
               switch (kpiMode) {
                 case 'add':
