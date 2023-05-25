@@ -1,17 +1,23 @@
-import { StatusIcon } from '@newrelic/nr-labs-components';
-
+import { SIGNAL_TYPES, STATUSES } from '../constants';
 import { serviceLevelStatus } from './service-levels';
 
-const {
-  STATUSES: { UNKNOWN },
-} = StatusIcon;
+const statusesOrder = [
+  STATUSES.CRITICAL,
+  STATUSES.UNKNOWN,
+  STATUSES.WARNING,
+  STATUSES.SUCCESS,
+];
 
-export const SIGNAL_TYPES = {
-  SERVICE_LEVEL: 'service_level',
-};
+const statusesOrderIndexLookup = statusesOrder.reduce(
+  (acc, status, index) => ({
+    ...acc,
+    [status]: index,
+  }),
+  {}
+);
 
 export const signalStatus = (signal) => {
-  if (!signal) return UNKNOWN;
+  if (!signal) return STATUSES.UNKNOWN;
 
   const { type = '' } = signal;
 
@@ -20,5 +26,13 @@ export const signalStatus = (signal) => {
     return serviceLevelStatus({ attainment, target });
   }
 
-  return UNKNOWN;
+  return STATUSES.UNKNOWN;
+};
+
+export const statusFromStatuses = (statusesArray = []) => {
+  const valuesArray = statusesArray.map(
+    ({ status } = STATUSES.UNKNOWN) => statusesOrderIndexLookup[status] || 0
+  );
+  const leastStatusValue = valuesArray.length ? Math.min(...valuesArray) : 0;
+  return statusesOrder[leastStatusValue];
 };

@@ -1,28 +1,21 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StatusIcon } from '@newrelic/nr-labs-components';
-import { SIGNAL_TYPES, signalStatus } from '../../utils';
+import { STATUSES } from '../../constants';
 
-const Signal = ({ type = '', name, ...params }) => {
-  const status = useMemo(
-    () => signalStatus({ type, ...params }),
-    [type, params]
-  );
-
-  return (
-    <div className="signal">
+const Signal = ({ name, status = STATUSES.UNKNOWN }) => (
+  <div className="signal">
+    <div className="status">
       <StatusIcon status={status} />
-      <span className="name">{name}</span>
     </div>
-  );
-};
+    <span className="name">{name}</span>
+  </div>
+);
 
 Signal.propTypes = {
-  type: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
   name: PropTypes.string,
-  attainment: PropTypes.number, // for type === service_level
-  target: PropTypes.number, // for type === service_level
+  status: PropTypes.oneOf(Object.values(STATUSES)),
 };
 
 export default Signal;
