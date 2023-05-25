@@ -41,12 +41,13 @@ const KpiModal = ({
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
     [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setName(kpi.name);
-    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setNrqlQuery(kpi.nrqlQuery);
+    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) &&
+      setNrqlQuery(kpi.nrqlQuery);
   }, [kpi, kpiMode]);
 
   const hookData = useFetchKpis({
     kpiData:
-    Number.isInteger(accountId) && nrqlQuery
+      Number.isInteger(accountId) && nrqlQuery
         ? [
             {
               index: kpiIndex,
@@ -58,11 +59,7 @@ const KpiModal = ({
   });
 
   useEffect(() => {
-    if (
-      Number.isInteger(accountId) &&
-      nrqlQuery &&
-      !hookData?.error
-    ) {
+    if (Number.isInteger(accountId) && nrqlQuery && !hookData?.error) {
       setPreviewOk(true);
     } else {
       setPreviewOk(false);
