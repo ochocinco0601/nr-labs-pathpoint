@@ -1,44 +1,31 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Step from '../step';
-import { MODES } from '../../constants';
-import { statusFromStatuses } from '../../utils';
+import { MODES, STATUSES } from '../../constants';
 
-const StepGroup = ({ order = 0, steps = [], mode = MODES.KIOSK }) => {
-  const { statuses, elements } = useMemo(
-    () =>
-      steps.reduce(
-        (acc, { title, signals = [] }, index) => ({
-          statuses: [...acc.statuses, { status: statusFromStatuses(signals) }],
-          elements: [
-            ...acc.elements,
-            <div className="cell" key={index}>
-              <Step title={title} signals={signals} mode={mode} />
-            </div>,
-          ],
-        }),
-        { statuses: [], elements: [] }
-      ),
-    [steps, mode]
-  );
-
-  const classFromStatuses = useMemo(
-    () => (statuses?.length ? statusFromStatuses(statuses) : ''),
-    [statuses]
-  );
-
-  return (
-    <div className="step-group">
-      <div className={`order ${classFromStatuses}`}>{order}</div>
-      <div className="steps">{elements}</div>
+const StepGroup = ({
+  order = 0,
+  steps = [],
+  status = STATUSES.UNKNOWN,
+  mode = MODES.KIOSK,
+}) => (
+  <div className="step-group">
+    <div className={`order ${status}`}>{order}</div>
+    <div className="steps">
+      {steps.map(({ title, signals = [], status }, index) => (
+        <div className="cell" key={index}>
+          <Step title={title} signals={signals} status={status} mode={mode} />
+        </div>
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 StepGroup.propTypes = {
   order: PropTypes.number,
   steps: PropTypes.arrayOf(PropTypes.object),
+  status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
