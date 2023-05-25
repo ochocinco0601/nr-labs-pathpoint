@@ -2,20 +2,23 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
-import { StatusIcon, StatusIconsLayout } from '@newrelic/nr-labs-components';
+import { StatusIconsLayout } from '@newrelic/nr-labs-components';
 
 import Signal from '../signal';
-import { MODES } from '../../constants';
+import { MODES, STATUSES } from '../../constants';
 
-const Step = ({ signals = [], title = 'Step', mode = MODES.KIOSK }) => {
+const Step = ({
+  title = 'Step',
+  signals = [],
+  status = STATUSES.UNKNOWN,
+  mode = MODES.KIOSK,
+}) => {
   const SignalsGrid = memo(
     () => (
       <StatusIconsLayout
-        statuses={signals.map(
-          ({ status = StatusIcon.STATUSES.UNKNOWN } = {}) => ({
-            status,
-          })
-        )}
+        statuses={signals.map(({ status = STATUSES.UNKNOWN } = {}) => ({
+          status,
+        }))}
       />
     ),
     [signals]
@@ -32,7 +35,7 @@ const Step = ({ signals = [], title = 'Step', mode = MODES.KIOSK }) => {
   SignalsList.displayName = 'SignalsList';
 
   return (
-    <div className="step">
+    <div className={`step ${status}`}>
       <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
         {title}
       </HeadingText>
@@ -45,8 +48,9 @@ const Step = ({ signals = [], title = 'Step', mode = MODES.KIOSK }) => {
 };
 
 Step.propTypes = {
-  signals: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string,
+  signals: PropTypes.arrayOf(PropTypes.object),
+  status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
