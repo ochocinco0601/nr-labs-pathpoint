@@ -28,10 +28,10 @@ const KpiModal = ({
   );
 
   const [name, setName] = useState(
-    [KPI_MODES.ADD, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
+    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
   );
   const [nrqlQuery, setNrqlQuery] = useState(
-    [KPI_MODES.ADD, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
+    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
   );
 
   const [previewOk, setPreviewOk] = useState(false);
