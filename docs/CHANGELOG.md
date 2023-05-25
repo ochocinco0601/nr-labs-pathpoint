@@ -1,3 +1,11 @@
+## [1.8.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.0...v1.8.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* refactor to prep for stage ([1ee25a5](https://github.com/newrelic/nr-labs-hedgehog/commit/1ee25a50a3b3baa09b01d78d413eaea3bcb88e37))
+* use locally defined constant ([3a59d7a](https://github.com/newrelic/nr-labs-hedgehog/commit/3a59d7a652de972c856ae59e81157a60670b0963))
+
 # [1.8.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.7.0...v1.8.0) (2023-05-24)
 
 
