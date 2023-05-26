@@ -1,3 +1,19 @@
+# [1.10.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.9.0...v1.10.0) (2023-05-26)
+
+
+### Bug Fixes
+
+* add dependencies ([69a4f40](https://github.com/newrelic/nr-labs-hedgehog/commit/69a4f400a174fb99de94de72a50a433e0ebd4117))
+* eslint errors ([a3561a7](https://github.com/newrelic/nr-labs-hedgehog/commit/a3561a7825cc1310aaf1d0ce9ab162827e438049))
+* eslint errors ([5f5c5b0](https://github.com/newrelic/nr-labs-hedgehog/commit/5f5c5b06c950a950bcc260269a360c42e0b2cefd))
+* typo ([9bcf278](https://github.com/newrelic/nr-labs-hedgehog/commit/9bcf278e3747f76ee82ca1c62d22ebc67c385be8))
+
+
+### Features
+
+* add kpi modal component ([696627d](https://github.com/newrelic/nr-labs-hedgehog/commit/696627da836a618acea96705ce0fa29bf0e5f462))
+* add modal kpi component ([c387ac1](https://github.com/newrelic/nr-labs-hedgehog/commit/c387ac19b7340f5b6101dfded3bc8711db783142))
+
 # [1.9.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.1...v1.9.0) (2023-05-25)
 
 
