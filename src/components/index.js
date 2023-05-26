@@ -6,3 +6,4 @@ export { default as SignalsList } from './signals-list';
 export { default as Step } from './step';
 export { default as StepGroup } from './step-group';
 export { default as Stage } from './stage';
+export { default as KpiModal } from './kpi-modal';
