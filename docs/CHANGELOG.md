@@ -1,3 +1,79 @@
+# [1.10.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.9.0...v1.10.0) (2023-05-26)
+
+
+### Bug Fixes
+
+* add dependencies ([69a4f40](https://github.com/newrelic/nr-labs-hedgehog/commit/69a4f400a174fb99de94de72a50a433e0ebd4117))
+* eslint errors ([a3561a7](https://github.com/newrelic/nr-labs-hedgehog/commit/a3561a7825cc1310aaf1d0ce9ab162827e438049))
+* eslint errors ([5f5c5b0](https://github.com/newrelic/nr-labs-hedgehog/commit/5f5c5b06c950a950bcc260269a360c42e0b2cefd))
+* typo ([9bcf278](https://github.com/newrelic/nr-labs-hedgehog/commit/9bcf278e3747f76ee82ca1c62d22ebc67c385be8))
+
+
+### Features
+
+* add kpi modal component ([696627d](https://github.com/newrelic/nr-labs-hedgehog/commit/696627da836a618acea96705ce0fa29bf0e5f462))
+* add modal kpi component ([c387ac1](https://github.com/newrelic/nr-labs-hedgehog/commit/c387ac19b7340f5b6101dfded3bc8711db783142))
+
+# [1.9.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.1...v1.9.0) (2023-05-25)
+
+
+### Features
+
+* stage component ([4fad7db](https://github.com/newrelic/nr-labs-hedgehog/commit/4fad7dba4d4f599da81f1c214a30abb4dfc9f296))
+
+## [1.8.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.8.0...v1.8.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* refactor to prep for stage ([1ee25a5](https://github.com/newrelic/nr-labs-hedgehog/commit/1ee25a50a3b3baa09b01d78d413eaea3bcb88e37))
+* use locally defined constant ([3a59d7a](https://github.com/newrelic/nr-labs-hedgehog/commit/3a59d7a652de972c856ae59e81157a60670b0963))
+
+# [1.8.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.7.0...v1.8.0) (2023-05-24)
+
+
+### Features
+
+* step group component ([6098a12](https://github.com/newrelic/nr-labs-hedgehog/commit/6098a120de342c6b34601f610f79a593e2a979fe))
+
+# [1.7.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.6.0...v1.7.0) (2023-05-18)
+
+
+### Features
+
+* step component ([efae155](https://github.com/newrelic/nr-labs-hedgehog/commit/efae155f032a8e6fb7a759456227e66fd28a2186))
+
+# [1.6.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.5.0...v1.6.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* null actor kyes ([b091568](https://github.com/newrelic/nr-labs-hedgehog/commit/b09156854d2448b51f12c03de308e8bb2280f9eb))
+
+
+### Features
+
+* useFetchKpiValues hook ([1749fbd](https://github.com/newrelic/nr-labs-hedgehog/commit/1749fbd7ed1c65df2040c225e881797ea54e3b3a))
+
+# [1.5.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.1...v1.5.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* cleaning up useFetchServiceLevels hook ([3a9f3a3](https://github.com/newrelic/nr-labs-hedgehog/commit/3a9f3a31212d1840f16fea6dc2ca713e1a59331b))
+
+
+### Features
+
+* useFetchServiceLevels hook ([e099a39](https://github.com/newrelic/nr-labs-hedgehog/commit/e099a398dd5cc259b77e264f739f5559d94aa47e))
+
+## [1.4.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.4.0...v1.4.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* warning status for service levels; add type to signal ([bb38697](https://github.com/newrelic/nr-labs-hedgehog/commit/bb386970aa096de291db3587b60aea4c787c8253))
+
 # [1.4.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.3.0...v1.4.0) (2023-05-04)
 
 
