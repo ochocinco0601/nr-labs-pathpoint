@@ -7,10 +7,10 @@ import { KpiModal } from '../';
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
 import { useFetchKpis } from '../../hooks';
-import { KPI_MODES } from '../../constants';
+import { MODES, KPI_MODES } from '../../constants';
 
 const KpiBar = ({
-  nerdletMode = 'view', // valid modes: view, edit
+  mode = MODES.KIOSK, // valid modes: kiosk, list, edit
   kpiArray = [],
   setKpiArray = setKpiArray ? setKpiArray : () => null,
 }) => {
@@ -71,7 +71,7 @@ const KpiBar = ({
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
-        {nerdletMode === 'view' ? (
+        {mode !== MODES.EDIT ? (
           <div className="kpi-bar-title buttonEditModeWidth">
             <label>Critical Measures</label>
           </div>
@@ -126,7 +126,7 @@ const KpiBar = ({
 
       <div
         className={`kpi-containers ${
-          nerdletMode === 'edit'
+          mode === MODES.EDIT
             ? 'kpiBarEditModeMaxWidth'
             : 'kpiBarViewModeMaxWidth'
         }`}
@@ -144,7 +144,7 @@ const KpiBar = ({
             <div
               key={index}
               className={`kpi-container ${
-                nerdletMode === 'edit'
+                mode === MODES.EDIT
                   ? 'kpiContainerEditModeWidth'
                   : 'kpiContainerViewModeWidth'
               }`}
@@ -161,7 +161,7 @@ const KpiBar = ({
                   }}
                 />
               </div>
-              {nerdletMode === 'edit' && (
+              {mode === MODES.EDIT && (
                 <div className="kpi-buttons">
                   <Button
                     className="box-shadow"
@@ -198,7 +198,7 @@ const KpiBar = ({
 };
 
 KpiBar.propTypes = {
-  nerdletMode: PropTypes.string,
+  mode: PropTypes.oneOf(Object.values(MODES)),
   kpiArray: PropTypes.object,
   setKpiArray: PropTypes.func,
 };
