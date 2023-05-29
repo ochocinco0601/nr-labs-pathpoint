@@ -1,206 +1,156 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
-import { EmptyState, PlatformStateContext, Button } from 'nr1';
+import { Button, HeadingText, PlatformStateContext } from 'nr1';
 
-import { KpiModal } from '../';
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
+import { KPI_MODES, MODES, SIGNAL_TYPES } from '../../constants';
 import { useFetchKpis } from '../../hooks';
-import { MODES, KPI_MODES } from '../../constants';
+import KpiEditButtons from './edit-buttons';
+import KpiModal from '../kpi-modal';
 
-const KpiBar = ({
-  mode = MODES.KIOSK, // valid modes: kiosk, list, edit
-  kpiArray = [],
-  setKpiArray = setKpiArray ? setKpiArray : () => null,
-}) => {
+const blankKpi = ({
+  type = SIGNAL_TYPES.NRQL_QUERY,
+  id = -1,
+  name = '',
+  accountIds = [],
+  nrqlQuery = '',
+}) => ({
+  type,
+  id,
+  name,
+  accountIds,
+  nrqlQuery,
+});
+
+const metricFromQuery = (results, index) => ({
+  value: ((results || [])[index] || {}).value || 0,
+  previousValue: ((results || [])[index] || {}).previousValue || '',
+});
+
+const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
   const { accountId } = useContext(PlatformStateContext);
-
   const [showModal, setShowModal] = useState(false);
-  const [currentKpi, setCurrentKpi] = useState({});
-  const [kpiMode, setKpiMode] = useState(KPI_MODES.VIEW);
-  const [kpiIndex, setKpiIndex] = useState(-1);
-
-  useEffect(() => {
-    if (kpiMode === KPI_MODES.VIEW) {
-      updateKpis(kpiArray);
-    }
-  }, [kpiMode]);
-
   const [queryResults, setQueryResults] = useState([]);
-
-  const hookData = useFetchKpis({ kpiData: kpiArray });
+  const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis });
+  const selectedKpi = useRef({});
+  const selectedKpiIndex = useRef(-1);
+  const selectedKpiMode = useRef(KPI_MODES.VIEW);
 
   useEffect(() => {
-    if (hookData.kpis && hookData.kpis.length) {
-      setQueryResults(hookData.kpis);
-    }
-  }, [hookData]);
-
-  const updateKpis = useCallback((updatedKpiArray) => {
-    setKpiIndex(-1);
+    selectedKpi.current = {};
+    selectedKpiIndex.current = -1;
+    selectedKpiMode.current = KPI_MODES.VIEW;
     setShowModal(false);
-    setKpiMode(KPI_MODES.VIEW);
-    setKpiArray(updatedKpiArray);
-  });
+  }, [kpis]);
 
-  const deleteKpi = useCallback((index) => {
-    updateKpis(kpiArray.filter((_, i) => i !== index));
-  });
+  useEffect(() => setQueryResults(qryResults), [qryResults]);
 
-  const updateKpi = useCallback((updatedKpi, kpiIndex) => {
-    const newKpis = kpiArray.map((k, i) => {
-      if (i === kpiIndex) {
-        return { ...k, ...updatedKpi };
-      } else {
-        return k;
-      }
+  const modeClassText = useMemo(
+    () => (mode === MODES.EDIT ? 'Edit' : 'View'),
+    [mode]
+  );
+
+  const createKpiHandler = useCallback(() => {
+    selectedKpi.current = blankKpi({
+      id: kpis.length,
+      accountIds: [accountId],
     });
-    updateKpis(newKpis);
-  });
+    selectedKpiIndex.current = kpis.length;
+    selectedKpiMode.current = KPI_MODES.ADD;
+    setShowModal(true);
+  }, [kpis, accountId]);
 
-  const addNewKpi = useCallback(
-    (currentKpi) => {
-      currentKpi.accountIds = [Number(currentKpi.accountIds)];
-      const newKpiArray = [...kpiArray, currentKpi];
-      updateKpis(newKpiArray);
+  const updateKpiHandler = useCallback(
+    (updatedKpi) => {
+      if (!onChange) return;
+      const kpiIndex = selectedKpiIndex.current;
+      const kpiMode = selectedKpiMode.current;
+      if (kpiMode === KPI_MODES.ADD) {
+        const type = SIGNAL_TYPES.NRQL_QUERY;
+        onChange([...kpis, { ...updatedKpi, type }]);
+      } else if (kpiMode === KPI_MODES.EDIT) {
+        onChange(kpis.map((k, i) => (i === kpiIndex ? updatedKpi : k)));
+      } else if (kpiMode === KPI_MODES.DELETE) {
+        onChange(kpis.filter((_, i) => i !== kpiIndex));
+      }
     },
-    [kpiArray]
+    [kpis, onChange]
+  );
+
+  const editButtonsClickHandler = useCallback(
+    (index, editType) => {
+      selectedKpi.current = kpis[index];
+      selectedKpiIndex.current = index;
+      selectedKpiMode.current = editType;
+      setShowModal(true);
+    },
+    [kpis]
   );
 
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
-        {mode !== MODES.EDIT ? (
-          <div className="kpi-bar-title buttonEditModeWidth">
-            <label>Critical Measures</label>
-          </div>
-        ) : (
-          <div>
-            <div className="kpi-bar-edit-mode-title buttonEditModeWidth">
-              <label>Critical Measures</label>
-            </div>
-            <div className="kpi-bar-add-button">
-              <Button
-                type={Button.TYPE.SECONDARY}
-                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-                sizeType={Button.SIZE_TYPE.LARGE}
-                onClick={() => {
-                  setKpiIndex(kpiArray.length); // new kpiArray bucket being added
-                  setCurrentKpi({
-                    id: kpiArray.length
-                      ? kpiArray[kpiArray.length - 1].id + 1
-                      : 0,
-                    accountIds: [accountId],
-                    name: '',
-                    nrqlQuery: '',
-                  });
-                  setKpiMode(KPI_MODES.ADD);
-                  setShowModal(true);
-                }}
-              >
-                Create new KPI
-              </Button>
-            </div>
-            <div id="kpi-modal">
-              {kpiMode !== KPI_MODES.VIEW && (
-                <KpiModal
-                  kpi={currentKpi}
-                  kpiIndex={kpiIndex}
-                  kpiMode={kpiMode} // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                  updateKpiArray={
-                    kpiMode === KPI_MODES.ADD
-                      ? addNewKpi
-                      : kpiMode === KPI_MODES.EDIT
-                      ? updateKpi
-                      : deleteKpi
-                  }
-                />
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div
-        className={`kpi-containers ${
-          mode === MODES.EDIT
-            ? 'kpiBarEditModeMaxWidth'
-            : 'kpiBarViewModeMaxWidth'
-        }`}
-      >
-        {!kpiArray || !kpiArray.length ? (
-          <div className="empty-state-component">
-            <EmptyState
-              fullWidth
-              title="No KPIs available"
-              type={EmptyState.TYPE.NORMAL}
-            />
-          </div>
-        ) : (
-          kpiArray.map((kpi, index) => (
-            <div
-              key={index}
-              className={`kpi-container ${
-                mode === MODES.EDIT
-                  ? 'kpiContainerEditModeWidth'
-                  : 'kpiContainerViewModeWidth'
-              }`}
+        <div className="kpi-bar-edit-mode-title buttonEditModeWidth">
+          <HeadingText type={HeadingText.TYPE.HEADING_3}>
+            Critical Measures
+          </HeadingText>
+        </div>
+        {mode === MODES.EDIT ? (
+          <div className="kpi-bar-add-button">
+            <Button
+              type={Button.TYPE.SECONDARY}
+              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+              sizeType={Button.SIZE_TYPE.LARGE}
+              onClick={createKpiHandler}
             >
-              <div className="kpi-data">
-                <SimpleBillboard
-                  metric={{
-                    value: ((queryResults || [])[index] || {}).value || 0,
-                    previousValue:
-                      ((queryResults || [])[index] || {}).previousValue || '',
-                  }}
-                  title={{
-                    name: kpi.name,
-                  }}
-                />
-              </div>
-              {mode === MODES.EDIT && (
-                <div className="kpi-buttons">
-                  <Button
-                    className="box-shadow"
-                    type={Button.TYPE.SECONDARY}
-                    iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__CLOSE}
-                    sizeType={Button.SIZE_TYPE.SMALL}
-                    onClick={() => {
-                      setKpiIndex(index); // kpi array bucket being deleted
-                      setCurrentKpi(kpi);
-                      setKpiMode(KPI_MODES.DELETE);
-                      setShowModal(true);
-                    }}
-                  />
-                  <Button
-                    className="box-shadow"
-                    type={Button.TYPE.SECONDARY}
-                    iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EDIT}
-                    sizeType={Button.SIZE_TYPE.SMALL}
-                    onClick={() => {
-                      setKpiIndex(index); // kpiArray bucket being edited
-                      setCurrentKpi(kpi);
-                      setKpiMode(KPI_MODES.EDIT);
-                      setShowModal(true);
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          ))
-        )}
+              Create new KPI
+            </Button>
+          </div>
+        ) : null}
       </div>
+      <div className={`kpi-containers kpiBar${modeClassText}ModeMaxWidth`}>
+        {kpis.map((kpi, index) => (
+          <div
+            key={index}
+            className={`kpi-container kpiContainer${modeClassText}ModeWidth`}
+          >
+            <div className="kpi-data">
+              <SimpleBillboard
+                metric={metricFromQuery(queryResults, index)}
+                title={{ name: kpi.name }}
+              />
+            </div>
+            {mode === MODES.EDIT && (
+              <KpiEditButtons index={index} onClick={editButtonsClickHandler} />
+            )}
+          </div>
+        ))}
+      </div>
+      <KpiModal
+        kpi={selectedKpi.current}
+        kpiIndex={selectedKpiIndex.current}
+        kpiMode={selectedKpiMode.current}
+        showModal={showModal}
+        setShowModal={setShowModal}
+        updateKpiArray={updateKpiHandler}
+      />
     </div>
   );
 };
 
 KpiBar.propTypes = {
+  kpis: PropTypes.array,
+  onChange: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
-  kpiArray: PropTypes.object,
-  setKpiArray: PropTypes.func,
 };
 
 export default KpiBar;
