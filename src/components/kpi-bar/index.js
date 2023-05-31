@@ -59,6 +59,11 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
     [mode]
   );
 
+  const modeHeadingText = useMemo(
+    () => (mode === MODES.EDIT ? 'HEADING_4' : 'HEADING_3'),
+    [mode]
+  );
+
   const createKpiHandler = useCallback(() => {
     selectedKpi.current = blankKpi({
       id: kpis.length,
@@ -99,8 +104,8 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
-        <div className="kpi-bar-edit-mode-title buttonEditModeWidth">
-          <HeadingText type={HeadingText.TYPE.HEADING_3}>
+        <div className={`heading${modeClassText}ModeWidth`}>
+          <HeadingText type={HeadingText.TYPE[modeHeadingText]}>
             Critical Measures
           </HeadingText>
         </div>
