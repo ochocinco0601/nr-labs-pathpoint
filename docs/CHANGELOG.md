@@ -1,3 +1,11 @@
+# [1.11.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.10.0...v1.11.0) (2023-05-31)
+
+
+### Features
+
+* add kpi bar component ([d7df53c](https://github.com/newrelic/nr-labs-hedgehog/commit/d7df53c18ed4c3752436b0f7ac5883e4ce671649))
+* add kpi-bar ([7bfe9c7](https://github.com/newrelic/nr-labs-hedgehog/commit/7bfe9c70568cad088d34bfbffa62d2bb42938f0f))
+
 # [1.10.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.9.0...v1.10.0) (2023-05-26)
 
 
