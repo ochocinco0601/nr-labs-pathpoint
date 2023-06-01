@@ -135,7 +135,7 @@ const serviceLevelsFromEntities = (entities = [], existing = {}) =>
 const attainmentsFromData = (data = {}, lookup = {}) =>
   Object.keys(data).reduce((acc, guid) => {
     if (!(guid in lookup)) return acc;
-    const { results: [res] = {} } = data[guid];
+    const { results: [res] = {} } = data[guid] || {};
     return {
       ...acc,
       [guid]: {
