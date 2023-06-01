@@ -114,7 +114,6 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
             <Button
               type={Button.TYPE.SECONDARY}
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-              sizeType={Button.SIZE_TYPE.LARGE}
               onClick={createKpiHandler}
             >
               Create new KPI

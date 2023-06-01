@@ -24,6 +24,8 @@ $kpiContainerEditModeWidth: 140px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 0.25rem;
+    margin-left: 1.125rem;
 
     .headingViewModeWidth {
       width: $headingViewModeWidth;
