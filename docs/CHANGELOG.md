@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.11.0...v1.12.0) (2023-06-01)
+
+
+### Features
+
+* uuid util ([fb053f0](https://github.com/newrelic/nr-labs-hedgehog/commit/fb053f0fcfe9ba6dec9b56f457a7795c6b2c77e9))
+
 # [1.11.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.10.0...v1.11.0) (2023-05-31)
 
 
