@@ -3,20 +3,25 @@ import { useAccountStorageQuery } from 'nr1';
 
 import { NERD_STORAGE } from '../../constants';
 
-const useFetchFlows = ({ accountId }) => {
+const useFlowLoader = ({ accountId, flowId }) => {
   const [skip, setSkip] = useState(true);
+  const [flows, setFlows] = useState([]);
   const { data, error, loading } = useAccountStorageQuery({
     skip,
     accountId,
-    collection: NERD_STORAGE.COLLECTION,
-    documentId: NERD_STORAGE.DOCUMENTS.FLOWS,
+    collection: NERD_STORAGE.FLOWS_COLLECTION,
+    documentId: flowId,
   });
 
   useEffect(() => {
     if (accountId) setSkip(false);
   }, [accountId]);
 
-  return { data, error, loading };
+  useEffect(() => {
+    if (!loading && data) setFlows(data);
+  }, [data, loading]);
+
+  return { flows, error };
 };
 
-export default useFetchFlows;
+export default useFlowLoader;
