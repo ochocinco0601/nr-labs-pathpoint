@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.12.0...v1.12.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* adding checks for results ([dce561c](https://github.com/newrelic/nr-labs-hedgehog/commit/dce561c5020f11200f2eeb976df688f0229c6ee2))
+
 # [1.12.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.11.0...v1.12.0) (2023-06-01)
 
 
