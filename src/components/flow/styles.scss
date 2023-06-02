@@ -1,10 +1,11 @@
 .flow {
-  max-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 
   .header-bar {
+    flex: 0;
     box-sizing: border-box;
     background: #FFFFFF;
     border-bottom: 1px solid #E7E9EA;
@@ -19,11 +20,13 @@
   }
 
   .stages {
+    flex: 1;
     box-sizing: border-box;
     display: flex;
     gap: 8px;
     padding: 24px 24px 8px;
     background: #FFFFFF;
+    height: calc(100vh - 135px);
   }
 
 }

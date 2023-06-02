@@ -1,11 +1,12 @@
 .stage {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 270px;
-  height: calc(100vh - 135px);
 
   .head {
+    box-sizing: border-box;
     flex: 0 0 auto;
     height: 55px;
     display: flex;
@@ -41,6 +42,7 @@
   }
 
   .body {
+    box-sizing: border-box;
     flex: 1 1 auto;
     overflow-y: auto;
     background: #FFFFFF;

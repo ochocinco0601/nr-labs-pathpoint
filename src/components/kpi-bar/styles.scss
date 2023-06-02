@@ -6,6 +6,7 @@ $kpiContainerViewModeWidth: 115px;
 $kpiContainerEditModeWidth: 140px;
 
 .kpi-bar {
+  flex: 0;
   box-sizing: border-box;
   display: flex;
   align-items: center;
