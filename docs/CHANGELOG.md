@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.12.1...v1.13.0) (2023-06-02)
+
+
+### Features
+
+* useFlowLoader hook (replaces useFetchFlows hook) ([f2ac4c0](https://github.com/newrelic/nr-labs-hedgehog/commit/f2ac4c062e818631d6f535e16be021c259a485de))
+
 ## [1.12.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.12.0...v1.12.1) (2023-06-01)
 
 
