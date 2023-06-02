@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.13.0...v1.14.0) (2023-06-02)
+
+
+### Features
+
+* flow component ([6400dc0](https://github.com/newrelic/nr-labs-hedgehog/commit/6400dc0a6997314722b5db6d3fdd77bc40d1d847))
+
 # [1.13.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.12.1...v1.13.0) (2023-06-02)
 
 
