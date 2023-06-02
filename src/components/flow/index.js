@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText, Icon, useAccountStorageMutation } from 'nr1';
+import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import { KpiBar, Stage } from '../';
 import { MODES, NERD_STORAGE, STATUSES } from '../../constants';
@@ -74,6 +75,18 @@ const Flow = ({
     if (updateFlowError) console.error('Error updating flow', updateFlowError);
   }, [updateFlowError]);
 
+  const saveFlowNameHandler = useCallback(
+    (name) =>
+      updateFlow({
+        documentId: flow.id,
+        document: {
+          ...flow,
+          name,
+        },
+      }),
+    []
+  );
+
   return (
     <div className="flow">
       <div className="header-bar">
@@ -81,7 +94,11 @@ const Flow = ({
           <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_LEFT} />
         </div>
         <HeadingText type={HeadingText.TYPE.HEADING_4}>
-          {flow?.name}
+          {mode === MODES.EDIT ? (
+            <EditInPlace value={flow?.name} setValue={saveFlowNameHandler} />
+          ) : (
+            flow?.name
+          )}
         </HeadingText>
       </div>
       <div className="stages">
