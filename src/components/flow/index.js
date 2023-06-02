@@ -33,13 +33,13 @@ const Flow = ({
     });
 
   useEffect(() => {
-    if (!flow) return;
+    if (!Object.keys(flow)?.length) return;
     setGuids(uniqueGuidsInStages(flow.stages));
     setKpis(flow.kpis || []);
   }, [flow]);
 
   useEffect(() => {
-    if (Object.keys(serviceLevelsData).length) {
+    if (Object.keys(serviceLevelsData)?.length) {
       const stagesWithSLData = addSignalStatuses(
         flow.stages,
         serviceLevelsData
