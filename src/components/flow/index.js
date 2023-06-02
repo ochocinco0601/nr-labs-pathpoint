@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText, Icon, useAccountStorageMutation } from 'nr1';
+import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import { KpiBar, Stage } from '../';
 import { MODES, NERD_STORAGE, STATUSES } from '../../constants';
@@ -32,13 +33,13 @@ const Flow = ({
     });
 
   useEffect(() => {
-    if (!flow) return;
+    if (!Object.keys(flow)?.length) return;
     setGuids(uniqueGuidsInStages(flow.stages));
     setKpis(flow.kpis || []);
   }, [flow]);
 
   useEffect(() => {
-    if (Object.keys(serviceLevelsData).length) {
+    if (Object.keys(serviceLevelsData)?.length) {
       const stagesWithSLData = addSignalStatuses(
         flow.stages,
         serviceLevelsData
@@ -52,13 +53,13 @@ const Flow = ({
       console.error('Error fetching service levels', serviceLevelsError);
   }, [serviceLevelsError]);
 
-  const updateKpisHandler = useCallback(
-    (updatedKpis) =>
+  const flowUpdateHandler = useCallback(
+    (updates = {}) =>
       updateFlow({
         documentId: flow.id,
         document: {
           ...flow,
-          kpis: updatedKpis,
+          ...updates,
         },
       }),
     [flow]
@@ -74,6 +75,11 @@ const Flow = ({
     if (updateFlowError) console.error('Error updating flow', updateFlowError);
   }, [updateFlowError]);
 
+  const updateKpisHandler = (updatedKpis) =>
+    flowUpdateHandler({ kpis: updatedKpis });
+
+  const saveFlowNameHandler = (name) => flowUpdateHandler({ name });
+
   return (
     <div className="flow">
       <div className="header-bar">
@@ -81,7 +87,11 @@ const Flow = ({
           <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_LEFT} />
         </div>
         <HeadingText type={HeadingText.TYPE.HEADING_4}>
-          {flow?.name}
+          {mode === MODES.EDIT ? (
+            <EditInPlace value={flow?.name} setValue={saveFlowNameHandler} />
+          ) : (
+            flow?.name
+          )}
         </HeadingText>
       </div>
       <div className="stages">
