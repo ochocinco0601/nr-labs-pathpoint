@@ -6,7 +6,11 @@ import { HeadingText, Icon, useAccountStorageMutation } from 'nr1';
 import { KpiBar, Stage } from '../';
 import { MODES, NERD_STORAGE, STATUSES } from '../../constants';
 import { useFetchServiceLevels } from '../../hooks';
-import { annotateStageWithStatuses, signalStatus } from '../../utils';
+import {
+  addSignalStatuses,
+  annotateStageWithStatuses,
+  uniqueGuidsInStages,
+} from '../../utils';
 
 const Flow = ({
   flow = {},
@@ -28,41 +32,18 @@ const Flow = ({
     });
 
   useEffect(() => {
-    const guidsSet = new Set();
-    (flow?.stages || []).map(({ stepGroups }) =>
-      stepGroups.map(({ steps }) =>
-        steps.map(({ signals }) =>
-          signals.map(({ guid }) => guidsSet.add(guid))
-        )
-      )
-    );
-    setGuids([...guidsSet]);
-    setKpis(flow?.kpis || []);
+    if (!flow) return;
+    setGuids(uniqueGuidsInStages(flow.stages));
+    setKpis(flow.kpis || []);
   }, [flow]);
 
   useEffect(() => {
     if (Object.keys(serviceLevelsData).length) {
-      const stagesWithSignalsData = flow.stages.map(({ name, stepGroups }) => ({
-        name,
-        stepGroups: stepGroups.map(({ order, steps }) => ({
-          order,
-          steps: steps.map(({ title, signals }) => ({
-            title,
-            signals: signals.map(({ type, guid }) => {
-              const { name, attainment, target } = serviceLevelsData[guid];
-              return {
-                type,
-                guid,
-                name,
-                attainment,
-                target,
-                status: signalStatus({ type, attainment, target }),
-              };
-            }),
-          })),
-        })),
-      }));
-      setStages(stagesWithSignalsData.map(annotateStageWithStatuses));
+      const stagesWithSLData = addSignalStatuses(
+        flow.stages,
+        serviceLevelsData
+      );
+      setStages(stagesWithSLData.map(annotateStageWithStatuses));
     }
   }, [serviceLevelsData]);
 

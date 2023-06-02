@@ -1,4 +1,26 @@
-import { statusFromStatuses } from './signal';
+import { signalStatus, statusFromStatuses } from './signal';
+
+export const addSignalStatuses = (stages = [], serviceLevelsData = {}) =>
+  stages.map(({ name, stepGroups }) => ({
+    name,
+    stepGroups: stepGroups.map(({ order, steps }) => ({
+      order,
+      steps: steps.map(({ title, signals }) => ({
+        title,
+        signals: signals.map(({ type, guid }) => {
+          const { name, attainment, target } = serviceLevelsData[guid];
+          return {
+            type,
+            guid,
+            name,
+            attainment,
+            target,
+            status: signalStatus({ type, attainment, target }),
+          };
+        }),
+      })),
+    })),
+  }));
 
 export const annotateStageWithStatuses = (stage) => {
   const { stepGroups, stepGroupStatuses } = stage.stepGroups.reduce(
@@ -25,4 +47,14 @@ export const annotateStageWithStatuses = (stage) => {
   );
   const status = statusFromStatuses(stepGroupStatuses);
   return { ...stage, stepGroups, status };
+};
+
+export const uniqueGuidsInStages = (stages = []) => {
+  const guidsSet = new Set();
+  stages.map(({ stepGroups }) =>
+    stepGroups.map(({ steps }) =>
+      steps.map(({ signals }) => signals.map(({ guid }) => guidsSet.add(guid)))
+    )
+  );
+  return [...guidsSet];
 };
