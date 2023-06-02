@@ -1,14 +1,33 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { Icon, nerdlet, PlatformStateContext } from 'nr1';
+import {
+  Icon,
+  nerdlet,
+  PlatformStateContext,
+  useAccountStorageMutation,
+} from 'nr1';
 
 import { NoFlows } from '../../src/components';
 import { useFlowLoader } from '../../src/hooks';
+import { NERD_STORAGE } from '../../src/constants';
+import { uuid } from '../../src/utils';
 
 const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const { accountId } = useContext(PlatformStateContext);
   const { flows: flowsData, error: flowsError } = useFlowLoader({ accountId });
+  const [createFlow, { error: createFlowError }] = useAccountStorageMutation({
+    actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+    collection: NERD_STORAGE.FLOWS_COLLECTION,
+    accountId: accountId,
+  });
+  const newFlowId = useRef();
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -28,6 +47,11 @@ const HomeNerdlet = () => {
 
   useEffect(() => {
     setFlows(flowsData || []);
+    if (newFlowId.current) {
+      // TODO: set current flow
+      // const index = flowsData.findIndex((f) => f.id === newFlowId.current);
+      newFlowId.current = null;
+    }
   }, [flowsData]);
 
   useEffect(() => {
@@ -35,8 +59,23 @@ const HomeNerdlet = () => {
   }, [flowsError]);
 
   const newFlowHandler = useCallback(() => {
-    // TODO: handle creation of new flows
-  });
+    const id = uuid();
+    newFlowId.current = id;
+    createFlow({
+      documentId: id,
+      document: {
+        id,
+        name: 'Untitled',
+        stages: [],
+        kpis: [],
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (createFlowError)
+      console.error('Error creating new flow', createFlowError);
+  }, [createFlowError]);
 
   return (
     <div className="container">
