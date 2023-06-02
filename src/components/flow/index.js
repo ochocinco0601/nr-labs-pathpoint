@@ -53,13 +53,13 @@ const Flow = ({
       console.error('Error fetching service levels', serviceLevelsError);
   }, [serviceLevelsError]);
 
-  const updateKpisHandler = useCallback(
-    (updatedKpis) =>
+  const flowUpdateHandler = useCallback(
+    (updates = {}) =>
       updateFlow({
         documentId: flow.id,
         document: {
           ...flow,
-          kpis: updatedKpis,
+          ...updates,
         },
       }),
     [flow]
@@ -75,17 +75,10 @@ const Flow = ({
     if (updateFlowError) console.error('Error updating flow', updateFlowError);
   }, [updateFlowError]);
 
-  const saveFlowNameHandler = useCallback(
-    (name) =>
-      updateFlow({
-        documentId: flow.id,
-        document: {
-          ...flow,
-          name,
-        },
-      }),
-    []
-  );
+  const updateKpisHandler = (updatedKpis) =>
+    flowUpdateHandler({ kpis: updatedKpis });
+
+  const saveFlowNameHandler = (name) => flowUpdateHandler({ name });
 
   return (
     <div className="flow">
