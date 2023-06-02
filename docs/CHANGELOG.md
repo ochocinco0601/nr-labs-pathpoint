@@ -1,3 +1,17 @@
+# [1.15.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.14.0...v1.15.0) (2023-06-02)
+
+
+### Bug Fixes
+
+* minor updates to how objects are checked for emptiness ([d23d014](https://github.com/newrelic/nr-labs-hedgehog/commit/d23d014362495df0961abeb094358addfcce9579))
+
+
+### Features
+
+* created flowUpdateHandler callback ([4c83c65](https://github.com/newrelic/nr-labs-hedgehog/commit/4c83c65b78663aa7d94e7998545060388eafe18f))
+* edit mode for flow ([1c5becd](https://github.com/newrelic/nr-labs-hedgehog/commit/1c5becdbc9608898b4a15124182b23dc7280edbd))
+* set up newFlowHandler callback ([3d99599](https://github.com/newrelic/nr-labs-hedgehog/commit/3d995990a35102909a64043f8e63f24e242e61af))
+
 # [1.14.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.13.0...v1.14.0) (2023-06-02)
 
 
