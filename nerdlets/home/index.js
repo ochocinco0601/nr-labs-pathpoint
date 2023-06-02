@@ -3,12 +3,12 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Icon, nerdlet, PlatformStateContext } from 'nr1';
 
 import { NoFlows } from '../../src/components';
-import { useFetchFlows } from '../../src/hooks';
+import { useFlowLoader } from '../../src/hooks';
 
 const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const { accountId } = useContext(PlatformStateContext);
-  const { data: flowsData, error: flowsError } = useFetchFlows({ accountId });
+  const { flows: flowsData, error: flowsError } = useFlowLoader({ accountId });
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -27,7 +27,6 @@ const HomeNerdlet = () => {
   }, []);
 
   useEffect(() => {
-    // TODO: set flows
     setFlows(flowsData || []);
   }, [flowsData]);
 
