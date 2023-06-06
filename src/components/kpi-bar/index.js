@@ -36,7 +36,7 @@ const metricFromQuery = (results, index) => ({
   previousValue: ((results || [])[index] || {}).previousValue || '',
 });
 
-const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
+const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
@@ -56,11 +56,6 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
 
   const modeClassText = useMemo(
     () => (mode === MODES.EDIT ? 'Edit' : 'View'),
-    [mode]
-  );
-
-  const modeHeadingText = useMemo(
-    () => (mode === MODES.EDIT ? 'HEADING_4' : 'HEADING_3'),
     [mode]
   );
 
@@ -105,7 +100,14 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
         <div className={`heading${modeClassText}ModeWidth`}>
-          <HeadingText type={HeadingText.TYPE[modeHeadingText]}>
+          <HeadingText
+            style={{
+              ...(mode !== MODES.EDIT ? { lineHeight: '20px' } : {}),
+            }}
+            type={
+              HeadingText.TYPE[mode === MODES.EDIT ? 'HEADING_4' : 'HEADING_3']
+            }
+          >
             Critical Measures
           </HeadingText>
         </div>
