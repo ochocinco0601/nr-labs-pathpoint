@@ -60,38 +60,22 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
               key={`flow-${flowIndex}`}
               className="row"
               onClick={() => {
-                onClick(flows[flowIndex].id);
+                onClick(flow.id);
               }}
             >
               <div className="cell cell col-1-format flow-name">
                 {flow.document.name}
               </div>
               <div className="cell col-2-format stage-names">
-                {flow.document.stages.map((stage, index) => {
-                  // let shape = '';
-                  // switch (stage.source + stage.target * 2) {
-                  //   case 1:
-                  //     shape = 'has-source';
-                  //     break;
-                  //   case 2:
-                  //     shape = 'has-target';
-                  //     break;
-                  //   case 3:
-                  //     shape = 'has-source has-target';
-                  //     break;
-                  //   default:
-                  //     shape = 'has-none';
-                  // }
-                  return (
-                    <div
-                      key={`stage-${index}`}
-                      className={`stage-name ${shape(stage)}`}
-                      title={stage.name}
-                    >
-                      <div className="name-text">{stage.name}</div>
-                    </div>
-                  );
-                })}
+                {flow.document.stages.map((stage, index) => (
+                  <div
+                    key={`stage-${index}`}
+                    className={`stage-name ${shape(stage)}`}
+                    title={stage.name}
+                  >
+                    <div className="name-text">{stage.name}</div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
