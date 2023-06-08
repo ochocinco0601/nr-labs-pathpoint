@@ -70,19 +70,21 @@
 .stage-name {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  flex-shrink: 0;
   height: 1.5rem;
+  line-height: 1.5rem;
   min-width: 4rem;
   max-width: 7rem;
   text-align: center;
   background-color: rgba(192, 192, 192, 0.2);
+  box-sizing: border-box;
   
 
   .name-text {
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0 0.4rem;
   }
 
   &.has-none {
@@ -91,11 +93,12 @@
   
   &.has-source {
     clip-path: polygon(100% 0, 100% 100%, 0% 100%, 10% 50%, 0% 0%);
-    padding-left: 0.7rem;
+    padding-left: 0.3rem;
   }
   
   &.has-target {
     clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+    padding-right: 0.3rem;
   }
   
   &.has-target.has-source {
