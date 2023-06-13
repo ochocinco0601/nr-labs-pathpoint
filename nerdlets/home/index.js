@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 
 import {
-  Button,
   Icon,
   nerdlet,
   PlatformStateContext,
@@ -38,16 +37,17 @@ const HomeNerdlet = () => {
       accountPicker: true,
       actionControls: true,
       actionControlButtons: [
-        MODES.KIOSK
-          ? {
-              label: 'Exit kiosk mode',
-              onClick: () => setMode(MODES.LIST),
-              type: Button.TYPE.PRIMARY,
-            }
-          : {
-              label: 'Kiosk mode',
-              onClick: () => setMode(MODES.KIOSK),
-            },
+        {
+          ...(mode === MODES.KIOSK
+            ? {
+                label: 'Exit kiosk mode',
+                onClick: () => setMode(MODES.LIST),
+              }
+            : {
+                label: 'Kiosk mode',
+                onClick: () => setMode(MODES.KIOSK),
+              }),
+        },
         {
           label: 'Create new flow',
           iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
@@ -57,7 +57,7 @@ const HomeNerdlet = () => {
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, []);
+  }, [mode, newFlowHandler]);
 
   useEffect(() => {
     setFlows(flowsData || []);
