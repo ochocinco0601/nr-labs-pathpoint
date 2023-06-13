@@ -120,7 +120,7 @@ const HomeNerdlet = () => {
     if (flows && flows.length)
       return <FlowList flows={flows} onClick={flowClickHandler} />;
     return <NoFlows newFlowHandler={newFlowHandler} />;
-  }, [flows, currentFlowIndex, accountId, mode]);
+  }, [flows, currentFlowIndex, accountId, mode, flowClickHandler]);
 
   return <div className="container">{currentView}</div>;
 };
