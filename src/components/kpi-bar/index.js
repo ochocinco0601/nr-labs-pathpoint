@@ -100,16 +100,18 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
         <div className={`heading${modeClassText}ModeWidth`}>
-          <HeadingText
-            style={{
-              ...(mode !== MODES.EDIT ? { lineHeight: '20px' } : {}),
-            }}
-            type={
-              HeadingText.TYPE[mode === MODES.EDIT ? 'HEADING_4' : 'HEADING_3']
-            }
-          >
-            Critical Measures
-          </HeadingText>
+          {mode === MODES.EDIT ? (
+            <HeadingText type={HeadingText.TYPE.HEADING_4}>
+              Critical Measures
+            </HeadingText>
+          ) : (
+            <HeadingText
+              type={HeadingText.TYPE.HEADING_3}
+              style={{ lineHeight: '20px' }}
+            >
+              Critical Measures
+            </HeadingText>
+          )}
         </div>
         {mode === MODES.EDIT ? (
           <div className="kpi-bar-add-button">
