@@ -1,0 +1,18 @@
+.stages-header {
+  padding: 24px 24px 0;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.stages {
+  flex: 1;
+  box-sizing: border-box;
+  display: flex;
+  gap: 8px;
+  padding: 8px 24px;
+  background: #FFFFFF;
+  height: calc(100vh - 135px);
+}

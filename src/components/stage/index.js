@@ -1,10 +1,11 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
 
 import StepGroup from '../step-group';
 import Signal from '../signal';
+import StageHeader from './header';
 import { MODES, STATUSES } from '../../constants';
 
 const Stage = ({
@@ -13,6 +14,7 @@ const Stage = ({
   status = STATUSES.UNKNOWN,
   related = {},
   mode = MODES.KIOSK,
+  onUpdate,
 }) => {
   const [signals, setSignals] = useState({});
 
@@ -52,20 +54,18 @@ const Stage = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const shape = useMemo(() => {
-    const { target, source } = related;
-    if (!target && !source) return '';
-    if (target && source) return 'has-target has-source';
-    if (target) return 'has-target';
-    if (source) return 'has-source';
-    return '';
-  }, [related]);
+  const saveStageNameHandler = (newName) =>
+    onUpdate({ name: newName, stepGroups, related });
 
   return (
     <div className="stage">
-      <div className={`head ${status} ${shape}`}>
-        <HeadingText className="name">{name}</HeadingText>
-      </div>
+      <StageHeader
+        name={name}
+        status={status}
+        related={related}
+        mode={mode}
+        onUpdate={saveStageNameHandler}
+      />
       <div className="body">
         <div className="section-title">
           <HeadingText>Steps</HeadingText>
@@ -105,6 +105,7 @@ Stage.propTypes = {
     source: PropTypes.bool,
   }),
   mode: PropTypes.oneOf(Object.values(MODES)),
+  onUpdate: PropTypes.func,
 };
 
 export default Stage;
