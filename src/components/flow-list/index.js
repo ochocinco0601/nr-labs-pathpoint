@@ -1,7 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { TextField } from 'nr1';
+
+import { getStageHeaderShape } from '../../utils';
 
 const FlowList = ({ flows = [], onClick = () => null }) => {
   const [searchPattern, setSearchPattern] = useState('');
@@ -20,19 +22,6 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
         : flows
     );
   }, [searchPattern]);
-
-  const shape = useCallback((stage) => {
-    switch (stage.source + stage.target * 2) {
-      case 1:
-        return 'has-source';
-      case 2:
-        return 'has-target';
-      case 3:
-        return 'has-source has-target';
-      default:
-        return 'has-none';
-    }
-  }, []);
 
   return (
     <div className="flows-container">
@@ -58,7 +47,7 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
           {filteredFlows.map((flow, flowIndex) => (
             <div
               key={`flow-${flowIndex}`}
-              className="row"
+              className="row body"
               onClick={() => {
                 onClick(flow.id);
               }}
@@ -70,7 +59,7 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
                 {flow.document.stages.map((stage, index) => (
                   <div
                     key={`stage-${index}`}
-                    className={`stage-name ${shape(stage)}`}
+                    className={`stage-name ${getStageHeaderShape(stage)}`}
                     title={stage.name}
                   >
                     <div className="name-text">{stage.name}</div>
