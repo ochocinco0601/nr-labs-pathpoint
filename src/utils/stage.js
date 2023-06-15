@@ -66,6 +66,8 @@ export const getStageHeaderShape = (stage = {}) => {
     'has-target',
     'has-source has-target',
   ];
-  // return classNames[stage.related.source + stage.related.target * 2];
-  return classNames[((stage.related || {}).source || 0) + ((stage.related || {}).target || 0) * 2];
+  return classNames[
+    ((stage.related || {}).source || 0) +
+      ((stage.related || {}).target || 0) * 2
+  ];
 };
