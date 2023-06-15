@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText } from 'nr1';
+import { HeadingText, Icon } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
+import IconsLib from '../icons-lib';
 import { MODES, STATUSES } from '../../constants';
 
 const StageHeader = ({
@@ -22,19 +23,25 @@ const StageHeader = ({
     return '';
   }, [related]);
 
-  return (
+  return mode === MODES.EDIT ? (
+    <div className={`stage-header edit ${shape}`}>
+      <IconsLib type={IconsLib.TYPES.HANDLE} />
+      <HeadingText className="name">
+        <EditInPlace
+          value={name}
+          setValue={(newName) =>
+            newName !== name && onUpdate ? onUpdate({name: newName}) : null
+          }
+        />
+      </HeadingText>
+      <span className="last-col" onClick={() => console.log('DELETE STAGE...')}>
+        <Icon type={Icon.TYPE.INTERFACE__SIGN__TIMES} />
+      </span>
+    </div>
+  ) : (
     <div className={`stage-header ${status} ${shape}`}>
       <HeadingText className="name">
-        {mode === MODES.EDIT ? (
-          <EditInPlace
-            value={name}
-            setValue={(newName) =>
-              newName !== name && onUpdate ? onUpdate(newName) : null
-            }
-          />
-        ) : (
-          name
-        )}
+        {name}
       </HeadingText>
     </div>
   );

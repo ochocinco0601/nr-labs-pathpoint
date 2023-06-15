@@ -54,8 +54,8 @@ const Stage = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const saveStageNameHandler = (newName) =>
-    onUpdate({ name: newName, stepGroups, related });
+  const updateStageHandler = (updates = {}) =>
+    onUpdate({ name, stepGroups, related, ...updates });
 
   return (
     <div className="stage">
@@ -64,7 +64,7 @@ const Stage = ({
         status={status}
         related={related}
         mode={mode}
-        onUpdate={saveStageNameHandler}
+        onUpdate={updateStageHandler}
       />
       <div className="body">
         <div className="section-title">
