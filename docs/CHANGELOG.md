@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.15.0...v1.16.0) (2023-06-15)
+
+
+### Features
+
+* edit stage; and new stages component ([6abdb50](https://github.com/newrelic/nr-labs-hedgehog/commit/6abdb5022470abb1fd17012b10e261592fc5045b))
+
 # [1.15.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.14.0...v1.15.0) (2023-06-02)
 
 
