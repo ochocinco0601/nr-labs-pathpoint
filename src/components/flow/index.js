@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText, Icon, useAccountStorageMutation } from 'nr1';
-import { EditInPlace } from '@newrelic/nr-labs-components';
+import { useAccountStorageMutation } from 'nr1';
 
 import { KpiBar, Stages } from '../';
+import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 
 const Flow = ({
@@ -53,22 +53,9 @@ const Flow = ({
   const updateKpisHandler = (updatedKpis) =>
     flowUpdateHandler({ kpis: updatedKpis });
 
-  const saveFlowNameHandler = (name) => flowUpdateHandler({ name });
-
   return (
     <div className="flow">
-      <div className="header-bar">
-        <div className="back" onClick={onClose}>
-          <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_LEFT} />
-        </div>
-        <HeadingText type={HeadingText.TYPE.HEADING_4}>
-          {mode === MODES.EDIT ? (
-            <EditInPlace value={flow?.name} setValue={saveFlowNameHandler} />
-          ) : (
-            flow?.name
-          )}
-        </HeadingText>
-      </div>
+      <FlowHeader name={flow.name} imageUrl={flow.imageUrl} onClose={onClose} mode={mode} />
       <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
       <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
     </div>
