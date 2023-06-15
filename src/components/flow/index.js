@@ -4,14 +4,8 @@ import PropTypes from 'prop-types';
 import { HeadingText, Icon, useAccountStorageMutation } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import { KpiBar, Stage } from '../';
-import { MODES, NERD_STORAGE, STATUSES } from '../../constants';
-import { useFetchServiceLevels } from '../../hooks';
-import {
-  addSignalStatuses,
-  annotateStageWithStatuses,
-  uniqueGuidsInStages,
-} from '../../utils';
+import { KpiBar, Stages } from '../';
+import { MODES, NERD_STORAGE } from '../../constants';
 
 const Flow = ({
   flow = {},
@@ -22,9 +16,6 @@ const Flow = ({
 }) => {
   const [stages, setStages] = useState([]);
   const [kpis, setKpis] = useState([]);
-  const [guids, setGuids] = useState([]);
-  const { data: serviceLevelsData, error: serviceLevelsError } =
-    useFetchServiceLevels({ guids });
   const [updateFlow, { data: updateFlowData, error: updateFlowError }] =
     useAccountStorageMutation({
       actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
@@ -33,25 +24,9 @@ const Flow = ({
     });
 
   useEffect(() => {
-    if (!Object.keys(flow)?.length) return;
-    setGuids(uniqueGuidsInStages(flow.stages));
+    setStages(flow.stages || []);
     setKpis(flow.kpis || []);
   }, [flow]);
-
-  useEffect(() => {
-    if (Object.keys(serviceLevelsData)?.length) {
-      const stagesWithSLData = addSignalStatuses(
-        flow.stages,
-        serviceLevelsData
-      );
-      setStages(stagesWithSLData.map(annotateStageWithStatuses));
-    }
-  }, [serviceLevelsData]);
-
-  useEffect(() => {
-    if (serviceLevelsError)
-      console.error('Error fetching service levels', serviceLevelsError);
-  }, [serviceLevelsError]);
 
   const flowUpdateHandler = useCallback(
     (updates = {}) =>
@@ -94,19 +69,7 @@ const Flow = ({
           )}
         </HeadingText>
       </div>
-      <div className="stages">
-        {stages.map(
-          ({ name = '', stepGroups = [], status = STATUSES.UNKNOWN }, i) => (
-            <Stage
-              key={i}
-              name={name}
-              stepGroups={stepGroups}
-              status={status}
-              mode={mode}
-            />
-          )
-        )}
-      </div>
+      <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
       <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
     </div>
   );

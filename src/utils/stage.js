@@ -49,7 +49,7 @@ export const annotateStageWithStatuses = (stage) => {
   return { ...stage, stepGroups, status };
 };
 
-export const uniqueGuidsInStages = (stages = []) => {
+export const uniqueSignalGuidsInStages = (stages = []) => {
   const guidsSet = new Set();
   stages.map(({ stepGroups }) =>
     stepGroups.map(({ steps }) =>

@@ -18,15 +18,4 @@
       cursor: pointer;
     }
   }
-
-  .stages {
-    flex: 1;
-    box-sizing: border-box;
-    display: flex;
-    gap: 8px;
-    padding: 24px 24px 8px;
-    background: #FFFFFF;
-    height: calc(100vh - 135px);
-  }
-
 }
