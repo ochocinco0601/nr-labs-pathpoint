@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, PlatformStateContext } from 'nr1';
+import { Button, Icon, HeadingText, PlatformStateContext } from 'nr1';
 
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
@@ -96,6 +96,54 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
     [kpis]
   );
 
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [kpisContainer, setKpisContainer] = useState(null);
+
+  useEffect(() => {
+    setKpisContainer(document.getElementById('kpi-containers'));
+  }, [scrollPosition]);
+
+  const shouldHideSliderButton = useCallback((direction) => {
+    if (
+      kpisContainer &&
+      kpisContainer.scrollWidth > kpisContainer.offsetWidth
+    ) {
+      switch (direction) {
+        case 'left':
+          return kpisContainer.scrollLeft <= 0;
+        case 'right':
+          return (
+            Math.round(kpisContainer.scrollLeft + kpisContainer.offsetWidth) >=
+            Math.round(kpisContainer.scrollWidth - 5)
+          );
+        default:
+          return true;
+      }
+    }
+    return true;
+  });
+
+  const slideKpiBar = useCallback((direction) => {
+    const elements = kpisContainer.querySelectorAll('.kpi-container');
+
+    const partialKpiNode = Array.from(elements).find((el) =>
+      direction === 'left'
+        ? kpisContainer.getBoundingClientRect().left -
+            el.getBoundingClientRect().left <=
+          kpisContainer.offsetWidth
+        : el.getBoundingClientRect().right -
+            kpisContainer.getBoundingClientRect().left >
+          kpisContainer.offsetWidth
+    );
+
+    if (partialKpiNode) {
+      kpisContainer.scrollLeft +=
+        partialKpiNode.getBoundingClientRect().left -
+        kpisContainer.getBoundingClientRect().left;
+      setScrollPosition(kpisContainer.scrollLeft);
+    }
+  });
+
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
@@ -125,11 +173,27 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
           </div>
         ) : null}
       </div>
-      <div className={`kpi-containers kpiBar${modeClassText}ModeMaxWidth`}>
+      <div
+        id="slider-button-left"
+        className="slider-button"
+        style={{
+          visibility: `${
+            shouldHideSliderButton('left') ? 'hidden' : 'visible'
+          }`,
+        }}
+        onClick={() => slideKpiBar('left')}
+      >
+        <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_LEFT} />
+      </div>
+      <div
+        id="kpi-containers"
+        className={`kpi-containers kpiBar${modeClassText}ModeMaxWidth`}
+      >
         {kpis.map((kpi, index) => (
           <div
+            id={`kpi-container-${index}`}
             key={index}
-            className={`kpi-container kpiContainer${modeClassText}ModeWidth`}
+            className="kpi-container"
           >
             <div className="kpi-data">
               <SimpleBillboard
@@ -142,6 +206,18 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
             )}
           </div>
         ))}
+      </div>
+      <div
+        id="slider-button-right"
+        className="slider-button"
+        style={{
+          visibility: `${
+            shouldHideSliderButton('right') ? 'hidden' : 'visible'
+          }`,
+        }}
+        onClick={() => slideKpiBar('right')}
+      >
+        <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT} />
       </div>
       <KpiModal
         kpi={selectedKpi.current}
