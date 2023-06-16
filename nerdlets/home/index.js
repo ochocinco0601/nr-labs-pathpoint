@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -13,13 +14,15 @@ import {
   useAccountStorageMutation,
 } from 'nr1';
 
-import { NoFlows } from '../../src/components';
+import { Flow, FlowList, NoFlows } from '../../src/components';
 import { useFlowLoader } from '../../src/hooks';
-import { NERD_STORAGE } from '../../src/constants';
+import { MODES, NERD_STORAGE } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
 const HomeNerdlet = () => {
+  const [mode, setMode] = useState(MODES.KIOSK);
   const [flows, setFlows] = useState([]);
+  const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
   const { flows: flowsData, error: flowsError } = useFlowLoader({ accountId });
   const [createFlow, { error: createFlowError }] = useAccountStorageMutation({
@@ -35,6 +38,17 @@ const HomeNerdlet = () => {
       actionControls: true,
       actionControlButtons: [
         {
+          ...(mode === MODES.KIOSK
+            ? {
+                label: 'Exit kiosk mode',
+                onClick: () => setMode(MODES.LIST),
+              }
+            : {
+                label: 'Kiosk mode',
+                onClick: () => setMode(MODES.KIOSK),
+              }),
+        },
+        {
           label: 'Create new flow',
           iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
           onClick: newFlowHandler,
@@ -43,7 +57,7 @@ const HomeNerdlet = () => {
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, []);
+  }, [mode, newFlowHandler]);
 
   useEffect(() => {
     setFlows(flowsData || []);
@@ -72,18 +86,43 @@ const HomeNerdlet = () => {
     });
   }, []);
 
+  const updateFlowHandler = useCallback(
+    (flow) =>
+      setFlows((f) =>
+        f.map(({ document }) => (document.id === flow.id ? flow : document))
+      ),
+    []
+  );
+
+  const flowClickHandler = useCallback(
+    (id) => setCurrentFlowIndex(flows.findIndex((f) => f.id === id)),
+    [flows]
+  );
+
+  const backToFlowsHandler = useCallback(() => setCurrentFlowIndex(-1), []);
+
   useEffect(() => {
     if (createFlowError)
       console.error('Error creating new flow', createFlowError);
   }, [createFlowError]);
 
-  return (
-    <div className="container">
-      {flows && flows.length ? null : (
-        <NoFlows newFlowHandler={newFlowHandler} />
-      )}
-    </div>
-  );
+  const currentView = useMemo(() => {
+    if (currentFlowIndex > -1)
+      return (
+        <Flow
+          flow={flows[currentFlowIndex].document}
+          onUpdate={updateFlowHandler}
+          onClose={backToFlowsHandler}
+          accountId={accountId}
+          mode={mode}
+        />
+      );
+    if (flows && flows.length)
+      return <FlowList flows={flows} onClick={flowClickHandler} />;
+    return <NoFlows newFlowHandler={newFlowHandler} />;
+  }, [flows, currentFlowIndex, accountId, mode, flowClickHandler]);
+
+  return <div className="container">{currentView}</div>;
 };
 
 export default HomeNerdlet;
