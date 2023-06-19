@@ -55,7 +55,13 @@ const Flow = ({
 
   return (
     <div className="flow">
-      <FlowHeader name={flow.name} imageUrl={flow.imageUrl} onClose={onClose} mode={mode} />
+      <FlowHeader
+        name={flow.name}
+        imageUrl={flow.imageUrl}
+        onUpdate={flowUpdateHandler}
+        onClose={onClose}
+        mode={mode}
+      />
       <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
       <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
     </div>
