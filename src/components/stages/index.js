@@ -53,6 +53,11 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
     if (onUpdate) onUpdate({ stages: updatedStages });
   };
 
+  const deleteStageHandler = (index) => {
+    const updatedStages = stages.filter((_, i) => i !== index);
+    if (onUpdate) onUpdate({ stages: updatedStages });
+  };
+
   return (
     <>
       <div className="stages-header">
@@ -78,6 +83,7 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
               status={status}
               mode={mode}
               onUpdate={(updateStage) => updateStageHandler(updateStage, i)}
+              onDelete={() => deleteStageHandler(i)}
             />
           )
         )}

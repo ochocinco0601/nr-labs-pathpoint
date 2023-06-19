@@ -15,6 +15,7 @@ const Stage = ({
   related = {},
   mode = MODES.KIOSK,
   onUpdate,
+  onDelete,
 }) => {
   const [signals, setSignals] = useState({});
 
@@ -63,8 +64,9 @@ const Stage = ({
         name={name}
         status={status}
         related={related}
-        mode={mode}
         onUpdate={updateStageHandler}
+        onDelete={onDelete}
+        mode={mode}
       />
       <div className="body">
         <div className="section-title">
@@ -106,6 +108,7 @@ Stage.propTypes = {
   }),
   mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default Stage;

@@ -1,0 +1,17 @@
+.delete-stage-modal {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr min-content;
+
+  .modal-content {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .modal-footer {
+    display: flex;
+    gap: 8px;
+  }
+}

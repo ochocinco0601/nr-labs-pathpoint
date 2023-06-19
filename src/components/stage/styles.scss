@@ -14,10 +14,16 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px 4px 0px 0px;
+    padding: 0 16px;
 
     &.edit {
+      gap: 8px;
       background-color: #9ea5a9;
       color: #fafbfb;
+
+      svg {
+        fill: #fafbfb;
+      }
 
       .last-col {
         margin-left: auto;
@@ -88,8 +94,31 @@
         padding: 0 16px 16px;
         box-sizing: border-box;
       }
-
-    
   }
-  
+}
+
+.dropdown-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  align-items: end;
+
+  .dropdown-link {
+    a {
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: right;
+      color: #293338;
+
+    }
+
+    &.destructive {
+      a {
+        color: #DF2D24;
+      }
+    }
+  }
 }

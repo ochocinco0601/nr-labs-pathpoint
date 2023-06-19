@@ -1,19 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText, Icon } from 'nr1';
+import { HeadingText, Icon, Popover, PopoverTrigger, PopoverBody } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
+import DeleteStageModal from '../delete-stage-modal';
 import { MODES, STATUSES } from '../../constants';
 
 const StageHeader = ({
   name = 'Stage',
   status = STATUSES.UNKNOWN,
   related = {},
-  mode = MODES.KIOSK,
   onUpdate,
+  onDelete,
+  mode = MODES.KIOSK,
 }) => {
+  const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+
   const shape = useMemo(() => {
     const { target, source } = related;
     if (!target && !source) return '';
@@ -23,6 +27,15 @@ const StageHeader = ({
     return '';
   }, [related]);
 
+  const linkClickHandler = useCallback((e, type) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (type === 'delete') {
+      setDeleteModalHidden(false);
+    }
+  });
+
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
       <IconsLib type={IconsLib.TYPES.HANDLE} />
@@ -30,19 +43,39 @@ const StageHeader = ({
         <EditInPlace
           value={name}
           setValue={(newName) =>
-            newName !== name && onUpdate ? onUpdate({name: newName}) : null
+            newName !== name && onUpdate ? onUpdate({ name: newName }) : null
           }
         />
       </HeadingText>
-      <span className="last-col" onClick={() => console.log('DELETE STAGE...')}>
-        <Icon type={Icon.TYPE.INTERFACE__SIGN__TIMES} />
+      <span className="last-col">
+        <Popover>
+          <PopoverTrigger>
+            <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__MORE} />
+          </PopoverTrigger>
+          <PopoverBody placementType={PopoverBody.PLACEMENT_TYPE.BOTTOM_END}>
+            <div className="dropdown-links">
+              <div className="dropdown-link destructive">
+                <a href="#" onClick={(e) => linkClickHandler(e, 'delete')}>
+                  Delete stage
+                </a>
+              </div>
+              <div className="dropdown-link">
+                <a href="#">Change shape</a>
+              </div>
+            </div>
+          </PopoverBody>
+        </Popover>
       </span>
+      <DeleteStageModal
+        name={name}
+        hidden={deleteModalHidden}
+        onConfirm={onDelete}
+        onClose={() => setDeleteModalHidden(true)}
+      />
     </div>
   ) : (
     <div className={`stage-header ${status} ${shape}`}>
-      <HeadingText className="name">
-        {name}
-      </HeadingText>
+      <HeadingText className="name">{name}</HeadingText>
     </div>
   );
 };
@@ -54,8 +87,9 @@ StageHeader.propTypes = {
     target: PropTypes.bool,
     source: PropTypes.bool,
   }),
-  mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
+  mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
 export default StageHeader;
