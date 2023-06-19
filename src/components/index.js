@@ -10,4 +10,5 @@ export { default as Stage } from './stage';
 export { default as KpiModal } from './kpi-modal';
 export { default as KpiBar } from './kpi-bar';
 export { default as Flow } from './flow';
+export { default as FlowList } from './flow-list';
 export { default as ImageUploadModal } from './image-upload-modal';

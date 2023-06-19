@@ -1,3 +1,21 @@
+# [1.17.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.16.0...v1.17.0) (2023-06-16)
+
+
+### Bug Fixes
+
+* action buttons to support modes ([d33410a](https://github.com/newrelic/nr-labs-hedgehog/commit/d33410abc507c551781f98063737c332eb13e605))
+* add dependency to memo function ([a98a673](https://github.com/newrelic/nr-labs-hedgehog/commit/a98a673a7fb37e5bcbb0ded501a5aef3bee23b13))
+* eslint error and remove commnets ([2b2f734](https://github.com/newrelic/nr-labs-hedgehog/commit/2b2f734c71ce8d1ba9014f57321bbc679cc25c72))
+* eslint errors ([38d95e0](https://github.com/newrelic/nr-labs-hedgehog/commit/38d95e0e3d6a14d25d8642f8529ee26894986647))
+* method name conflict ([01233e0](https://github.com/newrelic/nr-labs-hedgehog/commit/01233e0b03e2b46c74db49ed9f559500132f7cc4))
+* use flow object to obtain id ([f2098eb](https://github.com/newrelic/nr-labs-hedgehog/commit/f2098eba028c858f2649fbda7c13bcace1687c52))
+
+
+### Features
+
+* add flow list and search ([7562442](https://github.com/newrelic/nr-labs-hedgehog/commit/756244281cde63fad8c61090d8e5a060e8becd6f))
+* use flow list component in home ([816fa3f](https://github.com/newrelic/nr-labs-hedgehog/commit/816fa3f1f7c6a19fa8c667ef278e895f1a3b128c))
+
 # [1.16.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.15.0...v1.16.0) (2023-06-15)
 
 
