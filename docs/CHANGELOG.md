@@ -1,3 +1,17 @@
+## [1.18.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.0...v1.18.1) (2023-06-19)
+
+
+### Bug Fixes
+
+* min width for stage ([4208f00](https://github.com/newrelic/nr-labs-hedgehog/commit/4208f00faa02201b62fc473312d2d71ff60253c8))
+
+# [1.18.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.17.0...v1.18.0) (2023-06-19)
+
+
+### Features
+
+* move flow header to its own component ([d1c90c7](https://github.com/newrelic/nr-labs-hedgehog/commit/d1c90c7f9f13074aefc84d1ee4b3f5f470115443))
+
 # [1.17.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.16.0...v1.17.0) (2023-06-16)
 
 

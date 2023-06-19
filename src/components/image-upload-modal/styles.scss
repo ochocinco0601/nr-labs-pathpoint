@@ -1,0 +1,51 @@
+.image-upload-modal {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr min-content;
+
+  .modal-content {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .image-preview {
+      background: #F3F4F4;
+      border: 1px dashed #CDD3D5;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        max-height: 200px;
+        max-width: 100%;
+      }
+
+      .no-image {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: center;
+
+        .blank-icon {
+          margin-bottom: 16px;
+        }
+      }
+    }
+
+    .upload-image {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: auto min-content;
+      gap: 8px;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    gap: 8px;
+  }
+}
