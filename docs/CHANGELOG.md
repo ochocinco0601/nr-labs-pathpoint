@@ -1,3 +1,10 @@
+## [1.18.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.1...v1.18.2) (2023-06-20)
+
+
+### Bug Fixes
+
+* set correct button type in image upload modal ([95776b8](https://github.com/newrelic/nr-labs-hedgehog/commit/95776b8e6429ccd8069e8739cbfe4dd5739ed84b))
+
 ## [1.18.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.0...v1.18.1) (2023-06-19)
 
 
