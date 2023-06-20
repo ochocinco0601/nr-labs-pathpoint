@@ -100,7 +100,7 @@ const ImageUploadModal = ({ imageUrl, hidden = true, onChange, onClose }) => {
           >
             Save
           </Button>
-          <Button type={Button.TYPE.NORMAL} onClick={closeHandler}>
+          <Button type={Button.TYPE.TERTIARY} onClick={closeHandler}>
             Cancel
           </Button>
         </div>
