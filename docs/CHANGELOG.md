@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.2...v1.19.0) (2023-06-21)
+
+
+### Features
+
+* delete stage ([1addf49](https://github.com/newrelic/nr-labs-hedgehog/commit/1addf493d785af63b6d377d9a9020b5ae3a525a3))
+
 ## [1.18.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.1...v1.18.2) (2023-06-20)
 
 
