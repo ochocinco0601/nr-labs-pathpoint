@@ -15,6 +15,7 @@ const Stage = ({
   related = {},
   mode = MODES.KIOSK,
   onUpdate,
+  onDelete,
 }) => {
   const [signals, setSignals] = useState({});
 
@@ -54,8 +55,8 @@ const Stage = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const saveStageNameHandler = (newName) =>
-    onUpdate({ name: newName, stepGroups, related });
+  const updateStageHandler = (updates = {}) =>
+    onUpdate({ name, stepGroups, related, ...updates });
 
   return (
     <div className="stage">
@@ -63,8 +64,9 @@ const Stage = ({
         name={name}
         status={status}
         related={related}
+        onUpdate={updateStageHandler}
+        onDelete={onDelete}
         mode={mode}
-        onUpdate={saveStageNameHandler}
       />
       <div className="body">
         <div className="section-title">
@@ -106,6 +108,7 @@ Stage.propTypes = {
   }),
   mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default Stage;
