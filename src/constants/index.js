@@ -3,3 +3,4 @@ export * from './modes';
 export * from './statuses';
 export * from './signals';
 export * from './kpis';
+export * from './stage-shapes';

@@ -1,3 +1,4 @@
+import { STAGE_SHAPES_CLASSNAME_ARRAY } from '../constants';
 import { signalStatus, statusFromStatuses } from './signal';
 
 export const addSignalStatuses = (stages = [], serviceLevelsData = {}) =>
@@ -71,3 +72,19 @@ export const getStageHeaderShape = (stage = {}) => {
       ((stage.related || {}).target || 0) * 2
   ];
 };
+
+export const stageShapeIndexFromData = ({ target, source } = {}) => {
+  if (target && source) return 2;
+  if (source) return 1;
+  if (target) return 3;
+  return 0;
+};
+
+export const stageShapeDataFromIndex = (index) => {
+  const target = index === 1 || index === 2;
+  const source = index > 1;
+  return { target, source };
+};
+
+export const stageHeaderShapeClassName = (related = {}) =>
+  STAGE_SHAPES_CLASSNAME_ARRAY[stageShapeIndexFromData(related)];
