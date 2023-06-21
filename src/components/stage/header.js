@@ -6,8 +6,8 @@ import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import DeleteStageModal from '../delete-stage-modal';
-import { MODES, STATUSES } from '../../constants';
 import ChangeShapeModal from '../change-shape-modal';
+import { MODES, STATUSES } from '../../constants';
 import { stageHeaderShapeClassName } from '../../utils';
 
 const StageHeader = ({
@@ -32,7 +32,7 @@ const StageHeader = ({
     } else if (type === 'shape') {
       setShapeModalHidden(false);
     }
-  });
+  }, []);
 
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
