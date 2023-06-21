@@ -11,8 +11,8 @@ import { MODES, STATUSES } from '../../constants';
 const Stage = ({
   name = 'Stage',
   stepGroups = [],
-  status = STATUSES.UNKNOWN,
   related = {},
+  status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
   onUpdate,
   onDelete,
@@ -62,8 +62,8 @@ const Stage = ({
     <div className="stage">
       <StageHeader
         name={name}
-        status={status}
         related={related}
+        status={status}
         onUpdate={updateStageHandler}
         onDelete={onDelete}
         mode={mode}
@@ -101,11 +101,11 @@ const Stage = ({
 Stage.propTypes = {
   name: PropTypes.string,
   stepGroups: PropTypes.arrayOf(PropTypes.object),
-  status: PropTypes.oneOf(Object.values(STATUSES)),
   related: PropTypes.shape({
     target: PropTypes.bool,
     source: PropTypes.bool,
   }),
+  status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

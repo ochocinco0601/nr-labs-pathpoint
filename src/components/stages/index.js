@@ -75,11 +75,20 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
       </div>
       <div className="stages">
         {(stagesWithStatuses || []).map(
-          ({ name = '', stepGroups = [], status = STATUSES.UNKNOWN }, i) => (
+          (
+            {
+              name = '',
+              stepGroups = [],
+              related = {},
+              status = STATUSES.UNKNOWN,
+            },
+            i
+          ) => (
             <Stage
               key={i}
               name={name}
               stepGroups={stepGroups}
+              related={related}
               status={status}
               mode={mode}
               onUpdate={(updateStage) => updateStageHandler(updateStage, i)}

@@ -18,6 +18,16 @@ const icons = {
       <circle cx="11" cy="13.5" r="1.5" />
     </>
   ),
+  'stage-shape-none': <rect x="0.5" y="4" width="15" height="9" rx="0.5" />,
+  'stage-shape-start': (
+    <polygon points="0.5 4 13.0333 4 15.4333 8.5 13.0333 13 0.5 13" />
+  ),
+  'stage-shape-connector': (
+    <polygon points="3.274507 8.73529 3.399997 8.5 3.274507 8.26471 1 4 13.199967 4 15.599967 8.5 13.199967 13 1 13" />
+  ),
+  'stage-shape-stop': (
+    <polygon points="3.204226 8.72932 3.322576 8.5 3.204226 8.27068 1 4 15.679266 4 15.679266 13 1 13" />
+  ),
 };
 
 const TYPES = Object.keys(icons).reduce(

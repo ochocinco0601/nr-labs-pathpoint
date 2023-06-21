@@ -6,26 +6,22 @@ import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import DeleteStageModal from '../delete-stage-modal';
+import ChangeShapeModal from '../change-shape-modal';
 import { MODES, STATUSES } from '../../constants';
+import { stageHeaderShapeClassName } from '../../utils';
 
 const StageHeader = ({
   name = 'Stage',
-  status = STATUSES.UNKNOWN,
   related = {},
+  status = STATUSES.UNKNOWN,
   onUpdate,
   onDelete,
   mode = MODES.KIOSK,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+  const [shapeModalHidden, setShapeModalHidden] = useState(true);
 
-  const shape = useMemo(() => {
-    const { target, source } = related;
-    if (!target && !source) return '';
-    if (target && source) return 'has-target has-source';
-    if (target) return 'has-target';
-    if (source) return 'has-source';
-    return '';
-  }, [related]);
+  const shape = useMemo(() => stageHeaderShapeClassName(related), [related]);
 
   const linkClickHandler = useCallback((e, type) => {
     e.preventDefault();
@@ -33,8 +29,10 @@ const StageHeader = ({
 
     if (type === 'delete') {
       setDeleteModalHidden(false);
+    } else if (type === 'shape') {
+      setShapeModalHidden(false);
     }
-  });
+  }, []);
 
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
@@ -60,7 +58,9 @@ const StageHeader = ({
                 </a>
               </div>
               <div className="dropdown-link">
-                <a href="#">Change shape</a>
+                <a href="#" onClick={(e) => linkClickHandler(e, 'shape')}>
+                  Change shape
+                </a>
               </div>
             </div>
           </PopoverBody>
@@ -72,6 +72,12 @@ const StageHeader = ({
         onConfirm={onDelete}
         onClose={() => setDeleteModalHidden(true)}
       />
+      <ChangeShapeModal
+        related={related}
+        hidden={shapeModalHidden}
+        onChange={onUpdate}
+        onClose={() => setShapeModalHidden(true)}
+      />
     </div>
   ) : (
     <div className={`stage-header ${status} ${shape}`}>
@@ -82,11 +88,11 @@ const StageHeader = ({
 
 StageHeader.propTypes = {
   name: PropTypes.string,
-  status: PropTypes.oneOf(Object.values(STATUSES)),
   related: PropTypes.shape({
     target: PropTypes.bool,
     source: PropTypes.bool,
   }),
+  status: PropTypes.oneOf(Object.values(STATUSES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
