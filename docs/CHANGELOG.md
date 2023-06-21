@@ -1,3 +1,15 @@
+# [1.20.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.19.0...v1.20.0) (2023-06-21)
+
+
+### Bug Fixes
+
+* add dependency array for usecallback ([a31aed5](https://github.com/newrelic/nr-labs-hedgehog/commit/a31aed593221d3c747e36bbcb76ae8fb705866ad))
+
+
+### Features
+
+* edit stage shape ([477b6a9](https://github.com/newrelic/nr-labs-hedgehog/commit/477b6a9d4f54bf9e6126f3300e02094965cb769d))
+
 # [1.19.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.18.2...v1.19.0) (2023-06-21)
 
 
