@@ -2,9 +2,9 @@ export const STAGE_SHAPES_ARRAY = ['None', 'Start', 'Connector', 'Stop'];
 
 export const STAGE_SHAPES_CLASSNAME_ARRAY = [
   '',
-  'has-source',
-  'has-target has-source',
   'has-target',
+  'has-target has-source',
+  'has-source',
 ];
 
 const icons = [

@@ -75,8 +75,8 @@ export const getStageHeaderShape = (stage = {}) => {
 
 export const stageShapeIndexFromData = ({ target, source } = {}) => {
   if (target && source) return 2;
-  if (source) return 1;
-  if (target) return 3;
+  if (target) return 1;
+  if (source) return 3;
   return 0;
 };
 
