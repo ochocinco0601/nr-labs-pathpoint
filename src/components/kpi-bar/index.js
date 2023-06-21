@@ -100,45 +100,51 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
 
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  const shouldHideSliderButton = useCallback((direction) => {
-    if (
-      kpisContainer?.current?.scrollWidth > kpisContainer?.current?.offsetWidth
-    ) {
-      switch (direction) {
-        case 'left':
-          return scrollPosition <= 0;
-        case 'right':
-          return (
-            Math.round(scrollPosition + kpisContainer.current.offsetWidth) >=
-            Math.round(kpisContainer.current.scrollWidth - 5)
-          );
-        default:
-          return true;
+  const shouldHideSliderButton = useCallback(
+    (direction) => {
+      const { scrollWidth, offsetWidth } = kpisContainer.current || {};
+      if (scrollWidth > offsetWidth) {
+        switch (direction) {
+          case 'left':
+            return scrollPosition <= 0;
+          case 'right':
+            return (
+              Math.round(scrollPosition + offsetWidth) >=
+              Math.round(scrollWidth - 5)
+            );
+          default:
+            return true;
+        }
       }
-    }
-    return true;
-  });
+      return true;
+    },
+    [scrollPosition]
+  );
 
   const slideKpiBar = useCallback((direction) => {
-    const partialKpiNode = Array.from(
-      kpisContainer.current.querySelectorAll('.kpi-container')
-    ).find((el) =>
+    const {
+      current: container,
+      current: { offsetWidth },
+    } = kpisContainer || {};
+    const elements = Array.from(container.querySelectorAll('.kpi-container'));
+
+    const partialKpiNode = elements.find((el) =>
       direction === 'left'
-        ? kpisContainer.current.getBoundingClientRect().left -
+        ? container.getBoundingClientRect().left -
             el.getBoundingClientRect().left <=
-          kpisContainer.current.offsetWidth
+          offsetWidth
         : el.getBoundingClientRect().right -
-            kpisContainer.current.getBoundingClientRect().left >
-          kpisContainer.current.offsetWidth
+            container.getBoundingClientRect().left >
+          offsetWidth
     );
 
     if (partialKpiNode) {
-      kpisContainer.current.scrollLeft +=
+      container.scrollLeft +=
         partialKpiNode.getBoundingClientRect().left -
-        kpisContainer.current.getBoundingClientRect().left;
-      setScrollPosition(kpisContainer.current.scrollLeft);
+        container.getBoundingClientRect().left;
+      setScrollPosition(container.scrollLeft);
     }
-  });
+  }, []);
 
   return (
     <div className="kpi-bar">
@@ -173,9 +179,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
         id="slider-button-left"
         className="slider-button"
         style={{
-          visibility: `${
-            shouldHideSliderButton('left') ? 'hidden' : 'visible'
-          }`,
+          visibility: shouldHideSliderButton('left') ? 'hidden' : 'visible',
         }}
         onClick={() => slideKpiBar('left')}
       >
@@ -208,9 +212,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
         id="slider-button-right"
         className="slider-button"
         style={{
-          visibility: `${
-            shouldHideSliderButton('right') ? 'hidden' : 'visible'
-          }`,
+          visibility: shouldHideSliderButton('right') ? 'hidden' : 'visible',
         }}
         onClick={() => slideKpiBar('right')}
       >
