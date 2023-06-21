@@ -22,14 +22,6 @@ export const STAGE_SHAPES = STAGE_SHAPES_ARRAY.reduce(
   {}
 );
 
-// export const STAGE_SHAPES_CLASSNAME = STAGE_SHAPES_ARRAY.reduce(
-//   (acc, shape, index) => ({
-//     ...acc,
-//     [shape.toUpperCase()]: classNames[index],
-//   }),
-//   {}
-// );
-
 export const STAGE_SHAPES_ICON = STAGE_SHAPES_ARRAY.reduce(
   (acc, shape, index) => ({
     ...acc,

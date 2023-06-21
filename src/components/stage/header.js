@@ -21,14 +21,6 @@ const StageHeader = ({
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [shapeModalHidden, setShapeModalHidden] = useState(true);
 
-  // const shape = useMemo(() => {
-  //   const { target, source } = related;
-  //   if (!target && !source) return '';
-  //   if (target && source) return 'has-target has-source';
-  //   if (target) return 'has-target';
-  //   if (source) return 'has-source';
-  //   return '';
-  // }, [related]);
   const shape = useMemo(() => stageHeaderShapeClassName(related), [related]);
 
   const linkClickHandler = useCallback((e, type) => {
