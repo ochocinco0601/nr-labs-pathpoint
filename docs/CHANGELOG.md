@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.21.0...v1.22.0) (2023-06-22)
+
+
+### Features
+
+* add step ([4cc1f50](https://github.com/newrelic/nr-labs-hedgehog/commit/4cc1f501a62dcf5c9df595f496a55cc0b884af16))
+
 # [1.21.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.20.1...v1.21.0) (2023-06-22)
 
 
