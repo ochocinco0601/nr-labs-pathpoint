@@ -1,3 +1,11 @@
+## [1.20.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.20.0...v1.20.1) (2023-06-22)
+
+
+### Bug Fixes
+
+* css class name clash ([461c980](https://github.com/newrelic/nr-labs-hedgehog/commit/461c980746cc76deffbe2a1ec56ffc375dd9b7b4))
+* stage shape indexes ([c4146ea](https://github.com/newrelic/nr-labs-hedgehog/commit/c4146eac6e0aebe7e31c13884fc2a6cc3a9d58da))
+
 # [1.20.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.19.0...v1.20.0) (2023-06-21)
 
 
