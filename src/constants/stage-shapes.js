@@ -8,10 +8,10 @@ export const STAGE_SHAPES_CLASSNAME_ARRAY = [
 ];
 
 const icons = [
-  'stage-shape-none',
-  'stage-shape-start',
-  'stage-shape-connector',
-  'stage-shape-stop',
+  'STAGE_SHAPE_NONE',
+  'STAGE_SHAPE_START',
+  'STAGE_SHAPE_CONNECTOR',
+  'STAGE_SHAPE_STOP',
 ];
 
 export const STAGE_SHAPES = STAGE_SHAPES_ARRAY.reduce(
@@ -25,7 +25,7 @@ export const STAGE_SHAPES = STAGE_SHAPES_ARRAY.reduce(
 export const STAGE_SHAPES_ICON = STAGE_SHAPES_ARRAY.reduce(
   (acc, shape, index) => ({
     ...acc,
-    [shape.toUpperCase()]: icons[index].toUpperCase(),
+    [shape.toUpperCase()]: icons[index],
   }),
   {}
 );

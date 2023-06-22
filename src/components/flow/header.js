@@ -26,7 +26,11 @@ const FlowHeader = ({
         className="logo-image edit"
         onClick={() => setImageModalHidden(false)}
       >
-        <IconsLib type={IconsLib.TYPES.CAMERA} />
+        {imageUrl ? (
+          <img src={imageUrl} />
+        ) : (
+          <IconsLib type={IconsLib.TYPES.CAMERA} />
+        )}
       </div>
       <HeadingText type={HeadingText.TYPE.HEADING_4}>
         <EditInPlace
