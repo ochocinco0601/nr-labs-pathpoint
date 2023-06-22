@@ -8,7 +8,7 @@ const AddStep = ({ stepGroups = [], onUpdate }) => {
   const [selectedStepGroup, setSelectedStepGroup] = useState(
     stepGroups.length + 1
   );
-  const [stepTitle, setStepTitle] = useState('Untitled step');
+  const [stepTitle, setStepTitle] = useState('');
 
   const addStepHandler = () => {
     const updatedStepGroups =
@@ -31,7 +31,7 @@ const AddStep = ({ stepGroups = [], onUpdate }) => {
 
   const cancelAddStepHandler = useCallback(() => {
     setSelectedStepGroup(stepGroups.length + 1);
-    setStepTitle('Untitled step');
+    setStepTitle('');
     setDisplayStepOptions(false);
   }, [stepGroups]);
 
@@ -50,6 +50,7 @@ const AddStep = ({ stepGroups = [], onUpdate }) => {
       </select>
       <input
         type="text"
+        placeholder="Untitled step"
         value={stepTitle}
         onChange={({ target: { value } = {} }) => setStepTitle(value)}
       />
@@ -57,6 +58,7 @@ const AddStep = ({ stepGroups = [], onUpdate }) => {
         type={Button.TYPE.PRIMARY}
         sizeType={Button.SIZE_TYPE.SMALL}
         iconType={Button.ICON_TYPE.INTERFACE__SIGN__CHECKMARK}
+        disabled={!stepTitle}
         onClick={addStepHandler}
       />
       <Button
