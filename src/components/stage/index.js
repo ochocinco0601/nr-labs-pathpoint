@@ -6,6 +6,7 @@ import { HeadingText } from 'nr1';
 import StepGroup from '../step-group';
 import Signal from '../signal';
 import StageHeader from './header';
+import AddStep from '../add-step';
 import { MODES, STATUSES } from '../../constants';
 
 const Stage = ({
@@ -71,12 +72,15 @@ const Stage = ({
       <div className="body">
         <div className="section-title">
           <HeadingText>Steps</HeadingText>
+          {mode === MODES.EDIT ? (
+            <AddStep stepGroups={stepGroups} onUpdate={updateStageHandler} />
+          ) : null}
         </div>
         <div className="step-groups">
-          {stepGroups.map(({ order, steps, status }, i) => (
+          {stepGroups.map(({ steps, status }, i) => (
             <StepGroup
               key={i}
-              order={order}
+              order={i + 1}
               steps={steps}
               status={status}
               mode={mode}
