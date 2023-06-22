@@ -1,3 +1,15 @@
+# [1.23.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.22.0...v1.23.0) (2023-06-22)
+
+
+### Bug Fixes
+
+* eslint updates; updated stage shape icon names; missing icon in edit flow ([cd103ea](https://github.com/newrelic/nr-labs-hedgehog/commit/cd103eaf4401e9f31ddf96483239b8b4607d4192))
+
+
+### Features
+
+* add pathpoint logo to icons library ([71621e2](https://github.com/newrelic/nr-labs-hedgehog/commit/71621e28c2a6419b6073313d164911bfc9ce007e))
+
 # [1.22.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.21.0...v1.22.0) (2023-06-22)
 
 
