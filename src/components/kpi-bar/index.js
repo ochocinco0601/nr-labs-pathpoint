@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, PlatformStateContext } from 'nr1';
+import { Button, Icon, HeadingText, PlatformStateContext } from 'nr1';
 
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
@@ -36,7 +36,7 @@ const metricFromQuery = (results, index) => ({
   previousValue: ((results || [])[index] || {}).previousValue || '',
 });
 
-const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
+const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
@@ -44,6 +44,8 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
   const selectedKpi = useRef({});
   const selectedKpiIndex = useRef(-1);
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
+
+  const kpisContainer = useRef();
 
   useEffect(() => {
     selectedKpi.current = {};
@@ -56,11 +58,6 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
 
   const modeClassText = useMemo(
     () => (mode === MODES.EDIT ? 'Edit' : 'View'),
-    [mode]
-  );
-
-  const modeHeadingText = useMemo(
-    () => (mode === MODES.EDIT ? 'HEADING_4' : 'HEADING_3'),
     [mode]
   );
 
@@ -101,13 +98,70 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
     [kpis]
   );
 
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const shouldHideSliderButton = useCallback(
+    (direction) => {
+      const { scrollWidth, offsetWidth } = kpisContainer.current || {};
+      if (scrollWidth > offsetWidth) {
+        switch (direction) {
+          case 'left':
+            return scrollPosition <= 0;
+          case 'right':
+            return (
+              Math.round(scrollPosition + offsetWidth) >=
+              Math.round(scrollWidth - 5)
+            );
+          default:
+            return true;
+        }
+      }
+      return true;
+    },
+    [scrollPosition]
+  );
+
+  const slideKpiBar = useCallback((direction) => {
+    const {
+      current: container,
+      current: { offsetWidth },
+    } = kpisContainer || {};
+    const elements = Array.from(container.querySelectorAll('.kpi-container'));
+
+    const partialKpiNode = elements.find((el) =>
+      direction === 'left'
+        ? container.getBoundingClientRect().left -
+            el.getBoundingClientRect().left <=
+          offsetWidth
+        : el.getBoundingClientRect().right -
+            container.getBoundingClientRect().left >
+          offsetWidth
+    );
+
+    if (partialKpiNode) {
+      container.scrollLeft +=
+        partialKpiNode.getBoundingClientRect().left -
+        container.getBoundingClientRect().left;
+      setScrollPosition(container.scrollLeft);
+    }
+  }, []);
+
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
         <div className={`heading${modeClassText}ModeWidth`}>
-          <HeadingText type={HeadingText.TYPE[modeHeadingText]}>
-            Critical Measures
-          </HeadingText>
+          {mode === MODES.EDIT ? (
+            <HeadingText type={HeadingText.TYPE.HEADING_4}>
+              Critical Measures
+            </HeadingText>
+          ) : (
+            <HeadingText
+              type={HeadingText.TYPE.HEADING_3}
+              style={{ lineHeight: '20px' }}
+            >
+              Critical Measures
+            </HeadingText>
+          )}
         </div>
         {mode === MODES.EDIT ? (
           <div className="kpi-bar-add-button">
@@ -121,11 +175,26 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
           </div>
         ) : null}
       </div>
-      <div className={`kpi-containers kpiBar${modeClassText}ModeMaxWidth`}>
+      <div
+        id="slider-button-left"
+        className="slider-button"
+        style={{
+          visibility: shouldHideSliderButton('left') ? 'hidden' : 'visible',
+        }}
+        onClick={() => slideKpiBar('left')}
+      >
+        <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_LEFT} />
+      </div>
+      <div
+        id="kpi-containers"
+        ref={kpisContainer}
+        className={`kpi-containers kpiBar${modeClassText}ModeMaxWidth`}
+      >
         {kpis.map((kpi, index) => (
           <div
+            id={`kpi-container-${index}`}
             key={index}
-            className={`kpi-container kpiContainer${modeClassText}ModeWidth`}
+            className="kpi-container"
           >
             <div className="kpi-data">
               <SimpleBillboard
@@ -138,6 +207,16 @@ const KpiBar = ({ kpis = [], onChange, mode = MODES.KIOSK }) => {
             )}
           </div>
         ))}
+      </div>
+      <div
+        id="slider-button-right"
+        className="slider-button"
+        style={{
+          visibility: shouldHideSliderButton('right') ? 'hidden' : 'visible',
+        }}
+        onClick={() => slideKpiBar('right')}
+      >
+        <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT} />
       </div>
       <KpiModal
         kpi={selectedKpi.current}
