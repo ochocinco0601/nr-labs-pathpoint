@@ -74,6 +74,9 @@
     .section-title {
       padding: 16px;
       box-sizing: border-box;
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
     .step-groups {
