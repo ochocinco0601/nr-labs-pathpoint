@@ -14,7 +14,7 @@ const StepGroup = ({
     <div className={`order ${status}`}>{order}</div>
     <div className="steps">
       {steps.map(({ title, signals = [], status }, index) => (
-        <div className="cell" key={index}>
+        <div className="step-cell" key={index}>
           <Step title={title} signals={signals} status={status} mode={mode} />
         </div>
       ))}
