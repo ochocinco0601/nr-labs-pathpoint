@@ -15,3 +15,4 @@ export { default as FlowListDropdown } from './flow-list-dropdown';
 export { default as ImageUploadModal } from './image-upload-modal';
 export { default as DeleteStageModal } from './delete-stage-modal';
 export { default as ChangeShapeModal } from './change-shape-modal';
+export { default as AddStep } from './add-step';

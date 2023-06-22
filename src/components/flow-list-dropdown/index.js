@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
 
+import IconsLib from '../icons-lib';
+
 const FlowListDropdown = ({ flows = [], onClick = () => null }) => {
   const [searchPattern, setSearchPattern] = useState('');
   const [filteredFlows, setFilteredFlows] = useState([]);
 
   useEffect(() => {
     setFilteredFlows(
-      flows.length && searchPattern
+      flows.length && searchPattern.trim()
         ? flows.filter((item) =>
             `${item.document.name} ${item.document.stages
               .map((s) => s.name)
@@ -46,10 +48,9 @@ const FlowListDropdown = ({ flows = [], onClick = () => null }) => {
             {flow.document.imageUrl ? (
               <img src={flow.document.imageUrl} />
             ) : (
-              <img
-                src={
-                  'https://raw.githubusercontent.com/newrelic/nr1-pathpoint/main/icon.png'
-                }
+              <IconsLib
+                className="iconslib"
+                type={IconsLib.TYPES.PATHPOINT_LOGO}
               />
             )}
             {flow.document.name}
@@ -59,6 +60,11 @@ const FlowListDropdown = ({ flows = [], onClick = () => null }) => {
     </div>
   );
 };
+// <img
+//   src={
+//     'https://raw.githubusercontent.com/newrelic/nr1-pathpoint/main/icon.png'
+//   }
+// />
 
 FlowListDropdown.propTypes = {
   flows: PropTypes.array,
