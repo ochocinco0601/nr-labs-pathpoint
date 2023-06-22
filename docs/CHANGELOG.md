@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.20.1...v1.21.0) (2023-06-22)
+
+
+### Features
+
+* add kpi-bar slider ([63d7861](https://github.com/newrelic/nr-labs-hedgehog/commit/63d7861f906d47c6e627f5745ca50c8b0d7e92c9))
+
 ## [1.20.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.20.0...v1.20.1) (2023-06-22)
 
 
