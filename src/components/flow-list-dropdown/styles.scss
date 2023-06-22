@@ -1,0 +1,47 @@
+.flowlist-pulldown {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  padding: 1rem;
+
+  .flowlist-search-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e7e9ea;
+  }
+}
+
+.flowlist-pulldown-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-wrap: nowrap;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.flowlist-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  min-height: 1.625rem;
+  padding-right: 1rem;
+  cursor: pointer;
+
+  img {
+    max-height: 1rem;
+    max-width: 1rem;
+  }
+
+  &:hover {
+    background-color: #f3f4f4;
+  }
+}
