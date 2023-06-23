@@ -1,3 +1,11 @@
+# [1.25.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.24.0...v1.25.0) (2023-06-23)
+
+
+### Features
+
+* add flow list dropdown ([0b89b8a](https://github.com/newrelic/nr-labs-hedgehog/commit/0b89b8afe3722f8048cfad5538caa39fa6495cfb))
+* add flow list dropdown source and styles to components files ([158c591](https://github.com/newrelic/nr-labs-hedgehog/commit/158c59155cfcc93354394b4bab057b9080f124db))
+
 # [1.24.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.2...v1.24.0) (2023-06-23)
 
 
