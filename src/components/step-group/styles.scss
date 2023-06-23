@@ -31,6 +31,10 @@
     .step-cell {
       flex: 1 1 27%;
       min-height: 50px;
+
+      &.edit {
+        flex: 1 1 100%;
+      }
     }
   }
 }
