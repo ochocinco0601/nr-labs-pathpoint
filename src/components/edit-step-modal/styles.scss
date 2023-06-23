@@ -16,6 +16,10 @@
       gap: 4px;
       align-items: center;
 
+      .edit-step-stage-name {
+        color: #535E65;
+      }
+
       .step-group {
         border-radius: 50%;
         background-color: #9ea5a9;
@@ -23,10 +27,12 @@
         aspect-ratio: 1 / 1;
         width: 28px;
         line-height: 28px;
+        display: inline-block;
+        color: #FAFBFB;
       }
     }
 
-    .search-bar {
+    .signals-search-bar {
       .search-input {
         width: 100%;
       }

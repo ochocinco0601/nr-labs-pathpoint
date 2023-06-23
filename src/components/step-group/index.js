@@ -11,6 +11,7 @@ import { MODES, STATUSES } from '../../constants';
 const StepGroup = ({
   order = 0,
   steps = [],
+  stageName,
   onUpdate,
   onDelete,
   status = STATUSES.UNKNOWN,
@@ -43,7 +44,7 @@ const StepGroup = ({
     <div className="step-group">
       {mode === MODES.EDIT ? (
         <>
-          <div className={`order edit ${status}`}>
+          <div className="order edit unknown">
             {order}
             <span className="drag-handle">
               <IconsLib type={IconsLib.TYPES.HANDLE} />
@@ -77,6 +78,8 @@ const StepGroup = ({
             <Step
               title={title}
               signals={signals}
+              stageName={stageName}
+              stepGroup={order}
               onUpdate={(updates) => updateStepHandler(index, updates)}
               onDelete={() => deleteStepHandler(index)}
               status={status}
@@ -92,6 +95,7 @@ const StepGroup = ({
 StepGroup.propTypes = {
   order: PropTypes.number,
   steps: PropTypes.arrayOf(PropTypes.object),
+  stageName: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),

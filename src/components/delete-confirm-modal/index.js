@@ -27,10 +27,12 @@ const DeleteConfirmModal = ({
             Are you sure you want to delete{' '}
             <span className="heading-name">{name}</span>?
           </HeadingText>
-          <BlockText>
-            Deleting this <strong>{type}</strong> will also remove everything
-            nested inside.
-          </BlockText>
+          {type ? (
+            <BlockText>
+              Deleting this <strong>{type}</strong> will also remove everything
+              nested inside.
+            </BlockText>
+          ) : null}
         </div>
         <div className="modal-footer">
           <Button type={Button.TYPE.DESTRUCTIVE} onClick={deleteHandler}>

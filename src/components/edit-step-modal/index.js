@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -9,22 +9,24 @@ import {
   HeadingText,
   Icon,
   Modal,
+  PlatformStateContext,
   TextField,
 } from 'nr1';
 import { useServiceLevelsSearch } from '../../hooks';
 import { isMatchPattern } from '../../utils/regex';
 
 const EditStepModal = ({
-  accountId,
   stageName = 'Stage',
   stepGroup = 0,
   stepName = 'Step',
   existingSignals = [],
+  hidden = true,
   onChange,
+  onClose,
 }) => {
   const [selectedSignals, setSelectedSignals] = useState([]);
-  const [hidden, setHidden] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const { accountId } = useContext(PlatformStateContext);
   const { serviceLevels, refetchServiceLevels } = useServiceLevelsSearch({
     accountId,
   });
@@ -44,7 +46,7 @@ const EditStepModal = ({
   );
 
   const closeHandler = useCallback(() => {
-    setHidden(true);
+    if (onClose) onClose();
   }, []);
 
   return (
@@ -52,8 +54,11 @@ const EditStepModal = ({
       <div className="edit-step-modal">
         <div className="signals-picker">
           <div className="heading">
-            <HeadingText type={HeadingText.TYPE.HEADING_3}>
-              {stageName}:
+            <HeadingText
+              type={HeadingText.TYPE.HEADING_4}
+              className="edit-step-stage-name"
+            >
+              {stageName}
             </HeadingText>
             <HeadingText
               type={HeadingText.TYPE.HEADING_5}
@@ -61,12 +66,12 @@ const EditStepModal = ({
             >
               {stepGroup}
             </HeadingText>
-            <HeadingText type={HeadingText.TYPE.HEADING_3}>
+            <HeadingText type={HeadingText.TYPE.HEADING_4}>
               {stepName}
             </HeadingText>
           </div>
 
-          <div className="search-bar">
+          <div className="signals-search-bar">
             <TextField
               className="search-input"
               type={TextField.TYPE.SEARCH}
@@ -101,6 +106,7 @@ const EditStepModal = ({
 
           <div className="footer-buttons">
             <Button
+              type={Button.TYPE.SECONDARY}
               onClick={() =>
                 window.open(
                   'https://one.newrelic.com/service-levels-management/sli-edit',
@@ -150,7 +156,11 @@ const EditStepModal = ({
         </div>
 
         <div className="footer-buttons">
-          <Button onClick={() => (onChange ? onChange(selectedSignals) : null)}>
+          <Button
+            type={Button.TYPE.PRIMARY}
+            disabled={!selectedSignals.length}
+            onClick={() => (onChange ? onChange(selectedSignals) : null)}
+          >
             Add signal(s)
           </Button>
         </div>
@@ -160,12 +170,13 @@ const EditStepModal = ({
 };
 
 EditStepModal.propTypes = {
-  accountId: PropTypes.number,
   stageName: PropTypes.string,
   stepGroup: PropTypes.number,
   stepName: PropTypes.string,
   existingSignals: PropTypes.arrayOf(PropTypes.string),
+  hidden: PropTypes.bool,
   onChange: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 export default EditStepModal;
