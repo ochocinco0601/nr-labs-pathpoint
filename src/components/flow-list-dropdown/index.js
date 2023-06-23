@@ -60,11 +60,6 @@ const FlowListDropdown = ({ flows = [], onClick = () => null }) => {
     </div>
   );
 };
-// <img
-//   src={
-//     'https://raw.githubusercontent.com/newrelic/nr1-pathpoint/main/icon.png'
-//   }
-// />
 
 FlowListDropdown.propTypes = {
   flows: PropTypes.array,
