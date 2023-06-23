@@ -1,3 +1,10 @@
+## [1.23.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.1...v1.23.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* center flow header in kiosk mode ([b357444](https://github.com/newrelic/nr-labs-hedgehog/commit/b357444beb94d26ae07bda1c8985222a99c4a8b5))
+
 ## [1.23.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.0...v1.23.1) (2023-06-23)
 
 
