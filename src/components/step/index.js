@@ -1,15 +1,17 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText } from 'nr1';
 import { StatusIconsLayout } from '@newrelic/nr-labs-components';
 
 import Signal from '../signal';
+import StepHeader from './header';
 import { MODES, STATUSES } from '../../constants';
 
 const Step = ({
   title = 'Step',
   signals = [],
+  onUpdate,
+  onDelete,
   status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
 }) => {
@@ -36,9 +38,12 @@ const Step = ({
 
   return (
     <div className={`step ${status}`}>
-      <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
-        {title}
-      </HeadingText>
+      <StepHeader
+        title={title}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        mode={mode}
+      />
       <div className="signals">
         {mode === MODES.KIOSK ? <SignalsGrid /> : null}
         {mode === MODES.LIST ? <SignalsList /> : null}
@@ -50,6 +55,8 @@ const Step = ({
 Step.propTypes = {
   title: PropTypes.string,
   signals: PropTypes.arrayOf(PropTypes.object),
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };

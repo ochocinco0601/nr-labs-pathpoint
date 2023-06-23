@@ -56,8 +56,25 @@ const Stage = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const updateStageHandler = (updates = {}) =>
-    onUpdate({ name, stepGroups, related, ...updates });
+  const updateStageHandler = (updates = {}) => {
+    if (onUpdate) onUpdate({ name, stepGroups, related, ...updates });
+  };
+
+  const deleteStepGroupHandler = (index) => {
+    if (onUpdate)
+      onUpdate({
+        name,
+        related,
+        stepGroups: stepGroups.filter((_, i) => i !== index),
+      });
+  };
+
+  const updateStepGroupHandler = (index, updates = {}) =>
+    updateStageHandler({
+      stepGroups: stepGroups.map((stepGroup, i) =>
+        i === index ? { ...stepGroup, ...updates } : stepGroup
+      ),
+    });
 
   return (
     <div className="stage">
@@ -77,11 +94,13 @@ const Stage = ({
           ) : null}
         </div>
         <div className="step-groups">
-          {stepGroups.map(({ steps, status }, i) => (
+          {stepGroups.map(({ steps, status }, index) => (
             <StepGroup
-              key={i}
-              order={i + 1}
+              key={index}
+              order={index + 1}
               steps={steps}
+              onUpdate={(updates) => updateStepGroupHandler(index, updates)}
+              onDelete={() => deleteStepGroupHandler(index)}
               status={status}
               mode={mode}
             />
