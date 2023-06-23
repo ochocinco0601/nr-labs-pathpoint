@@ -1,3 +1,11 @@
+## [1.23.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.0...v1.23.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* change initial input text to placeholder; disable add step button till step name is typed out ([52d89e3](https://github.com/newrelic/nr-labs-hedgehog/commit/52d89e345fb8790e432dc17e7341a3f365d024c4))
+* place steps in separate rows when in edit mode ([84af77d](https://github.com/newrelic/nr-labs-hedgehog/commit/84af77d6a26eb78d8fc63eac5f10665ed0d7fd87))
+
 # [1.23.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.22.0...v1.23.0) (2023-06-22)
 
 
