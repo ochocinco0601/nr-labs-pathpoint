@@ -1,16 +1,23 @@
 .delete-stage-modal {
   height: 100%;
-  display: grid;
-  grid-template-rows: 1fr min-content;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
 
   .modal-content {
     align-self: center;
     display: flex;
     flex-direction: column;
     gap: 4px;
+
+    .heading-name {
+      font-style: italic;
+    }
   }
 
   .modal-footer {
+    margin-top: 48px;
     display: flex;
     gap: 8px;
   }

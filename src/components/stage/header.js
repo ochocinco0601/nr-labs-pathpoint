@@ -5,7 +5,7 @@ import { HeadingText, Icon, Popover, PopoverTrigger, PopoverBody } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
-import DeleteStageModal from '../delete-stage-modal';
+import DeleteConfirmModal from '../delete-confirm-modal';
 import ChangeShapeModal from '../change-shape-modal';
 import { MODES, STATUSES } from '../../constants';
 import { stageHeaderShapeClassName } from '../../utils';
@@ -66,8 +66,9 @@ const StageHeader = ({
           </PopoverBody>
         </Popover>
       </span>
-      <DeleteStageModal
+      <DeleteConfirmModal
         name={name}
+        type="stage"
         hidden={deleteModalHidden}
         onConfirm={onDelete}
         onClose={() => setDeleteModalHidden(true)}

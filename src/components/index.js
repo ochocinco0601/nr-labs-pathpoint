@@ -12,6 +12,6 @@ export { default as KpiBar } from './kpi-bar';
 export { default as Flow } from './flow';
 export { default as FlowList } from './flow-list';
 export { default as ImageUploadModal } from './image-upload-modal';
-export { default as DeleteStageModal } from './delete-stage-modal';
+export { default as DeleteConfirmModal } from './delete-confirm-modal';
 export { default as ChangeShapeModal } from './change-shape-modal';
 export { default as AddStep } from './add-step';
