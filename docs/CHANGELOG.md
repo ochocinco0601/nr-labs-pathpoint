@@ -1,3 +1,12 @@
+# [1.24.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.2...v1.24.0) (2023-06-23)
+
+
+### Features
+
+* delete step group ([9a00454](https://github.com/newrelic/nr-labs-hedgehog/commit/9a004543663a7247619e807ae9a7194872401337))
+* edit step name and delete step functionality ([9655e18](https://github.com/newrelic/nr-labs-hedgehog/commit/9655e1803ca8c839d0658800242edb5629288300))
+* renaming delete stage modal to delete confirm modal to support other types ([9173307](https://github.com/newrelic/nr-labs-hedgehog/commit/91733078f04144d3f530e99cd856b00dd5464079))
+
 ## [1.23.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.1...v1.23.2) (2023-06-23)
 
 
