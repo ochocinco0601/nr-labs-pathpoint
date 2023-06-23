@@ -11,6 +11,7 @@ import { MODES, STATUSES } from '../../constants';
 const StepGroup = ({
   order = 0,
   steps = [],
+  onUpdate,
   onDelete,
   status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
@@ -21,6 +22,22 @@ const StepGroup = ({
     if (onDelete) onDelete();
     setDeleteModalHidden(true);
   }, []);
+
+  const updateStepHandler = (index, updates = {}) => {
+    if (onUpdate) {
+      onUpdate({
+        steps: steps.map((step, i) =>
+          i === index ? { ...step, ...updates } : step
+        ),
+      });
+    }
+  };
+
+  const deleteStepHandler = (index) => {
+    if (onUpdate) {
+      onUpdate({ steps: steps.filter((_, i) => i !== index) });
+    }
+  };
 
   return (
     <div className="step-group">
@@ -57,7 +74,14 @@ const StepGroup = ({
             className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
             key={index}
           >
-            <Step title={title} signals={signals} status={status} mode={mode} />
+            <Step
+              title={title}
+              signals={signals}
+              onUpdate={(updates) => updateStepHandler(index, updates)}
+              onDelete={() => deleteStepHandler(index)}
+              status={status}
+              mode={mode}
+            />
           </div>
         ))}
       </div>
@@ -68,6 +92,7 @@ const StepGroup = ({
 StepGroup.propTypes = {
   order: PropTypes.number,
   steps: PropTypes.arrayOf(PropTypes.object),
+  onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),

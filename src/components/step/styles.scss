@@ -6,7 +6,22 @@
   background-color: #fff;
   max-width: 200px;
 
-  .title {
-    margin-bottom: 8px;  
+  .step-header {
+    display: grid;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+
+    &.edit {
+      grid-template-columns: min-content auto min-content min-content;
+    }
+
+    .drag-handle {
+      cursor: pointer;
+    }
+
+    .delete-btn {
+      cursor: pointer;
+    }
   }
 }
