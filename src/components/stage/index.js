@@ -59,6 +59,13 @@ const Stage = ({
   const updateStageHandler = (updates = {}) =>
     onUpdate({ name, stepGroups, related, ...updates });
 
+  const deleteStepGroupHandler = (index) =>
+    onUpdate({
+      name,
+      related,
+      stepGroups: stepGroups.filter((_, i) => i !== index),
+    });
+
   return (
     <div className="stage">
       <StageHeader
@@ -82,6 +89,7 @@ const Stage = ({
               key={i}
               order={i + 1}
               steps={steps}
+              onDelete={() => deleteStepGroupHandler(i)}
               status={status}
               mode={mode}
             />

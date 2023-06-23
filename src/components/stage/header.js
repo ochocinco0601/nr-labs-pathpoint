@@ -36,7 +36,9 @@ const StageHeader = ({
 
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
-      <IconsLib type={IconsLib.TYPES.HANDLE} />
+      <span className="drag-handle">
+        <IconsLib type={IconsLib.TYPES.HANDLE} />
+      </span>
       <HeadingText className="name">
         <EditInPlace
           value={name}

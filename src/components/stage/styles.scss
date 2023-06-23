@@ -21,8 +21,11 @@
       background-color: #9ea5a9;
       color: #fafbfb;
 
-      svg {
-        fill: #fafbfb;
+      .drag-handle {
+        cursor: pointer;
+        svg {
+          fill: #fafbfb;
+        }
       }
 
       .last-col {

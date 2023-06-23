@@ -13,6 +13,27 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
+
+    &.edit {
+      display: flex;
+      flex-direction: column;
+      height: min-content;
+      padding: 4px;
+      gap: 4px;
+      align-items: center;
+
+      .drag-handle {
+        cursor: pointer;
+        svg {
+          fill: #fafbfb;
+        }
+      }
+
+      .delete-btn {
+        margin-top: 4px;
+        cursor: pointer;
+      }
+    }
     
     @include status-colors(
       $critical: 'critical',
