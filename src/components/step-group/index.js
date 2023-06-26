@@ -44,7 +44,7 @@ const StepGroup = ({
     <div className="step-group">
       {mode === MODES.EDIT ? (
         <>
-          <div className="order edit unknown">
+          <div className={`order edit ${STATUSES.UNKNOWN}`}>
             {order}
             <span className="drag-handle">
               <IconsLib type={IconsLib.TYPES.HANDLE} />
