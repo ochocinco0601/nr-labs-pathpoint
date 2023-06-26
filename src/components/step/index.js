@@ -1,14 +1,14 @@
 import React, { memo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Icon } from 'nr1';
+import { Button } from 'nr1';
 import { StatusIconsLayout } from '@newrelic/nr-labs-components';
 
 import Signal from '../signal';
 import StepHeader from './header';
+import EditStepModal from '../edit-step-modal';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
-import EditStepModal from '../edit-step-modal';
 
 const Step = ({
   title = 'Step',
@@ -27,13 +27,10 @@ const Step = ({
   const addSignalsHandler = (guids) => {
     if (onUpdate)
       onUpdate({
-        signals: [
-          ...signals,
-          ...guids.map((guid) => ({
-            guid,
-            type: 'service_level',
-          })),
-        ],
+        signals: guids.map((guid) => ({
+          guid,
+          type: 'service_level',
+        })),
       });
   };
 
@@ -71,21 +68,15 @@ const Step = ({
 
   const SignalsList = memo(
     () =>
-      signals.map(({ name, status }, i) =>
-        mode === MODES.EDIT ? (
-          <div className="signal-edit-row" key={i}>
-            <Signal name={name} />
-            <span
-              className="delete-btn"
-              onClick={() => openDeleteModalHandler(i, name)}
-            >
-              <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__CLOSE} />
-            </span>
-          </div>
-        ) : (
-          <Signal key={i} name={name} status={status} />
-        )
-      ),
+      signals.map(({ name, status }, i) => (
+        <Signal
+          key={i}
+          name={name}
+          onDelete={() => openDeleteModalHandler(i, name)}
+          status={status}
+          mode={mode}
+        />
+      )),
     [signals, mode]
   );
   SignalsList.displayName = 'SignalsList';
@@ -117,7 +108,7 @@ const Step = ({
             stageName={stageName}
             stepGroup={stepGroup}
             stepTitle={title}
-            existingSignals={signals}
+            existingSignals={signals.map(({ guid }) => guid)}
             hidden={editModalHidden}
             onChange={addSignalsHandler}
             onClose={() => setEditModalHidden(true)}

@@ -11,16 +11,6 @@
     flex-direction: column;
     gap: 4px;
     margin-top: 8px;
-
-    .signal-edit-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-
-      .delete-btn {
-        cursor: pointer;
-      }
-    }
   }
 
   .step-header {
