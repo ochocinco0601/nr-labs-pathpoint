@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
@@ -17,8 +17,12 @@ const Stage = ({
   mode = MODES.KIOSK,
   onUpdate,
   onDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }) => {
   const [signals, setSignals] = useState({});
+  const isDragHandleClicked = useRef(false);
 
   useEffect(
     () =>
@@ -76,8 +80,34 @@ const Stage = ({
       ),
     });
 
+  const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
+
+  const dragStartHandler = (e) => {
+    if (isDragHandleClicked.current) {
+      if (onDragStart) onDragStart(e);
+    } else {
+      e.preventDefault();
+    }
+  };
+
+  const onDropHandler = (e) => {
+    if (onDrop) onDrop(e);
+    isDragHandleClicked.current = false;
+  };
+
+  const dragEndHandler = () => {
+    isDragHandleClicked.current = false;
+  };
+
   return (
-    <div className="stage">
+    <div
+      className="stage"
+      draggable={mode === MODES.EDIT}
+      onDragStart={dragStartHandler}
+      onDragOver={onDragOver}
+      onDrop={onDropHandler}
+      onDragEnd={dragEndHandler}
+    >
       <StageHeader
         name={name}
         related={related}
@@ -85,6 +115,7 @@ const Stage = ({
         onUpdate={updateStageHandler}
         onDelete={onDelete}
         mode={mode}
+        onDragHandle={dragHandleHandler}
       />
       <div className="body">
         <div className="section-title">
@@ -132,6 +163,9 @@ Stage.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDrop: PropTypes.func,
 };
 
 export default Stage;

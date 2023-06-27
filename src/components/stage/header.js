@@ -17,6 +17,7 @@ const StageHeader = ({
   onUpdate,
   onDelete,
   mode = MODES.KIOSK,
+  onDragHandle,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [shapeModalHidden, setShapeModalHidden] = useState(true);
@@ -36,7 +37,11 @@ const StageHeader = ({
 
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
-      <span className="drag-handle">
+      <span
+        className="drag-handle"
+        onMouseDown={() => (onDragHandle ? onDragHandle(true) : null)}
+        onMouseUp={() => (onDragHandle ? onDragHandle(false) : null)}
+      >
         <IconsLib type={IconsLib.TYPES.HANDLE} />
       </span>
       <HeadingText className="name">
@@ -99,6 +104,7 @@ StageHeader.propTypes = {
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  onDragHandle: PropTypes.func,
 };
 
 export default StageHeader;
