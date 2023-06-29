@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 import {
+  Button,
   Icon,
   nerdlet,
   PlatformStateContext,
@@ -32,32 +33,49 @@ const HomeNerdlet = () => {
   });
   const newFlowId = useRef();
 
+  const actionControlButtons = useMemo(() => {
+    const buttons = [];
+    if (mode === MODES.EDIT) {
+      buttons.push({
+        label: 'Exit edit mode',
+        type: Button.TYPE.PRIMARY,
+        iconType: Icon.TYPE.INTERFACE__OPERATIONS__CLOSE,
+        onClick: () => setMode(MODES.KIOSK),
+      });
+    } else {
+      if (currentFlowIndex > -1) {
+        buttons.push({
+          label: 'Editing mode',
+          type: Button.TYPE.SECONDARY,
+          iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
+          onClick: () => setMode(MODES.EDIT),
+        });
+        buttons.push({
+          label: mode === MODES.KIOSK ? 'Compact view' : 'Detail view',
+          type: Button.TYPE.SECONDARY,
+          onClick: () =>
+            setMode(mode === MODES.KIOSK ? MODES.LIST : MODES.KIOSK),
+        });
+      }
+      buttons.push({
+        label: 'Create new flow',
+        type: Button.TYPE.PRIMARY,
+        iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
+        onClick: () => newFlowHandler(),
+      });
+    }
+    return buttons;
+  }, [mode, newFlowHandler, currentFlowIndex, newFlowId]);
+
   useEffect(() => {
     nerdlet.setConfig({
       accountPicker: true,
       actionControls: true,
-      actionControlButtons: [
-        {
-          ...(mode === MODES.KIOSK
-            ? {
-                label: 'Exit kiosk mode',
-                onClick: () => setMode(MODES.LIST),
-              }
-            : {
-                label: 'Kiosk mode',
-                onClick: () => setMode(MODES.KIOSK),
-              }),
-        },
-        {
-          label: 'Create new flow',
-          iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
-          onClick: newFlowHandler,
-        },
-      ],
+      actionControlButtons: actionControlButtons,
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [mode, newFlowHandler]);
+  }, [mode, newFlowHandler, currentFlowIndex]);
 
   useEffect(() => {
     setFlows(flowsData || []);
@@ -99,7 +117,10 @@ const HomeNerdlet = () => {
     [flows]
   );
 
-  const backToFlowsHandler = useCallback(() => setCurrentFlowIndex(-1), []);
+  const backToFlowsHandler = useCallback(() => {
+    setCurrentFlowIndex(-1);
+    setMode(MODES.KIOSK);
+  }, []);
 
   useEffect(() => {
     if (createFlowError)
@@ -115,6 +136,8 @@ const HomeNerdlet = () => {
           onClose={backToFlowsHandler}
           accountId={accountId}
           mode={mode}
+          flows={flows}
+          onSelectFlow={flowClickHandler}
         />
       );
     if (flows && flows.length)
