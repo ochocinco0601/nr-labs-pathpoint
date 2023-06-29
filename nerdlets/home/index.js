@@ -26,11 +26,12 @@ const HomeNerdlet = () => {
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
   const { flows: flowsData, error: flowsError } = useFlowLoader({ accountId });
-  const [createFlow, { data: createFlowData, error: createFlowError }] = useAccountStorageMutation({
-    actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-    collection: NERD_STORAGE.FLOWS_COLLECTION,
-    accountId: accountId,
-  });
+  const [createFlow, { data: createFlowData, error: createFlowError }] =
+    useAccountStorageMutation({
+      actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+      collection: NERD_STORAGE.FLOWS_COLLECTION,
+      accountId: accountId,
+    });
   const newFlowId = useRef();
 
   const actionControlButtons = useMemo(() => {
@@ -123,8 +124,7 @@ const HomeNerdlet = () => {
   }, []);
 
   useEffect(() => {
-    const { nerdStorageWriteDocument: { id } = {} } =
-      createFlowData || {};
+    const { nerdStorageWriteDocument: { id } = {} } = createFlowData || {};
     if (id) {
       setMode(MODES.EDIT);
       flowClickHandler(id);
