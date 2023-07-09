@@ -9,11 +9,15 @@
     box-sizing: border-box;
     background: #FFFFFF;
     border-bottom: 1px solid #E7E9EA;
-    padding: 16px 24px 8px;
+    padding: 12px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 4px;
+
+    Button {
+      margin-left: auto;
+    }
 
     .back {
       cursor: pointer;
