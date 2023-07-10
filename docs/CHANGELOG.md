@@ -1,3 +1,25 @@
+# [1.26.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.25.0...v1.26.0) (2023-07-09)
+
+
+### Bug Fixes
+
+* eslint errors ([6965ed5](https://github.com/newrelic/nr-labs-hedgehog/commit/6965ed5797b34405f3f319d64fdb047e9e9117cb))
+
+
+### Features
+
+* add action control buttons + additional props to Flow component ([86507ad](https://github.com/newrelic/nr-labs-hedgehog/commit/86507ad829c807e0ca897242b79f0009481c43ed))
+* add logic for selecting / deleting a flow + style updates ([aa1bf3f](https://github.com/newrelic/nr-labs-hedgehog/commit/aa1bf3f71689709aaf7df5e3f9771a0d24adb28f))
+* load newly created flow  after clicking the 'create new flow' button and set mode to edit ([ca25ac7](https://github.com/newrelic/nr-labs-hedgehog/commit/ca25ac7fd1f6ea1d72ebf0af3c3413269b132a60))
+
+# [1.25.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.24.0...v1.25.0) (2023-06-23)
+
+
+### Features
+
+* add flow list dropdown ([0b89b8a](https://github.com/newrelic/nr-labs-hedgehog/commit/0b89b8afe3722f8048cfad5538caa39fa6495cfb))
+* add flow list dropdown source and styles to components files ([158c591](https://github.com/newrelic/nr-labs-hedgehog/commit/158c59155cfcc93354394b4bab057b9080f124db))
+
 # [1.24.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.23.2...v1.24.0) (2023-06-23)
 
 
