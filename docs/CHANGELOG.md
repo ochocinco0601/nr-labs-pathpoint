@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.26.0...v1.27.0) (2023-07-11)
+
+
+### Features
+
+* display spinner while flows are being loaded ([6420d46](https://github.com/newrelic/nr-labs-hedgehog/commit/6420d46a66c92c414dfeaef333d7ff7f90e9d74a))
+
 # [1.26.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.25.0...v1.26.0) (2023-07-09)
 
 
