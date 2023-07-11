@@ -12,6 +12,7 @@ import {
   Icon,
   nerdlet,
   PlatformStateContext,
+  Spinner,
   useAccountStorageMutation,
 } from 'nr1';
 
@@ -25,7 +26,12 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
-  const { flows: flowsData, error: flowsError } = useFlowLoader({ accountId });
+  const {
+    flows: flowsData,
+    error: flowsError,
+    loading: flowsLoading,
+  } = useFlowLoader({ accountId });
+
   const [createFlow, { data: createFlowData, error: createFlowError }] =
     useAccountStorageMutation({
       actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
@@ -151,7 +157,11 @@ const HomeNerdlet = () => {
       );
     if (flows && flows.length)
       return <FlowList flows={flows} onClick={flowClickHandler} />;
-    return <NoFlows newFlowHandler={newFlowHandler} />;
+    if (flowsLoading) {
+      return <Spinner />;
+    } else {
+      return <NoFlows newFlowHandler={newFlowHandler} />;
+    }
   }, [flows, currentFlowIndex, accountId, mode, flowClickHandler]);
 
   return <div className="container">{currentView}</div>;

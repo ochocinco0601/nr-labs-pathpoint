@@ -21,7 +21,7 @@ const useFlowLoader = ({ accountId, flowId }) => {
     if (!loading && data) setFlows(data);
   }, [data, loading]);
 
-  return { flows, error };
+  return { flows, error, loading };
 };
 
 export default useFlowLoader;
