@@ -42,6 +42,14 @@
       flex: 1;
       overflow: auto;
     }
+
+    .create-signals-bar {
+      .create-signals-hint {
+        font-weight: bold;
+        color: #293338;
+        margin-bottom: 4px;
+      }
+    }
   }
 
   .signals-selections {

@@ -18,7 +18,7 @@ import { isMatchPattern } from '../../utils/regex';
 const EditStepModal = ({
   stageName = 'Stage',
   stepGroup = 0,
-  stepName = 'Step',
+  stepTitle = 'Step',
   existingSignals = [],
   hidden = true,
   onChange,
@@ -45,6 +45,11 @@ const EditStepModal = ({
     [serviceLevels]
   );
 
+  const saveHandler = useCallback(() => {
+    if (onChange) onChange(selectedSignals);
+    if (onClose) onClose();
+  }, [selectedSignals]);
+
   const closeHandler = useCallback(() => {
     if (onClose) onClose();
   }, []);
@@ -67,7 +72,7 @@ const EditStepModal = ({
               {stepGroup}
             </HeadingText>
             <HeadingText type={HeadingText.TYPE.HEADING_4}>
-              {stepName}
+              {stepTitle}
             </HeadingText>
           </div>
 
@@ -104,26 +109,36 @@ const EditStepModal = ({
             </CheckboxGroup>
           </div>
 
-          <div className="footer-buttons">
-            <Button
-              type={Button.TYPE.SECONDARY}
-              onClick={() =>
-                window.open(
-                  'https://one.newrelic.com/service-levels-management/sli-edit',
-                  '_blank',
-                  'noreferrer'
-                )
-              }
-            >
-              Create signal
-            </Button>
-            <Button
-              type={Button.TYPE.PLAIN}
-              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
-              onClick={() =>
-                refetchServiceLevels ? refetchServiceLevels() : null
-              }
-            />
+          <div className="create-signals-bar">
+            <BlockText className="create-signals-hint">
+              Don&apos;t see the signal you are looking for?
+            </BlockText>
+            <div className="footer-buttons">
+              <Button
+                type={Button.TYPE.SECONDARY}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                onClick={() =>
+                  window.open(
+                    'https://one.newrelic.com/service-levels-management/sli-edit',
+                    '_blank',
+                    'noreferrer'
+                  )
+                }
+              >
+                Create signal
+              </Button>
+              <Button
+                type={Button.TYPE.TERTIARY}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
+                onClick={() =>
+                  refetchServiceLevels ? refetchServiceLevels() : null
+                }
+              >
+                Refresh list
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -156,12 +171,15 @@ const EditStepModal = ({
         </div>
 
         <div className="footer-buttons">
+          <Button type={Button.TYPE.PRIMARY} onClick={saveHandler}>
+            Save
+          </Button>
           <Button
-            type={Button.TYPE.PRIMARY}
-            disabled={!selectedSignals.length}
-            onClick={() => (onChange ? onChange(selectedSignals) : null)}
+            type={Button.TYPE.TERTIARY}
+            sizeType={Button.SIZE_TYPE.SMALL}
+            onClick={closeHandler}
           >
-            Add signal(s)
+            Cancel
           </Button>
         </div>
       </div>
@@ -172,7 +190,7 @@ const EditStepModal = ({
 EditStepModal.propTypes = {
   stageName: PropTypes.string,
   stepGroup: PropTypes.number,
-  stepName: PropTypes.string,
+  stepTitle: PropTypes.string,
   existingSignals: PropTypes.arrayOf(PropTypes.string),
   hidden: PropTypes.bool,
   onChange: PropTypes.func,
