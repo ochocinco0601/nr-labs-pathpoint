@@ -1,3 +1,17 @@
+# [1.28.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.27.0...v1.28.0) (2023-07-13)
+
+
+### Bug Fixes
+
+* design updates ([15d571b](https://github.com/newrelic/nr-labs-hedgehog/commit/15d571bb478ad5267e21eea8be0d30e6f939712b))
+* guids not sent array of guids to edit step modal; style updates for signal ([c221651](https://github.com/newrelic/nr-labs-hedgehog/commit/c2216518b7ce928a88c27a1c5badb4c3ea322d17))
+* replace text with constant ([4c6bd0d](https://github.com/newrelic/nr-labs-hedgehog/commit/4c6bd0d84c24add51375b234bebfcc7ac1ce02b7))
+
+
+### Features
+
+* add and delete signals ([bec6ff0](https://github.com/newrelic/nr-labs-hedgehog/commit/bec6ff07c7ab00675b725e6cf7f3ba781bb67e62))
+
 # [1.27.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.26.0...v1.27.0) (2023-07-11)
 
 
