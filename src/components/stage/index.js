@@ -23,6 +23,8 @@ const Stage = ({
 }) => {
   const [signals, setSignals] = useState({});
   const isDragHandleClicked = useRef(false);
+  const dragItemIndex = useRef();
+  const dragOverItemIndex = useRef();
 
   useEffect(
     () =>
@@ -87,6 +89,7 @@ const Stage = ({
       if (onDragStart) onDragStart(e);
     } else {
       e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -97,6 +100,39 @@ const Stage = ({
 
   const dragEndHandler = () => {
     isDragHandleClicked.current = false;
+  };
+
+  const stepGroupDragStartHandler = (e, index) => {
+    e.stopPropagation();
+    dragItemIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const stepGroupDragOverHandler = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverItemIndex.current = index;
+  };
+
+  const stepGroupDropHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const itemIndex = dragItemIndex.current;
+    const overIndex = dragOverItemIndex.current;
+    if (
+      !Number.isInteger(itemIndex) ||
+      !Number.isInteger(overIndex) ||
+      itemIndex === overIndex
+    )
+      return;
+    const updatedStepGroups = [...stepGroups];
+    const item = updatedStepGroups[itemIndex];
+    updatedStepGroups.splice(itemIndex, 1);
+    updatedStepGroups.splice(overIndex, 0, item);
+    if (onUpdate) onUpdate({ name, related, stepGroups: updatedStepGroups });
+    dragItemIndex.current = null;
+    dragOverItemIndex.current = null;
   };
 
   return (
@@ -133,6 +169,9 @@ const Stage = ({
               stageName={name}
               onUpdate={(updates) => updateStepGroupHandler(index, updates)}
               onDelete={() => deleteStepGroupHandler(index)}
+              onDragStart={(e) => stepGroupDragStartHandler(e, index)}
+              onDragOver={(e) => stepGroupDragOverHandler(e, index)}
+              onDrop={(e) => stepGroupDropHandler(e)}
               status={status}
               mode={mode}
             />
