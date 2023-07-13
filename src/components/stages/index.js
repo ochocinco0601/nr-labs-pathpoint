@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText } from 'nr1';
@@ -15,6 +15,8 @@ import {
 const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
   const [stagesWithStatuses, setStagesWithStatuses] = useState([]);
   const [guids, setGuids] = useState([]);
+  const dragItemIndex = useRef();
+  const dragOverItemIndex = useRef();
   const { data: serviceLevelsData, error: serviceLevelsError } =
     useFetchServiceLevels({ guids });
 
@@ -58,6 +60,36 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
     if (onUpdate) onUpdate({ stages: updatedStages });
   };
 
+  const dragStartHandler = (e, index) => {
+    dragItemIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const dragOverHandler = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverItemIndex.current = index;
+  };
+
+  const dropHandler = (e) => {
+    e.preventDefault();
+    const itemIndex = dragItemIndex.current;
+    const overIndex = dragOverItemIndex.current;
+    if (
+      !Number.isInteger(itemIndex) ||
+      !Number.isInteger(overIndex) ||
+      itemIndex === overIndex
+    )
+      return;
+    const updatedStages = [...stages];
+    const item = updatedStages[itemIndex];
+    updatedStages.splice(itemIndex, 1);
+    updatedStages.splice(overIndex, 0, item);
+    if (onUpdate) onUpdate({ stages: updatedStages });
+    dragItemIndex.current = null;
+    dragOverItemIndex.current = null;
+  };
+
   return (
     <>
       <div className="stages-header">
@@ -93,6 +125,9 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
               mode={mode}
               onUpdate={(updateStage) => updateStageHandler(updateStage, i)}
               onDelete={() => deleteStageHandler(i)}
+              onDragStart={(e) => dragStartHandler(e, i)}
+              onDragOver={(e) => dragOverHandler(e, i)}
+              onDrop={(e) => dropHandler(e)}
             />
           )
         )}
