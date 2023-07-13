@@ -1,20 +1,59 @@
-import React, { memo } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { Button } from 'nr1';
 import { StatusIconsLayout } from '@newrelic/nr-labs-components';
 
 import Signal from '../signal';
 import StepHeader from './header';
+import EditStepModal from '../edit-step-modal';
+import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
 
 const Step = ({
   title = 'Step',
   signals = [],
+  stageName,
+  stepGroup,
   onUpdate,
   onDelete,
   status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
 }) => {
+  const [editModalHidden, setEditModalHidden] = useState(true);
+  const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+  const signalToDelete = useRef({});
+
+  const addSignalsHandler = (guids) => {
+    if (onUpdate)
+      onUpdate({
+        signals: guids.map((guid) => ({
+          guid,
+          type: 'service_level',
+        })),
+      });
+  };
+
+  const openDeleteModalHandler = (index, name) => {
+    signalToDelete.current = { index, name };
+    setDeleteModalHidden(false);
+  };
+
+  const deleteSignalHandler = () => {
+    if (onUpdate) {
+      const { index } = signalToDelete.current;
+      onUpdate({
+        signals: signals.filter((_, i) => i !== index),
+      });
+      signalToDelete.current = {};
+    }
+  };
+
+  const closeDeleteModalHandler = () => {
+    signalToDelete.current = {};
+    setDeleteModalHidden(true);
+  };
+
   const SignalsGrid = memo(
     () => (
       <StatusIconsLayout
@@ -30,9 +69,15 @@ const Step = ({
   const SignalsList = memo(
     () =>
       signals.map(({ name, status }, i) => (
-        <Signal key={i} name={name} status={status} />
+        <Signal
+          key={i}
+          name={name}
+          onDelete={() => openDeleteModalHandler(i, name)}
+          status={status}
+          mode={mode}
+        />
       )),
-    [signals]
+    [signals, mode]
   );
   SignalsList.displayName = 'SignalsList';
 
@@ -44,6 +89,38 @@ const Step = ({
         onDelete={onDelete}
         mode={mode}
       />
+      {mode === MODES.EDIT ? (
+        <>
+          <div className="add-signal-btn">
+            <Button
+              type={Button.TYPE.SECONDARY}
+              sizeType={Button.SIZE_TYPE.SMALL}
+              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+              onClick={() => setEditModalHidden(false)}
+            >
+              Add a signal
+            </Button>
+          </div>
+          <div className="edit-signals-list">
+            <SignalsList />
+          </div>
+          <EditStepModal
+            stageName={stageName}
+            stepGroup={stepGroup}
+            stepTitle={title}
+            existingSignals={signals.map(({ guid }) => guid)}
+            hidden={editModalHidden}
+            onChange={addSignalsHandler}
+            onClose={() => setEditModalHidden(true)}
+          />
+          <DeleteConfirmModal
+            name={signalToDelete.current.name}
+            hidden={deleteModalHidden}
+            onConfirm={deleteSignalHandler}
+            onClose={closeDeleteModalHandler}
+          />
+        </>
+      ) : null}
       <div className="signals">
         {mode === MODES.KIOSK ? <SignalsGrid /> : null}
         {mode === MODES.LIST ? <SignalsList /> : null}
@@ -55,6 +132,8 @@ const Step = ({
 Step.propTypes = {
   title: PropTypes.string,
   signals: PropTypes.arrayOf(PropTypes.object),
+  stageName: PropTypes.string,
+  stepGroup: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),

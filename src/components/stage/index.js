@@ -99,6 +99,7 @@ const Stage = ({
               key={index}
               order={index + 1}
               steps={steps}
+              stageName={name}
               onUpdate={(updates) => updateStepGroupHandler(index, updates)}
               onDelete={() => deleteStepGroupHandler(index)}
               status={status}

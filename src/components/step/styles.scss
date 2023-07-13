@@ -6,6 +6,13 @@
   background-color: #fff;
   max-width: 200px;
 
+  .edit-signals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
   .step-header {
     display: grid;
     gap: 8px;
