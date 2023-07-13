@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.28.0...v1.29.0) (2023-07-13)
+
+
+### Features
+
+* drag and drop for stages ([f52eb9c](https://github.com/newrelic/nr-labs-hedgehog/commit/f52eb9cfb31da433260ee13adff3a056d19eb011))
+
 # [1.28.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.27.0...v1.28.0) (2023-07-13)
 
 
