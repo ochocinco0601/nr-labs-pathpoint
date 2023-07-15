@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -14,10 +14,14 @@ const StepGroup = ({
   stageName,
   onUpdate,
   onDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
   status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+  const isDragHandleClicked = useRef(false);
 
   const deleteHandler = useCallback(() => {
     if (onDelete) onDelete();
@@ -40,13 +44,41 @@ const StepGroup = ({
     }
   };
 
+  const dragStartHandler = (e) => {
+    if (isDragHandleClicked.current) {
+      if (onDragStart) onDragStart(e);
+    } else {
+      e.preventDefault();
+    }
+  };
+
+  const onDropHandler = (e) => {
+    if (onDrop) onDrop(e);
+    isDragHandleClicked.current = false;
+  };
+
+  const dragEndHandler = () => {
+    isDragHandleClicked.current = false;
+  };
+
   return (
-    <div className="step-group">
+    <div
+      className="step-group"
+      draggable={mode === MODES.EDIT}
+      onDragStart={dragStartHandler}
+      onDragOver={onDragOver}
+      onDrop={onDropHandler}
+      onDragEnd={dragEndHandler}
+    >
       {mode === MODES.EDIT ? (
         <>
           <div className={`order edit ${STATUSES.UNKNOWN}`}>
             {order}
-            <span className="drag-handle">
+            <span
+              className="drag-handle"
+              onMouseDown={() => (isDragHandleClicked.current = true)}
+              onMouseUp={() => (isDragHandleClicked.current = false)}
+            >
               <IconsLib type={IconsLib.TYPES.HANDLE} />
             </span>
             <span
@@ -98,6 +130,9 @@ StepGroup.propTypes = {
   stageName: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDrop: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
