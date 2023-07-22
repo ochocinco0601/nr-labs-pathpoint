@@ -9,6 +9,7 @@ const DeleteConfirmModal = ({
   hidden = true,
   onConfirm,
   onClose,
+  isDeletingFlow,
 }) => {
   const deleteHandler = useCallback(() => {
     if (onConfirm) onConfirm();
@@ -35,10 +36,18 @@ const DeleteConfirmModal = ({
           ) : null}
         </div>
         <div className="modal-footer">
-          <Button type={Button.TYPE.DESTRUCTIVE} onClick={deleteHandler}>
+          <Button
+            loading={isDeletingFlow}
+            type={Button.TYPE.DESTRUCTIVE}
+            onClick={deleteHandler}
+          >
             Delete
           </Button>
-          <Button type={Button.TYPE.TERTIARY} onClick={closeHandler}>
+          <Button
+            disabled={isDeletingFlow}
+            type={Button.TYPE.TERTIARY}
+            onClick={closeHandler}
+          >
             Cancel
           </Button>
         </div>
@@ -53,6 +62,7 @@ DeleteConfirmModal.propTypes = {
   hidden: PropTypes.bool,
   onConfirm: PropTypes.func,
   onClose: PropTypes.func,
+  isDeletingFlow: PropTypes.bool,
 };
 
 export default DeleteConfirmModal;

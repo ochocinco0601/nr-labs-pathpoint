@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { useAccountStorageMutation } from 'nr1';
+import { Spinner, useAccountStorageMutation } from 'nr1';
 
 import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
@@ -16,6 +16,7 @@ const Flow = ({
   flows = [],
   onSelectFlow = () => null,
 }) => {
+  const [isDeletingFlow, setDeletingFlow] = useState(false);
   const [stages, setStages] = useState([]);
   const [kpis, setKpis] = useState([]);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -63,13 +64,13 @@ const Flow = ({
       accountId: accountId,
     });
 
-  const deleteFlowHandler = useCallback(
-    () =>
-      deleteFlow({
-        documentId: flow.id,
-      }),
-    [flow]
-  );
+  const deleteFlowHandler = useCallback(async () => {
+    setDeletingFlow(true);
+    await deleteFlow({
+      documentId: flow.id,
+    });
+    setDeletingFlow(false);
+  }, [flow]);
 
   useEffect(() => {
     const { nerdStorageDeleteDocument: { deleted } = {} } =
@@ -83,18 +84,6 @@ const Flow = ({
 
   return (
     <div className="flow">
-      <FlowHeader
-        name={flow.name}
-        imageUrl={flow.imageUrl}
-        onUpdate={flowUpdateHandler}
-        onClose={onClose}
-        mode={mode}
-        flows={flows}
-        onSelectFlow={onSelectFlow}
-        onDeleteFlow={() => setDeleteModalHidden(false)}
-      />
-      <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
-      <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
       {mode === MODES.EDIT && (
         <DeleteConfirmModal
           name={flow.name}
@@ -102,7 +91,26 @@ const Flow = ({
           hidden={deleteModalHidden}
           onConfirm={() => deleteFlowHandler()}
           onClose={() => setDeleteModalHidden(true)}
+          isDeletingFlow={isDeletingFlow}
         />
+      )}
+      {!isDeletingFlow ? (
+        <>
+          <FlowHeader
+            name={flow.name}
+            imageUrl={flow.imageUrl}
+            onUpdate={flowUpdateHandler}
+            onClose={onClose}
+            mode={mode}
+            flows={flows}
+            onSelectFlow={onSelectFlow}
+            onDeleteFlow={() => setDeleteModalHidden(false)}
+          />
+          <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
+          <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
+        </>
+      ) : (
+        <Spinner />
       )}
     </div>
   );

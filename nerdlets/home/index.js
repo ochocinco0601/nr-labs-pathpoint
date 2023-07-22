@@ -143,7 +143,7 @@ const HomeNerdlet = () => {
   }, [createFlowError]);
 
   const currentView = useMemo(() => {
-    if (currentFlowIndex > -1)
+    if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
       return (
         <Flow
           flow={flows[currentFlowIndex].document}
@@ -155,6 +155,7 @@ const HomeNerdlet = () => {
           onSelectFlow={flowClickHandler}
         />
       );
+    }
     if (flows && flows.length)
       return <FlowList flows={flows} onClick={flowClickHandler} />;
     if (flowsLoading) {
