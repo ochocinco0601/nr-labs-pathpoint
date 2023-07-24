@@ -14,6 +14,8 @@ import {
   PlatformStateContext,
   Spinner,
   useAccountStorageMutation,
+  useUserStorageQuery,
+  useUserStorageMutation,
 } from 'nr1';
 
 import { Flow, FlowList, NoFlows } from '../../src/components';
@@ -26,6 +28,42 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
+
+  const [hhUserConfig, { error: userStorageWriteError }] =
+    useUserStorageMutation({
+      actionType: useUserStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+      collection: NERD_STORAGE.USER_COLLECTION,
+    });
+  useEffect(
+    () => console.error('User storage write error: ', userStorageWriteError),
+    [userStorageWriteError]
+  );
+  const userStorageHandler = useCallback((updatedConfig) => {
+    hhUserConfig({
+      documentId: NERD_STORAGE.USER_DOCUMENT_ID,
+      document: {
+        id: NERD_STORAGE.USER_DOCUMENT_ID,
+        ...userConfig,
+        ...updatedConfig,
+      },
+    });
+  }, []);
+
+  const [userConfig, setUserConfig] = useState({});
+  const { data: userStorageOptions, error: userStorageError } =
+    useUserStorageQuery({
+      collection: NERD_STORAGE.USER_COLLECTION,
+      documentId: NERD_STORAGE.USER_DOCUMENT_ID,
+    });
+  useEffect(
+    () => setUserConfig(userStorageOptions || {}),
+    [userStorageOptions]
+  );
+  useEffect(
+    () => console.error('User storage error: ', userStorageError),
+    [userStorageError]
+  );
+
   const {
     flows: flowsData,
     error: flowsError,
@@ -153,11 +191,15 @@ const HomeNerdlet = () => {
           mode={mode}
           flows={flows}
           onSelectFlow={flowClickHandler}
+          userConfig={userConfig}
+          updateUserStorage={(config) => userStorageHandler(config)}
         />
       );
     }
-    if (flows && flows.length)
+    if (flows && flows.length) {
+      backToFlowsHandler();
       return <FlowList flows={flows} onClick={flowClickHandler} />;
+    }
     if (flowsLoading) {
       return <Spinner />;
     } else {
