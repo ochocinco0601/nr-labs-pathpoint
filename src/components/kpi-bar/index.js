@@ -12,6 +12,7 @@ import { Button, Icon, HeadingText, PlatformStateContext } from 'nr1';
 
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
+import IconsLib from '../icons-lib';
 import { KPI_MODES, MODES, SIGNAL_TYPES } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
@@ -46,6 +47,39 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
 
   const kpisContainer = useRef();
+
+  const dragItemIndex = useRef();
+  const dragOverItemIndex = useRef();
+
+  const dragStartHandler = (e, index) => {
+    dragItemIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const dragOverHandler = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverItemIndex.current = index;
+  };
+
+  const dropHandler = (e) => {
+    e.preventDefault();
+    const itemIndex = dragItemIndex.current;
+    const overIndex = dragOverItemIndex.current;
+    if (
+      !Number.isInteger(itemIndex) ||
+      !Number.isInteger(overIndex) ||
+      itemIndex === overIndex
+    )
+      return;
+    const updatedKpis = [...kpis];
+    const item = updatedKpis[itemIndex];
+    updatedKpis.splice(itemIndex, 1);
+    updatedKpis.splice(overIndex, 0, item);
+    onChange(updatedKpis);
+    dragItemIndex.current = null;
+    dragOverItemIndex.current = null;
+  };
 
   useEffect(() => {
     selectedKpi.current = {};
@@ -195,7 +229,16 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
             id={`kpi-container-${index}`}
             key={index}
             className="kpi-container"
+            draggable={mode === MODES.EDIT}
+            onDragStart={(e) => dragStartHandler(e, index)}
+            onDragOver={(e) => dragOverHandler(e, index)}
+            onDrop={(e) => dropHandler(e)}
           >
+            {mode === MODES.EDIT && (
+              <span className="drag-handle">
+                <IconsLib type={IconsLib.TYPES.HANDLE} />
+              </span>
+            )}
             <div className="kpi-data">
               <SimpleBillboard
                 metric={metricFromQuery(queryResults, index)}
