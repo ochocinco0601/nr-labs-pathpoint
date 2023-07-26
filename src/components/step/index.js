@@ -17,12 +17,16 @@ const Step = ({
   stepGroup,
   onUpdate,
   onDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
   status = STATUSES.UNKNOWN,
   mode = MODES.KIOSK,
 }) => {
   const [editModalHidden, setEditModalHidden] = useState(true);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const signalToDelete = useRef({});
+  const isDragHandleClicked = useRef(false);
 
   const addSignalsHandler = (guids) => {
     if (onUpdate)
@@ -54,6 +58,25 @@ const Step = ({
     setDeleteModalHidden(true);
   };
 
+  const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
+
+  const dragStartHandler = (e) => {
+    if (isDragHandleClicked.current) {
+      if (onDragStart) onDragStart(e);
+    } else {
+      e.preventDefault();
+    }
+  };
+
+  const onDropHandler = (e) => {
+    if (onDrop) onDrop(e);
+    isDragHandleClicked.current = false;
+  };
+
+  const dragEndHandler = () => {
+    isDragHandleClicked.current = false;
+  };
+
   const SignalsGrid = memo(
     () => (
       <StatusIconsLayout
@@ -82,11 +105,19 @@ const Step = ({
   SignalsList.displayName = 'SignalsList';
 
   return (
-    <div className={`step ${status}`}>
+    <div
+      className={`step ${status}`}
+      draggable={mode === MODES.EDIT}
+      onDragStart={dragStartHandler}
+      onDragOver={onDragOver}
+      onDrop={onDropHandler}
+      onDragEnd={dragEndHandler}
+    >
       <StepHeader
         title={title}
         onUpdate={onUpdate}
         onDelete={onDelete}
+        onDragHandle={dragHandleHandler}
         mode={mode}
       />
       {mode === MODES.EDIT ? (
@@ -136,6 +167,9 @@ Step.propTypes = {
   stepGroup: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDrop: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };

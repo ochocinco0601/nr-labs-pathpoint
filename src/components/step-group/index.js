@@ -22,6 +22,8 @@ const StepGroup = ({
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const isDragHandleClicked = useRef(false);
+  const dragItemIndex = useRef();
+  const dragOverItemIndex = useRef();
 
   const deleteHandler = useCallback(() => {
     if (onDelete) onDelete();
@@ -59,6 +61,39 @@ const StepGroup = ({
 
   const dragEndHandler = () => {
     isDragHandleClicked.current = false;
+  };
+
+  const stepDragStartHandler = (e, index) => {
+    e.stopPropagation();
+    dragItemIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const stepDragOverHandler = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+    dragOverItemIndex.current = index;
+  };
+
+  const stepDropHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const itemIndex = dragItemIndex.current;
+    const overIndex = dragOverItemIndex.current;
+    if (
+      !Number.isInteger(itemIndex) ||
+      !Number.isInteger(overIndex) ||
+      itemIndex === overIndex
+    )
+      return;
+    const updatedSteps = [...steps];
+    const item = updatedSteps[itemIndex];
+    updatedSteps.splice(itemIndex, 1);
+    updatedSteps.splice(overIndex, 0, item);
+    if (onUpdate) onUpdate({ steps: updatedSteps });
+    dragItemIndex.current = null;
+    dragOverItemIndex.current = null;
   };
 
   return (
@@ -114,6 +149,9 @@ const StepGroup = ({
               stepGroup={order}
               onUpdate={(updates) => updateStepHandler(index, updates)}
               onDelete={() => deleteStepHandler(index)}
+              onDragStart={(e) => stepDragStartHandler(e, index)}
+              onDragOver={(e) => stepDragOverHandler(e, index)}
+              onDrop={(e) => stepDropHandler(e)}
               status={status}
               mode={mode}
             />
