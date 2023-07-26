@@ -1,3 +1,10 @@
+# [1.32.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.31.0...v1.32.0) (2023-07-26)
+
+
+### Features
+
+* add kpi drag-n-drop ([780abd1](https://github.com/newrelic/nr-labs-hedgehog/commit/780abd1fe29874055b13c7a940261ec48d1a8392))
+
 # [1.31.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.30.1...v1.31.0) (2023-07-26)
 
 
