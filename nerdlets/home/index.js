@@ -17,7 +17,11 @@ import {
 } from 'nr1';
 
 import { Flow, FlowList, NoFlows } from '../../src/components';
-import { useFlowLoader, useFetchUserConfig, useUpdateUserConfig } from '../../src/hooks';
+import {
+  useFlowLoader,
+  useFetchUserConfig,
+  useUpdateUserConfig,
+} from '../../src/hooks';
 import { MODES, NERD_STORAGE } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
@@ -29,7 +33,7 @@ const HomeNerdlet = () => {
 
   const [userConfig, setUserConfig] = useState({});
   const { userStorageConfig } = useFetchUserConfig();
-  useEffect( () => setUserConfig(userStorageConfig || {}), [userStorageConfig] );
+  useEffect(() => setUserConfig(userStorageConfig || {}), [userStorageConfig]);
   const { userStorageHandler } = useUpdateUserConfig();
 
   const {
