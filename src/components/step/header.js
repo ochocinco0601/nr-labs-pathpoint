@@ -12,13 +12,18 @@ const StepHeader = ({
   title = 'Step',
   onUpdate,
   onDelete,
+  onDragHandle,
   mode = MODES.KIOSK,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
 
   return mode === MODES.EDIT ? (
     <div className="step-header edit">
-      <span className="drag-handle">
+      <span
+        className="drag-handle"
+        onMouseDown={() => (onDragHandle ? onDragHandle(true) : null)}
+        onMouseUp={() => (onDragHandle ? onDragHandle(false) : null)}
+      >
         <IconsLib type={IconsLib.TYPES.HANDLE} />
       </span>
       <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
@@ -55,6 +60,7 @@ StepHeader.propTypes = {
   title: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
+  onDragHandle: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
