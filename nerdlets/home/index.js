@@ -17,7 +17,11 @@ import {
 } from 'nr1';
 
 import { Flow, FlowList, NoFlows } from '../../src/components';
-import { useFlowLoader } from '../../src/hooks';
+import {
+  useFlowLoader,
+  useFetchUserConfig,
+  useUpdateUserConfig,
+} from '../../src/hooks';
 import { MODES, NERD_STORAGE } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
@@ -26,6 +30,12 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
+
+  const [userConfig, setUserConfig] = useState({});
+  const { userStorageConfig } = useFetchUserConfig();
+  useEffect(() => setUserConfig(userStorageConfig || {}), [userStorageConfig]);
+  const { userStorageHandler } = useUpdateUserConfig();
+
   const {
     flows: flowsData,
     error: flowsError,
@@ -153,11 +163,15 @@ const HomeNerdlet = () => {
           mode={mode}
           flows={flows}
           onSelectFlow={flowClickHandler}
+          userConfig={userConfig}
+          updateUserStorage={(config) => userStorageHandler(config)}
         />
       );
     }
-    if (flows && flows.length)
+    if (flows && flows.length) {
+      backToFlowsHandler();
       return <FlowList flows={flows} onClick={flowClickHandler} />;
+    }
     if (flowsLoading) {
       return <Spinner />;
     } else {
