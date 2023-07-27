@@ -1,3 +1,15 @@
+# [1.33.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.32.0...v1.33.0) (2023-07-27)
+
+
+### Bug Fixes
+
+* eslint errors ([f37b5cb](https://github.com/newrelic/nr-labs-hedgehog/commit/f37b5cb692e7e1928affd29cb6c37c249ebd01a3))
+
+
+### Features
+
+* display edit-mode banner ([47bf150](https://github.com/newrelic/nr-labs-hedgehog/commit/47bf150a7ecb4e3a25d09084330be3672e65bf82))
+
 # [1.32.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.31.0...v1.32.0) (2023-07-26)
 
 
