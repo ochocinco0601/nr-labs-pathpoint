@@ -20,6 +20,7 @@ export const UI_CONTENT = {
   },
   KPI_BAR: {
     TITLE: 'Flow KPIs',
+    TITLE_TOOLTIP: 'Business performance metrics',
   },
   GET_STARTED: {
     HEADING: 'Pathpoint',
