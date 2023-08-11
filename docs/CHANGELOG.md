@@ -1,3 +1,11 @@
+# [1.34.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.33.0...v1.34.0) (2023-08-11)
+
+
+### Features
+
+* add kpi bar title tooltip ([0b5e10d](https://github.com/newrelic/nr-labs-hedgehog/commit/0b5e10db0639b8f2ab143329a44325ea29c89ecf))
+* add tooltip to kpi-bar title ([64e8083](https://github.com/newrelic/nr-labs-hedgehog/commit/64e8083a962a36fd2fcfcdb21044eb4080558b4f))
+
 # [1.33.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.32.0...v1.33.0) (2023-07-27)
 
 
