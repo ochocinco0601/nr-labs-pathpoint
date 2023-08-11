@@ -183,13 +183,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
-        <div className={`heading-title heading${modeClassText}ModeWidth`}
-          // style={{
-          //   display: 'flex',
-          //   gap: '0.5rem',
-          //   alignItems: 'end',
-          // }}
-        >
+        <div className={`heading-title heading${modeClassText}ModeWidth`}>
           <HeadingText type={HeadingText.TYPE.HEADING_4}>
             {UI_CONTENT.KPI_BAR.TITLE || 'Flow KPIs'}
           </HeadingText>
