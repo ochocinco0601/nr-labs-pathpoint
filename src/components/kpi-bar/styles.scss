@@ -25,14 +25,20 @@ $kpiBarEditModeMaxWidth: calc(99% - 190px);
     gap: 0.25rem;
     margin-left: 1.125rem;
 
-    .headingViewModeWidth {
-      width: $headingViewModeWidth;
-    }
+    .heading-title {
+      display: flex;
+      gap: 0.5rem;
+      align-items: end;
 
-    .headingEditModeWidth {
-      width: $headingEditModeWidth;
+      .headingViewModeWidth {
+        width: $headingViewModeWidth;
+      }
+  
+      .headingEditModeWidth {
+        width: $headingEditModeWidth;
+      }
     }
-
+    
     .kpi-bar-add-button {
       width: 144px;
       color: #293338;
