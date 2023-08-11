@@ -13,7 +13,7 @@ const StepHeader = ({
   onUpdate,
   onDelete,
   onDragHandle,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
 

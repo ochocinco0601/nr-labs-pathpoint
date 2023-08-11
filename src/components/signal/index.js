@@ -10,7 +10,7 @@ const Signal = ({
   name,
   onDelete,
   status = STATUSES.UNKNOWN,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
 }) => (
   <div className={`signal ${mode === MODES.EDIT ? 'edit' : ''}`}>
     <div className="status">
