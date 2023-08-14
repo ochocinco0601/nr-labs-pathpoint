@@ -57,36 +57,3 @@
   width: 450px;
   height: 270px;
 }
-
-.edit-mode-banner {
-  height: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-  padding: 0 0.5rem;
-  border-radius: 0.25rem;
-  color: #ffffff;
-  background-color: #0c74df;
-  font-size: 0.75rem;
-  line-height: 1rem;
-
-  .info-icon {
-    padding: 0 0.5rem;
-  }
-
-  .button {
-    color: #ffffff;
-    box-shadow: none;
-    margin: 0 0.5rem;
-
-    &.dismiss {
-      background-color: rgba(255, 255, 255, 0.20);
-    }
-
-    &.close {
-      background-color: transparent;
-    }
-  }
-}
