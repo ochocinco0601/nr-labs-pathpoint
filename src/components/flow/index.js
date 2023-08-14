@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Icon, Spinner, useAccountStorageMutation } from 'nr1';
+import { Spinner, useAccountStorageMutation } from 'nr1';
 
 import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
@@ -15,16 +15,11 @@ const Flow = ({
   mode = MODES.INLINE,
   flows = [],
   onSelectFlow = () => null,
-  userConfig = {},
-  updateUserStorage = () => null,
 }) => {
   const [isDeletingFlow, setDeletingFlow] = useState(false);
   const [stages, setStages] = useState([]);
   const [kpis, setKpis] = useState([]);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
-  const [hideBanner, setHideBanner] = useState(
-    userConfig?.dismissEditModeBanner | false
-  );
   const [updateFlow, { data: updateFlowData, error: updateFlowError }] =
     useAccountStorageMutation({
       actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
@@ -90,49 +85,14 @@ const Flow = ({
   return (
     <div className="flow">
       {mode === MODES.EDIT && (
-        <>
-          <DeleteConfirmModal
-            name={flow.name}
-            type="flow"
-            hidden={deleteModalHidden}
-            onConfirm={() => deleteFlowHandler()}
-            onClose={() => setDeleteModalHidden(true)}
-            isDeletingFlow={isDeletingFlow}
-          />
-          {!hideBanner && (
-            <div className="edit-mode-banner">
-              <div>
-                <Icon
-                  className="info-icon"
-                  type={Icon.TYPE.INTERFACE__INFO__INFO}
-                />
-                Note: Changes in edit mode are automatically saved.
-              </div>
-              <div>
-                <Button
-                  className="button dismiss"
-                  sizeType={Button.SIZE_TYPE.SMALL}
-                  onClick={() => {
-                    setHideBanner(true);
-                    updateUserStorage({
-                      ...userConfig,
-                      dismissEditModeBanner: true,
-                      timestamp: new Date().getTime(),
-                    });
-                  }}
-                >
-                  {"Don't show this banner again"}
-                </Button>
-                <Button
-                  className="button close"
-                  sizeType={Button.SIZE_TYPE.SMALL}
-                  iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__CLOSE}
-                  onClick={() => setHideBanner(true)}
-                />
-              </div>
-            </div>
-          )}
-        </>
+        <DeleteConfirmModal
+          name={flow.name}
+          type="flow"
+          hidden={deleteModalHidden}
+          onConfirm={() => deleteFlowHandler()}
+          onClose={() => setDeleteModalHidden(true)}
+          isDeletingFlow={isDeletingFlow}
+        />
       )}
       {!isDeletingFlow ? (
         <>
@@ -164,8 +124,6 @@ Flow.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
-  userConfig: PropTypes.object,
-  updateUserStorage: PropTypes.func,
 };
 
 export default Flow;
