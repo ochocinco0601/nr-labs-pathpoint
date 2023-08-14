@@ -1,5 +1,5 @@
 export const MODES = {
-  KIOSK: 'kiosk',
-  LIST: 'list',
+  INLINE: 'inline',
+  STACKED: 'stacked',
   EDIT: 'edit',
 };

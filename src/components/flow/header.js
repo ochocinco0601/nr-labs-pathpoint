@@ -21,7 +21,7 @@ const FlowHeader = ({
   imageUrl,
   onUpdate,
   onClose,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
   flows = [],
   onSelectFlow = () => null,
   onDeleteFlow = () => null,

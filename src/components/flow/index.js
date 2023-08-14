@@ -12,7 +12,7 @@ const Flow = ({
   onUpdate,
   onClose,
   accountId,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
   flows = [],
   onSelectFlow = () => null,
   userConfig = {},

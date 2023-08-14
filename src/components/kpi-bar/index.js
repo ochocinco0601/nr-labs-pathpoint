@@ -37,7 +37,7 @@ const metricFromQuery = (results, index) => ({
   previousValue: ((results || [])[index] || {}).previousValue || '',
 });
 
-const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
+const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);

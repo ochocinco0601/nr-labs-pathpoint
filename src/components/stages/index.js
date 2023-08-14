@@ -12,7 +12,7 @@ import {
   uniqueSignalGuidsInStages,
 } from '../../utils';
 
-const Stages = ({ stages = [], onUpdate, mode = MODES.KIOSK }) => {
+const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
   const [stagesWithStatuses, setStagesWithStatuses] = useState([]);
   const [guids, setGuids] = useState([]);
   const dragItemIndex = useRef();

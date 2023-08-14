@@ -14,7 +14,7 @@ const Stage = ({
   stepGroups = [],
   related = {},
   status = STATUSES.UNKNOWN,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
   onUpdate,
   onDelete,
   onDragStart,
@@ -177,7 +177,7 @@ const Stage = ({
             />
           ))}
         </div>
-        {mode === MODES.KIOSK ? (
+        {mode === MODES.INLINE ? (
           <>
             <div className="section-title">
               <HeadingText className="title">Signals</HeadingText>

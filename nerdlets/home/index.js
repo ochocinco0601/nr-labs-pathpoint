@@ -26,7 +26,7 @@ import { MODES, NERD_STORAGE } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
 const HomeNerdlet = () => {
-  const [mode, setMode] = useState(MODES.KIOSK);
+  const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
@@ -57,7 +57,7 @@ const HomeNerdlet = () => {
         label: 'Exit edit mode',
         type: Button.TYPE.PRIMARY,
         iconType: Icon.TYPE.INTERFACE__OPERATIONS__CLOSE,
-        onClick: () => setMode(MODES.KIOSK),
+        onClick: () => setMode(MODES.INLINE),
       });
     } else {
       if (currentFlowIndex > -1) {
@@ -68,10 +68,10 @@ const HomeNerdlet = () => {
           onClick: () => setMode(MODES.EDIT),
         });
         buttons.push({
-          label: mode === MODES.KIOSK ? 'Compact view' : 'Detail view',
+          label: mode === MODES.INLINE ? 'Stacked view' : 'Inline view',
           type: Button.TYPE.SECONDARY,
           onClick: () =>
-            setMode(mode === MODES.KIOSK ? MODES.LIST : MODES.KIOSK),
+            setMode(mode === MODES.INLINE ? MODES.STACKED : MODES.INLINE),
         });
       }
       buttons.push({
@@ -136,7 +136,7 @@ const HomeNerdlet = () => {
 
   const backToFlowsHandler = useCallback(() => {
     setCurrentFlowIndex(-1);
-    setMode(MODES.KIOSK);
+    setMode(MODES.INLINE);
   }, []);
 
   useEffect(() => {

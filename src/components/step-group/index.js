@@ -18,7 +18,7 @@ const StepGroup = ({
   onDragOver,
   onDrop,
   status = STATUSES.UNKNOWN,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const isDragHandleClicked = useRef(false);
