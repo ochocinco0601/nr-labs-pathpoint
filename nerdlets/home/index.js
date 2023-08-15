@@ -7,22 +7,17 @@ import React, {
   useState,
 } from 'react';
 
-import {
-  Button,
-  Icon,
-  nerdlet,
-  PlatformStateContext,
-  Spinner,
-  useAccountStorageMutation,
-} from 'nr1';
+import { Button, Icon, nerdlet, PlatformStateContext, Spinner } from 'nr1';
 
 import { Flow, FlowList, NoFlows } from '../../src/components';
 import {
   useFlowLoader,
+  useFlowWriter,
+  useFetchUser,
   useFetchUserConfig,
   useUpdateUserConfig,
 } from '../../src/hooks';
-import { MODES, NERD_STORAGE } from '../../src/constants';
+import { MODES } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
 const HomeNerdlet = () => {
@@ -30,6 +25,7 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
+  const { user } = useFetchUser();
 
   const [userConfig, setUserConfig] = useState({});
   const { userStorageConfig } = useFetchUserConfig();
@@ -42,12 +38,7 @@ const HomeNerdlet = () => {
     loading: flowsLoading,
   } = useFlowLoader({ accountId });
 
-  const [createFlow, { data: createFlowData, error: createFlowError }] =
-    useAccountStorageMutation({
-      actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-      collection: NERD_STORAGE.FLOWS_COLLECTION,
-      accountId: accountId,
-    });
+  const flowWriter = useFlowWriter({ accountId, user });
   const newFlowId = useRef();
 
   const actionControlButtons = useMemo(() => {
@@ -110,7 +101,7 @@ const HomeNerdlet = () => {
   const newFlowHandler = useCallback(() => {
     const id = uuid();
     newFlowId.current = id;
-    createFlow({
+    flowWriter.write({
       documentId: id,
       document: {
         id,
@@ -140,17 +131,12 @@ const HomeNerdlet = () => {
   }, []);
 
   useEffect(() => {
-    const { nerdStorageWriteDocument: { id } = {} } = createFlowData || {};
+    const { nerdStorageWriteDocument: { id } = {} } = flowWriter?.data || {};
     if (id) {
       setMode(MODES.EDIT);
       flowClickHandler(id);
     }
-  }, [createFlowData]);
-
-  useEffect(() => {
-    if (createFlowError)
-      console.error('Error creating new flow', createFlowError);
-  }, [createFlowError]);
+  }, [flowWriter.data]);
 
   const currentView = useMemo(() => {
     if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
@@ -165,6 +151,7 @@ const HomeNerdlet = () => {
           onSelectFlow={flowClickHandler}
           userConfig={userConfig}
           updateUserStorage={(config) => userStorageHandler(config)}
+          user={user}
         />
       );
     }

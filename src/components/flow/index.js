@@ -6,6 +6,7 @@ import { Button, Icon, Spinner, useAccountStorageMutation } from 'nr1';
 import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
+import { useFlowWriter } from '../../hooks';
 
 const Flow = ({
   flow = {},
@@ -17,6 +18,7 @@ const Flow = ({
   onSelectFlow = () => null,
   userConfig = {},
   updateUserStorage = () => null,
+  user,
 }) => {
   const [isDeletingFlow, setDeletingFlow] = useState(false);
   const [stages, setStages] = useState([]);
@@ -25,12 +27,13 @@ const Flow = ({
   const [hideBanner, setHideBanner] = useState(
     userConfig?.dismissEditModeBanner | false
   );
-  const [updateFlow, { data: updateFlowData, error: updateFlowError }] =
-    useAccountStorageMutation({
-      actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-      collection: NERD_STORAGE.FLOWS_COLLECTION,
-      accountId: accountId,
-    });
+  // const [updateFlow, { data: updateFlowData, error: updateFlowError }] =
+  //   useAccountStorageMutation({
+  //     actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+  //     collection: NERD_STORAGE.FLOWS_COLLECTION,
+  //     accountId: accountId,
+  //   });
+  const flowWriter = useFlowWriter({ accountId, user });
 
   useEffect(() => {
     setStages(flow.stages || []);
@@ -39,7 +42,7 @@ const Flow = ({
 
   const flowUpdateHandler = useCallback(
     (updates = {}) =>
-      updateFlow({
+      flowWriter.write({
         documentId: flow.id,
         document: {
           ...flow,
@@ -47,17 +50,17 @@ const Flow = ({
         },
       }),
     [flow]
-  );
+  ); //updateFlow
 
   useEffect(() => {
     const { nerdStorageWriteDocument: { document } = {} } =
-      updateFlowData || {};
+      flowWriter.data || {}; //updateFlowData
     if (document) onUpdate(document);
-  }, [updateFlowData]);
+  }, [flowWriter.data]); //updateFlowData
 
-  useEffect(() => {
-    if (updateFlowError) console.error('Error updating flow', updateFlowError);
-  }, [updateFlowError]);
+  // useEffect(() => {
+  //   if (updateFlowError) console.error('Error updating flow', updateFlowError);
+  // }, [updateFlowError]);
 
   const updateKpisHandler = (updatedKpis) =>
     flowUpdateHandler({ kpis: updatedKpis });
@@ -166,6 +169,7 @@ Flow.propTypes = {
   onSelectFlow: PropTypes.func,
   userConfig: PropTypes.object,
   updateUserStorage: PropTypes.func,
+  user: PropTypes.object,
 };
 
 export default Flow;
