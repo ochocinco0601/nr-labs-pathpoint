@@ -43,7 +43,7 @@ const Flow = ({
 
   useEffect(() => {
     const { nerdStorageWriteDocument: { document } = {} } =
-      flowWriter.data || {};
+      flowWriter?.data || {};
     if (document) onUpdate(document);
   }, [flowWriter.data]);
 
