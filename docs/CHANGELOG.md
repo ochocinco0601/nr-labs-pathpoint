@@ -1,3 +1,16 @@
+# [1.35.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.34.0...v1.35.0) (2023-08-15)
+
+
+### Bug Fixes
+
+* adding optional chanining as fail-safe ([1229f3e](https://github.com/newrelic/nr-labs-hedgehog/commit/1229f3ebe50ad9cac4e4a758ba68e00fb6209ba0))
+
+
+### Features
+
+* use fetch user hook to get current user details ([ddaf101](https://github.com/newrelic/nr-labs-hedgehog/commit/ddaf1010cec6df9f0a5b8ccce4d93e0ed2147ae5))
+* use flow writer hook to add audit trail on create and update flows ([394dcd8](https://github.com/newrelic/nr-labs-hedgehog/commit/394dcd836c2c6ab7ddd2c6a58bd234cd1af5eb91))
+
 # [1.34.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.33.0...v1.34.0) (2023-08-11)
 
 
