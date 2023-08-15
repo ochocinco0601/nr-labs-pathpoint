@@ -16,7 +16,7 @@ const StageHeader = ({
   status = STATUSES.UNKNOWN,
   onUpdate,
   onDelete,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
   onDragHandle,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);

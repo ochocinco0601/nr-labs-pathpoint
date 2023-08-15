@@ -8,12 +8,12 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Icon, HeadingText, PlatformStateContext } from 'nr1';
+import { Button, Icon, HeadingText, PlatformStateContext, Tooltip } from 'nr1';
 
 import { SimpleBillboard } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
-import { KPI_MODES, MODES, SIGNAL_TYPES } from '../../constants';
+import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
 import KpiModal from '../kpi-modal';
@@ -37,7 +37,7 @@ const metricFromQuery = (results, index) => ({
   previousValue: ((results || [])[index] || {}).previousValue || '',
 });
 
-const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
+const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
@@ -183,19 +183,16 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.KIOSK }) => {
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
-        <div className={`heading${modeClassText}ModeWidth`}>
-          {mode === MODES.EDIT ? (
-            <HeadingText type={HeadingText.TYPE.HEADING_4}>
-              Critical Measures
-            </HeadingText>
-          ) : (
-            <HeadingText
-              type={HeadingText.TYPE.HEADING_3}
-              style={{ lineHeight: '20px' }}
-            >
-              Critical Measures
-            </HeadingText>
-          )}
+        <div className={`heading-title heading${modeClassText}ModeWidth`}>
+          <HeadingText type={HeadingText.TYPE.HEADING_4}>
+            {UI_CONTENT.KPI_BAR.TITLE}
+          </HeadingText>
+          <Tooltip text={UI_CONTENT.KPI_BAR.TITLE_TOOLTIP}>
+            <Icon
+              className="info-icon"
+              type={Icon.TYPE.INTERFACE__INFO__INFO}
+            />
+          </Tooltip>
         </div>
         {mode === MODES.EDIT ? (
           <div className="kpi-bar-add-button">

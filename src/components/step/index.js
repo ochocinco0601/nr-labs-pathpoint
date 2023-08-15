@@ -21,7 +21,7 @@ const Step = ({
   onDragOver,
   onDrop,
   status = STATUSES.UNKNOWN,
-  mode = MODES.KIOSK,
+  mode = MODES.INLINE,
 }) => {
   const [editModalHidden, setEditModalHidden] = useState(true);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -153,8 +153,8 @@ const Step = ({
         </>
       ) : null}
       <div className="signals">
-        {mode === MODES.KIOSK ? <SignalsGrid /> : null}
-        {mode === MODES.LIST ? <SignalsList /> : null}
+        {mode === MODES.INLINE ? <SignalsGrid /> : null}
+        {mode === MODES.STACKED ? <SignalsList /> : null}
       </div>
     </div>
   );
