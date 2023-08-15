@@ -6,6 +6,7 @@ import { Spinner, useAccountStorageMutation } from 'nr1';
 import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
+import { useFlowWriter } from '../../hooks';
 
 const Flow = ({
   flow = {},
@@ -15,17 +16,13 @@ const Flow = ({
   mode = MODES.INLINE,
   flows = [],
   onSelectFlow = () => null,
+  user,
 }) => {
   const [isDeletingFlow, setDeletingFlow] = useState(false);
   const [stages, setStages] = useState([]);
   const [kpis, setKpis] = useState([]);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
-  const [updateFlow, { data: updateFlowData, error: updateFlowError }] =
-    useAccountStorageMutation({
-      actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-      collection: NERD_STORAGE.FLOWS_COLLECTION,
-      accountId: accountId,
-    });
+  const flowWriter = useFlowWriter({ accountId, user });
 
   useEffect(() => {
     setStages(flow.stages || []);
@@ -34,7 +31,7 @@ const Flow = ({
 
   const flowUpdateHandler = useCallback(
     (updates = {}) =>
-      updateFlow({
+      flowWriter.write({
         documentId: flow.id,
         document: {
           ...flow,
@@ -46,13 +43,9 @@ const Flow = ({
 
   useEffect(() => {
     const { nerdStorageWriteDocument: { document } = {} } =
-      updateFlowData || {};
+      flowWriter?.data || {};
     if (document) onUpdate(document);
-  }, [updateFlowData]);
-
-  useEffect(() => {
-    if (updateFlowError) console.error('Error updating flow', updateFlowError);
-  }, [updateFlowError]);
+  }, [flowWriter.data]);
 
   const updateKpisHandler = (updatedKpis) =>
     flowUpdateHandler({ kpis: updatedKpis });
@@ -124,6 +117,7 @@ Flow.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
+  user: PropTypes.object,
 };
 
 export default Flow;
