@@ -5,6 +5,7 @@ export const UI_CONTENT = {
     BUTTON_LABEL_EXIT_EDIT_MODE: 'Done Editing',
     BUTTON_LABEL_INLINE_MODE: 'Inline',
     BUTTON_LABEL_STACKED_MODE: 'Stacked',
+    BUTTON_LABEL_DELETE_FLOW: 'Delete Flow',
   },
   FLOW: {
     //

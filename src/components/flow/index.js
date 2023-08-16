@@ -14,6 +14,7 @@ const Flow = ({
   onClose,
   accountId,
   mode = MODES.INLINE,
+  setMode = () => null,
   flows = [],
   onSelectFlow = () => null,
   user,
@@ -95,6 +96,7 @@ const Flow = ({
             onUpdate={flowUpdateHandler}
             onClose={onClose}
             mode={mode}
+            setMode={setMode}
             flows={flows}
             onSelectFlow={onSelectFlow}
             onDeleteFlow={() => setDeleteModalHidden(false)}
@@ -115,6 +117,7 @@ Flow.propTypes = {
   onClose: PropTypes.func,
   accountId: PropTypes.number,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
   user: PropTypes.object,
