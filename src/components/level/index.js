@@ -8,7 +8,7 @@ import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
 
-const StepGroup = ({
+const Level = ({
   order = 0,
   steps = [],
   stageName,
@@ -98,7 +98,7 @@ const StepGroup = ({
 
   return (
     <div
-      className="step-group"
+      className="level"
       draggable={mode === MODES.EDIT}
       onDragStart={dragStartHandler}
       onDragOver={onDragOver}
@@ -126,8 +126,8 @@ const StepGroup = ({
             </span>
           </div>
           <DeleteConfirmModal
-            name={`Step Group ${order}`}
-            type="step group"
+            name={`Level ${order}`}
+            type="level"
             hidden={deleteModalHidden}
             onConfirm={deleteHandler}
             onClose={() => setDeleteModalHidden(true)}
@@ -146,7 +146,7 @@ const StepGroup = ({
               title={title}
               signals={signals}
               stageName={stageName}
-              stepGroup={order}
+              level={order}
               onUpdate={(updates) => updateStepHandler(index, updates)}
               onDelete={() => deleteStepHandler(index)}
               onDragStart={(e) => stepDragStartHandler(e, index)}
@@ -162,7 +162,7 @@ const StepGroup = ({
   );
 };
 
-StepGroup.propTypes = {
+Level.propTypes = {
   order: PropTypes.number,
   steps: PropTypes.arrayOf(PropTypes.object),
   stageName: PropTypes.string,
@@ -175,4 +175,4 @@ StepGroup.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
-export default StepGroup;
+export default Level;

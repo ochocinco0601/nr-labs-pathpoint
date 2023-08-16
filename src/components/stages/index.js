@@ -43,7 +43,7 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
             ...stages,
             {
               name: 'New Stage',
-              stepGroups: [],
+              levels: [],
             },
           ],
         })
@@ -108,18 +108,13 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
       <div className="stages">
         {(stagesWithStatuses || []).map(
           (
-            {
-              name = '',
-              stepGroups = [],
-              related = {},
-              status = STATUSES.UNKNOWN,
-            },
+            { name = '', levels = [], related = {}, status = STATUSES.UNKNOWN },
             i
           ) => (
             <Stage
               key={i}
               name={name}
-              stepGroups={stepGroups}
+              levels={levels}
               related={related}
               status={status}
               mode={mode}

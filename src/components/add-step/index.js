@@ -3,50 +3,45 @@ import PropTypes from 'prop-types';
 
 import { Button } from 'nr1';
 
-const AddStep = ({ stepGroups = [], onUpdate }) => {
+const AddStep = ({ levels = [], onUpdate }) => {
   const [displayStepOptions, setDisplayStepOptions] = useState(false);
-  const [selectedStepGroup, setSelectedStepGroup] = useState(
-    stepGroups.length + 1
-  );
+  const [selectedLevel, setSelectedLevel] = useState(levels.length + 1);
   const [stepTitle, setStepTitle] = useState('');
 
   const addStepHandler = () => {
-    const updatedStepGroups =
-      selectedStepGroup > stepGroups.length
-        ? [...stepGroups, { steps: [{ signals: [], title: stepTitle }] }]
-        : stepGroups.map((stepGroup, index) =>
-            index === selectedStepGroup - 1
+    const updatedLevels =
+      selectedLevel > levels.length
+        ? [...levels, { steps: [{ signals: [], title: stepTitle }] }]
+        : levels.map((level, index) =>
+            index === selectedLevel - 1
               ? {
-                  ...stepGroup,
-                  steps: [
-                    ...stepGroup.steps,
-                    { signals: [], title: stepTitle },
-                  ],
+                  ...level,
+                  steps: [...level.steps, { signals: [], title: stepTitle }],
                 }
-              : stepGroup
+              : level
           );
-    if (onUpdate) onUpdate({ stepGroups: updatedStepGroups });
+    if (onUpdate) onUpdate({ levels: updatedLevels });
     cancelAddStepHandler();
   };
 
   const cancelAddStepHandler = useCallback(() => {
-    setSelectedStepGroup(stepGroups.length + 1);
+    setSelectedLevel(levels.length + 1);
     setStepTitle('');
     setDisplayStepOptions(false);
-  }, [stepGroups]);
+  }, [levels]);
 
   return displayStepOptions ? (
     <div className="add-step">
       <select
-        value={selectedStepGroup}
-        onChange={({ target: { value } = {} }) => setSelectedStepGroup(value)}
+        value={selectedLevel}
+        onChange={({ target: { value } = {} }) => setSelectedLevel(value)}
       >
-        {stepGroups.map((_, index) => (
+        {levels.map((_, index) => (
           <option key={index} value={index + 1}>
             {index + 1}
           </option>
         ))}
-        <option value={stepGroups.length + 1}>{stepGroups.length + 1}</option>
+        <option value={levels.length + 1}>{levels.length + 1}</option>
       </select>
       <input
         type="text"
@@ -81,7 +76,7 @@ const AddStep = ({ stepGroups = [], onUpdate }) => {
 };
 
 AddStep.propTypes = {
-  stepGroups: PropTypes.array,
+  levels: PropTypes.array,
   onUpdate: PropTypes.func,
 };
 
