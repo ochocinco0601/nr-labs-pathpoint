@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.35.0...v1.35.1) (2023-08-16)
+
+
+### Bug Fixes
+
+* eslint errors ([a83e48e](https://github.com/newrelic/nr-labs-hedgehog/commit/a83e48e2d2ae1f71a94fb2bf8e8f39454130afcb))
+
 # [1.35.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.34.0...v1.35.0) (2023-08-15)
 
 
