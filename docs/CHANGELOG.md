@@ -1,3 +1,10 @@
+## [1.35.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.35.1...v1.35.2) (2023-08-16)
+
+
+### Bug Fixes
+
+* rename step groups to level ([16a123c](https://github.com/newrelic/nr-labs-hedgehog/commit/16a123c44d0bb75acbf41c47466ec1086db76aeb))
+
 ## [1.35.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.35.0...v1.35.1) (2023-08-16)
 
 
