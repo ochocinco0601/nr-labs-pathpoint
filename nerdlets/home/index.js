@@ -61,7 +61,7 @@ const HomeNerdlet = () => {
     });
   }, [mode, newFlowHandler, currentFlowIndex]);
 
-  useEffect(() => {console.log('### flowsData: ', flowsData);
+  useEffect(() => {
     setFlows(flowsData || []);
     if (newFlowId.current) {
       // TODO: set current flow

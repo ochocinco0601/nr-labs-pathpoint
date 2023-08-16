@@ -70,7 +70,7 @@ const FlowHeader = ({
       >
         {UI_CONTENT.GLOBAL.BUTTON_LABEL_EXIT_EDIT_MODE}
       </Button>
-            <Button
+      <Button
         type={Button.TYPE.DESTRUCTIVE}
         iconType={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
         sizeType={Button.SIZE_TYPE.SMALL}
