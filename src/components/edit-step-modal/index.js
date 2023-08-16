@@ -17,7 +17,7 @@ import { isMatchPattern } from '../../utils/regex';
 
 const EditStepModal = ({
   stageName = 'Stage',
-  stepGroup = 0,
+  level = 0,
   stepTitle = 'Step',
   existingSignals = [],
   hidden = true,
@@ -69,7 +69,7 @@ const EditStepModal = ({
               type={HeadingText.TYPE.HEADING_5}
               className="step-group"
             >
-              {stepGroup}
+              {level}
             </HeadingText>
             <HeadingText type={HeadingText.TYPE.HEADING_4}>
               {stepTitle}
@@ -189,7 +189,7 @@ const EditStepModal = ({
 
 EditStepModal.propTypes = {
   stageName: PropTypes.string,
-  stepGroup: PropTypes.number,
+  level: PropTypes.number,
   stepTitle: PropTypes.string,
   existingSignals: PropTypes.arrayOf(PropTypes.string),
   hidden: PropTypes.bool,

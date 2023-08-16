@@ -14,7 +14,7 @@ const Step = ({
   title = 'Step',
   signals = [],
   stageName,
-  stepGroup,
+  level,
   onUpdate,
   onDelete,
   onDragStart,
@@ -137,7 +137,7 @@ const Step = ({
           </div>
           <EditStepModal
             stageName={stageName}
-            stepGroup={stepGroup}
+            level={level}
             stepTitle={title}
             existingSignals={signals.map(({ guid }) => guid)}
             hidden={editModalHidden}
@@ -164,7 +164,7 @@ Step.propTypes = {
   title: PropTypes.string,
   signals: PropTypes.arrayOf(PropTypes.object),
   stageName: PropTypes.string,
-  stepGroup: PropTypes.string,
+  level: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   onDragStart: PropTypes.func,

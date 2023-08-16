@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
 
-import StepGroup from '../step-group';
+import Level from '../level';
 import Signal from '../signal';
 import StageHeader from './header';
 import AddStep from '../add-step';
@@ -11,7 +11,7 @@ import { MODES, STATUSES } from '../../constants';
 
 const Stage = ({
   name = 'Stage',
-  stepGroups = [],
+  levels = [],
   related = {},
   status = STATUSES.UNKNOWN,
   mode = MODES.INLINE,
@@ -29,7 +29,7 @@ const Stage = ({
   useEffect(
     () =>
       setSignals(
-        stepGroups.reduce(
+        levels.reduce(
           (acc, { steps = [] }) => ({
             ...acc,
             ...steps.reduce(
@@ -49,7 +49,7 @@ const Stage = ({
           {}
         )
       ),
-    [stepGroups]
+    [levels]
   );
 
   const SignalsList = memo(
@@ -63,22 +63,22 @@ const Stage = ({
   SignalsList.displayName = 'SignalsList';
 
   const updateStageHandler = (updates = {}) => {
-    if (onUpdate) onUpdate({ name, stepGroups, related, ...updates });
+    if (onUpdate) onUpdate({ name, levels, related, ...updates });
   };
 
-  const deleteStepGroupHandler = (index) => {
+  const deleteLevelHandler = (index) => {
     if (onUpdate)
       onUpdate({
         name,
         related,
-        stepGroups: stepGroups.filter((_, i) => i !== index),
+        levels: levels.filter((_, i) => i !== index),
       });
   };
 
-  const updateStepGroupHandler = (index, updates = {}) =>
+  const updateLevelHandler = (index, updates = {}) =>
     updateStageHandler({
-      stepGroups: stepGroups.map((stepGroup, i) =>
-        i === index ? { ...stepGroup, ...updates } : stepGroup
+      levels: levels.map((level, i) =>
+        i === index ? { ...level, ...updates } : level
       ),
     });
 
@@ -102,20 +102,20 @@ const Stage = ({
     isDragHandleClicked.current = false;
   };
 
-  const stepGroupDragStartHandler = (e, index) => {
+  const levelDragStartHandler = (e, index) => {
     e.stopPropagation();
     dragItemIndex.current = index;
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const stepGroupDragOverHandler = (e, index) => {
+  const levelDragOverHandler = (e, index) => {
     e.preventDefault();
     e.stopPropagation();
     e.dataTransfer.dropEffect = 'move';
     dragOverItemIndex.current = index;
   };
 
-  const stepGroupDropHandler = (e) => {
+  const levelDropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
     const itemIndex = dragItemIndex.current;
@@ -126,11 +126,11 @@ const Stage = ({
       itemIndex === overIndex
     )
       return;
-    const updatedStepGroups = [...stepGroups];
-    const item = updatedStepGroups[itemIndex];
-    updatedStepGroups.splice(itemIndex, 1);
-    updatedStepGroups.splice(overIndex, 0, item);
-    if (onUpdate) onUpdate({ name, related, stepGroups: updatedStepGroups });
+    const updatedLevels = [...levels];
+    const item = updatedLevels[itemIndex];
+    updatedLevels.splice(itemIndex, 1);
+    updatedLevels.splice(overIndex, 0, item);
+    if (onUpdate) onUpdate({ name, related, levels: updatedLevels });
     dragItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
@@ -157,21 +157,21 @@ const Stage = ({
         <div className="section-title">
           <HeadingText>Steps</HeadingText>
           {mode === MODES.EDIT ? (
-            <AddStep stepGroups={stepGroups} onUpdate={updateStageHandler} />
+            <AddStep levels={levels} onUpdate={updateStageHandler} />
           ) : null}
         </div>
         <div className="step-groups">
-          {stepGroups.map(({ steps, status }, index) => (
-            <StepGroup
+          {levels.map(({ steps, status }, index) => (
+            <Level
               key={index}
               order={index + 1}
               steps={steps}
               stageName={name}
-              onUpdate={(updates) => updateStepGroupHandler(index, updates)}
-              onDelete={() => deleteStepGroupHandler(index)}
-              onDragStart={(e) => stepGroupDragStartHandler(e, index)}
-              onDragOver={(e) => stepGroupDragOverHandler(e, index)}
-              onDrop={(e) => stepGroupDropHandler(e)}
+              onUpdate={(updates) => updateLevelHandler(index, updates)}
+              onDelete={() => deleteLevelHandler(index)}
+              onDragStart={(e) => levelDragStartHandler(e, index)}
+              onDragOver={(e) => levelDragOverHandler(e, index)}
+              onDrop={(e) => levelDropHandler(e)}
               status={status}
               mode={mode}
             />
@@ -194,7 +194,7 @@ const Stage = ({
 
 Stage.propTypes = {
   name: PropTypes.string,
-  stepGroups: PropTypes.arrayOf(PropTypes.object),
+  levels: PropTypes.arrayOf(PropTypes.object),
   related: PropTypes.shape({
     target: PropTypes.bool,
     source: PropTypes.bool,
