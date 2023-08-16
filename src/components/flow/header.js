@@ -14,7 +14,7 @@ import { EditInPlace } from '@newrelic/nr-labs-components';
 import IconsLib from '../icons-lib';
 import { FlowListDropdown } from '../';
 import ImageUploadModal from '../image-upload-modal';
-import { MODES } from '../../constants';
+import { MODES, UI_CONTENT } from '../../constants';
 
 const FlowHeader = ({
   name = 'Flow',
@@ -22,6 +22,7 @@ const FlowHeader = ({
   onUpdate,
   onClose,
   mode = MODES.INLINE,
+  setMode = () => null,
   flows = [],
   onSelectFlow = () => null,
   onDeleteFlow = () => null,
@@ -62,12 +63,20 @@ const FlowHeader = ({
         onClose={() => setImageModalHidden(true)}
       />
       <Button
+        type={Button.TYPE.PRIMARY}
+        iconType={Icon.TYPE.INTERFACE__SIGN__CHECKMARK}
+        sizeType={Button.SIZE_TYPE.SMALL}
+        onClick={() => setMode(MODES.INLINE)}
+      >
+        {UI_CONTENT.GLOBAL.BUTTON_LABEL_EXIT_EDIT_MODE}
+      </Button>
+            <Button
         type={Button.TYPE.DESTRUCTIVE}
         iconType={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
         sizeType={Button.SIZE_TYPE.SMALL}
         onClick={() => onDeleteFlow()}
       >
-        Delete Flow
+        {UI_CONTENT.GLOBAL.BUTTON_LABEL_DELETE_FLOW}
       </Button>
     </div>
   ) : (
@@ -93,6 +102,14 @@ const FlowHeader = ({
           </div>
         </PopoverBody>
       </Popover>
+      <Button
+        type={Button.TYPE.PRIMARY}
+        iconType={Icon.TYPE.INTERFACE__OPERATIONS__EDIT}
+        sizeType={Button.SIZE_TYPE.SMALL}
+        onClick={() => setMode(MODES.EDIT)}
+      >
+        {UI_CONTENT.GLOBAL.BUTTON_LABEL_EDIT_MODE}
+      </Button>
     </div>
   );
 };
@@ -103,6 +120,7 @@ FlowHeader.propTypes = {
   onUpdate: PropTypes.func,
   onClose: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,

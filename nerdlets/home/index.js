@@ -11,7 +11,7 @@ import { Button, Icon, nerdlet, PlatformStateContext, Spinner } from 'nr1';
 
 import { Flow, FlowList, NoFlows } from '../../src/components';
 import { useFlowLoader, useFlowWriter, useFetchUser } from '../../src/hooks';
-import { MODES } from '../../src/constants';
+import { MODES, UI_CONTENT } from '../../src/constants';
 import { uuid } from '../../src/utils';
 
 const HomeNerdlet = () => {
@@ -32,21 +32,8 @@ const HomeNerdlet = () => {
 
   const actionControlButtons = useMemo(() => {
     const buttons = [];
-    if (mode === MODES.EDIT) {
-      buttons.push({
-        label: 'Exit edit mode',
-        type: Button.TYPE.PRIMARY,
-        iconType: Icon.TYPE.INTERFACE__OPERATIONS__CLOSE,
-        onClick: () => setMode(MODES.INLINE),
-      });
-    } else {
+    if (mode !== MODES.EDIT) {
       if (currentFlowIndex > -1) {
-        buttons.push({
-          label: 'Editing mode',
-          type: Button.TYPE.SECONDARY,
-          iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
-          onClick: () => setMode(MODES.EDIT),
-        });
         buttons.push({
           label: mode === MODES.INLINE ? 'Stacked view' : 'Inline view',
           type: Button.TYPE.SECONDARY,
@@ -55,7 +42,7 @@ const HomeNerdlet = () => {
         });
       }
       buttons.push({
-        label: 'Create new flow',
+        label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
         type: Button.TYPE.PRIMARY,
         iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
         onClick: () => newFlowHandler(),
@@ -74,7 +61,7 @@ const HomeNerdlet = () => {
     });
   }, [mode, newFlowHandler, currentFlowIndex]);
 
-  useEffect(() => {
+  useEffect(() => {console.log('### flowsData: ', flowsData);
     setFlows(flowsData || []);
     if (newFlowId.current) {
       // TODO: set current flow
@@ -136,6 +123,7 @@ const HomeNerdlet = () => {
           onClose={backToFlowsHandler}
           accountId={accountId}
           mode={mode}
+          setMode={setMode}
           flows={flows}
           onSelectFlow={flowClickHandler}
           user={user}
