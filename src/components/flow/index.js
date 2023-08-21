@@ -23,6 +23,7 @@ const Flow = ({
   const [stages, setStages] = useState([]);
   const [kpis, setKpis] = useState([]);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+  const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
   const flowWriter = useFlowWriter({ accountId, user });
 
   useEffect(() => {
@@ -31,21 +32,25 @@ const Flow = ({
   }, [flow]);
 
   const flowUpdateHandler = useCallback(
-    (updates = {}) =>
+    (updates = {}) => {
+      setLastSavedTimestamp(0);
       flowWriter.write({
         documentId: flow.id,
         document: {
           ...flow,
           ...updates,
         },
-      }),
+      });
+    },
     [flow]
   );
 
   useEffect(() => {
-    const { nerdStorageWriteDocument: { document } = {} } =
-      flowWriter?.data || {};
-    if (document) onUpdate(document);
+    const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
+    if (document) {
+      if (onUpdate) onUpdate(document);
+      setLastSavedTimestamp(Date.now());
+    }
   }, [flowWriter.data]);
 
   const updateKpisHandler = (updatedKpis) =>
@@ -100,6 +105,8 @@ const Flow = ({
             flows={flows}
             onSelectFlow={onSelectFlow}
             onDeleteFlow={() => setDeleteModalHidden(false)}
+            lastSavedTimestamp={lastSavedTimestamp}
+            resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
           />
           <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
           <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />

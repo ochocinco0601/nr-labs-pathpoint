@@ -89,11 +89,13 @@ const HomeNerdlet = () => {
   }, []);
 
   const updateFlowHandler = useCallback(
-    (flow) =>
-      setFlows((f) =>
-        f.map(({ document }) => (document.id === flow.id ? flow : document))
-      ),
-    []
+    ({ id, ...doc }) => {
+      const updatedFlows = [...flows];
+      const index = updatedFlows.findIndex((f) => f.id === id);
+      if (index > -1) updatedFlows[index] = { id, document: { id, ...doc } };
+      setFlows(updatedFlows);
+    },
+    [flows]
   );
 
   const flowClickHandler = useCallback(

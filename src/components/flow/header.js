@@ -12,7 +12,7 @@ import {
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
-import { FlowListDropdown } from '../';
+import { FlowListDropdown, LastSavedMessage } from '../';
 import ImageUploadModal from '../image-upload-modal';
 import { MODES, UI_CONTENT } from '../../constants';
 
@@ -26,8 +26,15 @@ const FlowHeader = ({
   flows = [],
   onSelectFlow = () => null,
   onDeleteFlow = () => null,
+  lastSavedTimestamp,
+  resetLastSavedTimestamp = () => null,
 }) => {
   const [imageModalHidden, setImageModalHidden] = useState(true);
+
+  const doneEditingHandler = () => {
+    resetLastSavedTimestamp();
+    setMode(MODES.INLINE);
+  };
 
   return mode === MODES.EDIT ? (
     <div className="flow-header">
@@ -52,6 +59,9 @@ const FlowHeader = ({
           }
         />
       </HeadingText>
+      {lastSavedTimestamp ? (
+        <LastSavedMessage lastSavedTimestamp={lastSavedTimestamp} />
+      ) : null}
       <ImageUploadModal
         imageUrl={imageUrl}
         hidden={imageModalHidden}
@@ -66,7 +76,7 @@ const FlowHeader = ({
         type={Button.TYPE.PRIMARY}
         iconType={Icon.TYPE.INTERFACE__SIGN__CHECKMARK}
         sizeType={Button.SIZE_TYPE.SMALL}
-        onClick={() => setMode(MODES.INLINE)}
+        onClick={doneEditingHandler}
       >
         {UI_CONTENT.GLOBAL.BUTTON_LABEL_EXIT_EDIT_MODE}
       </Button>
@@ -94,6 +104,9 @@ const FlowHeader = ({
             ) : null}
             <HeadingText type={HeadingText.TYPE.HEADING_4}>{name}</HeadingText>
             <Icon type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_BOTTOM} />
+            {lastSavedTimestamp ? (
+              <LastSavedMessage lastSavedTimestamp={lastSavedTimestamp} />
+            ) : null}
           </div>
         </PopoverTrigger>
         <PopoverBody>
@@ -124,6 +137,8 @@ FlowHeader.propTypes = {
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
+  lastSavedTimestamp: PropTypes.number,
+  resetLastSavedTimestamp: PropTypes.func,
 };
 
 export default FlowHeader;

@@ -16,3 +16,4 @@ export { default as ImageUploadModal } from './image-upload-modal';
 export { default as DeleteConfirmModal } from './delete-confirm-modal';
 export { default as ChangeShapeModal } from './change-shape-modal';
 export { default as AddStep } from './add-step';
+export { default as LastSavedMessage } from './last-saved-message';
