@@ -12,8 +12,7 @@ import {
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
-import { FlowListDropdown, LastSavedMessage } from '../';
-import ImageUploadModal from '../image-upload-modal';
+import { FlowListDropdown, ImageUploadModal, LastSavedMessage } from '../';
 import { MODES, UI_CONTENT } from '../../constants';
 
 const FlowHeader = ({
