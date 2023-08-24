@@ -23,6 +23,31 @@ export const UI_CONTENT = {
     TITLE: 'Flow KPIs',
     TITLE_TOOLTIP: 'Business performance metrics',
   },
+  KPI_MODAL: {
+    EMPTY_STATE_ADDITIONAL_LINK_LABEL: 'See our NRQL reference',
+    EMPTY_STATE_ADDITIONAL_LINK_URL:
+      'https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/get-started/nrql-syntax-clauses-functions/',
+
+    // emptystate error messages
+    EMPTY_STATE_MESSAGE_TITLE_1: 'No preview available yet', // invalid accountId or missing query
+    EMPTY_STATE_MESSAGE_TITLE_2: 'Error!', // other errors
+
+    EMPTY_STATUS_MESSAGE_DESC_1: 'At least one account must be selected', // invalid accountId
+    EMPTY_STATUS_MESSAGE_DESC_2: 'Enter and run a query to preview the result', // missing query
+
+    // billboard related messages
+    BILLBOARD_DOC_LINK:
+      'https://docs.newrelic.com/docs/query-your-data/explore-query-data/use-charts/chart-types/#widget-billboard',
+    NRQL_EDITOR_DESCRIPTION: `Enter a query which returns a single number. You could use queries that return Apdex values, or compare a single value across states and show the up/down trend. For instance, use 'COMPARE WITH' clause in a query to compare the same attribute across two different time frames.`,
+    BILLBOARD_HELP_TITLE: 'Example Queries: ',
+    BILLBOARD_HELP_QUERY_EXAMPLE_1:
+      'SELECT count(*) FROM Transaction since 1 hour ago',
+    BILLBOARD_HELP_QUERY_EXAMPLE_2:
+      'SELECT count(*) FROM Pageview since 3 hours ago COMPARE WITH 2 days ago',
+    BILLBOARD_HELP_QUERY_EXAMPLE_3:
+      'SELECT count(session) FROM Pageview since 1 hour ago COMPARE WITH 1 day ago',
+    QUERY_PROMPT: 'Enter query here',
+  },
   GET_STARTED: {
     HEADING: 'Pathpoint',
     DESCRIPTION:
