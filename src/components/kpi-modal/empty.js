@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { EmptyState } from 'nr1';
+import { UI_CONTENT } from '../../constants';
 
 const KpiModalEmptyState = ({ accountId, nrqlQuery, error }) => {
   const accountValid = Number.isInteger(accountId);
 
   const desc = !accountValid
-    ? 'At least one account must be selected'
+    ? UI_CONTENT.KPI_MODAL.EMPTY_STATUS_MESSAGE_DESC_1
     : !nrqlQuery
-    ? 'Enter and run a query to preview the result'
+    ? UI_CONTENT.KPI_MODAL.EMPTY_STATUS_MESSAGE_DESC_2
     : error && error.graphQLErrors[0].message;
 
   return (
@@ -17,17 +18,19 @@ const KpiModalEmptyState = ({ accountId, nrqlQuery, error }) => {
       fullWidth
       iconType={EmptyState.ICON_TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
       title={
-        !accountValid || !nrqlQuery ? 'No preview available yet' : 'Error!'
+        !accountValid || !nrqlQuery
+          ? UI_CONTENT.KPI_MODAL.EMPTY_STATE_MESSAGE_TITLE_1
+          : UI_CONTENT.KPI_MODAL.EMPTY_STATE_MESSAGE_TITLE_2
       }
       description={desc}
-      type={
-        !accountValid || !nrqlQuery
-          ? EmptyState.TYPE.NORMAL
-          : EmptyState.TYPE.ERROR
-      }
+      // type={
+      //   !accountValid || !nrqlQuery
+      //     ? EmptyState.TYPE.NORMAL
+      //     : EmptyState.TYPE.ERROR
+      // }
       additionalInfoLink={{
-        label: 'See our NRQL reference',
-        to: 'https://docs.newrelic.com/docs/query-your-data/nrql-new-relic-query-language/get-started/nrql-syntax-clauses-functions/',
+        label: UI_CONTENT.KPI_MODAL.EMPTY_STATE_ADDITIONAL_LINK_LABEL,
+        to: UI_CONTENT.KPI_MODAL.EMPTY_STATE_ADDITIONAL_LINK_URL,
       }}
     />
   );
