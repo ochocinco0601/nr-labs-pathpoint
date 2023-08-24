@@ -64,6 +64,21 @@
   overflow: hidden;
 }
 
+.modal-component-nrql-editor-help {
+  font-size: 9px;
+
+  .exmple-title {
+    margin: 0.75rem 0;
+  }
+
+  Button {
+    font-size: 9px;
+    padding: 0px;
+    margin: 0px;
+    min-height: 16px;
+  }
+}
+
 .modal-component-preview-heading {
   margin: 1.25rem 0;
 }

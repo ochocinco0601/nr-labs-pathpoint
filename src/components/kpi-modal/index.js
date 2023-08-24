@@ -1,7 +1,19 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useRef,
+  useEffect,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, Modal, PlatformStateContext } from 'nr1';
+import {
+  BlockText,
+  Button,
+  HeadingText,
+  Modal,
+  PlatformStateContext,
+} from 'nr1';
 
 import {
   EditInPlace,
@@ -12,7 +24,7 @@ import {
 import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { useFetchKpis } from '../../hooks';
-import { KPI_MODES } from '../../constants';
+import { KPI_MODES, UI_CONTENT } from '../../constants';
 
 const KpiModal = ({
   kpi = {},
@@ -30,6 +42,9 @@ const KpiModal = ({
   const [name, setName] = useState(
     [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
   );
+  const [alias, setAlias] = useState(
+    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.alias : ''
+  );
   const [nrqlQuery, setNrqlQuery] = useState(
     [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
   );
@@ -37,10 +52,13 @@ const KpiModal = ({
   const [previewOk, setPreviewOk] = useState(false);
 
   const nameRef = useRef('name');
+  const aliasRef = useRef('alias');
+  const nrqlQueryRef = useRef();
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
     [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setName(kpi.name);
+    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setAlias(kpi.alias);
     [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) &&
       setNrqlQuery(kpi.nrqlQuery);
   }, [kpi, kpiMode]);
@@ -66,6 +84,11 @@ const KpiModal = ({
     }
   }, [accountId, nrqlQuery, hookData]);
 
+  const handleClick = useCallback((query) => {
+    setPreviewOk(false);
+    setNrqlQuery(query);
+  }, []);
+
   return (
     <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
       <div className="modal-component">
@@ -90,17 +113,83 @@ const KpiModal = ({
                       placeholder="Enter KPI name"
                     />
                   </div>
+                  <div className="modal-component-kpi-name">
+                    <EditInPlace
+                      value={alias}
+                      setValue={setAlias}
+                      ref={aliasRef}
+                      placeholder="Enter KPI alias"
+                    />
+                  </div>
                 </div>
-                <div className="modal-component-nrql-editor">
+                <div
+                  id="nrql-editor-div"
+                  className="modal-component-nrql-editor"
+                >
                   <NrqlEditor
-                    query={kpi.nrqlQuery}
+                    id={'nrqlEditor'}
+                    ref={nrqlQueryRef}
+                    query={
+                      nrqlQuery
+                        ? nrqlQuery
+                        : kpi.nrqlQuery
+                        ? kpi.nrqlQuery
+                        : UI_CONTENT.KPI_MODAL.QUERY_PROMPT
+                    }
                     accountId={accountId}
                     saveButtonText="Preview"
                     onSave={(res) => {
                       setAccountId(res.accountId);
-                      setNrqlQuery(res.query);
+                      res.query !== UI_CONTENT.KPI_MODAL.QUERY_PROMPT &&
+                        setNrqlQuery(res.query);
                     }}
                   />
+                  <div>
+                    <BlockText
+                      className="modal-component-nrql-editor-help"
+                      type={BlockText.TYPE.NORMAL}
+                    >
+                      <p>{UI_CONTENT.KPI_MODAL.NRQL_EDITOR_DESCRIPTION}</p>
+                      <br />
+                      <strong className="exmple-title">
+                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_TITLE}
+                      </strong>
+                      <br />
+                      <Button
+                        type={Button.TYPE.PLAIN}
+                        sizeType={Button.SIZE_TYPE.SMALL}
+                        onClick={() =>
+                          handleClick(
+                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_1
+                          )
+                        }
+                      >
+                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_1}
+                      </Button>
+                      <Button
+                        type={Button.TYPE.PLAIN}
+                        sizeType={Button.SIZE_TYPE.SMALL}
+                        onClick={() =>
+                          handleClick(
+                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_2
+                          )
+                        }
+                      >
+                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_2}
+                      </Button>
+                      <Button
+                        type={Button.TYPE.PLAIN}
+                        sizeType={Button.SIZE_TYPE.SMALL}
+                        onClick={() =>
+                          handleClick(
+                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_3
+                          )
+                        }
+                      >
+                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_3}
+                      </Button>
+                    </BlockText>
+                  </div>
                 </div>
                 <div className="modal-component-preview-heading">
                   <HeadingText type={HeadingText.TYPE.HEADING_1}>
@@ -129,7 +218,7 @@ const KpiModal = ({
                         className: 'modal-component-status-trend',
                       }}
                       title={{
-                        name: name,
+                        name: alias || name,
                         className: 'modal-component-metric-name',
                       }}
                     />
@@ -145,7 +234,7 @@ const KpiModal = ({
                 type={Button.TYPE.PRIMARY}
                 sizeType={Button.SIZE_TYPE.LARGE}
                 spacingType={[Button.SPACING_TYPE.EXTRA_LARGE]}
-                disabled={!previewOk}
+                disabled={!previewOk || !name}
                 onClick={() => {
                   switch (kpiMode) {
                     case KPI_MODES.ADD:
@@ -153,6 +242,7 @@ const KpiModal = ({
                         id: kpi.id,
                         accountIds: [accountId],
                         name,
+                        alias,
                         nrqlQuery,
                       });
                       break;
@@ -162,6 +252,7 @@ const KpiModal = ({
                           id: kpi.id,
                           accountIds: [accountId],
                           name,
+                          alias,
                           nrqlQuery,
                         },
                         kpiIndex
