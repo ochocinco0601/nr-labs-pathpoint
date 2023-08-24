@@ -69,6 +69,7 @@ $kpiBarEditModeMaxWidth: calc(99% - 190px);
       flex-direction: row;
       gap: 0.125rem;
       width: max-content;
+      white-space:nowrap;
 
       .drag-handle {
         margin-top: 0.25rem;
