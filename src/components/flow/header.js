@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -8,6 +8,8 @@ import {
   Popover,
   PopoverTrigger,
   PopoverBody,
+  SegmentedControl,
+  SegmentedControlItem,
 } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
@@ -34,6 +36,10 @@ const FlowHeader = ({
     resetLastSavedTimestamp();
     setMode(MODES.INLINE);
   };
+
+  const capitalize = useCallback((word) =>
+    word.replace(/\b\w/g, (l) => l.toUpperCase())
+  );
 
   return mode === MODES.EDIT ? (
     <div className="flow-header">
@@ -72,6 +78,7 @@ const FlowHeader = ({
         onClose={() => setImageModalHidden(true)}
       />
       <Button
+        className="view-mode"
         type={Button.TYPE.PRIMARY}
         iconType={Icon.TYPE.INTERFACE__SIGN__CHECKMARK}
         sizeType={Button.SIZE_TYPE.SMALL}
@@ -114,14 +121,24 @@ const FlowHeader = ({
           </div>
         </PopoverBody>
       </Popover>
-      <Button
-        type={Button.TYPE.PRIMARY}
-        iconType={Icon.TYPE.INTERFACE__OPERATIONS__EDIT}
-        sizeType={Button.SIZE_TYPE.SMALL}
-        onClick={() => setMode(MODES.EDIT)}
+      <SegmentedControl
+        className="view-mode"
+        value={mode}
+        onChange={(_, value) => setMode(value)}
       >
-        {UI_CONTENT.GLOBAL.BUTTON_LABEL_EDIT_MODE}
-      </Button>
+        <SegmentedControlItem
+          label={capitalize(MODES.STACKED)}
+          value={MODES.STACKED}
+          iconType={
+            SegmentedControlItem.ICON_TYPE.DATAVIZ__DATAVIZ__TABLE_CHART
+          }
+        />
+        <SegmentedControlItem
+          label={capitalize(MODES.INLINE)}
+          value={MODES.INLINE}
+          iconType={SegmentedControlItem.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
+        />
+      </SegmentedControl>
     </div>
   );
 };

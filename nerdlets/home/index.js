@@ -35,21 +35,21 @@ const HomeNerdlet = () => {
     if (mode !== MODES.EDIT) {
       if (currentFlowIndex > -1) {
         buttons.push({
-          label: mode === MODES.INLINE ? 'Stacked view' : 'Inline view',
-          type: Button.TYPE.SECONDARY,
-          onClick: () =>
-            setMode(mode === MODES.INLINE ? MODES.STACKED : MODES.INLINE),
+          label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
+          type: Button.TYPE.PRIMARY,
+          iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
+          onClick: () => newFlowHandler(),
+        });
+        buttons.push({
+          label: UI_CONTENT.GLOBAL.BUTTON_LABEL_EDIT_MODE,
+          type: Button.TYPE.PRIMARY,
+          iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
+          onClick: () => setMode(MODES.EDIT),
         });
       }
-      buttons.push({
-        label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
-        type: Button.TYPE.PRIMARY,
-        iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
-        onClick: () => newFlowHandler(),
-      });
     }
     return buttons;
-  }, [mode, newFlowHandler, currentFlowIndex, newFlowId]);
+  }, [mode, newFlowHandler, currentFlowIndex, newFlowId, setMode]);
 
   useEffect(() => {
     nerdlet.setConfig({
