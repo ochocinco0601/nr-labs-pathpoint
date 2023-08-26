@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.36.0...v1.37.0) (2023-08-26)
+
+
+### Features
+
+* add segmented control for stacked/inline buttons to flow header ([0c04da6](https://github.com/newrelic/nr-labs-hedgehog/commit/0c04da6ed9d7ddc3720e404f2a6e82e679360870))
+
 # [1.36.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.35.2...v1.36.0) (2023-08-24)
 
 
