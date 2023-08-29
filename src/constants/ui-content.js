@@ -38,14 +38,15 @@ export const UI_CONTENT = {
     // billboard related messages
     BILLBOARD_DOC_LINK:
       'https://docs.newrelic.com/docs/query-your-data/explore-query-data/use-charts/chart-types/#widget-billboard',
-    NRQL_EDITOR_DESCRIPTION: `Enter a query which returns a single number. You could use queries that return Apdex values, or compare a single value across states and show the up/down trend. For instance, use 'COMPARE WITH' clause in a query to compare the same attribute across two different time frames.`,
-    BILLBOARD_HELP_TITLE: 'Example Queries: ',
-    BILLBOARD_HELP_QUERY_EXAMPLE_1:
+    NRQL_EDITOR_INSTRUCTIONS_HEADING: 'Instructions',
+    NRQL_EDITOR_INSTRUCTIONS:
+      'Enter a query which returns a single number. You could use queries that return Apdex values, or compare a single value across states to show the upward/downward trend.',
+    BILLBOARD_HELP_TITLE: 'Sample Queries: ',
+    BILLBOARD_HELP_QUERY_EXAMPLE: [
       'SELECT count(*) FROM Transaction since 1 hour ago',
-    BILLBOARD_HELP_QUERY_EXAMPLE_2:
       'SELECT count(*) FROM Pageview since 3 hours ago COMPARE WITH 2 days ago',
-    BILLBOARD_HELP_QUERY_EXAMPLE_3:
       'SELECT count(session) FROM Pageview since 1 hour ago COMPARE WITH 1 day ago',
+    ],
     QUERY_PROMPT: 'Enter query here',
   },
   GET_STARTED: {

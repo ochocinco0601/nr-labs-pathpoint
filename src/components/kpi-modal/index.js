@@ -7,13 +7,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  BlockText,
-  Button,
-  HeadingText,
-  Modal,
-  PlatformStateContext,
-} from 'nr1';
+import { Button, HeadingText, Modal, PlatformStateContext } from 'nr1';
 
 import {
   EditInPlace,
@@ -53,7 +47,6 @@ const KpiModal = ({
 
   const nameRef = useRef('name');
   const aliasRef = useRef('alias');
-  const nrqlQueryRef = useRef();
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
@@ -110,15 +103,15 @@ const KpiModal = ({
                       value={name}
                       setValue={setName}
                       ref={nameRef}
-                      placeholder="Enter KPI name"
+                      placeholder="Untitled KPI"
                     />
                   </div>
-                  <div className="modal-component-kpi-name">
+                  <div className="modal-component-kpi-alias">
                     <EditInPlace
                       value={alias}
                       setValue={setAlias}
                       ref={aliasRef}
-                      placeholder="Enter KPI alias"
+                      placeholder="Alias (optional)"
                     />
                   </div>
                 </div>
@@ -128,13 +121,10 @@ const KpiModal = ({
                 >
                   <NrqlEditor
                     id={'nrqlEditor'}
-                    ref={nrqlQueryRef}
                     query={
-                      nrqlQuery
-                        ? nrqlQuery
-                        : kpi.nrqlQuery
-                        ? kpi.nrqlQuery
-                        : UI_CONTENT.KPI_MODAL.QUERY_PROMPT
+                      nrqlQuery ||
+                      kpi.nrqlQuery ||
+                      UI_CONTENT.KPI_MODAL.QUERY_PROMPT
                     }
                     accountId={accountId}
                     saveButtonText="Preview"
@@ -144,55 +134,33 @@ const KpiModal = ({
                         setNrqlQuery(res.query);
                     }}
                   />
-                  <div>
-                    <BlockText
-                      className="modal-component-nrql-editor-help"
-                      type={BlockText.TYPE.NORMAL}
-                    >
-                      <p>{UI_CONTENT.KPI_MODAL.NRQL_EDITOR_DESCRIPTION}</p>
-                      <br />
-                      <strong className="exmple-title">
-                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_TITLE}
-                      </strong>
-                      <br />
-                      <Button
-                        type={Button.TYPE.PLAIN}
-                        sizeType={Button.SIZE_TYPE.SMALL}
-                        onClick={() =>
-                          handleClick(
-                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_1
-                          )
-                        }
-                      >
-                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_1}
-                      </Button>
-                      <Button
-                        type={Button.TYPE.PLAIN}
-                        sizeType={Button.SIZE_TYPE.SMALL}
-                        onClick={() =>
-                          handleClick(
-                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_2
-                          )
-                        }
-                      >
-                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_2}
-                      </Button>
-                      <Button
-                        type={Button.TYPE.PLAIN}
-                        sizeType={Button.SIZE_TYPE.SMALL}
-                        onClick={() =>
-                          handleClick(
-                            UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_3
-                          )
-                        }
-                      >
-                        {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE_3}
-                      </Button>
-                    </BlockText>
+                  <div className="modal-component-nrql-editor-help">
+                    <details>
+                      <summary>
+                        {` ${UI_CONTENT.KPI_MODAL.NRQL_EDITOR_INSTRUCTIONS_HEADING}`}
+                      </summary>
+                      <p>{UI_CONTENT.KPI_MODAL.NRQL_EDITOR_INSTRUCTIONS}</p>
+                    </details>
+                    <details>
+                      <summary>
+                        {` ${UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_TITLE}`}
+                      </summary>
+                      {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE.map(
+                        (query, index) => (
+                          <div
+                            key={`query_${index}index`}
+                            className="query-example"
+                            onClick={() => handleClick(query)}
+                          >
+                            {query}
+                          </div>
+                        )
+                      )}
+                    </details>
                   </div>
                 </div>
                 <div className="modal-component-preview-heading">
-                  <HeadingText type={HeadingText.TYPE.HEADING_1}>
+                  <HeadingText type={HeadingText.TYPE.HEADING_3}>
                     Preview:
                   </HeadingText>
                 </div>
