@@ -19,6 +19,7 @@ import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { useFetchKpis } from '../../hooks';
 import { KPI_MODES, UI_CONTENT } from '../../constants';
+import { lexer, NRQL_STYLES } from '../../utils';
 
 const KpiModal = ({
   kpi = {},
@@ -148,11 +149,14 @@ const KpiModal = ({
                       {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE.map(
                         (query, index) => (
                           <div
-                            key={`query_${index}index`}
+                            key={`query_${index}`}
                             className="query-example"
                             onClick={() => handleClick(query)}
                           >
-                            {query}
+                            <code
+                              style={{ color: NRQL_STYLES.normal }}
+                              dangerouslySetInnerHTML={{ __html: lexer(query) }}
+                            />
                           </div>
                         )
                       )}
