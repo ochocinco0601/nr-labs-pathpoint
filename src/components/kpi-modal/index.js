@@ -131,7 +131,7 @@ const KpiModal = ({
                     saveButtonText="Preview"
                     onSave={(res) => {
                       setAccountId(res.accountId);
-                      res.query !== UI_CONTENT.KPI_MODAL.QUERY_PROMPT &&
+                      if (res.query !== UI_CONTENT.KPI_MODAL.QUERY_PROMPT)
                         setNrqlQuery(res.query);
                     }}
                   />
