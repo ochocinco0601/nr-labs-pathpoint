@@ -239,7 +239,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
             <div className="kpi-data">
               <SimpleBillboard
                 metric={metricFromQuery(queryResults, index)}
-                title={{ name: kpi.alias ? kpi.alias : kpi.name }}
+                title={{ name: kpi.alias || kpi.name }}
               />
             </div>
             {mode === MODES.EDIT && (
