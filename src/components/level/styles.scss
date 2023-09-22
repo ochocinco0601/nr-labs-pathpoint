@@ -3,12 +3,9 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 12px;
 
   .order {
-    height: 30px;
-    box-shadow: 0px 1px 2px 1px rgba(40, 54, 54, 0.1);
-    border-radius: 4px;
+    border-radius: 4px 0 0 4px;
     padding: 8px 8px 0;
     font-weight: 600;
     font-size: 14px;
@@ -17,7 +14,6 @@
     &.edit {
       display: flex;
       flex-direction: column;
-      height: min-content;
       padding: 4px;
       gap: 4px;
       align-items: center;
@@ -43,18 +39,47 @@
     );
   }
   .steps {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
 
     .step-cell {
-      flex: 1 1 27%;
-      min-height: 50px;
+      box-sizing: border-box;
+      border-color: #dedede;
+      border-style: solid;
+      border-width: 0.5px 0.25px;
 
       &.edit {
-        flex: 1 1 100%;
+        border-width: 0.5px;
+        grid-column: 1 / 4;
+      }
+
+      &.top-thin-border {
+        border-top-width: 0.25px;
+      }
+
+      &.bot-thin-border {
+        border-bottom-width: 0.25px;
+      }
+
+      &.top-radius {
+        border-top-right-radius: 4px;
+      }
+
+      &.bot-radius {
+        border-bottom-right-radius: 4px;
+      }
+
+      &.start-col-1 {
+        grid-column: 1 / -1;
+      }
+
+      &.start-col-2 {
+        grid-column: 2 / -1;
+      }
+
+      &.last-col {
+        border-right-width: 0.5px;
       }
     }
   }

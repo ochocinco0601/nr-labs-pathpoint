@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -24,6 +24,33 @@ const Level = ({
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
+  const stepCellsRefs = useRef([]);
+
+  useEffect(() => {
+    if (mode === MODES.EDIT) return;
+    const stepCells = stepCellsRefs.current;
+    const rows = Math.ceil(stepCells.length / 3);
+    const lastRowColumns = stepCells.length % 3;
+    stepCells.forEach((scr, index) => {
+      let col = (index + 1) % 3;
+      if (!col) col = 3;
+      const row = Math.ceil((index + 1) / 3);
+      if (row === 1 && (col === 3 || (rows === 1 && col === lastRowColumns))) {
+        scr.classList.add('top-radius');
+      }
+      if (row < rows) {
+        scr.classList.add('bot-thin-border');
+      } else if (row === rows) {
+        scr.classList.add('top-thin-border');
+        if (col === lastRowColumns) {
+          scr.classList.add('bot-radius');
+          scr.classList.add(`start-col-${col === 1 ? '1' : '2'}`);
+          scr.classList.add('last-col');
+        }
+      }
+      if (col === 3) scr.classList.add('last-col');
+    });
+  }, [mode]);
 
   const deleteHandler = useCallback(() => {
     if (onDelete) onDelete();
@@ -141,6 +168,7 @@ const Level = ({
           <div
             className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
             key={index}
+            ref={(el) => (stepCellsRefs.current[index] = el)}
           >
             <Step
               title={title}
