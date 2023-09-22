@@ -18,3 +18,19 @@
     }
   }
 }
+
+@mixin border-colors($statuses...) {
+  @each $status, $name in meta.keywords($statuses) {
+    &.#{$name} {
+      @if $status == 'critical' {
+        border-color: $critical;
+      } @else if $status == 'success' {
+        border-color: $success;
+      } @else if $status == 'unknown' {
+        border-color: $unknown;
+      } @else if $status == 'warning' {
+        border-color: $warning;
+      }
+    }
+  }
+}
