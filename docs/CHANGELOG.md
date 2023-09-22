@@ -1,3 +1,10 @@
+## [1.37.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.37.0...v1.37.1) (2023-09-22)
+
+
+### Bug Fixes
+
+* update ui for levels ([255ed7d](https://github.com/newrelic/nr-labs-hedgehog/commit/255ed7dc1cf22a177ee86e4ae91c39454224d26b))
+
 # [1.37.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.36.0...v1.37.0) (2023-08-26)
 
 
