@@ -1,3 +1,15 @@
+# [1.38.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.37.1...v1.38.0) (2023-09-22)
+
+
+### Bug Fixes
+
+* add newline to end of file ([67ee889](https://github.com/newrelic/nr-labs-hedgehog/commit/67ee889ab777d69b9e54deb40fd213c3ec8ccebc))
+
+
+### Features
+
+* sidebar component ([fafe61f](https://github.com/newrelic/nr-labs-hedgehog/commit/fafe61fde8bbdaf2284d06cc585a9009105e43b4))
+
 ## [1.37.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.37.0...v1.37.1) (2023-09-22)
 
 
