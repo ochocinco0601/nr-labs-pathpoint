@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useContext,
-  useRef,
   useEffect,
   useState,
 } from 'react';
@@ -45,9 +44,6 @@ const KpiModal = ({
   );
 
   const [previewOk, setPreviewOk] = useState(false);
-
-  const nameRef = useRef('name');
-  const aliasRef = useRef('alias');
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
@@ -103,7 +99,6 @@ const KpiModal = ({
                     <EditInPlace
                       value={name}
                       setValue={setName}
-                      ref={nameRef}
                       placeholder="Untitled KPI"
                     />
                   </div>
@@ -111,7 +106,6 @@ const KpiModal = ({
                     <EditInPlace
                       value={alias}
                       setValue={setAlias}
-                      ref={aliasRef}
                       placeholder="Alias (optional)"
                     />
                   </div>
