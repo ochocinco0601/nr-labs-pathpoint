@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Modal, PlatformStateContext } from 'nr1';
