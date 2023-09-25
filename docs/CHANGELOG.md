@@ -1,3 +1,19 @@
+# [1.39.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.38.0...v1.39.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* add collapsible text on kpi modal frame to display query instructions and sample queries ([988858a](https://github.com/newrelic/nr-labs-hedgehog/commit/988858a151235533ffc0253e922afa79d3e0bc19))
+* eslint error ([6d11a4f](https://github.com/newrelic/nr-labs-hedgehog/commit/6d11a4fbca2b05854256f6aa29eeefc8130b2e85))
+* stop kpi value from wrapping to next line ([4e0e385](https://github.com/newrelic/nr-labs-hedgehog/commit/4e0e385d8ece753a9124f09316c563d308586920))
+
+
+### Features
+
+* add kpi alias, billboard and nrql editor instructions, query editor prompt ([d5ec436](https://github.com/newrelic/nr-labs-hedgehog/commit/d5ec43684d5a374ecde240696a500a78f75da720))
+* add nrql syntax color to kpi-modal nrql samples ([89f02b3](https://github.com/newrelic/nr-labs-hedgehog/commit/89f02b30cf0224f3cbc8be74180de893dad56e0f))
+* use kpi alias in billboard if it's added ([1a259f3](https://github.com/newrelic/nr-labs-hedgehog/commit/1a259f3fb38c6f7a69ce605d6dd0b6ea2475cf60))
+
 # [1.38.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.37.1...v1.38.0) (2023-09-22)
 
 
