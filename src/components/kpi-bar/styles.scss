@@ -78,6 +78,7 @@ $kpiBarEditModeMaxWidth: calc(99% - 190px);
 
       .kpi-data {
         height: 100%;
+        min-width: max-content;
         display: flex;
         flex-direction: column;
         justify-content: center;
