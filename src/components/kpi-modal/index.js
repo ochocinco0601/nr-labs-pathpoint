@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Modal, PlatformStateContext } from 'nr1';
@@ -12,7 +12,8 @@ import {
 import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { useFetchKpis } from '../../hooks';
-import { KPI_MODES } from '../../constants';
+import { KPI_MODES, UI_CONTENT } from '../../constants';
+import { lexer, NRQL_STYLES } from '../../utils';
 
 const KpiModal = ({
   kpi = {},
@@ -30,17 +31,19 @@ const KpiModal = ({
   const [name, setName] = useState(
     [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
   );
+  const [alias, setAlias] = useState(
+    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.alias : ''
+  );
   const [nrqlQuery, setNrqlQuery] = useState(
     [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
   );
 
   const [previewOk, setPreviewOk] = useState(false);
 
-  const nameRef = useRef('name');
-
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
     [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setName(kpi.name);
+    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setAlias(kpi.alias);
     [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) &&
       setNrqlQuery(kpi.nrqlQuery);
   }, [kpi, kpiMode]);
@@ -66,6 +69,11 @@ const KpiModal = ({
     }
   }, [accountId, nrqlQuery, hookData]);
 
+  const handleClick = useCallback((query) => {
+    setPreviewOk(false);
+    setNrqlQuery(query);
+  }, []);
+
   return (
     <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
       <div className="modal-component">
@@ -86,24 +94,66 @@ const KpiModal = ({
                     <EditInPlace
                       value={name}
                       setValue={setName}
-                      ref={nameRef}
-                      placeholder="Enter KPI name"
+                      placeholder="Untitled KPI"
+                    />
+                  </div>
+                  <div className="modal-component-kpi-alias">
+                    <EditInPlace
+                      value={alias}
+                      setValue={setAlias}
+                      placeholder="Alias (optional)"
                     />
                   </div>
                 </div>
-                <div className="modal-component-nrql-editor">
+                <div
+                  id="nrql-editor-div"
+                  className="modal-component-nrql-editor"
+                >
                   <NrqlEditor
-                    query={kpi.nrqlQuery}
+                    id={'nrqlEditor'}
+                    query={
+                      nrqlQuery ||
+                      kpi.nrqlQuery ||
+                      UI_CONTENT.KPI_MODAL.QUERY_PROMPT
+                    }
                     accountId={accountId}
                     saveButtonText="Preview"
                     onSave={(res) => {
                       setAccountId(res.accountId);
-                      setNrqlQuery(res.query);
+                      if (res.query !== UI_CONTENT.KPI_MODAL.QUERY_PROMPT)
+                        setNrqlQuery(res.query);
                     }}
                   />
+                  <div className="modal-component-nrql-editor-help">
+                    <details>
+                      <summary>
+                        {` ${UI_CONTENT.KPI_MODAL.NRQL_EDITOR_INSTRUCTIONS_HEADING}`}
+                      </summary>
+                      <p>{UI_CONTENT.KPI_MODAL.NRQL_EDITOR_INSTRUCTIONS}</p>
+                    </details>
+                    <details>
+                      <summary>
+                        {` ${UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_TITLE}`}
+                      </summary>
+                      {UI_CONTENT.KPI_MODAL.BILLBOARD_HELP_QUERY_EXAMPLE.map(
+                        (query, index) => (
+                          <div
+                            key={`query_${index}`}
+                            className="query-example"
+                            onClick={() => handleClick(query)}
+                          >
+                            <code
+                              style={{ color: NRQL_STYLES.normal }}
+                              dangerouslySetInnerHTML={{ __html: lexer(query) }}
+                            />
+                          </div>
+                        )
+                      )}
+                    </details>
+                  </div>
                 </div>
                 <div className="modal-component-preview-heading">
-                  <HeadingText type={HeadingText.TYPE.HEADING_1}>
+                  <HeadingText type={HeadingText.TYPE.HEADING_3}>
                     Preview:
                   </HeadingText>
                 </div>
@@ -129,7 +179,7 @@ const KpiModal = ({
                         className: 'modal-component-status-trend',
                       }}
                       title={{
-                        name: name,
+                        name: alias || name,
                         className: 'modal-component-metric-name',
                       }}
                     />
@@ -145,7 +195,7 @@ const KpiModal = ({
                 type={Button.TYPE.PRIMARY}
                 sizeType={Button.SIZE_TYPE.LARGE}
                 spacingType={[Button.SPACING_TYPE.EXTRA_LARGE]}
-                disabled={!previewOk}
+                disabled={!previewOk || !name}
                 onClick={() => {
                   switch (kpiMode) {
                     case KPI_MODES.ADD:
@@ -153,6 +203,7 @@ const KpiModal = ({
                         id: kpi.id,
                         accountIds: [accountId],
                         name,
+                        alias,
                         nrqlQuery,
                       });
                       break;
@@ -162,6 +213,7 @@ const KpiModal = ({
                           id: kpi.id,
                           accountIds: [accountId],
                           name,
+                          alias,
                           nrqlQuery,
                         },
                         kpiIndex
