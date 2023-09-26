@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -24,33 +24,6 @@ const Level = ({
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
-  const stepCellsRefs = useRef([]);
-
-  useEffect(() => {
-    if (mode === MODES.EDIT) return;
-    const stepCells = stepCellsRefs.current;
-    const rows = Math.ceil(stepCells.length / 3);
-    const lastRowColumns = stepCells.length % 3;
-    stepCells.forEach((scr, index) => {
-      let col = (index + 1) % 3;
-      if (!col) col = 3;
-      const row = Math.ceil((index + 1) / 3);
-      if (row === 1 && (col === 3 || (rows === 1 && col === lastRowColumns))) {
-        scr.classList.add('top-radius');
-      }
-      if (row < rows) {
-        scr.classList.add('bot-thin-border');
-      } else if (row === rows) {
-        scr.classList.add('top-thin-border');
-        if (col === lastRowColumns) {
-          scr.classList.add('bot-radius');
-          scr.classList.add(`start-col-${col === 1 ? '1' : '2'}`);
-          scr.classList.add('last-col');
-        }
-      }
-      if (col === 3) scr.classList.add('last-col');
-    });
-  }, [mode]);
 
   const deleteHandler = useCallback(() => {
     if (onDelete) onDelete();
@@ -164,27 +137,49 @@ const Level = ({
         <div className={`order ${status}`}>{order}</div>
       )}
       <div className="steps">
-        {steps.map(({ title, signals = [], status }, index) => (
-          <div
-            className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
-            key={index}
-            ref={(el) => (stepCellsRefs.current[index] = el)}
-          >
-            <Step
-              title={title}
-              signals={signals}
-              stageName={stageName}
-              level={order}
-              onUpdate={(updates) => updateStepHandler(index, updates)}
-              onDelete={() => deleteStepHandler(index)}
-              onDragStart={(e) => stepDragStartHandler(e, index)}
-              onDragOver={(e) => stepDragOverHandler(e, index)}
-              onDrop={(e) => stepDropHandler(e)}
-              status={status}
-              mode={mode}
-            />
-          </div>
-        ))}
+        {steps.reduce(
+          (acc, { id, title, signals = [], status }, index, arr) => {
+            const isLastStep = index + 1 === arr.length;
+            acc.cols.push(
+              <div
+                className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
+                key={id || index}
+              >
+                <Step
+                  title={title}
+                  signals={signals}
+                  stageName={stageName}
+                  level={order}
+                  onUpdate={(updates) => updateStepHandler(index, updates)}
+                  onDelete={() => deleteStepHandler(index)}
+                  onDragStart={(e) => stepDragStartHandler(e, index)}
+                  onDragOver={(e) => stepDragOverHandler(e, index)}
+                  onDrop={(e) => stepDropHandler(e)}
+                  status={status}
+                  mode={mode}
+                />
+              </div>
+            );
+            if (mode === MODES.EDIT) {
+              acc.rows.push(
+                <div className="steps-row cols-1">{[...acc.cols]}</div>
+              );
+              acc.cols = [];
+            } else if (index % 3 === 2 || isLastStep) {
+              acc.rows.push(
+                <div
+                  className={`steps-row cols-${acc.cols.length}`}
+                  key={`steps_row_${order}_${index}`}
+                >
+                  {[...acc.cols]}
+                </div>
+              );
+              acc.cols = [];
+            }
+            return isLastStep ? acc.rows : acc;
+          },
+          { rows: [], cols: [] }
+        )}
       </div>
     </div>
   );
