@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -24,6 +24,61 @@ const Level = ({
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
+
+  const stepsRows = useMemo(() => {
+    if (!steps.length) return [];
+
+    return steps.reduce(
+      (acc, { id, title, signals = [], status }, index, arr) => {
+        const isLastStep = index + 1 === arr.length;
+        const cell = (
+          <div
+            className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
+            key={id || index}
+          >
+            <Step
+              title={title}
+              signals={signals}
+              stageName={stageName}
+              level={order}
+              onUpdate={(updates) => updateStepHandler(index, updates)}
+              onDelete={() => deleteStepHandler(index)}
+              onDragStart={(e) => stepDragStartHandler(e, index)}
+              onDragOver={(e) => stepDragOverHandler(e, index)}
+              onDrop={(e) => stepDropHandler(e)}
+              status={status}
+              mode={mode}
+            />
+          </div>
+        );
+        if (mode === MODES.EDIT) {
+          acc.rows.push(
+            <div
+              className="steps-row cols-1"
+              key={`steps_row_${order}_${index}`}
+            >
+              {cell}
+            </div>
+          );
+        } else {
+          acc.cols.push(cell);
+          if (index % 3 === 2 || isLastStep) {
+            acc.rows.push(
+              <div
+                className={`steps-row cols-${acc.cols.length}`}
+                key={`steps_row_${order}_${index}`}
+              >
+                {[...acc.cols]}
+              </div>
+            );
+            acc.cols = [];
+          }
+        }
+        return isLastStep ? acc.rows : acc;
+      },
+      { rows: [], cols: [] }
+    );
+  }, [steps, mode]);
 
   const deleteHandler = useCallback(() => {
     if (onDelete) onDelete();
@@ -136,51 +191,7 @@ const Level = ({
       ) : (
         <div className={`order ${status}`}>{order}</div>
       )}
-      <div className="steps">
-        {steps.reduce(
-          (acc, { id, title, signals = [], status }, index, arr) => {
-            const isLastStep = index + 1 === arr.length;
-            acc.cols.push(
-              <div
-                className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
-                key={id || index}
-              >
-                <Step
-                  title={title}
-                  signals={signals}
-                  stageName={stageName}
-                  level={order}
-                  onUpdate={(updates) => updateStepHandler(index, updates)}
-                  onDelete={() => deleteStepHandler(index)}
-                  onDragStart={(e) => stepDragStartHandler(e, index)}
-                  onDragOver={(e) => stepDragOverHandler(e, index)}
-                  onDrop={(e) => stepDropHandler(e)}
-                  status={status}
-                  mode={mode}
-                />
-              </div>
-            );
-            if (mode === MODES.EDIT) {
-              acc.rows.push(
-                <div className="steps-row cols-1">{[...acc.cols]}</div>
-              );
-              acc.cols = [];
-            } else if (index % 3 === 2 || isLastStep) {
-              acc.rows.push(
-                <div
-                  className={`steps-row cols-${acc.cols.length}`}
-                  key={`steps_row_${order}_${index}`}
-                >
-                  {[...acc.cols]}
-                </div>
-              );
-              acc.cols = [];
-            }
-            return isLastStep ? acc.rows : acc;
-          },
-          { rows: [], cols: [] }
-        )}
-      </div>
+      <div className="steps">{stepsRows}</div>
     </div>
   );
 };
