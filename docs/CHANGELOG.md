@@ -1,3 +1,11 @@
+## [1.39.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.39.0...v1.39.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* handle empty steps in levels ui ([1c77999](https://github.com/newrelic/nr-labs-hedgehog/commit/1c779994e66f725d25d13e9eec077f063823f40f))
+* remove useref in levels ([b36458e](https://github.com/newrelic/nr-labs-hedgehog/commit/b36458e4d2bf53bd80113c3bb074bdb7218d5794))
+
 # [1.39.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.38.0...v1.39.0) (2023-09-25)
 
 
