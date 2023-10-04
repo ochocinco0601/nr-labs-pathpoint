@@ -23,7 +23,6 @@ const FlowSteps = ({
   const calloutRef = useRef();
 
   useEffect(() => {
-    console.log('flowRef', flowRef);
     if (step === 2) {
       setOverlayStyle({ left: 0, top: 0, width: '100%', height: '100%' });
       setCalloutStyle({
