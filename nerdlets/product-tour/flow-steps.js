@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Flow } from '../../src/components';
@@ -25,132 +25,34 @@ const FlowSteps = ({
   useEffect(() => {
     if (step === 2) {
       setOverlayStyle({ left: 0, top: 0, width: '100%', height: '100%' });
-      setCalloutStyle({
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      });
+      positionCallout({ top: '50%', left: '50%', tx: '-50%', ty: '-50%' });
     } else if (step === 3) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current
-        ?.querySelector('.stages')
-        ?.children?.[0]?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
-      setCalloutStyle({
-        top: '50%',
-        left: 0,
-        transform: `translate(${left + width + 10}px, -50%)`,
-      });
+      spotlightElement(
+        flowRef?.current?.querySelector('.stages')?.children?.[0]
+      );
     } else if (step === 4) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current
-        ?.querySelector('.stages')
-        ?.children?.[0]?.querySelector('.step-groups')
-        ?.children?.[0]?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
+      spotlightElement(
+        flowRef?.current
+          ?.querySelector('.stages')
+          ?.children?.[0]?.querySelector('.step-groups')?.children?.[0]
+      );
     } else if (step === 5) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current
-        ?.querySelector('.stages')
-        ?.children?.[0]?.querySelector('.step-groups')
-        ?.children?.[0]?.querySelector('.steps')
-        ?.children?.[0]?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
+      spotlightElement(
+        flowRef?.current
+          ?.querySelector('.stages')
+          ?.children?.[0]?.querySelector('.step-groups')
+          ?.children?.[0]?.querySelector('.steps')?.children?.[0]
+      );
     } else if (step === 6) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current
-        ?.querySelector('.stages')
-        ?.children?.[0]?.querySelector('.signals-listing')
-        ?.children?.[0]?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
+      spotlightElement(
+        flowRef?.current
+          ?.querySelector('.stages')
+          ?.children?.[0]?.querySelector('.signals-listing')?.children?.[0]
+      );
     } else if (step === 7) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current
-        ?.querySelector('.kpi-bar')
-        ?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
+      spotlightElement(flowRef?.current?.querySelector('.kpi-bar'));
     } else if (step === 8) {
-      const {
-        left = 0,
-        top = 0,
-        width = 0,
-        height = 0,
-      } = flowRef?.current?.getBoundingClientRect?.() || {};
-      setOverlayStyle((os) => {
-        if (
-          os.left === left &&
-          os.top === top &&
-          os.width === width &&
-          os.height === height
-        )
-          return os;
-        return { ...os, left, top, width, height };
-      });
+      spotlightElement(flowRef?.current, true);
     }
   }, [step]);
 
@@ -159,35 +61,56 @@ const FlowSteps = ({
     if (width && height) {
       const { width: calloutWidth = 0, height: calloutHeight = 0 } =
         calloutRef?.current?.getBoundingClientRect?.() || {};
-      if (step === 4 || step === 5) {
-        setCalloutStyle({
-          top: 0,
-          left: 0,
-          transform: `translate(0, ${top - calloutHeight - 10}px)`,
+      if (step === 3) {
+        positionCallout({
+          top: '50%',
+          tx: `${left + width + 10}px`,
+          ty: '-50%',
         });
+      } else if (step === 4 || step === 5) {
+        positionCallout({ ty: `${top - calloutHeight - 10}px` });
       } else if (step === 6) {
-        setCalloutStyle({
-          top: 0,
-          left: 0,
-          transform: `translate(${left + width + 10}px, ${
-            top - calloutHeight / 2
-          }px)`,
+        positionCallout({
+          tx: `${left + width + 10}px`,
+          ty: `${top - calloutHeight / 2}px`,
         });
       } else if (step === 7) {
-        setCalloutStyle({
-          top: 0,
+        positionCallout({
           left: '50%',
-          transform: `translate(-50%, ${top - calloutHeight - 10}px)`,
+          tx: '-50%',
+          ty: `${top - calloutHeight - 10}px`,
         });
       } else if (step === 8) {
-        setCalloutStyle({
-          top: 0,
-          left: 0,
-          transform: `translate(${width - calloutWidth}px, 10px)`,
-        });
+        positionCallout({ tx: `${width - calloutWidth}px`, ty: '10px' });
       }
     }
   }, [step, overlayStyle]);
+
+  const spotlightElement = useCallback((el, shouldCoverCanvas = false) => {
+    const rect = el?.getBoundingClientRect?.() || {};
+    const { left = 0, top = 0 } = rect;
+    const { width = 0, height = 0 } = shouldCoverCanvas ? {} : rect;
+    setOverlayStyle((os) => {
+      if (
+        os.left === left &&
+        os.top === top &&
+        os.width === width &&
+        os.height === height
+      )
+        return os;
+      return { ...os, left, top, width, height };
+    });
+  }, []);
+
+  const positionCallout = useCallback(
+    ({ top = 0, left = 0, tx = 0, ty = 0 }) =>
+      setCalloutStyle({
+        top,
+        left,
+        transform: `translate(${tx}, ${ty})`,
+      }),
+    []
+  );
 
   return (
     <div className="product-tour">
