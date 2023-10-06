@@ -1,3 +1,17 @@
+# [1.40.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.39.1...v1.40.0) (2023-10-06)
+
+
+### Bug Fixes
+
+* adding newline to eof for json files ([8b6605f](https://github.com/newrelic/nr-labs-hedgehog/commit/8b6605f2a9d88572aa8a2dd65c105ddc83c10fd4))
+* remove console log ([9f3abaf](https://github.com/newrelic/nr-labs-hedgehog/commit/9f3abafe968960d15715e900f8b4d17188a75857))
+
+
+### Features
+
+* adding refs for flow and flowlist ([04eb69d](https://github.com/newrelic/nr-labs-hedgehog/commit/04eb69d96ba44ce82f37cdec272767742b65aa6c))
+* product tour nerdlet ([3ddfb83](https://github.com/newrelic/nr-labs-hedgehog/commit/3ddfb836a29126f6629460384dd3f2877864e9d0))
+
 ## [1.39.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.39.0...v1.39.1) (2023-09-26)
 
 
