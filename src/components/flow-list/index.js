@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { TextField } from 'nr1';
 
 import { getStageHeaderShape } from '../../utils';
 
-const FlowList = ({ flows = [], onClick = () => null }) => {
+const FlowList = forwardRef(({ flows = [], onClick = () => null }, ref) => {
   const [searchPattern, setSearchPattern] = useState('');
   const [filteredFlows, setFilteredFlows] = useState([]);
 
@@ -43,7 +43,7 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
             <div className="cell col-2-format">Stages</div>
           </div>
         </div>
-        <div className="flowlist-content">
+        <div className="flowlist-content" ref={ref}>
           {filteredFlows.map((flow, flowIndex) => (
             <div
               key={`flow-${flowIndex}`}
@@ -72,11 +72,13 @@ const FlowList = ({ flows = [], onClick = () => null }) => {
       </div>
     </div>
   );
-};
+});
 
 FlowList.propTypes = {
   flows: PropTypes.array,
   onClick: PropTypes.func,
 };
+
+FlowList.displayName = 'FlowList';
 
 export default FlowList;
