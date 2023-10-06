@@ -7,10 +7,28 @@ import React, {
   useState,
 } from 'react';
 
-import { Button, Icon, nerdlet, PlatformStateContext, Spinner } from 'nr1';
+import {
+  Button,
+  Icon,
+  nerdlet,
+  PlatformStateContext,
+  Spinner,
+  useNerdletState,
+} from 'nr1';
 
-import { Flow, FlowList, NoFlows, Sidebar } from '../../src/components';
-import { useFlowLoader, useFlowWriter, useFetchUser } from '../../src/hooks';
+import {
+  Flow,
+  FlowList,
+  GetStarted,
+  NoFlows,
+  Sidebar,
+} from '../../src/components';
+import {
+  useFlowLoader,
+  useFlowWriter,
+  useFetchUser,
+  useReadUserPreferences,
+} from '../../src/hooks';
 import { MODES, UI_CONTENT } from '../../src/constants';
 import { uuid } from '../../src/utils';
 import { SidebarProvider } from '../../src/contexts';
@@ -20,7 +38,10 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
+  const [nerdletState] = useNerdletState();
   const { user } = useFetchUser();
+  const { userPreferences, loading: userPreferencesLoading } =
+    useReadUserPreferences();
 
   const {
     flows: flowsData,
@@ -118,6 +139,13 @@ const HomeNerdlet = () => {
   }, [flowWriter.data]);
 
   const currentView = useMemo(() => {
+    if (
+      nerdletState?.redirfrom !== 'product-tour' &&
+      !userPreferencesLoading &&
+      !userPreferences?.tour?.skipped
+    )
+      return <GetStarted />;
+
     if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
       return (
         <SidebarProvider>
