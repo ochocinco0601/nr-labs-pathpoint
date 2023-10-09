@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.40.0...v1.41.0) (2023-10-09)
+
+
+### Features
+
+* get started page ([783159d](https://github.com/newrelic/nr-labs-hedgehog/commit/783159d6b329a5c52bc435d5c9a55ac2675e1b04))
+
 # [1.40.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.39.1...v1.40.0) (2023-10-06)
 
 
