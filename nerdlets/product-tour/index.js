@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Button, Icon, nerdlet, PlatformStateContext } from 'nr1';
+import { Button, Icon, navigation, nerdlet, PlatformStateContext } from 'nr1';
 
+import { useSaveUserPreferences } from '../../src/hooks';
 import { MODES, UI_CONTENT } from '../../src/constants';
+
 import flows from './flows.json';
 import content from './content.json';
 import FlowListSteps from './flow-list-steps';
@@ -12,6 +14,7 @@ const ProductTourNerdlet = () => {
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState(MODES.INLINE);
   const { accountId } = useContext(PlatformStateContext);
+  const saveUserPreferences = useSaveUserPreferences();
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -36,7 +39,18 @@ const ProductTourNerdlet = () => {
 
   const backHandler = () => setStep((s) => (s === 1 ? s : s - 1));
 
-  const dismissHandler = () => null; // TODO: close the tour
+  const dismissHandler = async () => {
+    await saveUserPreferences.save({
+      documentId: 'tour',
+      document: { skipped: true },
+    });
+    navigation.openNerdlet({
+      id: 'home',
+      urlState: {
+        redirfrom: 'product-tour',
+      },
+    });
+  };
 
   return step === 1 ? (
     <FlowListSteps
