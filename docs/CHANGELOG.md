@@ -1,3 +1,10 @@
+## [1.42.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.0...v1.42.1) (2023-10-11)
+
+
+### Bug Fixes
+
+* handle deleted service levels ([be0af2e](https://github.com/newrelic/nr-labs-hedgehog/commit/be0af2ef46f42edb6b479ea702d31d95d7c85505))
+
 # [1.42.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.41.0...v1.42.0) (2023-10-11)
 
 
