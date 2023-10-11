@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.41.0...v1.42.0) (2023-10-11)
+
+
+### Features
+
+* flow list updates ([ec0aca9](https://github.com/newrelic/nr-labs-hedgehog/commit/ec0aca9216641610339211809ffe3782fc82152e))
+
 # [1.41.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.40.0...v1.41.0) (2023-10-09)
 
 
