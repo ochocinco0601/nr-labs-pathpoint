@@ -3,7 +3,6 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
@@ -30,8 +29,20 @@ import {
   useReadUserPreferences,
 } from '../../src/hooks';
 import { MODES, UI_CONTENT } from '../../src/constants';
-import { uuid } from '../../src/utils';
 import { SidebarProvider } from '../../src/contexts';
+import { uuid } from '../../src/utils';
+
+const createFlowButtonAttributes = {
+  label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
+  type: Button.TYPE.PRIMARY,
+  iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
+};
+
+const editButtonAttributes = {
+  label: UI_CONTENT.GLOBAL.BUTTON_LABEL_EDIT_MODE,
+  type: Button.TYPE.PRIMARY,
+  iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
+};
 
 const HomeNerdlet = () => {
   const [mode, setMode] = useState(MODES.INLINE);
@@ -42,55 +53,41 @@ const HomeNerdlet = () => {
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
     useReadUserPreferences();
-
   const {
     flows: flowsData,
     error: flowsError,
     loading: flowsLoading,
   } = useFlowLoader({ accountId });
-
   const flowWriter = useFlowWriter({ accountId, user });
-  const newFlowId = useRef();
-
-  const actionControlButtons = useMemo(() => {
-    const buttons = [];
-    if (mode !== MODES.EDIT) {
-      if (currentFlowIndex > -1) {
-        buttons.push({
-          label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
-          type: Button.TYPE.PRIMARY,
-          iconType: Icon.TYPE.DATAVIZ__DATAVIZ__SERVICE_MAP_CHART,
-          onClick: () => newFlowHandler(),
-        });
-        buttons.push({
-          label: UI_CONTENT.GLOBAL.BUTTON_LABEL_EDIT_MODE,
-          type: Button.TYPE.PRIMARY,
-          iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
-          onClick: () => setMode(MODES.EDIT),
-        });
-      }
-    }
-    return buttons;
-  }, [mode, newFlowHandler, currentFlowIndex, newFlowId, setMode]);
 
   useEffect(() => {
     nerdlet.setConfig({
       accountPicker: true,
       actionControls: true,
-      actionControlButtons: actionControlButtons,
+      actionControlButtons:
+        currentFlowIndex > -1
+          ? [
+              {
+                ...createFlowButtonAttributes,
+                onClick: newFlowHandler,
+              },
+              {
+                ...editButtonAttributes,
+                onClick: () => setMode(MODES.EDIT),
+              },
+            ]
+          : [
+              {
+                ...createFlowButtonAttributes,
+                onClick: newFlowHandler,
+              },
+            ],
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [mode, newFlowHandler, currentFlowIndex]);
+  }, [user, newFlowHandler, currentFlowIndex]);
 
-  useEffect(() => {
-    setFlows(flowsData || []);
-    if (newFlowId.current) {
-      // TODO: set current flow
-      // const index = flowsData.findIndex((f) => f.id === newFlowId.current);
-      newFlowId.current = null;
-    }
-  }, [flowsData]);
+  useEffect(() => setFlows(flowsData || []), [flowsData]);
 
   useEffect(() => {
     if (flowsError) console.error('Error fetching flows', flowsError);
@@ -98,7 +95,6 @@ const HomeNerdlet = () => {
 
   const newFlowHandler = useCallback(() => {
     const id = uuid();
-    newFlowId.current = id;
     flowWriter.write({
       documentId: id,
       document: {
@@ -106,9 +102,13 @@ const HomeNerdlet = () => {
         name: 'Untitled',
         stages: [],
         kpis: [],
+        created: {
+          user,
+          timestamp: Date.now(),
+        },
       },
     });
-  }, []);
+  }, [user]);
 
   const updateFlowHandler = useCallback(
     ({ id, ...doc }) => {
