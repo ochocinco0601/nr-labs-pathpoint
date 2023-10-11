@@ -59,8 +59,7 @@ const FlowList = forwardRef(({ flows = [], onClick = () => null }, ref) => {
         const { [id]: _, ...favs } = favorites; // eslint-disable-line no-unused-vars
         document = favs;
       } else {
-        const favs = { ...favorites, [id]: null };
-        document = favs;
+        document = { ...favorites, [id]: null };
       }
 
       await saveUserPreferences.save({
