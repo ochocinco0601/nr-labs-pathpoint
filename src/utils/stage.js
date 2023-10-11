@@ -9,7 +9,8 @@ export const addSignalStatuses = (stages = [], serviceLevelsData = {}) =>
       steps: steps.map(({ title, signals = [] }) => ({
         title,
         signals: signals.map(({ type, guid }) => {
-          const { name, attainment, target } = serviceLevelsData[guid];
+          const { name, attainment, target } = serviceLevelsData[guid] || {};
+          // TODO: handle service levels with no data
           return {
             type,
             guid,
