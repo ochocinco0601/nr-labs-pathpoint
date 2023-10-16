@@ -22,7 +22,7 @@ const AddStep = ({ levels = [], onUpdate }) => {
             index === selectedLevel - 1
               ? {
                   ...level,
-                  steps: [...level.steps, { newStep }],
+                  steps: [...level.steps, newStep],
                 }
               : level
           );
