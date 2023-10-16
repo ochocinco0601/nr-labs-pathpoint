@@ -54,9 +54,9 @@ const Stage = ({
 
   const SignalsList = memo(
     () =>
-      Object.keys(signals).map((key, i) => {
-        const { name, status } = signals[key];
-        return <Signal key={i} name={name} status={status} />;
+      Object.keys(signals).map((guid) => {
+        const { name, status } = signals[guid];
+        return <Signal key={guid} name={name} status={status} />;
       }),
     [signals]
   );
@@ -161,9 +161,9 @@ const Stage = ({
           ) : null}
         </div>
         <div className="step-groups">
-          {levels.map(({ steps, status }, index) => (
+          {levels.map(({ id, steps, status }, index) => (
             <Level
-              key={index}
+              key={id}
               order={index + 1}
               steps={steps}
               stageName={name}

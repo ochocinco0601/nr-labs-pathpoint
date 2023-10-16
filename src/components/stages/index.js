@@ -10,6 +10,7 @@ import {
   addSignalStatuses,
   annotateStageWithStatuses,
   uniqueSignalGuidsInStages,
+  uuid,
 } from '../../utils';
 
 const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
@@ -42,6 +43,7 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
           stages: [
             ...stages,
             {
+              id: uuid(),
               name: 'New Stage',
               levels: [],
             },
@@ -108,11 +110,17 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
       <div className="stages">
         {(stagesWithStatuses || []).map(
           (
-            { name = '', levels = [], related = {}, status = STATUSES.UNKNOWN },
+            {
+              id,
+              name = '',
+              levels = [],
+              related = {},
+              status = STATUSES.UNKNOWN,
+            },
             i
           ) => (
             <Stage
-              key={i}
+              key={id}
               name={name}
               levels={levels}
               related={related}

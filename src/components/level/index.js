@@ -34,7 +34,7 @@ const Level = ({
         const cell = (
           <div
             className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
-            key={id || index}
+            key={id}
           >
             <Step
               title={title}
