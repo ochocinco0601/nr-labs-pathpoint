@@ -128,11 +128,11 @@ const FlowList = forwardRef(({ flows = [], onClick = () => null }, ref) => {
 const userText = ({ user: { name: user } = {} } = {}) =>
   user ? <span className="user">Created by {user}</span> : null;
 
-const stageShape = (stage = {}, index) => {
+const stageShape = (stage = {}) => {
   const className = getStageHeaderShape(stage);
 
   return (
-    <div key={index} className="stage-shape" title={stage.name}>
+    <div key={stage.id} className="stage-shape" title={stage.name}>
       {className !== 'has-none' ? (
         <div className={`stage-name ${className}-border border`} />
       ) : null}

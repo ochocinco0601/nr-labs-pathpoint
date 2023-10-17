@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText } from 'nr1';
@@ -10,6 +10,7 @@ import {
   addSignalStatuses,
   annotateStageWithStatuses,
   uniqueSignalGuidsInStages,
+  uuid,
 } from '../../utils';
 
 const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
@@ -36,18 +37,20 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
       console.error('Error fetching service levels', serviceLevelsError);
   }, [serviceLevelsError]);
 
-  const addStageHandler = () =>
-    onUpdate
-      ? onUpdate({
-          stages: [
-            ...stages,
-            {
-              name: 'New Stage',
-              levels: [],
-            },
-          ],
-        })
-      : null;
+  const addStageHandler = useCallback(() => {
+    if (onUpdate)
+      onUpdate({
+        stages: [
+          ...stages,
+          {
+            id: uuid(),
+            name: 'New Stage',
+            levels: [],
+            related: {},
+          },
+        ],
+      });
+  }, [onUpdate, stages]);
 
   const updateStageHandler = (updatedStage, index) => {
     const updatedStages = [...stages];
@@ -108,11 +111,17 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
       <div className="stages">
         {(stagesWithStatuses || []).map(
           (
-            { name = '', levels = [], related = {}, status = STATUSES.UNKNOWN },
+            {
+              id,
+              name = '',
+              levels = [],
+              related = {},
+              status = STATUSES.UNKNOWN,
+            },
             i
           ) => (
             <Stage
-              key={i}
+              key={id}
               name={name}
               levels={levels}
               related={related}
