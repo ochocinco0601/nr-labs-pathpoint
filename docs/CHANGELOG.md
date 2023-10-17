@@ -1,3 +1,10 @@
+## [1.42.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.3...v1.42.4) (2023-10-17)
+
+
+### Bug Fixes
+
+* stage shape getting overwritten ([6206331](https://github.com/newrelic/nr-labs-hedgehog/commit/6206331746b87e81bb79cc1b48f97ccb1dc7ff2f))
+
 ## [1.42.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.2...v1.42.3) (2023-10-17)
 
 
