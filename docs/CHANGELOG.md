@@ -1,3 +1,10 @@
+## [1.42.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.2...v1.42.3) (2023-10-17)
+
+
+### Bug Fixes
+
+* calculating statuses issue ([e02e380](https://github.com/newrelic/nr-labs-hedgehog/commit/e02e380dc1cd0d5e4f5f118933fe4f69a958493c))
+
 ## [1.42.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.1...v1.42.2) (2023-10-17)
 
 
