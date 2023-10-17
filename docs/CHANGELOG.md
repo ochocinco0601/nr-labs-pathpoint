@@ -1,3 +1,11 @@
+## [1.42.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.1...v1.42.2) (2023-10-17)
+
+
+### Bug Fixes
+
+* add IDs to stage components ([75cf2c5](https://github.com/newrelic/nr-labs-hedgehog/commit/75cf2c55792ce5f8a7986bfb4aace8761776afe6))
+* issues with adding step and stage ([58e2f35](https://github.com/newrelic/nr-labs-hedgehog/commit/58e2f357dc53ba72a7599d5586b0701ee8131fe9))
+
 ## [1.42.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.0...v1.42.1) (2023-10-11)
 
 
