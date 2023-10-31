@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText } from 'nr1';
@@ -8,12 +8,10 @@ import Signal from '../signal';
 import StageHeader from './header';
 import AddStep from '../add-step';
 import { MODES, STATUSES } from '../../constants';
+import { StagesContext } from '../../contexts';
 
 const Stage = ({
-  name = 'Stage',
-  levels = [],
-  related = {},
-  status = STATUSES.UNKNOWN,
+  stageId,
   mode = MODES.INLINE,
   onUpdate,
   onDelete,
@@ -21,10 +19,24 @@ const Stage = ({
   onDragOver,
   onDrop,
 }) => {
+  const stages = useContext(StagesContext);
+  const [name, setName] = useState('Stage');
+  const [levels, setLevels] = useState([]);
+  const [related, setRelated] = useState({});
   const [signals, setSignals] = useState({});
+  const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
+
+  useEffect(() => {
+    const stage =
+      (stages?.withStatuses || []).find(({ id }) => id === stageId) || {};
+    setName(stage.name || 'Stage');
+    setLevels(stage.levels || []);
+    setRelated(stage.related || {});
+    setStatus(stage.status || STATUSES.UNKNOWN);
+  }, [stageId, stages]);
 
   useEffect(
     () =>
@@ -161,18 +173,17 @@ const Stage = ({
           ) : null}
         </div>
         <div className="step-groups">
-          {levels.map(({ id, steps, status }, index) => (
+          {levels.map(({ id }, index) => (
             <Level
               key={id}
+              stageId={stageId}
+              levelId={id}
               order={index + 1}
-              steps={steps}
-              stageName={name}
               onUpdate={(updates) => updateLevelHandler(index, updates)}
               onDelete={() => deleteLevelHandler(index)}
               onDragStart={(e) => levelDragStartHandler(e, index)}
               onDragOver={(e) => levelDragOverHandler(e, index)}
               onDrop={(e) => levelDropHandler(e)}
-              status={status}
               mode={mode}
             />
           ))}
@@ -193,13 +204,7 @@ const Stage = ({
 };
 
 Stage.propTypes = {
-  name: PropTypes.string,
-  levels: PropTypes.arrayOf(PropTypes.object),
-  related: PropTypes.shape({
-    target: PropTypes.bool,
-    source: PropTypes.bool,
-  }),
-  status: PropTypes.oneOf(Object.values(STATUSES)),
+  stageId: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
