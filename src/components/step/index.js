@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from 'nr1';
@@ -9,24 +9,44 @@ import StepHeader from './header';
 import EditStepModal from '../edit-step-modal';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
+import { StagesContext } from '../../contexts';
 
 const Step = ({
-  title = 'Step',
-  signals = [],
-  stageName,
-  level,
+  stageId,
+  levelId,
+  levelOrder,
+  stepId,
   onUpdate,
   onDelete,
   onDragStart,
   onDragOver,
   onDrop,
-  status = STATUSES.UNKNOWN,
   mode = MODES.INLINE,
 }) => {
+  const stages = useContext(StagesContext);
+  const [title, setTitle] = useState('Step');
+  const [signals, setSignals] = useState([]);
+  const [status, setStatus] = useState(STATUSES.UNKNOWN);
+  const [stageName, setStageName] = useState('');
   const [editModalHidden, setEditModalHidden] = useState(true);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const signalToDelete = useRef({});
   const isDragHandleClicked = useRef(false);
+
+  useEffect(() => {
+    const { name, levels = [] } =
+      (stages?.withStatuses || []).find(({ id }) => id === stageId) || {};
+    const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
+    const {
+      signals: stepSignals,
+      status: stepStatus,
+      title: stepTitle,
+    } = steps.find(({ id }) => id === stepId) || {};
+    setStageName(name);
+    setTitle(stepTitle);
+    setSignals(stepSignals);
+    setStatus(stepStatus);
+  }, [stageId, levelId, stepId, stages]);
 
   const addSignalsHandler = (guids) => {
     if (onUpdate)
@@ -137,7 +157,7 @@ const Step = ({
           </div>
           <EditStepModal
             stageName={stageName}
-            level={level}
+            level={levelOrder}
             stepTitle={title}
             existingSignals={signals.map(({ guid }) => guid)}
             hidden={editModalHidden}
@@ -161,16 +181,15 @@ const Step = ({
 };
 
 Step.propTypes = {
-  title: PropTypes.string,
-  signals: PropTypes.arrayOf(PropTypes.object),
-  stageName: PropTypes.string,
-  level: PropTypes.string,
+  stageId: PropTypes.string,
+  levelId: PropTypes.string,
+  levelOrder: PropTypes.string,
+  stepId: PropTypes.string,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
-  status: PropTypes.oneOf(Object.values(STATUSES)),
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 

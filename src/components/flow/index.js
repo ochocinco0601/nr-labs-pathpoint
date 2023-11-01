@@ -7,6 +7,7 @@ import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
+import { StagesContextProvider } from '../../contexts';
 
 const Flow = forwardRef(
   (
@@ -24,14 +25,12 @@ const Flow = forwardRef(
     ref
   ) => {
     const [isDeletingFlow, setDeletingFlow] = useState(false);
-    const [stages, setStages] = useState([]);
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const flowWriter = useFlowWriter({ accountId, user });
 
     useEffect(() => {
-      setStages(flow.stages || []);
       setKpis(flow.kpis || []);
     }, [flow]);
 
@@ -113,7 +112,9 @@ const Flow = forwardRef(
               lastSavedTimestamp={lastSavedTimestamp}
               resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
             />
-            <Stages stages={stages} onUpdate={flowUpdateHandler} mode={mode} />
+            <StagesContextProvider value={flow.stages || []}>
+              <Stages onUpdate={flowUpdateHandler} mode={mode} />
+            </StagesContextProvider>
             <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
           </>
         ) : (

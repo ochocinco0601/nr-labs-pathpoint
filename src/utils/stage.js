@@ -4,10 +4,10 @@ import { signalStatus, statusFromStatuses } from './signal';
 export const addSignalStatuses = (stages = [], serviceLevelsData = {}) =>
   stages.map(({ levels = [], ...stage }) => ({
     ...stage,
-    levels: levels.map(({ order, steps = [] }) => ({
-      order,
-      steps: steps.map(({ title, signals = [] }) => ({
-        title,
+    levels: levels.map(({ steps = [], ...level }) => ({
+      ...level,
+      steps: steps.map(({ signals = [], ...step }) => ({
+        ...step,
         signals: signals.map(({ type, guid }) => {
           const { name, attainment, target } = serviceLevelsData[guid] || {};
           // TODO: handle service levels with no data

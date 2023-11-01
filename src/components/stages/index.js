@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText } from 'nr1';
@@ -12,9 +18,14 @@ import {
   uniqueSignalGuidsInStages,
   uuid,
 } from '../../utils';
+import { StagesContext } from '../../contexts';
 
-const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
-  const [stagesWithStatuses, setStagesWithStatuses] = useState([]);
+const Stages = ({ onUpdate, mode = MODES.INLINE }) => {
+  const {
+    raw: stages,
+    withStatuses: stagesWithStatuses,
+    setStatuses,
+  } = useContext(StagesContext);
   const [guids, setGuids] = useState([]);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
@@ -22,14 +33,13 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
     useFetchServiceLevels({ guids });
 
   useEffect(() => {
-    setStagesWithStatuses(stages);
     setGuids(uniqueSignalGuidsInStages(stages));
   }, [stages]);
 
   useEffect(() => {
     if (!Object.keys(serviceLevelsData).length) return;
     const stagesWithSLData = addSignalStatuses(stages, serviceLevelsData);
-    setStagesWithStatuses(stagesWithSLData.map(annotateStageWithStatuses));
+    setStatuses(stagesWithSLData.map(annotateStageWithStatuses));
   }, [serviceLevelsData]);
 
   useEffect(() => {
@@ -122,6 +132,7 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
           ) => (
             <Stage
               key={id}
+              stageId={id}
               name={name}
               levels={levels}
               related={related}
@@ -141,7 +152,6 @@ const Stages = ({ stages = [], onUpdate, mode = MODES.INLINE }) => {
 };
 
 Stages.propTypes = {
-  stages: PropTypes.array,
   onUpdate: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
