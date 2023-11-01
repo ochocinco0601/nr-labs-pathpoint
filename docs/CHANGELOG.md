@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.4...v1.43.0) (2023-11-01)
+
+
+### Features
+
+* use contexts for data handling ([65b76b5](https://github.com/newrelic/nr-labs-hedgehog/commit/65b76b5c5be659d16dd53751dc7270c402923b17))
+
 ## [1.42.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.3...v1.42.4) (2023-10-17)
 
 
