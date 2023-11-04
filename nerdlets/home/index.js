@@ -110,16 +110,6 @@ const HomeNerdlet = () => {
     });
   }, [user]);
 
-  const updateFlowHandler = useCallback(
-    ({ id, ...doc }) => {
-      const updatedFlows = [...flows];
-      const index = updatedFlows.findIndex((f) => f.id === id);
-      if (index > -1) updatedFlows[index] = { id, document: { id, ...doc } };
-      setFlows(updatedFlows);
-    },
-    [flows]
-  );
-
   const flowClickHandler = useCallback(
     (id) => setCurrentFlowIndex(flows.findIndex((f) => f.id === id)),
     [flows]
@@ -152,7 +142,6 @@ const HomeNerdlet = () => {
           <>
             <Flow
               flowDoc={flows[currentFlowIndex].document}
-              onUpdate={updateFlowHandler}
               onClose={backToFlowsHandler}
               accountId={accountId}
               mode={mode}
