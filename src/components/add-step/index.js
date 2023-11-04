@@ -1,40 +1,45 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from 'nr1';
 
-import { uuid } from '../../utils';
+import { FlowDispatchContext, StagesContext } from '../../contexts';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
-const AddStep = ({ levels = [], onUpdate }) => {
+const AddStep = ({ stageId, saveFlow }) => {
+  const stages = useContext(StagesContext);
+  const dispatch = useContext(FlowDispatchContext);
+  const [levels, setLevels] = useState([]);
   const [nextLevel, setNextLevel] = useState(levels.length + 1);
   const [displayStepOptions, setDisplayStepOptions] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState(levels.length + 1);
+  const [selectedLevel, setSelectedLevel] = useState('');
   const [stepTitle, setStepTitle] = useState('');
 
-  useEffect(() => setNextLevel(levels.length + 1), [levels]);
+  useEffect(() => {
+    const { levels: stageLevels = [] } =
+      (stages || []).find(({ id }) => id === stageId) || {};
+    setLevels(stageLevels);
+    setNextLevel(stageLevels.length + 1);
+  }, [stageId, stages]);
 
   const addStepHandler = () => {
-    const newStep = { id: uuid(), signals: [], title: stepTitle };
-    const updatedLevels =
-      selectedLevel > levels.length
-        ? [...levels, { id: uuid(), steps: [newStep] }]
-        : levels.map((level, index) =>
-            index === selectedLevel - 1
-              ? {
-                  ...level,
-                  steps: [...level.steps, newStep],
-                }
-              : level
-          );
-    if (onUpdate) onUpdate({ levels: updatedLevels });
-    cancelAddStepHandler();
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.ADDED,
+      component: FLOW_DISPATCH_COMPONENTS.STEP,
+      componentIds: { stageId, levelId: selectedLevel },
+      updates: { title: stepTitle },
+      saveFlow,
+    });
+    resetState();
   };
 
-  const cancelAddStepHandler = useCallback(() => {
-    setSelectedLevel(levels.length + 1);
+  const cancelAddStepHandler = () => resetState();
+
+  const resetState = () => {
+    setSelectedLevel('');
     setStepTitle('');
     setDisplayStepOptions(false);
-  }, [levels]);
+  };
 
   return displayStepOptions ? (
     <div className="add-step">
@@ -43,11 +48,11 @@ const AddStep = ({ levels = [], onUpdate }) => {
         onChange={({ target: { value } = {} }) => setSelectedLevel(value)}
       >
         {levels.map(({ id }, index) => (
-          <option key={id} value={index + 1}>
+          <option key={id} value={id}>
             {index + 1}
           </option>
         ))}
-        <option value={nextLevel}>{nextLevel}</option>
+        <option value="">{nextLevel}</option>
       </select>
       <input
         type="text"
@@ -82,8 +87,8 @@ const AddStep = ({ levels = [], onUpdate }) => {
 };
 
 AddStep.propTypes = {
-  levels: PropTypes.array,
-  onUpdate: PropTypes.func,
+  stageId: PropTypes.string,
+  saveFlow: PropTypes.func,
 };
 
 export default AddStep;

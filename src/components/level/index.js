@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
@@ -14,20 +7,21 @@ import Step from '../step';
 import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
-import { StagesContext } from '../../contexts';
+import { FlowDispatchContext, StagesContext } from '../../contexts';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Level = ({
   stageId,
   levelId,
   order = 0,
-  onUpdate,
-  onDelete,
   onDragStart,
   onDragOver,
   onDrop,
   mode = MODES.INLINE,
+  saveFlow,
 }) => {
   const stages = useContext(StagesContext);
+  const dispatch = useContext(FlowDispatchContext);
   const [steps, setSteps] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -37,11 +31,10 @@ const Level = ({
 
   useEffect(() => {
     const { levels = [] } =
-      (stages?.withStatuses || []).find(({ id }) => id === stageId) || {};
-    const { status: levelStatus, steps: levelSteps = [] } =
-      levels.find(({ id }) => id === levelId) || {};
-    setSteps(levelSteps);
-    setStatus(levelStatus);
+      (stages || []).find(({ id }) => id === stageId) || {};
+    const level = levels.find(({ id }) => id === levelId) || {};
+    setSteps(level.steps || []);
+    setStatus(level.status || STATUSES.UNKNOWN);
   }, [stageId, levelId, stages]);
 
   const stepsRows = useMemo(() => {
@@ -60,12 +53,11 @@ const Level = ({
               levelId={levelId}
               levelOrder={order}
               stepId={id}
-              onUpdate={(updates) => updateStepHandler(index, updates)}
-              onDelete={() => deleteStepHandler(index)}
               onDragStart={(e) => stepDragStartHandler(e, index)}
               onDragOver={(e) => stepDragOverHandler(e, index)}
               onDrop={(e) => stepDropHandler(e)}
               mode={mode}
+              saveFlow={saveFlow}
             />
           </div>
         );
@@ -98,25 +90,14 @@ const Level = ({
     );
   }, [steps, mode]);
 
-  const deleteHandler = useCallback(() => {
-    if (onDelete) onDelete();
+  const deleteHandler = () => {
     setDeleteModalHidden(true);
-  }, []);
-
-  const updateStepHandler = (index, updates = {}) => {
-    if (onUpdate) {
-      onUpdate({
-        steps: steps.map((step, i) =>
-          i === index ? { ...step, ...updates } : step
-        ),
-      });
-    }
-  };
-
-  const deleteStepHandler = (index) => {
-    if (onUpdate) {
-      onUpdate({ steps: steps.filter((_, i) => i !== index) });
-    }
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.DELETED,
+      component: FLOW_DISPATCH_COMPONENTS.LEVEL,
+      componentIds: { stageId, levelId },
+      saveFlow,
+    });
   };
 
   const dragStartHandler = (e) => {
@@ -152,19 +133,15 @@ const Level = ({
   const stepDropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const itemIndex = dragItemIndex.current;
-    const overIndex = dragOverItemIndex.current;
-    if (
-      !Number.isInteger(itemIndex) ||
-      !Number.isInteger(overIndex) ||
-      itemIndex === overIndex
-    )
-      return;
-    const updatedSteps = [...steps];
-    const item = updatedSteps[itemIndex];
-    updatedSteps.splice(itemIndex, 1);
-    updatedSteps.splice(overIndex, 0, item);
-    if (onUpdate) onUpdate({ steps: updatedSteps });
+    const sourceIndex = dragItemIndex.current;
+    const targetIndex = dragOverItemIndex.current;
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.REORDERED,
+      component: FLOW_DISPATCH_COMPONENTS.STEP,
+      componentIds: { stageId, levelId },
+      updates: { sourceIndex, targetIndex },
+      saveFlow,
+    });
     dragItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
@@ -218,12 +195,12 @@ Level.propTypes = {
   stageId: PropTypes.string,
   levelId: PropTypes.string,
   order: PropTypes.number,
-  onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  saveFlow: PropTypes.func,
 };
 
 export default Level;

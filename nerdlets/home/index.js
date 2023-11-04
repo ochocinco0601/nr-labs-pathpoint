@@ -151,7 +151,7 @@ const HomeNerdlet = () => {
         <SidebarProvider>
           <>
             <Flow
-              flow={flows[currentFlowIndex].document}
+              flowDoc={flows[currentFlowIndex].document}
               onUpdate={updateFlowHandler}
               onClose={backToFlowsHandler}
               accountId={accountId}
