@@ -1,3 +1,15 @@
+# [1.44.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.43.0...v1.44.0) (2023-11-07)
+
+
+### Bug Fixes
+
+* issues with stage updates not displaying ([5960d72](https://github.com/newrelic/nr-labs-hedgehog/commit/5960d7290f661d8e616acc20914331f8ad2097b9))
+
+
+### Features
+
+* using reducer for data updates ([112ae26](https://github.com/newrelic/nr-labs-hedgehog/commit/112ae2681b90ff0c71bc5b76826cf8b8d2767a11))
+
 # [1.43.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.42.4...v1.43.0) (2023-11-01)
 
 
