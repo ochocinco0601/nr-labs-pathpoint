@@ -1,2 +1,3 @@
 export { SidebarProvider, useSidebar } from './sidebar';
-export { StagesContext, StagesContextProvider } from './stages';
+export { StagesContext } from './stages';
+export { FlowContext, FlowDispatchContext } from './flow';

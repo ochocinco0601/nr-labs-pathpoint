@@ -46,7 +46,8 @@ const EditStepModal = ({
   );
 
   const saveHandler = useCallback(() => {
-    if (onChange) onChange(selectedSignals);
+    const type = 'service_level';
+    if (onChange) onChange(selectedSignals.map((guid) => ({ guid, type })));
     if (onClose) onClose();
   }, [selectedSignals]);
 

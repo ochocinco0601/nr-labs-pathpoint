@@ -1,4 +1,10 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import { Spinner, useAccountStorageMutation } from 'nr1';
@@ -7,13 +13,17 @@ import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { StagesContextProvider } from '../../contexts';
+import { FlowContext, FlowDispatchContext } from '../../contexts';
+import {
+  FLOW_DISPATCH_COMPONENTS,
+  FLOW_DISPATCH_TYPES,
+  flowReducer,
+} from '../../reducers';
 
 const Flow = forwardRef(
   (
     {
-      flow = {},
-      onUpdate,
+      flowDoc = {},
       onClose,
       accountId,
       mode = MODES.INLINE,
@@ -24,6 +34,7 @@ const Flow = forwardRef(
     },
     ref
   ) => {
+    const [flow, dispatch] = useReducer(flowReducer, flowDoc);
     const [isDeletingFlow, setDeletingFlow] = useState(false);
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -34,26 +45,23 @@ const Flow = forwardRef(
       setKpis(flow.kpis || []);
     }, [flow]);
 
-    const flowUpdateHandler = useCallback(
-      (updates = {}) => {
-        setLastSavedTimestamp(0);
-        flowWriter.write({
-          documentId: flow.id,
-          document: {
-            ...flow,
-            ...updates,
-          },
-        });
-      },
-      [flow]
-    );
+    const saveFlow = useCallback((document) => {
+      setLastSavedTimestamp(0);
+      const documentId = document.id;
+      flowWriter.write({ documentId, document });
+    }, []);
+
+    const flowUpdateHandler = (updates = {}) =>
+      dispatch({
+        type: FLOW_DISPATCH_TYPES.UPDATED,
+        component: FLOW_DISPATCH_COMPONENTS.FLOW,
+        updates,
+        saveFlow,
+      });
 
     useEffect(() => {
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
-      if (document) {
-        if (onUpdate) onUpdate(document);
-        setLastSavedTimestamp(Date.now());
-      }
+      if (document) setLastSavedTimestamp(Date.now());
     }, [flowWriter.data]);
 
     const updateKpisHandler = (updatedKpis) =>
@@ -86,48 +94,49 @@ const Flow = forwardRef(
     }, [deleteFlowError]);
 
     return (
-      <div className="flow" ref={ref}>
-        {mode === MODES.EDIT && (
-          <DeleteConfirmModal
-            name={flow.name}
-            type="flow"
-            hidden={deleteModalHidden}
-            onConfirm={() => deleteFlowHandler()}
-            onClose={() => setDeleteModalHidden(true)}
-            isDeletingFlow={isDeletingFlow}
-          />
-        )}
-        {!isDeletingFlow ? (
-          <>
-            <FlowHeader
-              name={flow.name}
-              imageUrl={flow.imageUrl}
-              onUpdate={flowUpdateHandler}
-              onClose={onClose}
-              mode={mode}
-              setMode={setMode}
-              flows={flows}
-              onSelectFlow={onSelectFlow}
-              onDeleteFlow={() => setDeleteModalHidden(false)}
-              lastSavedTimestamp={lastSavedTimestamp}
-              resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
-            />
-            <StagesContextProvider value={flow.stages || []}>
-              <Stages onUpdate={flowUpdateHandler} mode={mode} />
-            </StagesContextProvider>
-            <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
-          </>
-        ) : (
-          <Spinner />
-        )}
-      </div>
+      <FlowContext.Provider value={flow}>
+        <FlowDispatchContext.Provider value={dispatch}>
+          <div className="flow" ref={ref}>
+            {mode === MODES.EDIT && (
+              <DeleteConfirmModal
+                name={flow.name}
+                type="flow"
+                hidden={deleteModalHidden}
+                onConfirm={() => deleteFlowHandler()}
+                onClose={() => setDeleteModalHidden(true)}
+                isDeletingFlow={isDeletingFlow}
+              />
+            )}
+            {!isDeletingFlow ? (
+              <>
+                <FlowHeader
+                  name={flow.name}
+                  imageUrl={flow.imageUrl}
+                  onUpdate={flowUpdateHandler}
+                  onClose={onClose}
+                  mode={mode}
+                  setMode={setMode}
+                  flows={flows}
+                  onSelectFlow={onSelectFlow}
+                  onDeleteFlow={() => setDeleteModalHidden(false)}
+                  lastSavedTimestamp={lastSavedTimestamp}
+                  resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
+                />
+                <Stages mode={mode} saveFlow={saveFlow} />
+                <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
+              </>
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        </FlowDispatchContext.Provider>
+      </FlowContext.Provider>
     );
   }
 );
 
 Flow.propTypes = {
-  flow: PropTypes.object,
-  onUpdate: PropTypes.func,
+  flowDoc: PropTypes.object,
   onClose: PropTypes.func,
   accountId: PropTypes.number,
   mode: PropTypes.oneOf(Object.values(MODES)),

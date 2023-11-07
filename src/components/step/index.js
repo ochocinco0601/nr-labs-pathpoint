@@ -9,22 +9,24 @@ import StepHeader from './header';
 import EditStepModal from '../edit-step-modal';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { MODES, STATUSES } from '../../constants';
-import { StagesContext } from '../../contexts';
+import { FlowDispatchContext, StagesContext } from '../../contexts';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Step = ({
   stageId,
   levelId,
   levelOrder,
   stepId,
-  onUpdate,
   onDelete,
   onDragStart,
   onDragOver,
   onDrop,
   mode = MODES.INLINE,
+  saveFlow,
 }) => {
   const stages = useContext(StagesContext);
-  const [title, setTitle] = useState('Step');
+  const dispatch = useContext(FlowDispatchContext);
+  const [title, setTitle] = useState();
   const [signals, setSignals] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [stageName, setStageName] = useState('');
@@ -35,42 +37,37 @@ const Step = ({
 
   useEffect(() => {
     const { name, levels = [] } =
-      (stages?.withStatuses || []).find(({ id }) => id === stageId) || {};
+      (stages || []).find(({ id }) => id === stageId) || {};
     const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
-    const {
-      signals: stepSignals,
-      status: stepStatus,
-      title: stepTitle,
-    } = steps.find(({ id }) => id === stepId) || {};
+    const step = steps.find(({ id }) => id === stepId) || {};
     setStageName(name);
-    setTitle(stepTitle);
-    setSignals(stepSignals);
-    setStatus(stepStatus);
+    setTitle(step.title);
+    setSignals(step.signals || []);
+    setStatus(step.status || STATUSES.UNKNOWN);
   }, [stageId, levelId, stepId, stages]);
 
-  const addSignalsHandler = (guids) => {
-    if (onUpdate)
-      onUpdate({
-        signals: guids.map((guid) => ({
-          guid,
-          type: 'service_level',
-        })),
-      });
-  };
+  const updateSignalsHandler = (signals) =>
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.UPDATED,
+      component: FLOW_DISPATCH_COMPONENTS.STEP,
+      componentIds: { stageId, levelId, stepId },
+      updates: { signals },
+      saveFlow,
+    });
 
-  const openDeleteModalHandler = (index, name) => {
-    signalToDelete.current = { index, name };
+  const openDeleteModalHandler = (guid, name) => {
+    signalToDelete.current = { guid, name };
     setDeleteModalHidden(false);
   };
 
   const deleteSignalHandler = () => {
-    if (onUpdate) {
-      const { index } = signalToDelete.current;
-      onUpdate({
-        signals: signals.filter((_, i) => i !== index),
-      });
-      signalToDelete.current = {};
-    }
+    const { guid: signalId } = signalToDelete.current;
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.DELETED,
+      component: FLOW_DISPATCH_COMPONENTS.SIGNAL,
+      componentIds: { stageId, levelId, stepId, signalId },
+      saveFlow,
+    });
   };
 
   const closeDeleteModalHandler = () => {
@@ -111,11 +108,11 @@ const Step = ({
 
   const SignalsList = memo(
     () =>
-      signals.map(({ guid, name, status }, i) => (
+      signals.map(({ guid, name, status }) => (
         <Signal
           key={guid}
           name={name}
-          onDelete={() => openDeleteModalHandler(i, name)}
+          onDelete={() => openDeleteModalHandler(guid, name)}
           status={status}
           mode={mode}
         />
@@ -134,11 +131,13 @@ const Step = ({
       onDragEnd={dragEndHandler}
     >
       <StepHeader
-        title={title}
-        onUpdate={onUpdate}
+        stageId={stageId}
+        levelId={levelId}
+        stepId={stepId}
         onDelete={onDelete}
         onDragHandle={dragHandleHandler}
         mode={mode}
+        saveFlow={saveFlow}
       />
       {mode === MODES.EDIT ? (
         <>
@@ -161,7 +160,7 @@ const Step = ({
             stepTitle={title}
             existingSignals={signals.map(({ guid }) => guid)}
             hidden={editModalHidden}
-            onChange={addSignalsHandler}
+            onChange={updateSignalsHandler}
             onClose={() => setEditModalHidden(true)}
           />
           <DeleteConfirmModal
@@ -185,12 +184,12 @@ Step.propTypes = {
   levelId: PropTypes.string,
   levelOrder: PropTypes.string,
   stepId: PropTypes.string,
-  onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  saveFlow: PropTypes.func,
 };
 
 export default Step;

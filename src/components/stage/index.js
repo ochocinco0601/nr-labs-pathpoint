@@ -8,18 +8,19 @@ import Signal from '../signal';
 import StageHeader from './header';
 import AddStep from '../add-step';
 import { MODES, STATUSES } from '../../constants';
-import { StagesContext } from '../../contexts';
+import { FlowDispatchContext, StagesContext } from '../../contexts';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Stage = ({
   stageId,
   mode = MODES.INLINE,
-  onUpdate,
-  onDelete,
   onDragStart,
   onDragOver,
   onDrop,
+  saveFlow,
 }) => {
   const stages = useContext(StagesContext);
+  const dispatch = useContext(FlowDispatchContext);
   const [name, setName] = useState('Stage');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
@@ -30,8 +31,7 @@ const Stage = ({
   const dragOverItemIndex = useRef();
 
   useEffect(() => {
-    const stage =
-      (stages?.withStatuses || []).find(({ id }) => id === stageId) || {};
+    const stage = (stages || []).find(({ id }) => id === stageId) || {};
     setName(stage.name || 'Stage');
     setLevels(stage.levels || []);
     setRelated(stage.related || {});
@@ -74,24 +74,21 @@ const Stage = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const updateStageHandler = (updates = {}) => {
-    if (onUpdate) onUpdate({ name, levels, related, ...updates });
-  };
+  const updateStageHandler = (updates = {}) =>
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.UPDATED,
+      component: FLOW_DISPATCH_COMPONENTS.STAGE,
+      componentIds: { stageId },
+      updates,
+      saveFlow,
+    });
 
-  const deleteLevelHandler = (index) => {
-    if (onUpdate)
-      onUpdate({
-        name,
-        related,
-        levels: levels.filter((_, i) => i !== index),
-      });
-  };
-
-  const updateLevelHandler = (index, updates = {}) =>
-    updateStageHandler({
-      levels: levels.map((level, i) =>
-        i === index ? { ...level, ...updates } : level
-      ),
+  const deleteStageHandler = () =>
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.DELETED,
+      component: FLOW_DISPATCH_COMPONENTS.STAGE,
+      componentIds: { stageId },
+      saveFlow,
     });
 
   const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
@@ -130,19 +127,15 @@ const Stage = ({
   const levelDropHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const itemIndex = dragItemIndex.current;
-    const overIndex = dragOverItemIndex.current;
-    if (
-      !Number.isInteger(itemIndex) ||
-      !Number.isInteger(overIndex) ||
-      itemIndex === overIndex
-    )
-      return;
-    const updatedLevels = [...levels];
-    const item = updatedLevels[itemIndex];
-    updatedLevels.splice(itemIndex, 1);
-    updatedLevels.splice(overIndex, 0, item);
-    if (onUpdate) onUpdate({ name, related, levels: updatedLevels });
+    const sourceIndex = dragItemIndex.current;
+    const targetIndex = dragOverItemIndex.current;
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.REORDERED,
+      component: FLOW_DISPATCH_COMPONENTS.LEVEL,
+      componentIds: { stageId },
+      updates: { sourceIndex, targetIndex },
+      saveFlow,
+    });
     dragItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
@@ -161,7 +154,7 @@ const Stage = ({
         related={related}
         status={status}
         onUpdate={updateStageHandler}
-        onDelete={onDelete}
+        onDelete={deleteStageHandler}
         mode={mode}
         onDragHandle={dragHandleHandler}
       />
@@ -169,7 +162,7 @@ const Stage = ({
         <div className="section-title">
           <HeadingText>Steps</HeadingText>
           {mode === MODES.EDIT ? (
-            <AddStep levels={levels} onUpdate={updateStageHandler} />
+            <AddStep stageId={stageId} saveFlow={saveFlow} />
           ) : null}
         </div>
         <div className="step-groups">
@@ -179,12 +172,11 @@ const Stage = ({
               stageId={stageId}
               levelId={id}
               order={index + 1}
-              onUpdate={(updates) => updateLevelHandler(index, updates)}
-              onDelete={() => deleteLevelHandler(index)}
               onDragStart={(e) => levelDragStartHandler(e, index)}
               onDragOver={(e) => levelDragOverHandler(e, index)}
               onDrop={(e) => levelDropHandler(e)}
               mode={mode}
+              saveFlow={saveFlow}
             />
           ))}
         </div>
@@ -206,11 +198,10 @@ const Stage = ({
 Stage.propTypes = {
   stageId: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
-  onUpdate: PropTypes.func,
-  onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
+  saveFlow: PropTypes.func,
 };
 
 export default Stage;

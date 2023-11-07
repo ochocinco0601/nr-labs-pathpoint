@@ -1,77 +1,59 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText } from 'nr1';
 
 import { Stage } from '../';
 import { useFetchServiceLevels } from '../../hooks';
-import { MODES, STATUSES } from '../../constants';
+import { MODES } from '../../constants';
 import {
   addSignalStatuses,
   annotateStageWithStatuses,
   uniqueSignalGuidsInStages,
-  uuid,
 } from '../../utils';
-import { StagesContext } from '../../contexts';
+import {
+  FlowContext,
+  FlowDispatchContext,
+  StagesContext,
+} from '../../contexts';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
-const Stages = ({ onUpdate, mode = MODES.INLINE }) => {
-  const {
-    raw: stages,
-    withStatuses: stagesWithStatuses,
-    setStatuses,
-  } = useContext(StagesContext);
+const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
+  const { stages = [] } = useContext(FlowContext);
+  const dispatch = useContext(FlowDispatchContext);
   const [guids, setGuids] = useState([]);
+  const [stagesWithStatuses, setStagesWithStatuses] = useState(stages);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
   const { data: serviceLevelsData, error: serviceLevelsError } =
     useFetchServiceLevels({ guids });
 
   useEffect(() => {
-    setGuids(uniqueSignalGuidsInStages(stages));
+    const uniqueGuids = uniqueSignalGuidsInStages(stages);
+    if (
+      uniqueGuids.length === guids.length &&
+      uniqueGuids.every((guid) => guids.includes(guid))
+    )
+      return;
+    setGuids(uniqueGuids);
   }, [stages]);
 
   useEffect(() => {
-    if (!Object.keys(serviceLevelsData).length) return;
     const stagesWithSLData = addSignalStatuses(stages, serviceLevelsData);
-    setStatuses(stagesWithSLData.map(annotateStageWithStatuses));
-  }, [serviceLevelsData]);
+    setStagesWithStatuses(stagesWithSLData.map(annotateStageWithStatuses));
+  }, [stages, serviceLevelsData]);
 
   useEffect(() => {
     if (serviceLevelsError)
       console.error('Error fetching service levels', serviceLevelsError);
   }, [serviceLevelsError]);
 
-  const addStageHandler = useCallback(() => {
-    if (onUpdate)
-      onUpdate({
-        stages: [
-          ...stages,
-          {
-            id: uuid(),
-            name: 'New Stage',
-            levels: [],
-            related: {},
-          },
-        ],
-      });
-  }, [onUpdate, stages]);
-
-  const updateStageHandler = (updatedStage, index) => {
-    const updatedStages = [...stages];
-    updatedStages[index] = updatedStage;
-    if (onUpdate) onUpdate({ stages: updatedStages });
-  };
-
-  const deleteStageHandler = (index) => {
-    const updatedStages = stages.filter((_, i) => i !== index);
-    if (onUpdate) onUpdate({ stages: updatedStages });
-  };
+  const addStageHandler = () =>
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.ADDED,
+      component: FLOW_DISPATCH_COMPONENTS.STAGE,
+      saveFlow,
+    });
 
   const dragStartHandler = (e, index) => {
     dragItemIndex.current = index;
@@ -86,25 +68,21 @@ const Stages = ({ onUpdate, mode = MODES.INLINE }) => {
 
   const dropHandler = (e) => {
     e.preventDefault();
-    const itemIndex = dragItemIndex.current;
-    const overIndex = dragOverItemIndex.current;
-    if (
-      !Number.isInteger(itemIndex) ||
-      !Number.isInteger(overIndex) ||
-      itemIndex === overIndex
-    )
-      return;
-    const updatedStages = [...stages];
-    const item = updatedStages[itemIndex];
-    updatedStages.splice(itemIndex, 1);
-    updatedStages.splice(overIndex, 0, item);
-    if (onUpdate) onUpdate({ stages: updatedStages });
+    e.stopPropagation();
+    const sourceIndex = dragItemIndex.current;
+    const targetIndex = dragOverItemIndex.current;
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.REORDERED,
+      component: FLOW_DISPATCH_COMPONENTS.STAGE,
+      updates: { sourceIndex, targetIndex },
+      saveFlow,
+    });
     dragItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
 
   return (
-    <>
+    <StagesContext.Provider value={stagesWithStatuses}>
       <div className="stages-header">
         <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
         {mode === MODES.EDIT ? (
@@ -119,41 +97,25 @@ const Stages = ({ onUpdate, mode = MODES.INLINE }) => {
         ) : null}
       </div>
       <div className="stages">
-        {(stagesWithStatuses || []).map(
-          (
-            {
-              id,
-              name = '',
-              levels = [],
-              related = {},
-              status = STATUSES.UNKNOWN,
-            },
-            i
-          ) => (
-            <Stage
-              key={id}
-              stageId={id}
-              name={name}
-              levels={levels}
-              related={related}
-              status={status}
-              mode={mode}
-              onUpdate={(updateStage) => updateStageHandler(updateStage, i)}
-              onDelete={() => deleteStageHandler(i)}
-              onDragStart={(e) => dragStartHandler(e, i)}
-              onDragOver={(e) => dragOverHandler(e, i)}
-              onDrop={(e) => dropHandler(e)}
-            />
-          )
-        )}
+        {(stagesWithStatuses || []).map(({ id }, i) => (
+          <Stage
+            key={id}
+            stageId={id}
+            mode={mode}
+            onDragStart={(e) => dragStartHandler(e, i)}
+            onDragOver={(e) => dragOverHandler(e, i)}
+            onDrop={(e) => dropHandler(e)}
+            saveFlow={saveFlow}
+          />
+        ))}
       </div>
-    </>
+    </StagesContext.Provider>
   );
 };
 
 Stages.propTypes = {
-  onUpdate: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  saveFlow: PropTypes.func,
 };
 
 export default Stages;
