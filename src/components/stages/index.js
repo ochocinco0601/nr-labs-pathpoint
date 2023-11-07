@@ -39,7 +39,6 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   }, [stages]);
 
   useEffect(() => {
-    if (!Object.keys(serviceLevelsData).length) return;
     const stagesWithSLData = addSignalStatuses(stages, serviceLevelsData);
     setStagesWithStatuses(stagesWithSLData.map(annotateStageWithStatuses));
   }, [stages, serviceLevelsData]);

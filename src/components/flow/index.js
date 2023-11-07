@@ -14,7 +14,11 @@ import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
 import { FlowContext, FlowDispatchContext } from '../../contexts';
-import { flowReducer } from '../../reducers';
+import {
+  FLOW_DISPATCH_COMPONENTS,
+  FLOW_DISPATCH_TYPES,
+  flowReducer,
+} from '../../reducers';
 
 const Flow = forwardRef(
   (
@@ -47,19 +51,13 @@ const Flow = forwardRef(
       flowWriter.write({ documentId, document });
     }, []);
 
-    const flowUpdateHandler = useCallback(
-      (updates = {}) => {
-        setLastSavedTimestamp(0);
-        flowWriter.write({
-          documentId: flow.id,
-          document: {
-            ...flow,
-            ...updates,
-          },
-        });
-      },
-      [flow]
-    );
+    const flowUpdateHandler = (updates = {}) =>
+      dispatch({
+        type: FLOW_DISPATCH_TYPES.UPDATED,
+        component: FLOW_DISPATCH_COMPONENTS.FLOW,
+        updates,
+        saveFlow,
+      });
 
     useEffect(() => {
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
