@@ -14,6 +14,7 @@ export const FLOW_DISPATCH_TYPES = {
   UPDATED: 'updated',
   DELETED: 'deleted',
   REORDERED: 'reordered',
+  CHANGED: 'changed',
 };
 
 export const FLOW_DISPATCH_COMPONENTS = {
@@ -62,6 +63,10 @@ export const flowReducer = (flow, action) => {
         return reorderLevels({ flow, saveFlow, componentIds, updates });
       if (component === FLOW_DISPATCH_COMPONENTS.STEP)
         return reorderSteps({ flow, saveFlow, componentIds, updates });
+      return flow;
+    }
+    case FLOW_DISPATCH_TYPES.CHANGED: {
+      if (component === FLOW_DISPATCH_COMPONENTS.FLOW) return updates;
       return flow;
     }
     default: {
