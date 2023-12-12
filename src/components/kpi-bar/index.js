@@ -17,6 +17,7 @@ import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
 import KpiModal from '../kpi-modal';
+import { uuid } from '../../utils';
 
 const blankKpi = ({
   type = SIGNAL_TYPES.NRQL_QUERY,
@@ -43,7 +44,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const [queryResults, setQueryResults] = useState([]);
   const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis });
   const selectedKpi = useRef({});
-  const selectedKpiIndex = useRef(-1);
+  const selectedKpiId = useRef('');
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
 
   const kpisContainer = useRef();
@@ -83,7 +84,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
 
   useEffect(() => {
     selectedKpi.current = {};
-    selectedKpiIndex.current = -1;
+    selectedKpiId.current = '';
     selectedKpiMode.current = KPI_MODES.VIEW;
     setShowModal(false);
   }, [kpis]);
@@ -97,10 +98,10 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
 
   const createKpiHandler = useCallback(() => {
     selectedKpi.current = blankKpi({
-      id: kpis.length,
+      id: uuid(),
       accountIds: [accountId],
     });
-    selectedKpiIndex.current = kpis.length;
+    selectedKpiId.current = selectedKpi.current.id;
     selectedKpiMode.current = KPI_MODES.ADD;
     setShowModal(true);
   }, [kpis, accountId]);
@@ -108,24 +109,25 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const updateKpiHandler = useCallback(
     (updatedKpi) => {
       if (!onChange) return;
-      const kpiIndex = selectedKpiIndex.current;
+      const kpiId = selectedKpiId.current;
       const kpiMode = selectedKpiMode.current;
+
       if (kpiMode === KPI_MODES.ADD) {
         const type = SIGNAL_TYPES.NRQL_QUERY;
         onChange([...kpis, { ...updatedKpi, type }]);
       } else if (kpiMode === KPI_MODES.EDIT) {
-        onChange(kpis.map((k, i) => (i === kpiIndex ? updatedKpi : k)));
+        onChange(kpis.map((k) => (k.id === kpiId ? updatedKpi : k)));
       } else if (kpiMode === KPI_MODES.DELETE) {
-        onChange(kpis.filter((_, i) => i !== kpiIndex));
+        onChange(kpis.filter((k) => k.id !== kpiId));
       }
     },
     [kpis, onChange]
   );
 
   const editButtonsClickHandler = useCallback(
-    (index, editType) => {
-      selectedKpi.current = kpis[index];
-      selectedKpiIndex.current = index;
+    (kpiId, editType) => {
+      selectedKpi.current = kpis.find((k) => k.id === kpiId);
+      selectedKpiId.current = kpiId;
       selectedKpiMode.current = editType;
       setShowModal(true);
     },
@@ -180,6 +182,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
     }
   }, []);
 
+  console.log('### KPIS: ', kpis);
   return (
     <div className="kpi-bar">
       <div className="kpi-bar-heading">
@@ -223,8 +226,8 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
       >
         {kpis.map((kpi, index) => (
           <div
-            id={`kpi-container-${index}`}
-            key={index}
+            id={`kpi-container-${kpi.id}`}
+            key={kpi.id}
             className="kpi-container"
             draggable={mode === MODES.EDIT}
             onDragStart={(e) => dragStartHandler(e, index)}
@@ -243,7 +246,10 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
               />
             </div>
             {mode === MODES.EDIT && (
-              <KpiEditButtons index={index} onClick={editButtonsClickHandler} />
+              <KpiEditButtons
+                kpiId={kpi.id}
+                onClick={editButtonsClickHandler}
+              />
             )}
           </div>
         ))}
@@ -260,7 +266,6 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
       </div>
       <KpiModal
         kpi={selectedKpi.current}
-        kpiIndex={selectedKpiIndex.current}
         kpiMode={selectedKpiMode.current}
         showModal={showModal}
         setShowModal={setShowModal}
