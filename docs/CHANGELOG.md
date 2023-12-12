@@ -1,3 +1,10 @@
+## [1.44.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.44.0...v1.44.1) (2023-12-12)
+
+
+### Bug Fixes
+
+* resolves [#123](https://github.com/newrelic/nr-labs-hedgehog/issues/123) - flowlist dropdown does not change flows ([4442f11](https://github.com/newrelic/nr-labs-hedgehog/commit/4442f110ec61e03c210206356674b014dd3f55f8))
+
 # [1.44.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.43.0...v1.44.0) (2023-11-07)
 
 
