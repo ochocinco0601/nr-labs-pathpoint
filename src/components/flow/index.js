@@ -34,12 +34,22 @@ const Flow = forwardRef(
     },
     ref
   ) => {
-    const [flow, dispatch] = useReducer(flowReducer, flowDoc);
+    const [flow, dispatch] = useReducer(flowReducer, {});
     const [isDeletingFlow, setDeletingFlow] = useState(false);
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const flowWriter = useFlowWriter({ accountId, user });
+
+    useEffect(
+      () =>
+        dispatch({
+          type: FLOW_DISPATCH_TYPES.CHANGED,
+          component: FLOW_DISPATCH_COMPONENTS.FLOW,
+          updates: flowDoc,
+        }),
+      [flowDoc]
+    );
 
     useEffect(() => {
       setKpis(flow.kpis || []);
