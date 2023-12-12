@@ -5,7 +5,7 @@ import { Button, HeadingText } from 'nr1';
 
 const KpiModalDeleteContent = ({ kpi, setShowModal, updateKpiArray }) => {
   const clickHandler = useCallback(() => {
-    updateKpiArray();
+    updateKpiArray(kpi);
     setShowModal(false);
   }, [setShowModal, updateKpiArray]);
 
