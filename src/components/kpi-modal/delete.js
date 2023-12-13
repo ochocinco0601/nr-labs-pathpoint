@@ -3,16 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Button, HeadingText } from 'nr1';
 
-const KpiModalDeleteContent = ({
-  kpi,
-  kpiIndex,
-  setShowModal,
-  updateKpiArray,
-}) => {
+const KpiModalDeleteContent = ({ kpi, setShowModal, updateKpiArray }) => {
   const clickHandler = useCallback(() => {
-    updateKpiArray(kpiIndex);
+    updateKpiArray(kpi);
     setShowModal(false);
-  }, [kpiIndex, setShowModal, updateKpiArray]);
+  }, [setShowModal, updateKpiArray]);
 
   return (
     <>
@@ -49,7 +44,6 @@ const KpiModalDeleteContent = ({
 
 KpiModalDeleteContent.propTypes = {
   kpi: PropTypes.object,
-  kpiIndex: PropTypes.number,
   setShowModal: PropTypes.func,
   updateKpiArray: PropTypes.func,
 };

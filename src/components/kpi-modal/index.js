@@ -17,7 +17,6 @@ import { lexer, NRQL_STYLES } from '../../utils';
 
 const KpiModal = ({
   kpi = {},
-  kpiIndex = 0,
   kpiMode = KPI_MODES.VIEW, // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
   showModal = false,
   setShowModal = setShowModal ? setShowModal : () => null,
@@ -53,7 +52,6 @@ const KpiModal = ({
       Number.isInteger(accountId) && nrqlQuery
         ? [
             {
-              index: kpiIndex,
               accountIds: [accountId],
               nrqlQuery: nrqlQuery,
             },
@@ -80,7 +78,6 @@ const KpiModal = ({
         {kpiMode === KPI_MODES.DELETE ? (
           <KpiModalDeleteContent
             kpi={kpi}
-            kpiIndex={kpiIndex}
             setShowModal={setShowModal}
             updateKpiArray={updateKpiArray}
           />
@@ -208,16 +205,13 @@ const KpiModal = ({
                       });
                       break;
                     case KPI_MODES.EDIT:
-                      updateKpiArray(
-                        {
-                          id: kpi.id,
-                          accountIds: [accountId],
-                          name,
-                          alias,
-                          nrqlQuery,
-                        },
-                        kpiIndex
-                      );
+                      updateKpiArray({
+                        id: kpi.id,
+                        accountIds: [accountId],
+                        name,
+                        alias,
+                        nrqlQuery,
+                      });
                       break;
                   }
                   setShowModal(false);
@@ -235,7 +229,6 @@ const KpiModal = ({
 
 KpiModal.propTypes = {
   kpi: PropTypes.object,
-  kpiIndex: PropTypes.number,
   kpiMode: PropTypes.oneOf(Object.values(KPI_MODES)),
   showModal: PropTypes.bool,
   setShowModal: PropTypes.func,
