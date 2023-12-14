@@ -91,9 +91,7 @@ const FlowHeader = ({
         iconType={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
         sizeType={Button.SIZE_TYPE.SMALL}
         onClick={() => onDeleteFlow()}
-      >
-        {UI_CONTENT.GLOBAL.BUTTON_LABEL_DELETE_FLOW}
-      </Button>
+      ></Button>
     </div>
   ) : (
     <div className="flow-header">
