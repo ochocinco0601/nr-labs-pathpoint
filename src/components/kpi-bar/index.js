@@ -249,7 +249,9 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
                   />
                 </PopoverTrigger>
                 <PopoverBody>
-                  <p className="kpi-hover">{getKpiHoverContent(kpi)}</p>
+                  <p className="kpi-hover">
+                    {getKpiHoverContent(kpi.nrqlQuery)}
+                  </p>
                 </PopoverBody>
               </Popover>
             </div>

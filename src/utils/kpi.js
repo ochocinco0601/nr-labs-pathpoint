@@ -1,5 +1,17 @@
-const _parseDate = (nrql, pattern) => {
-  let re = new RegExp(pattern, 'i');
+const weekDays = [
+  'yesterday',
+  'today',
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+];
+
+const _parseDate = (nrql, keyword) => {
+  let re = new RegExp(keyword, 'i');
   const result = nrql.match(re);
 
   re = /'/gi;
@@ -9,37 +21,41 @@ const _parseDate = (nrql, pattern) => {
   return nrql.substring(result.index + idx1 + 1, result.index + idx2);
 };
 
-export const getKpiHoverContent = (kpi) => {
+export const getKpiHoverContent = (nrql) => {
   let hoverContent = '';
-  const nrqlTokens = kpi.nrqlQuery.toLowerCase().split(' ');
+  const tokens = nrql.toLowerCase().split(' ');
 
-  if (nrqlTokens.includes('since')) {
-    const index = nrqlTokens.indexOf('since');
-    if (nrqlTokens[index + 1].startsWith("'")) {
-      hoverContent = `Since ${_parseDate(kpi.nrqlQuery, 'since')}`;
+  if (tokens.includes('since')) {
+    const index = tokens.indexOf('since');
+    if (tokens[index + 1].startsWith("'")) {
+      hoverContent = `Since ${_parseDate(nrql, 'since')}`;
+    } else if (weekDays.includes(tokens[index + 1])) {
+      hoverContent = `Since ${tokens[index + 1]}`;
+    } else if (['this', 'last'].includes(tokens[index + 1])) {
+      hoverContent = `Since ${tokens[index + 1]} ${tokens[index + 2]}`;
     } else {
-      hoverContent = `Since ${nrqlTokens[index + 1]} ${nrqlTokens[index + 2]} ${
-        nrqlTokens[index + 3]
-      }`;
+      hoverContent = `Since ${tokens.slice(index + 1, index + 4).join(' ')}`;
     }
   }
 
-  if (nrqlTokens.includes('until')) {
-    const index = nrqlTokens.indexOf('until');
-    if (nrqlTokens[index + 1].startsWith("'")) {
-      hoverContent += ` until ${_parseDate(kpi.nrqlQuery, 'until')}`;
+  if (tokens.includes('until')) {
+    const index = tokens.indexOf('until');
+    if (tokens[index + 1] === 'now') {
+      hoverContent += ` until ${tokens[index + 1]}`;
+    } else if (tokens[index + 1].startsWith("'")) {
+      hoverContent += ` until ${_parseDate(nrql, 'until')}`;
+    } else if (weekDays.includes(tokens[index + 1])) {
+      hoverContent += ` until ${tokens[index + 1]}`;
+    } else if (['this', 'last'].includes(tokens[index + 1])) {
+      hoverContent += ` until ${tokens[index + 1]} ${tokens[index + 2]}`;
     } else {
-      hoverContent += ` until ${nrqlTokens[index + 1]} ${
-        nrqlTokens[index + 2]
-      } ${nrqlTokens[index + 3]}`;
+      hoverContent += ` until ${tokens.slice(index + 1, index + 4).join(' ')}`;
     }
   }
 
-  if (nrqlTokens.includes('compare')) {
-    const index = nrqlTokens.indexOf('compare');
-    hoverContent += ` vs. ${nrqlTokens[index + 2]} ${nrqlTokens[index + 3]} ${
-      nrqlTokens[index + 4]
-    }`;
+  if (tokens.includes('compare')) {
+    const index = tokens.indexOf('compare');
+    hoverContent += ` vs. ${tokens.slice(index + 2, index + 5).join(' ')}`;
   }
 
   return hoverContent;
