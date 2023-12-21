@@ -70,7 +70,6 @@ const KpiModal = ({
 
   useEffect(() => {
     if (Number.isInteger(accountId) && nrqlQuery && !hookData?.error) {
-      console.log('### hookData: ', hookData);
       setPreviewOk(true);
       setKpiResult(hookData?.kpis[0]);
     } else {
@@ -83,7 +82,6 @@ const KpiModal = ({
     setNrqlQuery(query);
   }, []);
 
-  console.log('### kpiResult: ', kpiResults);
   return (
     <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
       <div className="modal-component">
