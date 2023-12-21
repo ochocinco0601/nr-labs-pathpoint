@@ -26,7 +26,7 @@ import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
 import KpiModal from '../kpi-modal';
-import { uuid, getKpiHoverContent } from '../../utils';
+import { uuid } from '../../utils';
 
 const blankKpi = ({
   type = SIGNAL_TYPES.NRQL_QUERY,
@@ -250,7 +250,27 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
                 </PopoverTrigger>
                 <PopoverBody>
                   <p className="kpi-hover">
-                    {getKpiHoverContent(kpi.nrqlQuery)}
+                    <span>
+                      {queryResults[index]?.metadata?.timeWindow?.since
+                        ? `Since ${queryResults[
+                            index
+                          ]?.metadata?.timeWindow?.since.toLowerCase()}`
+                        : ''}
+                    </span>
+                    <span>
+                      {queryResults[index]?.metadata?.timeWindow?.until
+                        ? ` until ${queryResults[
+                            index
+                          ]?.metadata?.timeWindow?.until.toLowerCase()}`
+                        : ''}
+                    </span>
+                    <span>
+                      {queryResults[index]?.metadata?.timeWindow?.compareWith
+                        ? ` compare with ${queryResults[
+                            index
+                          ]?.metadata?.timeWindow?.compareWith.toLowerCase()}`
+                        : ''}
+                    </span>
                   </p>
                 </PopoverBody>
               </Popover>

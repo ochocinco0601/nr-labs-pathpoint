@@ -1,7 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, Modal, PlatformStateContext } from 'nr1';
+import {
+  Button,
+  HeadingText,
+  Modal,
+  PlatformStateContext,
+  Popover,
+  PopoverTrigger,
+  PopoverBody,
+} from 'nr1';
 
 import {
   EditInPlace,
@@ -38,6 +46,7 @@ const KpiModal = ({
   );
 
   const [previewOk, setPreviewOk] = useState(false);
+  const [kpiResults, setKpiResult] = useState({});
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
@@ -61,7 +70,9 @@ const KpiModal = ({
 
   useEffect(() => {
     if (Number.isInteger(accountId) && nrqlQuery && !hookData?.error) {
+      console.log('### hookData: ', hookData);
       setPreviewOk(true);
+      setKpiResult(hookData?.kpis[0]);
     } else {
       setPreviewOk(false);
     }
@@ -72,6 +83,7 @@ const KpiModal = ({
     setNrqlQuery(query);
   }, []);
 
+  console.log('### kpiResult: ', kpiResults);
   return (
     <Modal hidden={!showModal} onClose={() => setShowModal(false)}>
       <div className="modal-component">
@@ -166,20 +178,43 @@ const KpiModal = ({
                   </div>
                 ) : (
                   <div className="kpi-data">
-                    <SimpleBillboard
-                      metric={{
-                        value: (hookData?.kpis || [])[0]?.value,
-                        previousValue: (hookData?.kpis || [])[0]?.previousValue,
-                        className: 'modal-component-metric-value',
-                      }}
-                      statusTrend={{
-                        className: 'modal-component-status-trend',
-                      }}
-                      title={{
-                        name: alias || name,
-                        className: 'modal-component-metric-name',
-                      }}
-                    />
+                    <Popover openOnHover={true}>
+                      <PopoverTrigger>
+                        <SimpleBillboard
+                          metric={{
+                            value: kpiResults?.value,
+                            previousValue: kpiResults?.previousValue,
+                            className: 'modal-component-metric-value',
+                          }}
+                          statusTrend={{
+                            className: 'modal-component-status-trend',
+                          }}
+                          title={{
+                            name: alias || name,
+                            className: 'modal-component-metric-name',
+                          }}
+                        />
+                      </PopoverTrigger>
+                      <PopoverBody>
+                        <p className="kpi-hover">
+                          <span>
+                            {kpiResults?.metadata?.timeWindow?.since
+                              ? `Since ${kpiResults?.metadata?.timeWindow?.since.toLowerCase()}`
+                              : ''}
+                          </span>
+                          <span>
+                            {kpiResults?.metadata?.timeWindow?.until
+                              ? ` until ${kpiResults?.metadata?.timeWindow?.until.toLowerCase()}`
+                              : ''}
+                          </span>
+                          <span>
+                            {kpiResults?.metadata?.timeWindow?.compareWith
+                              ? ` compare with ${kpiResults?.metadata?.timeWindow?.compareWith.toLowerCase()}`
+                              : ''}
+                          </span>
+                        </p>
+                      </PopoverBody>
+                    </Popover>
                   </div>
                 )}
               </>
