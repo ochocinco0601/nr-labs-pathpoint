@@ -207,7 +207,7 @@ const KpiModal = ({
                           </span>
                           <span>
                             {kpiResults?.metadata?.timeWindow?.compareWith
-                              ? ` compare with ${kpiResults?.metadata?.timeWindow?.compareWith.toLowerCase()}`
+                              ? ` vs. ${kpiResults?.metadata?.timeWindow?.compareWith.toLowerCase()}`
                               : ''}
                           </span>
                         </p>

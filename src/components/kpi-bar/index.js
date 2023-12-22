@@ -266,7 +266,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
                     </span>
                     <span>
                       {queryResults[index]?.metadata?.timeWindow?.compareWith
-                        ? ` compare with ${queryResults[
+                        ? ` vs. ${queryResults[
                             index
                           ]?.metadata?.timeWindow?.compareWith.toLowerCase()}`
                         : ''}
