@@ -258,8 +258,9 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
                         : ''}
                     </span>
                     <span>
-                      {queryResults[index]?.metadata?.timeWindow?.until
-                        ? ` until ${queryResults[
+                      {queryResults[index]?.metadata?.timeWindow?.until !==
+                      'NOW'
+                        ? ` - until ${queryResults[
                             index
                           ]?.metadata?.timeWindow?.until.toLowerCase()}`
                         : ''}

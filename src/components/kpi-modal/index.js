@@ -201,8 +201,8 @@ const KpiModal = ({
                               : ''}
                           </span>
                           <span>
-                            {kpiResults?.metadata?.timeWindow?.until
-                              ? ` until ${kpiResults?.metadata?.timeWindow?.until.toLowerCase()}`
+                            {kpiResults?.metadata?.timeWindow?.until !== 'NOW'
+                              ? ` - until ${kpiResults?.metadata?.timeWindow?.until.toLowerCase()}`
                               : ''}
                           </span>
                           <span>
