@@ -1,3 +1,11 @@
+# [1.45.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.44.1...v1.45.0) (2023-12-25)
+
+
+### Features
+
+* add kpi hover for additional kpi info ([326e096](https://github.com/newrelic/nr-labs-hedgehog/commit/326e09675eab5b8585bf5af9153658e2f8924e1d))
+* get metadata for kpi nrql queries ([02eca99](https://github.com/newrelic/nr-labs-hedgehog/commit/02eca993c7ba8ecb524b8ab4701fd0e220277a71))
+
 ## [1.44.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.44.0...v1.44.1) (2023-12-12)
 
 
