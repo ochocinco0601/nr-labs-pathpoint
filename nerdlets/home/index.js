@@ -27,8 +27,9 @@ import {
   useFlowWriter,
   useFetchUser,
   useReadUserPreferences,
+  useFetchAccount,
 } from '../../src/hooks';
-import { MODES, UI_CONTENT } from '../../src/constants';
+import { MODES, REFRESH_INTERVALS, UI_CONTENT } from '../../src/constants';
 import { SidebarProvider } from '../../src/contexts';
 import { uuid } from '../../src/utils';
 
@@ -44,10 +45,17 @@ const editButtonAttributes = {
   iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
 };
 
+const editButtonFlowSettingsAttributes = {
+  type: Button.TYPE.PRIMARY,
+  iconType: Icon.TYPE.INTERFACE__OPERATIONS__CONFIGURE,
+};
+
 const HomeNerdlet = () => {
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
+  const [editFlowSettings, setEditFlowSettings] = useState(false);
+  const [accountName, setAccountName] = useState('');
   const { accountId } = useContext(PlatformStateContext);
   const [nerdletState] = useNerdletState();
   const { user } = useFetchUser();
@@ -60,6 +68,10 @@ const HomeNerdlet = () => {
   } = useFlowLoader({ accountId });
   const flowWriter = useFlowWriter({ accountId, user });
 
+  const { accountObject } = useFetchAccount({ accountId });
+
+  useEffect(() => setAccountName(accountObject.name), [accountObject]);
+
   useEffect(() => {
     nerdlet.setConfig({
       accountPicker: true,
@@ -70,6 +82,12 @@ const HomeNerdlet = () => {
               {
                 ...createFlowButtonAttributes,
                 onClick: newFlowHandler,
+              },
+              {
+                ...editButtonFlowSettingsAttributes,
+                onClick: () => {
+                  if (!editFlowSettings) setEditFlowSettings(true);
+                },
               },
               {
                 ...editButtonAttributes,
@@ -85,7 +103,7 @@ const HomeNerdlet = () => {
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [user, newFlowHandler, currentFlowIndex]);
+  }, [user, newFlowHandler, currentFlowIndex, editFlowSettings]);
 
   useEffect(() => setFlows(flowsData || []), [flowsData]);
 
@@ -100,6 +118,7 @@ const HomeNerdlet = () => {
       document: {
         id,
         name: 'Untitled',
+        refreshInterval: Number(REFRESH_INTERVALS, [0].value),
         stages: [],
         kpis: [],
         created: {
@@ -144,11 +163,14 @@ const HomeNerdlet = () => {
               flowDoc={flows[currentFlowIndex].document}
               onClose={backToFlowsHandler}
               accountId={accountId}
+              accountName={accountName}
               mode={mode}
               setMode={setMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
               user={user}
+              editFlowSettings={editFlowSettings}
+              setEditFlowSettings={setEditFlowSettings}
             />
             <Sidebar />
           </>
@@ -171,6 +193,7 @@ const HomeNerdlet = () => {
     accountId,
     mode,
     flowClickHandler,
+    editFlowSettings,
   ]);
 
   return <div className="container">{currentView}</div>;

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import { Spinner, useAccountStorageMutation } from 'nr1';
 
-import { KpiBar, Stages, DeleteConfirmModal } from '../';
+import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
@@ -26,11 +26,14 @@ const Flow = forwardRef(
       flowDoc = {},
       onClose,
       accountId,
+      accountName = '',
       mode = MODES.INLINE,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
       user,
+      editFlowSettings = false,
+      setEditFlowSettings = () => null,
     },
     ref
   ) => {
@@ -107,15 +110,27 @@ const Flow = forwardRef(
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
           <div className="flow" ref={ref}>
-            {mode === MODES.EDIT && (
-              <DeleteConfirmModal
-                name={flow.name}
-                type="flow"
-                hidden={deleteModalHidden}
-                onConfirm={() => deleteFlowHandler()}
-                onClose={() => setDeleteModalHidden(true)}
-                isDeletingFlow={isDeletingFlow}
-              />
+            {flow?.id && (
+              <>
+                <DeleteConfirmModal
+                  name={flow.name}
+                  type="flow"
+                  hidden={deleteModalHidden}
+                  onConfirm={() => deleteFlowHandler()}
+                  onClose={() => setDeleteModalHidden(true)}
+                  isDeletingFlow={isDeletingFlow}
+                />
+                {editFlowSettings && (
+                  <EditFlowSettingsModal
+                    flow={flow}
+                    accountName={accountName}
+                    onUpdate={flowUpdateHandler}
+                    onDeleteFlow={() => setDeleteModalHidden(false)}
+                    editFlowSettings={editFlowSettings}
+                    setEditFlowSettings={setEditFlowSettings}
+                  />
+                )}
+              </>
             )}
             {!isDeletingFlow ? (
               <>
@@ -131,6 +146,8 @@ const Flow = forwardRef(
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
+                  editFlowSettings={editFlowSettings}
+                  setEditFlowSettings={setEditFlowSettings}
                 />
                 <Stages mode={mode} saveFlow={saveFlow} />
                 <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
@@ -149,11 +166,14 @@ Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
   accountId: PropTypes.number,
+  accountName: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
   user: PropTypes.object,
+  editFlowSettings: PropTypes.bool,
+  setEditFlowSettings: PropTypes.func,
 };
 
 Flow.displayName = 'Flow';
