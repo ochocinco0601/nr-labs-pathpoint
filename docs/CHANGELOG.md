@@ -1,3 +1,10 @@
+# [1.46.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.45.0...v1.46.0) (2023-12-29)
+
+
+### Features
+
+* signal selection nerdlet ([56dcaae](https://github.com/newrelic/nr-labs-hedgehog/commit/56dcaae82757222356d2ad60fd965dfd71f0573f))
+
 # [1.45.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.44.1...v1.45.0) (2023-12-25)
 
 
