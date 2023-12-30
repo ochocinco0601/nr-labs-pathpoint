@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNerdGraphQuery } from 'nr1';
 
+import { timeRangeToNrql } from '@newrelic/nr-labs-components';
 import { queriesGQL } from '../../queries';
+
+import { removeDateClauseFromNrql } from '../../utils';
+
+const updateQueryTime = (nrqlQuery, timeRange) => {
+  const q1 = removeDateClauseFromNrql(nrqlQuery, 'since');
+  const newQuery = removeDateClauseFromNrql(q1, 'until');
+  return `${newQuery} ${timeRangeToNrql({ timeRange })}`;
+};
 
 const valueFromResult = (result = {}) => {
   const { comparison, ...vals } = result;
@@ -36,7 +45,7 @@ const kpisFromData = ({ actor = {} } = {}) =>
     return acc;
   }, []);
 
-const useFetchKpis = ({ kpiData = [] } = {}) => {
+const useFetchKpis = ({ kpiData = [], timeRange = {} } = {}) => {
   const [kpis, setKpis] = useState([]);
   const [query, setQuery] = useState(queriesGQL());
   const { data, error, loading } = useNerdGraphQuery({ query });
@@ -47,12 +56,15 @@ const useFetchKpis = ({ kpiData = [] } = {}) => {
         ({ accountIds = [], nrqlQuery = '' }, index) => ({
           accounts: accountIds.join(', '),
           alias: `q${index}`,
-          query: nrqlQuery,
+          query:
+            timeRange?.begin_time || timeRange?.duration
+              ? updateQueryTime(nrqlQuery, timeRange)
+              : nrqlQuery,
         })
       );
       setQuery(queriesGQL(queries));
     }
-  }, [kpiData]);
+  }, [kpiData, timeRange]);
 
   useEffect(() => {
     if (data && !loading) {
