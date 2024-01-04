@@ -19,11 +19,7 @@ import {
   PopoverBody,
 } from 'nr1';
 
-import {
-  SimpleBillboard,
-  TimeRangePicker,
-  timeRangeToNrql,
-} from '@newrelic/nr-labs-components';
+import { SimpleBillboard, TimeRangePicker } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
@@ -51,33 +47,12 @@ const metricFromQuery = (results, index) => ({
   previousValue: ((results || [])[index] || {}).previousValue || '',
 });
 
-const formatKpiHoverDate = (date) => {
-  let p = new Intl.DateTimeFormat('en', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZoneName: 'short',
-    hour12: true,
-  })
-    .formatToParts(date)
-    .reduce((acc, part) => {
-      acc[part.type] = part.value;
-      return acc;
-    }, {});
-
-  return `${p.month} ${p.day}, ${p.hour}:${
-    p.minute
-  } ${p.dayPeriod.toLowerCase()}, ${p.year}`;
-};
-
 const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
 
-  const [timeRange, setTimeRange] = useState(new Date());
+  const [timeRange, setTimeRange] = useState(null);
   const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis, timeRange });
   const selectedKpi = useRef({});
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
@@ -239,17 +214,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
             </Button>
           </div>
         ) : (
-          <Tooltip
-            text={
-              timeRange?.begin_time
-                ? `From  ${formatKpiHoverDate(
-                    timeRange.begin_time
-                  )}  to  ${formatKpiHoverDate(timeRange.end_time)}`
-                : timeRangeToNrql({ timeRange })
-            }
-          >
-            <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
-          </Tooltip>
+          <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
         )}
       </div>
       <div
