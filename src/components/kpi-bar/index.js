@@ -26,7 +26,7 @@ import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
 import KpiModal from '../kpi-modal';
-import { uuid } from '../../utils';
+import { uuid, formatKpiHoverDatime } from '../../utils';
 
 const blankKpi = ({
   type = SIGNAL_TYPES.NRQL_QUERY,
@@ -252,17 +252,17 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
                   <p className="kpi-hover">
                     <span>
                       {queryResults[index]?.metadata?.timeWindow?.since
-                        ? `Since ${queryResults[
-                            index
-                          ]?.metadata?.timeWindow?.since.toLowerCase()}`
+                        ? `Since ${formatKpiHoverDatime(
+                            queryResults[index]?.metadata?.timeWindow?.since
+                          )}`
                         : ''}
                     </span>
                     <span>
                       {queryResults[index]?.metadata?.timeWindow?.until !==
                       'NOW'
-                        ? ` - until ${queryResults[
-                            index
-                          ]?.metadata?.timeWindow?.until.toLowerCase()}`
+                        ? ` - until ${formatKpiHoverDatime(
+                            queryResults[index]?.metadata?.timeWindow?.until
+                          )}`
                         : ''}
                     </span>
                     <span>

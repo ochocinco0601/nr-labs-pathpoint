@@ -21,7 +21,7 @@ import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { useFetchKpis } from '../../hooks';
 import { KPI_MODES, UI_CONTENT } from '../../constants';
-import { lexer, NRQL_STYLES } from '../../utils';
+import { lexer, NRQL_STYLES, formatKpiHoverDatime } from '../../utils';
 
 const KpiModal = ({
   kpi = {},
@@ -197,12 +197,16 @@ const KpiModal = ({
                         <p className="kpi-hover">
                           <span>
                             {kpiResults?.metadata?.timeWindow?.since
-                              ? `Since ${kpiResults?.metadata?.timeWindow?.since.toLowerCase()}`
+                              ? `Since ${formatKpiHoverDatime(
+                                  kpiResults?.metadata?.timeWindow?.since
+                                )}`
                               : ''}
                           </span>
                           <span>
                             {kpiResults?.metadata?.timeWindow?.until !== 'NOW'
-                              ? ` - until ${kpiResults?.metadata?.timeWindow?.until.toLowerCase()}`
+                              ? ` - until ${formatKpiHoverDatime(
+                                  kpiResults?.metadata?.timeWindow?.until
+                                )}`
                               : ''}
                           </span>
                           <span>
