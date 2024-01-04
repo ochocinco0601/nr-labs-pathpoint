@@ -1,4 +1,5 @@
 import { SIGNAL_TYPES, STATUSES } from '../constants';
+import { entityStatus } from './entities';
 import { serviceLevelStatus } from './service-levels';
 
 const statusesOrder = [
@@ -20,6 +21,8 @@ export const signalStatus = (signal) => {
   if (!signal) return STATUSES.UNKNOWN;
 
   const { type = '' } = signal;
+
+  if (type === SIGNAL_TYPES.ENTITY) return entityStatus(signal);
 
   if (type === SIGNAL_TYPES.SERVICE_LEVEL) {
     const { attainment, target } = signal;

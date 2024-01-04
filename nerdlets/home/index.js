@@ -13,6 +13,7 @@ import {
   PlatformStateContext,
   Spinner,
   useNerdletState,
+  usePlatformState,
 } from 'nr1';
 
 import {
@@ -49,6 +50,8 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const { accountId } = useContext(PlatformStateContext);
+  const [{ filters: platformStateFilters }, setPlatformUrlState] =
+    usePlatformState();
   const [nerdletState] = useNerdletState();
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
@@ -57,6 +60,7 @@ const HomeNerdlet = () => {
     flows: flowsData,
     error: flowsError,
     loading: flowsLoading,
+    refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const flowWriter = useFlowWriter({ accountId, user });
 
@@ -86,6 +90,13 @@ const HomeNerdlet = () => {
       headerTitle: 'Project Hedgehog 🦔',
     });
   }, [user, newFlowHandler, currentFlowIndex]);
+
+  useEffect(() => {
+    if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
+      setPlatformUrlState({ filters: '' });
+      flowsRefetch();
+    }
+  }, [platformStateFilters]);
 
   useEffect(() => setFlows(flowsData || []), [flowsData]);
 
