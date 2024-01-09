@@ -42,9 +42,9 @@ const blankKpi = ({
   nrqlQuery,
 });
 
-const metricFromQuery = (results, index) => ({
-  value: ((results || [])[index] || {}).value || 0,
-  previousValue: ((results || [])[index] || {}).previousValue || '',
+const metricFromQuery = (results) => ({
+  value: results?.value || 0,
+  previousValue: isNaN(results?.previousValue) ? '' : results?.previousValue,
 });
 
 const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
@@ -244,7 +244,7 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
               <Popover openOnHover={true}>
                 <PopoverTrigger>
                   <SimpleBillboard
-                    metric={metricFromQuery(queryResults, index)}
+                    metric={metricFromQuery(queryResults[index])}
                     title={{ name: kpi.alias || kpi.name }}
                   />
                 </PopoverTrigger>

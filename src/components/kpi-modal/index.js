@@ -23,6 +23,11 @@ import { useFetchKpis } from '../../hooks';
 import { KPI_MODES, UI_CONTENT } from '../../constants';
 import { lexer, NRQL_STYLES, formatKpiHoverDatime } from '../../utils';
 
+const metricFromQuery = (results) => ({
+  value: results?.value || 0,
+  previousValue: isNaN(results?.previousValue) ? '' : results?.previousValue,
+});
+
 const KpiModal = ({
   kpi = {},
   kpiMode = KPI_MODES.VIEW, // kpiMode = "view" / "add" kpi / "edit" existing kpi / "delete" existing kpi
@@ -180,8 +185,7 @@ const KpiModal = ({
                       <PopoverTrigger>
                         <SimpleBillboard
                           metric={{
-                            value: kpiResults?.value,
-                            previousValue: kpiResults?.previousValue,
+                            ...metricFromQuery(kpiResults),
                             className: 'modal-component-metric-value',
                           }}
                           statusTrend={{
