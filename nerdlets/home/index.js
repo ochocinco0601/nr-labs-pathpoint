@@ -93,7 +93,6 @@ const HomeNerdlet = () => {
 
   useEffect(() => {
     if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
-      setPlatformUrlState({ filters: '' });
       flowsRefetch();
     }
   }, [platformStateFilters]);
