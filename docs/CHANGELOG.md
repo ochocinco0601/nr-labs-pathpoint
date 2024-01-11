@@ -1,3 +1,15 @@
+# [1.48.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.47.0...v1.48.0) (2024-01-11)
+
+
+### Bug Fixes
+
+* set default values to handle undefined values being passed ([6a1abd8](https://github.com/newrelic/nr-labs-hedgehog/commit/6a1abd8d40911ab6e2bfc01863983f285bf0250a))
+
+
+### Features
+
+* updated signal statuses calculation ([012aca5](https://github.com/newrelic/nr-labs-hedgehog/commit/012aca53a37913ca93d7ac5d78c3836b8d51cd2b))
+
 # [1.47.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.46.0...v1.47.0) (2024-01-11)
 
 
