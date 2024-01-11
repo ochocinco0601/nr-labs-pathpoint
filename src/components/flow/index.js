@@ -103,6 +103,19 @@ const Flow = forwardRef(
         console.error('Error deleting flow', deleteFlowError);
     }, [deleteFlowError]);
 
+    const exportFlowHandler = useCallback(() => {
+      const { created, ...exportableFlow } = flow || {}; // eslint-disable-line no-unused-vars
+      const exportBtn = document.createElement('a');
+      exportBtn.download = `${(flow?.name || 'flow')
+        .replace(/[^a-z0-9]/gi, '_')
+        .toLowerCase()}.json`;
+      exportBtn.href = URL.createObjectURL(
+        new Blob([JSON.stringify(exportableFlow)], { type: 'application/json' })
+      );
+      exportBtn.click();
+      exportBtn.remove();
+    }, [flow]);
+
     return (
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
@@ -128,6 +141,7 @@ const Flow = forwardRef(
                   setMode={setMode}
                   flows={flows}
                   onSelectFlow={onSelectFlow}
+                  onExportFlow={exportFlowHandler}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
