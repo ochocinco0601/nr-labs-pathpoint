@@ -4,7 +4,7 @@ const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
 } = StatusIcon;
 
-export const entityStatus = ({ alertSeverity }) => {
+export const entityStatus = ({ alertSeverity } = {}) => {
   switch (alertSeverity) {
     case 'NOT_ALERTING': {
       return SUCCESS;

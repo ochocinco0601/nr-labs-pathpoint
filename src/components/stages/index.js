@@ -30,7 +30,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const dispatch = useContext(FlowDispatchContext);
   const [guids, setGuids] = useState({});
   const [statuses, setStatuses] = useState({});
-  const [stagesData, setStagesData] = useState({});
+  const [stagesData, setStagesData] = useState({ stages });
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
   const entitiesDetails = useEntitiesByGuidsQuery({

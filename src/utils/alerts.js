@@ -5,7 +5,7 @@ const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
 } = StatusIcon;
 
-export const alertStatus = ({ event, priority }) => {
+export const alertStatus = ({ event, priority } = {}) => {
   if (event === 'open') {
     switch (priority) {
       case 'warning': {
