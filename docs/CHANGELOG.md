@@ -1,3 +1,15 @@
+# [1.47.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.46.0...v1.47.0) (2024-01-11)
+
+
+### Bug Fixes
+
+* distinguish between zero and empty string ([7e54646](https://github.com/newrelic/nr-labs-hedgehog/commit/7e54646de031cf2b46c35f8129419f554c08d0e2))
+
+
+### Features
+
+* add function to format date/time for kpi hover ([d50c6ac](https://github.com/newrelic/nr-labs-hedgehog/commit/d50c6acc8b2c5223bb93536b2f827e132c13ce69))
+
 # [1.46.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.45.0...v1.46.0) (2023-12-29)
 
 
