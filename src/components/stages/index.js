@@ -1,13 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText } from 'nr1';
+import {
+  Button,
+  HeadingText,
+  NerdGraphQuery,
+  useEntitiesByGuidsQuery,
+} from 'nr1';
 
 import { Stage } from '../';
-import { useFetchServiceLevels } from '../../hooks';
-import { MODES } from '../../constants';
+import { MODES, SIGNAL_TYPES } from '../../constants';
 import {
   addSignalStatuses,
+  alertConditionsStatusGQL,
+  alertsStatusFromQueryResults,
+  alertsTree,
   annotateStageWithStatuses,
   uniqueSignalGuidsInStages,
 } from '../../utils';
@@ -21,32 +28,65 @@ import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const { stages = [] } = useContext(FlowContext);
   const dispatch = useContext(FlowDispatchContext);
-  const [guids, setGuids] = useState([]);
-  const [stagesWithStatuses, setStagesWithStatuses] = useState(stages);
+  const [guids, setGuids] = useState({});
+  const [statuses, setStatuses] = useState({});
+  const [stagesData, setStagesData] = useState({ stages });
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
-  const { data: serviceLevelsData, error: serviceLevelsError } =
-    useFetchServiceLevels({ guids });
+  const entitiesDetails = useEntitiesByGuidsQuery({
+    entityGuids: guids[SIGNAL_TYPES.ENTITY] || [],
+  });
 
   useEffect(() => {
-    const uniqueGuids = uniqueSignalGuidsInStages(stages);
-    if (
-      uniqueGuids.length === guids.length &&
-      uniqueGuids.every((guid) => guids.includes(guid))
-    )
-      return;
-    setGuids(uniqueGuids);
+    setGuids(uniqueSignalGuidsInStages(stages));
+    setStagesData(() => ({ stages: [...stages] }));
   }, [stages]);
 
   useEffect(() => {
-    const stagesWithSLData = addSignalStatuses(stages, serviceLevelsData);
-    setStagesWithStatuses(stagesWithSLData.map(annotateStageWithStatuses));
-  }, [stages, serviceLevelsData]);
+    if (statuses[SIGNAL_TYPES.ENTITY]) return;
+    const {
+      loading,
+      data: { entities = [] },
+    } = entitiesDetails;
+    if (loading || !entities.length) return;
+    setStatuses((s) => ({
+      ...s,
+      [SIGNAL_TYPES.ENTITY]: entities.reduce(
+        (acc, { guid, ...entity }) => ({ ...acc, [guid]: entity }),
+        {}
+      ),
+    }));
+  }, [entitiesDetails]);
 
   useEffect(() => {
-    if (serviceLevelsError)
-      console.error('Error fetching service levels', serviceLevelsError);
-  }, [serviceLevelsError]);
+    const signalsWithStatuses = addSignalStatuses([...stages], statuses);
+    setStagesData(() => ({
+      stages: signalsWithStatuses.map(annotateStageWithStatuses),
+    }));
+  }, [stages, statuses]);
+
+  useEffect(() => {
+    const alertGuids = guids[SIGNAL_TYPES.ALERT] || [];
+    if (!alertGuids.length) return;
+
+    const fetchAlerts = async (alertGuids) => {
+      if (alertGuids.length) {
+        const alerts = alertGuids.reduce(alertsTree, {});
+        const query = alertConditionsStatusGQL(alerts);
+        if (query) {
+          const { data: { actor = {} } = {} } = await NerdGraphQuery.query({
+            query,
+          });
+          setStatuses((s) => ({
+            ...s,
+            [SIGNAL_TYPES.ALERT]: alertsStatusFromQueryResults(alerts, actor),
+          }));
+        }
+      }
+    };
+
+    fetchAlerts(alertGuids);
+  }, [stages, guids]);
 
   const addStageHandler = () =>
     dispatch({
@@ -82,7 +122,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   };
 
   return (
-    <StagesContext.Provider value={stagesWithStatuses}>
+    <StagesContext.Provider value={stagesData.stages}>
       <div className="stages-header">
         <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
         {mode === MODES.EDIT ? (
@@ -97,7 +137,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
         ) : null}
       </div>
       <div className="stages">
-        {(stagesWithStatuses || []).map(({ id }, i) => (
+        {(stagesData.stages || []).map(({ id }, i) => (
           <Stage
             key={id}
             stageId={id}
