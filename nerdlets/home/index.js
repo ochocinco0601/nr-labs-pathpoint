@@ -57,7 +57,6 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const [editFlowSettings, setEditFlowSettings] = useState(false);
-  const [accountName, setAccountName] = useState('');
   const { accountId } = useContext(PlatformStateContext);
   const [{ filters: platformStateFilters }] = usePlatformState();
   const [nerdletState] = useNerdletState();
