@@ -12,6 +12,7 @@ import {
   nerdlet,
   PlatformStateContext,
   Spinner,
+  useAccountsQuery,
   useNerdletState,
   usePlatformState,
 } from 'nr1';
@@ -30,7 +31,7 @@ import {
   useReadUserPreferences,
 } from '../../src/hooks';
 import { MODES, UI_CONTENT } from '../../src/constants';
-import { SidebarProvider } from '../../src/contexts';
+import { AppContext, SidebarProvider } from '../../src/contexts';
 import { uuid } from '../../src/utils';
 
 const createFlowButtonAttributes = {
@@ -46,6 +47,7 @@ const editButtonAttributes = {
 };
 
 const HomeNerdlet = () => {
+  const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
@@ -63,6 +65,19 @@ const HomeNerdlet = () => {
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const flowWriter = useFlowWriter({ accountId, user });
+  const { data: accounts = [] } = useAccountsQuery();
+
+  useEffect(
+    () =>
+      setApp({
+        account: {
+          id: accountId,
+          name: accounts.find(({ id }) => id === accountId)?.name,
+        },
+        user,
+      }),
+    [accountId, accounts, user]
+  );
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -149,21 +164,19 @@ const HomeNerdlet = () => {
 
     if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
       return (
-        <SidebarProvider>
-          <>
+        <AppContext.Provider value={app}>
+          <SidebarProvider>
             <Flow
               flowDoc={flows[currentFlowIndex].document}
               onClose={backToFlowsHandler}
-              accountId={accountId}
               mode={mode}
               setMode={setMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
-              user={user}
             />
             <Sidebar />
-          </>
-        </SidebarProvider>
+          </SidebarProvider>
+        </AppContext.Provider>
       );
     }
     if (flows && flows.length) {
