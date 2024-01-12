@@ -26,6 +26,7 @@ const FlowHeader = ({
   setMode = () => null,
   flows = [],
   onSelectFlow = () => null,
+  onExportFlow = () => null,
   onDeleteFlow = () => null,
   lastSavedTimestamp,
   resetLastSavedTimestamp = () => null,
@@ -119,24 +120,34 @@ const FlowHeader = ({
           </div>
         </PopoverBody>
       </Popover>
-      <SegmentedControl
-        className="view-mode"
-        value={mode}
-        onChange={(_, value) => setMode(value)}
-      >
-        <SegmentedControlItem
-          label={capitalize(MODES.STACKED)}
-          value={MODES.STACKED}
-          iconType={
-            SegmentedControlItem.ICON_TYPE.DATAVIZ__DATAVIZ__TABLE_CHART
-          }
-        />
-        <SegmentedControlItem
-          label={capitalize(MODES.INLINE)}
-          value={MODES.INLINE}
-          iconType={SegmentedControlItem.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
-        />
-      </SegmentedControl>
+      <div className="flow-header-actions">
+        <Button
+          type={Button.TYPE.PLAIN}
+          sizeType={Button.SIZE_TYPE.SMALL}
+          iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__DOWNLOAD}
+          onClick={onExportFlow}
+        >
+          {UI_CONTENT.FLOW.BUTTON_EXPORT}
+        </Button>
+        <SegmentedControl
+          className="view-mode"
+          value={mode}
+          onChange={(_, value) => setMode(value)}
+        >
+          <SegmentedControlItem
+            label={capitalize(MODES.STACKED)}
+            value={MODES.STACKED}
+            iconType={
+              SegmentedControlItem.ICON_TYPE.DATAVIZ__DATAVIZ__TABLE_CHART
+            }
+          />
+          <SegmentedControlItem
+            label={capitalize(MODES.INLINE)}
+            value={MODES.INLINE}
+            iconType={SegmentedControlItem.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
+          />
+        </SegmentedControl>
+      </div>
     </div>
   );
 };
@@ -150,6 +161,7 @@ FlowHeader.propTypes = {
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
+  onExportFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
   lastSavedTimestamp: PropTypes.number,
   resetLastSavedTimestamp: PropTypes.func,

@@ -12,7 +12,9 @@ import {
   nerdlet,
   PlatformStateContext,
   Spinner,
+  useAccountsQuery,
   useNerdletState,
+  usePlatformState,
 } from 'nr1';
 
 import {
@@ -27,10 +29,9 @@ import {
   useFlowWriter,
   useFetchUser,
   useReadUserPreferences,
-  useFetchAccount,
 } from '../../src/hooks';
 import { MODES, REFRESH_INTERVALS, UI_CONTENT } from '../../src/constants';
-import { SidebarProvider } from '../../src/contexts';
+import { AppContext, SidebarProvider } from '../../src/contexts';
 import { uuid } from '../../src/utils';
 
 const createFlowButtonAttributes = {
@@ -51,12 +52,14 @@ const editButtonFlowSettingsAttributes = {
 };
 
 const HomeNerdlet = () => {
+  const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const [accountName, setAccountName] = useState('');
   const { accountId } = useContext(PlatformStateContext);
+  const [{ filters: platformStateFilters }] = usePlatformState();
   const [nerdletState] = useNerdletState();
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
@@ -65,12 +68,23 @@ const HomeNerdlet = () => {
     flows: flowsData,
     error: flowsError,
     loading: flowsLoading,
+    refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const flowWriter = useFlowWriter({ accountId, user });
+  const { data: accounts = [] } = useAccountsQuery();
 
-  const { accountObject } = useFetchAccount({ accountId });
-
-  useEffect(() => setAccountName(accountObject.name), [accountObject]);
+  useEffect(
+    () =>
+      setApp({
+        account: {
+          id: accountId,
+          name: accounts.find(({ id }) => id === accountId)?.name,
+        },
+        accounts: accounts.map(({ id, name }) => ({ id, name })),
+        user,
+      }),
+    [accountId, accounts, user]
+  );
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -104,6 +118,12 @@ const HomeNerdlet = () => {
       headerTitle: 'Project Hedgehog 🦔',
     });
   }, [user, newFlowHandler, currentFlowIndex, editFlowSettings]);
+
+  useEffect(() => {
+    if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
+      flowsRefetch();
+    }
+  }, [platformStateFilters]);
 
   useEffect(() => setFlows(flowsData || []), [flowsData]);
 
@@ -157,24 +177,21 @@ const HomeNerdlet = () => {
 
     if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
       return (
-        <SidebarProvider>
-          <>
+        <AppContext.Provider value={app}>
+          <SidebarProvider>
             <Flow
               flowDoc={flows[currentFlowIndex].document}
               onClose={backToFlowsHandler}
-              accountId={accountId}
-              accountName={accountName}
               mode={mode}
               setMode={setMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
-              user={user}
               editFlowSettings={editFlowSettings}
               setEditFlowSettings={setEditFlowSettings}
             />
             <Sidebar />
-          </>
-        </SidebarProvider>
+          </SidebarProvider>
+        </AppContext.Provider>
       );
     }
     if (flows && flows.length) {

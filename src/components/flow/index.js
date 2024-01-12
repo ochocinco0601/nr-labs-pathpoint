@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useReducer,
   useState,
@@ -13,7 +14,7 @@ import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { FlowContext, FlowDispatchContext } from '../../contexts';
+import { AppContext, FlowContext, FlowDispatchContext } from '../../contexts';
 import {
   FLOW_DISPATCH_COMPONENTS,
   FLOW_DISPATCH_TYPES,
@@ -25,13 +26,10 @@ const Flow = forwardRef(
     {
       flowDoc = {},
       onClose,
-      accountId,
-      accountName = '',
       mode = MODES.INLINE,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
-      user,
       editFlowSettings = false,
       setEditFlowSettings = () => null,
     },
@@ -43,6 +41,7 @@ const Flow = forwardRef(
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const flowWriter = useFlowWriter({ accountId, user });
+    const { account: { id: accountId } = {}, user } = useContext(AppContext);
 
     useEffect(
       () =>
@@ -106,6 +105,19 @@ const Flow = forwardRef(
         console.error('Error deleting flow', deleteFlowError);
     }, [deleteFlowError]);
 
+    const exportFlowHandler = useCallback(() => {
+      const { created, ...exportableFlow } = flow || {}; // eslint-disable-line no-unused-vars
+      const exportBtn = document.createElement('a');
+      exportBtn.download = `${(flow?.name || 'flow')
+        .replace(/[^a-z0-9]/gi, '_')
+        .toLowerCase()}.json`;
+      exportBtn.href = URL.createObjectURL(
+        new Blob([JSON.stringify(exportableFlow)], { type: 'application/json' })
+      );
+      exportBtn.click();
+      exportBtn.remove();
+    }, [flow]);
+
     return (
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
@@ -143,6 +155,7 @@ const Flow = forwardRef(
                   setMode={setMode}
                   flows={flows}
                   onSelectFlow={onSelectFlow}
+                  onExportFlow={exportFlowHandler}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
@@ -165,13 +178,10 @@ const Flow = forwardRef(
 Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
-  accountId: PropTypes.number,
-  accountName: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
-  user: PropTypes.object,
   editFlowSettings: PropTypes.bool,
   setEditFlowSettings: PropTypes.func,
 };
