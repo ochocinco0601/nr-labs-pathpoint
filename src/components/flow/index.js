@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useReducer,
   useState,
@@ -13,7 +14,7 @@ import { KpiBar, Stages, DeleteConfirmModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { FlowContext, FlowDispatchContext } from '../../contexts';
+import { AppContext, FlowContext, FlowDispatchContext } from '../../contexts';
 import {
   FLOW_DISPATCH_COMPONENTS,
   FLOW_DISPATCH_TYPES,
@@ -25,12 +26,10 @@ const Flow = forwardRef(
     {
       flowDoc = {},
       onClose,
-      accountId,
       mode = MODES.INLINE,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
-      user,
     },
     ref
   ) => {
@@ -40,6 +39,7 @@ const Flow = forwardRef(
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const flowWriter = useFlowWriter({ accountId, user });
+    const { account: { id: accountId } = {}, user } = useContext(AppContext);
 
     useEffect(
       () =>
@@ -162,12 +162,10 @@ const Flow = forwardRef(
 Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
-  accountId: PropTypes.number,
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
-  user: PropTypes.object,
 };
 
 Flow.displayName = 'Flow';
