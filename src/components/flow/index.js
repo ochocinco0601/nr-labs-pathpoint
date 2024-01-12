@@ -134,8 +134,6 @@ const Flow = forwardRef(
                 />
                 {editFlowSettings && (
                   <EditFlowSettingsModal
-                    flow={flow}
-                    accountName={accountName}
                     onUpdate={flowUpdateHandler}
                     onDeleteFlow={() => setDeleteModalHidden(false)}
                     editFlowSettings={editFlowSettings}

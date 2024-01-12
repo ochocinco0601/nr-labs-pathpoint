@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -11,20 +11,26 @@ import {
   TextField,
 } from 'nr1';
 
+import { AppContext, FlowContext } from '../../contexts';
 import { REFRESH_INTERVALS } from '../../constants';
 
 const EditFlowSettingsModal = ({
-  flow = {},
-  accountName = '',
   onUpdate = () => null,
   onDeleteFlow = () => null,
   editFlowSettings = false,
   setEditFlowSettings = () => null,
 }) => {
+  const flow = useContext(FlowContext);
+  const { account, accounts = [] } = useContext(AppContext);
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
     flow?.refreshInterval?.toString() || REFRESH_INTERVALS[0].value
   );
   const [updatedName, setupdatedName] = useState(flow.name || '');
+
+  const accountName = useMemo(
+    () => (accounts || []).find(({ id }) => id === account?.id)?.name || '',
+    [account, accounts]
+  );
 
   const closeHandler = (action) => {
     switch (action) {
@@ -114,8 +120,6 @@ const EditFlowSettingsModal = ({
 };
 
 EditFlowSettingsModal.propTypes = {
-  flow: PropTypes.object,
-  accountName: PropTypes.string,
   onUpdate: PropTypes.func,
   onDeleteFlow: PropTypes.func,
   editFlowSettings: PropTypes.bool,
