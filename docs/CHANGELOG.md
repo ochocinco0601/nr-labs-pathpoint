@@ -1,3 +1,18 @@
+# [1.49.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.48.0...v1.49.0) (2024-01-12)
+
+
+### Bug Fixes
+
+* issue with signal selection nerdlet not closing on save ([2b1b957](https://github.com/newrelic/nr-labs-hedgehog/commit/2b1b9577893e2a4a3ca82e4f41cb75c44d1b0407))
+* remove unused function ([aff75ed](https://github.com/newrelic/nr-labs-hedgehog/commit/aff75ed1f376776c865de651658bb5efa65c5227))
+
+
+### Features
+
+* add accounts to app context ([40a1931](https://github.com/newrelic/nr-labs-hedgehog/commit/40a1931f87c9ed6c81a20aa8555014c99046ff2c))
+* app context ([cf06a0a](https://github.com/newrelic/nr-labs-hedgehog/commit/cf06a0a13dbcf5c2079b441c1d22a1391a254a7f))
+* export flow ([cfcd2f1](https://github.com/newrelic/nr-labs-hedgehog/commit/cfcd2f15728730adf1d2c2b0bc36d035f3f9868c))
+
 # [1.48.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.47.0...v1.48.0) (2024-01-11)
 
 
