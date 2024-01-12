@@ -7,7 +7,7 @@ export const UI_CONTENT = {
     BUTTON_LABEL_STACKED_MODE: 'Stacked',
   },
   FLOW: {
-    //
+    BUTTON_EXPORT: 'Export JSON',
   },
   STAGE: {
     //
