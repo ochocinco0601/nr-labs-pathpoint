@@ -74,6 +74,7 @@ const HomeNerdlet = () => {
           id: accountId,
           name: accounts.find(({ id }) => id === accountId)?.name,
         },
+        accounts: accounts.map(({id, name}) => ({id, name})),
         user,
       }),
     [accountId, accounts, user]
