@@ -99,7 +99,7 @@ const HomeNerdlet = () => {
               {
                 ...editButtonFlowSettingsAttributes,
                 onClick: () => {
-                  if (!editFlowSettings) setEditFlowSettings(true);
+                  setEditFlowSettings(true);
                 },
               },
               {
@@ -137,7 +137,7 @@ const HomeNerdlet = () => {
       document: {
         id,
         name: 'Untitled',
-        refreshInterval: Number(REFRESH_INTERVALS, [0].value),
+        refreshInterval: REFRESH_INTERVALS[0].value,
         stages: [],
         kpis: [],
         created: {

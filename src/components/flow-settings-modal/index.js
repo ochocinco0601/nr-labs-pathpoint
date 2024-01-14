@@ -23,7 +23,7 @@ const EditFlowSettingsModal = ({
   const flow = useContext(FlowContext);
   const { account, accounts = [] } = useContext(AppContext);
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
-    flow?.refreshInterval?.toString() || REFRESH_INTERVALS[0].value
+    flow?.refreshInterval || REFRESH_INTERVALS[0].value
   );
   const [updatedName, setupdatedName] = useState(flow.name || '');
 
