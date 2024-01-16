@@ -30,7 +30,7 @@ import {
   useFetchUser,
   useReadUserPreferences,
 } from '../../src/hooks';
-import { MODES, UI_CONTENT } from '../../src/constants';
+import { MODES, REFRESH_INTERVALS, UI_CONTENT } from '../../src/constants';
 import { AppContext, SidebarProvider } from '../../src/contexts';
 import { uuid } from '../../src/utils';
 
@@ -46,11 +46,17 @@ const editButtonAttributes = {
   iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
 };
 
+const editButtonFlowSettingsAttributes = {
+  type: Button.TYPE.PRIMARY,
+  iconType: Icon.TYPE.INTERFACE__OPERATIONS__CONFIGURE,
+};
+
 const HomeNerdlet = () => {
   const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
+  const [editFlowSettings, setEditFlowSettings] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
   const [{ filters: platformStateFilters }] = usePlatformState();
   const [nerdletState] = useNerdletState();
@@ -91,6 +97,10 @@ const HomeNerdlet = () => {
                 onClick: newFlowHandler,
               },
               {
+                ...editButtonFlowSettingsAttributes,
+                onClick: () => setEditFlowSettings(true),
+              },
+              {
                 ...editButtonAttributes,
                 onClick: () => setMode(MODES.EDIT),
               },
@@ -104,7 +114,7 @@ const HomeNerdlet = () => {
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [user, newFlowHandler, currentFlowIndex]);
+  }, [user, newFlowHandler, currentFlowIndex, editFlowSettings]);
 
   useEffect(() => {
     if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
@@ -125,6 +135,7 @@ const HomeNerdlet = () => {
       document: {
         id,
         name: 'Untitled',
+        refreshInterval: REFRESH_INTERVALS[0].value,
         stages: [],
         kpis: [],
         created: {
@@ -172,6 +183,8 @@ const HomeNerdlet = () => {
               setMode={setMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
+              editFlowSettings={editFlowSettings}
+              setEditFlowSettings={setEditFlowSettings}
             />
             <Sidebar />
           </SidebarProvider>
@@ -194,6 +207,7 @@ const HomeNerdlet = () => {
     accountId,
     mode,
     flowClickHandler,
+    editFlowSettings,
   ]);
 
   return <div className="container">{currentView}</div>;
