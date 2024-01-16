@@ -1,3 +1,13 @@
+# [1.50.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.49.0...v1.50.0) (2024-01-16)
+
+
+### Features
+
+* add actionControlButton for flow settings modal ([ec17cb6](https://github.com/newrelic/nr-labs-hedgehog/commit/ec17cb64b0307772f18cc8774d683d9ba249465a))
+* add flow refresh interval constant ([eef8fda](https://github.com/newrelic/nr-labs-hedgehog/commit/eef8fda940a0055080a12827ca33c80d965dde73))
+* add flow settings modal component ([67e9c7d](https://github.com/newrelic/nr-labs-hedgehog/commit/67e9c7d4746988ec192c3ca55cda1a0d6956e2a2))
+* add hook to obtain account name ([36e44cf](https://github.com/newrelic/nr-labs-hedgehog/commit/36e44cff7f58eb18b0eb69e3d6bf6b80a75a2f8e))
+
 # [1.49.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.48.0...v1.49.0) (2024-01-12)
 
 
