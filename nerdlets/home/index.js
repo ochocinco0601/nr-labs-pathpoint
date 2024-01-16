@@ -98,9 +98,7 @@ const HomeNerdlet = () => {
               },
               {
                 ...editButtonFlowSettingsAttributes,
-                onClick: () => {
-                  setEditFlowSettings(true);
-                },
+                onClick: () => setEditFlowSettings(true),
               },
               {
                 ...editButtonAttributes,
