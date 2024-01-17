@@ -1,3 +1,16 @@
+# [1.51.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.50.0...v1.51.0) (2024-01-17)
+
+
+### Bug Fixes
+
+* pass accountId and user to flow writer ([ea0fb79](https://github.com/newrelic/nr-labs-hedgehog/commit/ea0fb79d760ab1ec8ed0cf1be4077420980db82f))
+* right align flow header actions ([ddea5ca](https://github.com/newrelic/nr-labs-hedgehog/commit/ddea5cae1b1433f3dd0126151d762866c5a206bd))
+
+
+### Features
+
+* signals context with signals details ([5d8b4a3](https://github.com/newrelic/nr-labs-hedgehog/commit/5d8b4a364de2100e5f9d9e1ef8dd366eb70a1ca4))
+
 # [1.50.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.49.0...v1.50.0) (2024-01-16)
 
 
