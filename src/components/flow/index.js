@@ -40,8 +40,8 @@ const Flow = forwardRef(
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
-    const flowWriter = useFlowWriter({ accountId, user });
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
+    const flowWriter = useFlowWriter({ accountId, user });
 
     useEffect(
       () =>
