@@ -16,14 +16,20 @@ import {
   alertsStatusFromQueryResults,
   alertsTree,
   annotateStageWithStatuses,
+  entitiesDetailsFromQueryResults,
+  guidsToArray,
   uniqueSignalGuidsInStages,
 } from '../../utils';
 import {
   FlowContext,
   FlowDispatchContext,
+  SignalsContext,
   StagesContext,
 } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
+import { queryFromGuidsArray } from '../../queries';
+
+const MAX_GUIDS_PER_CALL = 25;
 
 const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const { stages = [] } = useContext(FlowContext);
@@ -31,6 +37,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const [guids, setGuids] = useState({});
   const [statuses, setStatuses] = useState({});
   const [stagesData, setStagesData] = useState({ stages });
+  const [signalsDetails, setSignalsDetails] = useState({});
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
   const entitiesDetails = useEntitiesByGuidsQuery({
@@ -41,6 +48,19 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
     setGuids(uniqueSignalGuidsInStages(stages));
     setStagesData(() => ({ stages: [...stages] }));
   }, [stages]);
+
+  useEffect(() => {
+    const arrayOfGuids = guidsToArray(guids, MAX_GUIDS_PER_CALL);
+    const fetchSignalsDetails = async () => {
+      const query = queryFromGuidsArray(arrayOfGuids);
+      const { data: { actor = {} } = {} } = await NerdGraphQuery.query({
+        query,
+      });
+      setSignalsDetails(entitiesDetailsFromQueryResults(actor));
+    };
+
+    if (arrayOfGuids.length) fetchSignalsDetails();
+  }, [guids]);
 
   useEffect(() => {
     if (statuses[SIGNAL_TYPES.ENTITY]) return;
@@ -74,12 +94,14 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
         const alerts = alertGuids.reduce(alertsTree, {});
         const query = alertConditionsStatusGQL(alerts);
         if (query) {
-          const { data: { actor = {} } = {} } = await NerdGraphQuery.query({
-            query,
-          });
+          const { data: { actor: res = {} } = {} } = await NerdGraphQuery.query(
+            {
+              query,
+            }
+          );
           setStatuses((s) => ({
             ...s,
-            [SIGNAL_TYPES.ALERT]: alertsStatusFromQueryResults(alerts, actor),
+            [SIGNAL_TYPES.ALERT]: alertsStatusFromQueryResults(alerts, res),
           }));
         }
       }
@@ -123,32 +145,34 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
 
   return (
     <StagesContext.Provider value={stagesData.stages}>
-      <div className="stages-header">
-        <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
-        {mode === MODES.EDIT ? (
-          <Button
-            type={Button.TYPE.SECONDARY}
-            sizeType={Button.SIZE_TYPE.SMALL}
-            iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-            onClick={addStageHandler}
-          >
-            Add a stage
-          </Button>
-        ) : null}
-      </div>
-      <div className="stages">
-        {(stagesData.stages || []).map(({ id }, i) => (
-          <Stage
-            key={id}
-            stageId={id}
-            mode={mode}
-            onDragStart={(e) => dragStartHandler(e, i)}
-            onDragOver={(e) => dragOverHandler(e, i)}
-            onDrop={(e) => dropHandler(e)}
-            saveFlow={saveFlow}
-          />
-        ))}
-      </div>
+      <SignalsContext.Provider value={signalsDetails}>
+        <div className="stages-header">
+          <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
+          {mode === MODES.EDIT ? (
+            <Button
+              type={Button.TYPE.SECONDARY}
+              sizeType={Button.SIZE_TYPE.SMALL}
+              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+              onClick={addStageHandler}
+            >
+              Add a stage
+            </Button>
+          ) : null}
+        </div>
+        <div className="stages">
+          {(stagesData.stages || []).map(({ id }, i) => (
+            <Stage
+              key={id}
+              stageId={id}
+              mode={mode}
+              onDragStart={(e) => dragStartHandler(e, i)}
+              onDragOver={(e) => dragOverHandler(e, i)}
+              onDrop={(e) => dropHandler(e)}
+              saveFlow={saveFlow}
+            />
+          ))}
+        </div>
+      </SignalsContext.Provider>
     </StagesContext.Provider>
   );
 };
