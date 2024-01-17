@@ -78,21 +78,22 @@ const FlowHeader = ({
         }
         onClose={() => setImageModalHidden(true)}
       />
-      <Button
-        className="view-mode"
-        type={Button.TYPE.PRIMARY}
-        iconType={Icon.TYPE.INTERFACE__SIGN__CHECKMARK}
-        sizeType={Button.SIZE_TYPE.SMALL}
-        onClick={doneEditingHandler}
-      >
-        {UI_CONTENT.GLOBAL.BUTTON_LABEL_EXIT_EDIT_MODE}
-      </Button>
-      <Button
-        type={Button.TYPE.DESTRUCTIVE}
-        iconType={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
-        sizeType={Button.SIZE_TYPE.SMALL}
-        onClick={() => onDeleteFlow()}
-      ></Button>
+      <div className="flow-header-actions">
+        <Button
+          type={Button.TYPE.PRIMARY}
+          iconType={Icon.TYPE.INTERFACE__SIGN__CHECKMARK}
+          sizeType={Button.SIZE_TYPE.SMALL}
+          onClick={doneEditingHandler}
+        >
+          {UI_CONTENT.GLOBAL.BUTTON_LABEL_EXIT_EDIT_MODE}
+        </Button>
+        <Button
+          type={Button.TYPE.DESTRUCTIVE}
+          iconType={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
+          sizeType={Button.SIZE_TYPE.SMALL}
+          onClick={() => onDeleteFlow()}
+        ></Button>
+      </div>
     </div>
   ) : (
     <div className="flow-header">
