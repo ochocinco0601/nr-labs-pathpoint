@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+  NerdGraphQuery,
   navigation,
   nerdlet,
   useEntityCountQuery,
@@ -19,7 +20,29 @@ import {
   useFlowLoader,
   useFlowWriter,
 } from '../../src/hooks';
+import { queryFromGuidsArray } from '../../src/queries';
+import { entitiesDetailsFromQueryResults } from '../../src/utils';
 import { SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
+
+const MAX_GUIDS_PER_CALL = 25;
+
+const guidsArray = (entities = [], maxArrayLen) =>
+  entities.reduce(
+    (acc, { guid } = {}, i) => {
+      if (!guid) return acc;
+      const insertAtIdx = Math.floor(i / maxArrayLen);
+      acc[insertAtIdx].push(guid);
+      return acc;
+    },
+    Array.from({ length: Math.ceil(entities.length / maxArrayLen) }, () => [])
+  );
+
+const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
+  const idx = arr.findIndex(({ guid }) => guid === item.guid);
+  if (shouldRemove)
+    return idx < 0 ? [...arr] : [...arr.slice(0, idx), ...arr.slice(idx + 1)];
+  return idx < 0 ? [...arr, item] : [...arr];
+};
 
 const SignalSelectionNerdlet = () => {
   const [currentTab, setCurrentTab] = useState(SIGNAL_TYPES.ENTITY);
@@ -32,6 +55,7 @@ const SignalSelectionNerdlet = () => {
   const [alertCount, setAlertCount] = useState(0);
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
+  const [signalsDetails, setSignalsDetails] = useState({});
   const [{ accountId }, setPlatformUrlState] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
@@ -56,6 +80,14 @@ const SignalSelectionNerdlet = () => {
 
   useEffect(() => {
     if (!flow) return;
+
+    const fetchSignalsDetails = async (arrayOfGuids) => {
+      const query = queryFromGuidsArray(arrayOfGuids);
+      const { data: { actor = {} } = {} } = await NerdGraphQuery.query({
+        query,
+      });
+      setSignalsDetails(entitiesDetailsFromQueryResults(actor));
+    };
     const { levels = [] } =
       (flow?.stages || []).find(({ id }) => id === stageId) || {};
     const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
@@ -63,11 +95,17 @@ const SignalSelectionNerdlet = () => {
     const [existingEntities, existingAlerts] = (step?.signals || []).reduce(
       (acc, signal) => {
         if (signal.type === SIGNAL_TYPES.ENTITY) acc[0].push(signal);
-        if (signal.type === SIGNAL_TYPES.ENTITY) acc[1].push(signal);
+        if (signal.type === SIGNAL_TYPES.ALERT) acc[1].push(signal);
         return acc;
       },
       [[], []]
     );
+    const arrayOfGuids = guidsArray(
+      [...existingEntities, ...existingAlerts],
+      MAX_GUIDS_PER_CALL
+    );
+    if (arrayOfGuids.length) fetchSignalsDetails(arrayOfGuids);
+
     if (existingEntities.length)
       setSelectedEntities((se) => [...se, ...existingEntities]);
     if (existingAlerts.length)
@@ -153,15 +191,10 @@ const SignalSelectionNerdlet = () => {
   );
 
   const selectItemHandler = useCallback((type, checked, item) => {
-    if (type === SIGNAL_TYPES.ENTITY) {
-      setSelectedEntities((se) =>
-        checked ? [...se, item] : se.filter(({ guid }) => guid !== item?.guid)
-      );
-    } else if (type === SIGNAL_TYPES.ALERT) {
-      setSelectedAlerts((sa) =>
-        checked ? [...sa, item] : sa.filter(({ guid }) => guid !== item?.guid)
-      );
-    }
+    if (type === SIGNAL_TYPES.ENTITY)
+      setSelectedEntities((se) => uniqueGuidsArray(se, item, !checked));
+    if (type === SIGNAL_TYPES.ALERT)
+      setSelectedAlerts((sa) => uniqueGuidsArray(sa, item, !checked));
   }, []);
 
   const cancelHandler = useCallback(() => navigation.closeNerdlet(), []);
@@ -184,12 +217,14 @@ const SignalSelectionNerdlet = () => {
 
     const document = { ...flow };
     document.stages[stageIndex].levels[levelIndex].steps[stepIndex].signals = [
-      ...(selectedEntities || []).map(({ guid }) => ({
+      ...(selectedEntities || []).map(({ guid, name }) => ({
         guid,
+        name,
         type: SIGNAL_TYPES.ENTITY,
       })),
-      ...(selectedAlerts || []).map(({ guid }) => ({
+      ...(selectedAlerts || []).map(({ guid, name }) => ({
         guid,
+        name,
         type: SIGNAL_TYPES.ALERT,
       })),
     ];
@@ -229,6 +264,7 @@ const SignalSelectionNerdlet = () => {
           alerts={alerts}
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
+          signalsDetails={signalsDetails}
           onSelect={selectItemHandler}
         />
         <Footer
