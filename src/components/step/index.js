@@ -7,10 +7,11 @@ import { StatusIconsLayout } from '@newrelic/nr-labs-components';
 import Signal from '../signal';
 import StepHeader from './header';
 import DeleteConfirmModal from '../delete-confirm-modal';
-import { MODES, STATUSES } from '../../constants';
+import { COMPONENTS, MODES, STATUSES } from '../../constants';
 import {
   FlowContext,
   FlowDispatchContext,
+  SelectionsContext,
   SignalsContext,
   StagesContext,
 } from '../../contexts';
@@ -31,6 +32,7 @@ const Step = ({
   const { id: flowId } = useContext(FlowContext);
   const stages = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
+  const { selections, toggleSelection } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
   const [signals, setSignals] = useState([]);
@@ -133,7 +135,10 @@ const Step = ({
 
   return (
     <div
-      className={`step ${status}`}
+      className={`step ${status} ${
+        selections[COMPONENTS.STEP]?.[stepId] ? 'selected' : ''
+      }`}
+      onClick={() => toggleSelection(COMPONENTS.STEP, stepId)}
       draggable={mode === MODES.EDIT}
       onDragStart={dragStartHandler}
       onDragOver={onDragOver}

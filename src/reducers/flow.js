@@ -8,6 +8,7 @@ import {
 import { deleteLevel, reorderLevels } from './helpers/levels';
 import { addStep, deleteStep, reorderSteps, updateStep } from './helpers/steps';
 import { deleteSignal } from './helpers/signals';
+import { COMPONENTS } from '../constants';
 
 export const FLOW_DISPATCH_TYPES = {
   ADDED: 'added',
@@ -17,13 +18,7 @@ export const FLOW_DISPATCH_TYPES = {
   CHANGED: 'changed',
 };
 
-export const FLOW_DISPATCH_COMPONENTS = {
-  FLOW: 'flow',
-  STAGE: 'stage',
-  LEVEL: 'level',
-  STEP: 'step',
-  SIGNAL: 'signal',
-};
+export const FLOW_DISPATCH_COMPONENTS = COMPONENTS;
 
 export const flowReducer = (flow, action) => {
   const { component, componentIds = {}, updates, saveFlow } = action;
