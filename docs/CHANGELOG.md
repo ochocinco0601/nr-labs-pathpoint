@@ -1,3 +1,10 @@
+# [1.52.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.51.1...v1.52.0) (2024-01-18)
+
+
+### Features
+
+* selections context ([72a3c18](https://github.com/newrelic/nr-labs-hedgehog/commit/72a3c18816c59c98ce6c5969663ac9cf37243533))
+
 ## [1.51.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.51.0...v1.51.1) (2024-01-18)
 
 
