@@ -11,6 +11,7 @@ import { MODES, STATUSES } from '../../constants';
 import {
   FlowContext,
   FlowDispatchContext,
+  SignalsContext,
   StagesContext,
 } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
@@ -29,6 +30,7 @@ const Step = ({
 }) => {
   const { id: flowId } = useContext(FlowContext);
   const stages = useContext(StagesContext);
+  const signalsDetails = useContext(SignalsContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
   const [signals, setSignals] = useState([]);
@@ -119,7 +121,7 @@ const Step = ({
       signals.map(({ guid, name, status }) => (
         <Signal
           key={guid}
-          name={name}
+          name={signalsDetails[guid]?.name || name}
           onDelete={() => openDeleteModalHandler(guid, name)}
           status={status}
           mode={mode}

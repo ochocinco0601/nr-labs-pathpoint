@@ -6,3 +6,5 @@ export * from './crypto';
 export * from './nrql-lexer';
 export * from './entities';
 export * from './nrql-helper';
+export * from './kpi-hover-helper';
+export * from './alerts';

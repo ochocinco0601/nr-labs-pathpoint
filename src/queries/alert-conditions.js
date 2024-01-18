@@ -20,4 +20,13 @@ query($id: Int!) {
   }
 }`;
 
-export { nrqlConditionsSearchQuery };
+const latestStatusForAlertConditions = (conditionIds = []) =>
+  `SELECT 
+    latest(event) AS event, 
+    latest(priority) AS priority, 
+    latest(conditionName) as name 
+  FROM NrAiIncident 
+  FACET string(conditionId) 
+  WHERE conditionId IN (${conditionIds.join(', ')})`.replace(/\s+/g, ' ');
+
+export { nrqlConditionsSearchQuery, latestStatusForAlertConditions };

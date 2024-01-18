@@ -6,3 +6,4 @@ export * from './kpis';
 export * from './stage-shapes';
 export * from './ui-content';
 export * from './nrql-days';
+export * from './refresh-intervals';

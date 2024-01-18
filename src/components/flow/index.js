@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useReducer,
   useState,
@@ -9,11 +10,11 @@ import PropTypes from 'prop-types';
 
 import { Spinner, useAccountStorageMutation } from 'nr1';
 
-import { KpiBar, Stages, DeleteConfirmModal } from '../';
+import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { FlowContext, FlowDispatchContext } from '../../contexts';
+import { AppContext, FlowContext, FlowDispatchContext } from '../../contexts';
 import {
   FLOW_DISPATCH_COMPONENTS,
   FLOW_DISPATCH_TYPES,
@@ -25,12 +26,12 @@ const Flow = forwardRef(
     {
       flowDoc = {},
       onClose,
-      accountId,
       mode = MODES.INLINE,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
-      user,
+      editFlowSettings = false,
+      setEditFlowSettings = () => null,
     },
     ref
   ) => {
@@ -39,6 +40,7 @@ const Flow = forwardRef(
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
+    const { account: { id: accountId } = {}, user } = useContext(AppContext);
     const flowWriter = useFlowWriter({ accountId, user });
 
     useEffect(
@@ -103,19 +105,42 @@ const Flow = forwardRef(
         console.error('Error deleting flow', deleteFlowError);
     }, [deleteFlowError]);
 
+    const exportFlowHandler = useCallback(() => {
+      const { created, ...exportableFlow } = flow || {}; // eslint-disable-line no-unused-vars
+      const exportBtn = document.createElement('a');
+      exportBtn.download = `${(flow?.name || 'flow')
+        .replace(/[^a-z0-9]/gi, '_')
+        .toLowerCase()}.json`;
+      exportBtn.href = URL.createObjectURL(
+        new Blob([JSON.stringify(exportableFlow)], { type: 'application/json' })
+      );
+      exportBtn.click();
+      exportBtn.remove();
+    }, [flow]);
+
     return (
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
           <div className="flow" ref={ref}>
-            {mode === MODES.EDIT && (
-              <DeleteConfirmModal
-                name={flow.name}
-                type="flow"
-                hidden={deleteModalHidden}
-                onConfirm={() => deleteFlowHandler()}
-                onClose={() => setDeleteModalHidden(true)}
-                isDeletingFlow={isDeletingFlow}
-              />
+            {flow?.id && (
+              <>
+                <DeleteConfirmModal
+                  name={flow.name}
+                  type="flow"
+                  hidden={deleteModalHidden}
+                  onConfirm={() => deleteFlowHandler()}
+                  onClose={() => setDeleteModalHidden(true)}
+                  isDeletingFlow={isDeletingFlow}
+                />
+                {editFlowSettings && (
+                  <EditFlowSettingsModal
+                    onUpdate={flowUpdateHandler}
+                    onDeleteFlow={() => setDeleteModalHidden(false)}
+                    editFlowSettings={editFlowSettings}
+                    setEditFlowSettings={setEditFlowSettings}
+                  />
+                )}
+              </>
             )}
             {!isDeletingFlow ? (
               <>
@@ -128,9 +153,12 @@ const Flow = forwardRef(
                   setMode={setMode}
                   flows={flows}
                   onSelectFlow={onSelectFlow}
+                  onExportFlow={exportFlowHandler}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
+                  editFlowSettings={editFlowSettings}
+                  setEditFlowSettings={setEditFlowSettings}
                 />
                 <Stages mode={mode} saveFlow={saveFlow} />
                 <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
@@ -148,12 +176,12 @@ const Flow = forwardRef(
 Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
-  accountId: PropTypes.number,
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
-  user: PropTypes.object,
+  editFlowSettings: PropTypes.bool,
+  setEditFlowSettings: PropTypes.func,
 };
 
 Flow.displayName = 'Flow';

@@ -12,6 +12,7 @@ import {
   nerdlet,
   PlatformStateContext,
   Spinner,
+  useAccountsQuery,
   useNerdletState,
   usePlatformState,
 } from 'nr1';
@@ -29,8 +30,8 @@ import {
   useFetchUser,
   useReadUserPreferences,
 } from '../../src/hooks';
-import { MODES, UI_CONTENT } from '../../src/constants';
-import { SidebarProvider } from '../../src/contexts';
+import { MODES, REFRESH_INTERVALS, UI_CONTENT } from '../../src/constants';
+import { AppContext, SidebarProvider } from '../../src/contexts';
 import { uuid } from '../../src/utils';
 
 const createFlowButtonAttributes = {
@@ -45,13 +46,19 @@ const editButtonAttributes = {
   iconType: Icon.TYPE.INTERFACE__OPERATIONS__EDIT,
 };
 
+const editButtonFlowSettingsAttributes = {
+  type: Button.TYPE.PRIMARY,
+  iconType: Icon.TYPE.INTERFACE__OPERATIONS__CONFIGURE,
+};
+
 const HomeNerdlet = () => {
+  const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
+  const [editFlowSettings, setEditFlowSettings] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
-  const [{ filters: platformStateFilters }, setPlatformUrlState] =
-    usePlatformState();
+  const [{ filters: platformStateFilters }] = usePlatformState();
   const [nerdletState] = useNerdletState();
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
@@ -63,6 +70,20 @@ const HomeNerdlet = () => {
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const flowWriter = useFlowWriter({ accountId, user });
+  const { data: accounts = [] } = useAccountsQuery();
+
+  useEffect(
+    () =>
+      setApp({
+        account: {
+          id: accountId,
+          name: accounts.find(({ id }) => id === accountId)?.name,
+        },
+        accounts: accounts.map(({ id, name }) => ({ id, name })),
+        user,
+      }),
+    [accountId, accounts, user]
+  );
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -74,6 +95,10 @@ const HomeNerdlet = () => {
               {
                 ...createFlowButtonAttributes,
                 onClick: newFlowHandler,
+              },
+              {
+                ...editButtonFlowSettingsAttributes,
+                onClick: () => setEditFlowSettings(true),
               },
               {
                 ...editButtonAttributes,
@@ -89,11 +114,10 @@ const HomeNerdlet = () => {
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [user, newFlowHandler, currentFlowIndex]);
+  }, [user, newFlowHandler, currentFlowIndex, editFlowSettings]);
 
   useEffect(() => {
     if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
-      setPlatformUrlState({ filters: '' });
       flowsRefetch();
     }
   }, [platformStateFilters]);
@@ -111,6 +135,7 @@ const HomeNerdlet = () => {
       document: {
         id,
         name: 'Untitled',
+        refreshInterval: REFRESH_INTERVALS[0].value,
         stages: [],
         kpis: [],
         created: {
@@ -149,21 +174,21 @@ const HomeNerdlet = () => {
 
     if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
       return (
-        <SidebarProvider>
-          <>
+        <AppContext.Provider value={app}>
+          <SidebarProvider>
             <Flow
               flowDoc={flows[currentFlowIndex].document}
               onClose={backToFlowsHandler}
-              accountId={accountId}
               mode={mode}
               setMode={setMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
-              user={user}
+              editFlowSettings={editFlowSettings}
+              setEditFlowSettings={setEditFlowSettings}
             />
             <Sidebar />
-          </>
-        </SidebarProvider>
+          </SidebarProvider>
+        </AppContext.Provider>
       );
     }
     if (flows && flows.length) {
@@ -182,6 +207,7 @@ const HomeNerdlet = () => {
     accountId,
     mode,
     flowClickHandler,
+    editFlowSettings,
   ]);
 
   return <div className="container">{currentView}</div>;
