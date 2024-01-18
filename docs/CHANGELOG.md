@@ -1,3 +1,10 @@
+## [1.51.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.51.0...v1.51.1) (2024-01-18)
+
+
+### Bug Fixes
+
+* signal selection issues ([672881a](https://github.com/newrelic/nr-labs-hedgehog/commit/672881a254bfc52e43e1247568dbc084467a7177))
+
 # [1.51.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.50.0...v1.51.0) (2024-01-17)
 
 
