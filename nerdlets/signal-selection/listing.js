@@ -14,6 +14,7 @@ const Listing = ({
   alerts = [],
   selectedEntities = [],
   selectedAlerts = [],
+  signalsDetails = {},
   onSelect,
 }) => {
   return (
@@ -54,7 +55,7 @@ const Listing = ({
             {selectedEntities.map(({ name, guid, alertSeverity }) => (
               <Signal
                 key={guid}
-                name={name}
+                name={signalsDetails[guid]?.name || name}
                 status={signalStatus({
                   type: SIGNAL_TYPES.ENTITY,
                   alertSeverity,
@@ -74,7 +75,7 @@ const Listing = ({
             {selectedAlerts.map(({ name, guid }) => (
               <Signal
                 key={guid}
-                name={name}
+                name={signalsDetails[guid]?.name || name}
                 type={SIGNAL_TYPES.ALERT}
                 status={STATUSES.UNKNOWN}
               />
@@ -92,6 +93,7 @@ Listing.propTypes = {
   alerts: PropTypes.array,
   selectedEntities: PropTypes.array,
   selectedAlerts: PropTypes.array,
+  signalsDetails: PropTypes.object,
   onSelect: PropTypes.func,
 };
 
