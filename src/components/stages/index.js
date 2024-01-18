@@ -23,6 +23,7 @@ import {
 import {
   FlowContext,
   FlowDispatchContext,
+  SelectionsContext,
   SignalsContext,
   StagesContext,
 } from '../../contexts';
@@ -38,6 +39,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const [statuses, setStatuses] = useState({});
   const [stagesData, setStagesData] = useState({ stages });
   const [signalsDetails, setSignalsDetails] = useState({});
+  const [selections, setSelections] = useState({});
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
   const entitiesDetails = useEntitiesByGuidsQuery({
@@ -117,6 +119,11 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
       saveFlow,
     });
 
+  const toggleSelection = (type, id) => {
+    if (!type || !id) return;
+    setSelections((s) => ({ ...s, [type]: { [id]: !s[type]?.[id] } }));
+  };
+
   const dragStartHandler = (e, index) => {
     dragItemIndex.current = index;
     e.dataTransfer.effectAllowed = 'move';
@@ -146,32 +153,34 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   return (
     <StagesContext.Provider value={stagesData.stages}>
       <SignalsContext.Provider value={signalsDetails}>
-        <div className="stages-header">
-          <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
-          {mode === MODES.EDIT ? (
-            <Button
-              type={Button.TYPE.SECONDARY}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-              onClick={addStageHandler}
-            >
-              Add a stage
-            </Button>
-          ) : null}
-        </div>
-        <div className="stages">
-          {(stagesData.stages || []).map(({ id }, i) => (
-            <Stage
-              key={id}
-              stageId={id}
-              mode={mode}
-              onDragStart={(e) => dragStartHandler(e, i)}
-              onDragOver={(e) => dragOverHandler(e, i)}
-              onDrop={(e) => dropHandler(e)}
-              saveFlow={saveFlow}
-            />
-          ))}
-        </div>
+        <SelectionsContext.Provider value={{ selections, toggleSelection }}>
+          <div className="stages-header">
+            <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
+            {mode === MODES.EDIT ? (
+              <Button
+                type={Button.TYPE.SECONDARY}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+                onClick={addStageHandler}
+              >
+                Add a stage
+              </Button>
+            ) : null}
+          </div>
+          <div className="stages">
+            {(stagesData.stages || []).map(({ id }, i) => (
+              <Stage
+                key={id}
+                stageId={id}
+                mode={mode}
+                onDragStart={(e) => dragStartHandler(e, i)}
+                onDragOver={(e) => dragOverHandler(e, i)}
+                onDrop={(e) => dropHandler(e)}
+                saveFlow={saveFlow}
+              />
+            ))}
+          </div>
+        </SelectionsContext.Provider>
       </SignalsContext.Provider>
     </StagesContext.Provider>
   );
