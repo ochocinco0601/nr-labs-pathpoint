@@ -19,7 +19,7 @@ import {
   PopoverBody,
 } from 'nr1';
 
-import { SimpleBillboard } from '@newrelic/nr-labs-components';
+import { SimpleBillboard, TimeRangePicker } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
@@ -51,7 +51,9 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
-  const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis });
+
+  const [timeRange, setTimeRange] = useState(null);
+  const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis, timeRange });
   const selectedKpi = useRef({});
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
 
@@ -211,7 +213,9 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
               Create new KPI
             </Button>
           </div>
-        ) : null}
+        ) : (
+          <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
+        )}
       </div>
       <div
         className="slider-button"
