@@ -1,3 +1,12 @@
+# [1.53.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.52.0...v1.53.0) (2024-01-19)
+
+
+### Features
+
+* add constant array for nrql days (i.e. yesterday, monday, tuesday, ... ([3cffc13](https://github.com/newrelic/nr-labs-hedgehog/commit/3cffc137cc33d0f7ea195823bd7d9aa3ca43b360))
+* add helper for removing 'since' and 'until' clauses ([eff94ca](https://github.com/newrelic/nr-labs-hedgehog/commit/eff94ca1b40273f2dd601569b35b0987f586d569))
+* update nrl queries with new since/until rimes from the time picker ([7780c7c](https://github.com/newrelic/nr-labs-hedgehog/commit/7780c7c38b22f2385952ca15283c62b57b783125))
+
 # [1.52.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.51.1...v1.52.0) (2024-01-18)
 
 
