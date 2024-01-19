@@ -41,7 +41,7 @@ code, the source code can be found at [https://github.com/newrelic/nr-labs-pathp
 
 ### @newrelic/nr-labs-components
 
-This product includes source derived from [@newrelic/nr-labs-components](https://github.com/newrelic/nr-labs-components) ([v1.21.1](https://github.com/newrelic/nr-labs-components/tree/v1.21.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr-labs-components/blob/v1.21.1/LICENSE):
+This product includes source derived from [@newrelic/nr-labs-components](https://github.com/newrelic/nr-labs-components) ([v1.21.2](https://github.com/newrelic/nr-labs-components/tree/v1.21.2)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr-labs-components/blob/v1.21.2/LICENSE):
 
 ```
                                  Apache License
