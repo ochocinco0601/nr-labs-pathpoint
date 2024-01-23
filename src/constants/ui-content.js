@@ -13,7 +13,8 @@ export const UI_CONTENT = {
     //
   },
   LEVEL: {
-    //
+    TOOLTIP:
+      'Collection of potential paths a user may traverse through this stage',
   },
   STEP: {
     //
