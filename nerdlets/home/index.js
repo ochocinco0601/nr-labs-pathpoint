@@ -9,6 +9,7 @@ import React, {
 import {
   Button,
   Icon,
+  navigation,
   nerdlet,
   PlatformStateContext,
   Spinner,
@@ -30,9 +31,8 @@ import {
   useFetchUser,
   useReadUserPreferences,
 } from '../../src/hooks';
-import { MODES, REFRESH_INTERVALS, UI_CONTENT } from '../../src/constants';
+import { MODES, UI_CONTENT } from '../../src/constants';
 import { AppContext, SidebarProvider } from '../../src/contexts';
-import { uuid } from '../../src/utils';
 
 const createFlowButtonAttributes = {
   label: UI_CONTENT.GLOBAL.BUTTON_LABEL_CREATE_FLOW,
@@ -128,23 +128,10 @@ const HomeNerdlet = () => {
     if (flowsError) console.error('Error fetching flows', flowsError);
   }, [flowsError]);
 
-  const newFlowHandler = useCallback(() => {
-    const id = uuid();
-    flowWriter.write({
-      documentId: id,
-      document: {
-        id,
-        name: 'Untitled',
-        refreshInterval: REFRESH_INTERVALS[0].value,
-        stages: [],
-        kpis: [],
-        created: {
-          user,
-          timestamp: Date.now(),
-        },
-      },
+  const newFlowHandler = () =>
+    navigation.openStackedNerdlet({
+      id: 'create-flow',
     });
-  }, [user]);
 
   const flowClickHandler = useCallback(
     (id) => setCurrentFlowIndex(flows.findIndex((f) => f.id === id)),
