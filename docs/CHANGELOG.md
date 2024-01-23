@@ -1,3 +1,10 @@
+# [1.54.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.53.0...v1.54.0) (2024-01-23)
+
+
+### Features
+
+* create blank flow nerdlet ([eceb021](https://github.com/newrelic/nr-labs-hedgehog/commit/eceb02191f115fdc8b5595ec87770e505c545ad5))
+
 # [1.53.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.52.0...v1.53.0) (2024-01-19)
 
 
