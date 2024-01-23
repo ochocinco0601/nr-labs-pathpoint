@@ -1,0 +1,107 @@
+.create-flow {
+  background: #fff;
+  padding: 16px;
+  height: calc(100% - 32px);
+  display: flex;
+  flex-direction: column;
+
+  header {
+    margin-bottom: 16px;
+  }
+
+  .content {
+    min-height: 50%;
+    display: flex;
+    gap: 16px;
+
+    &.details {
+      flex-direction: column;
+      width: max-content;
+
+      .flow-subtitle {
+        color: #6B757B;
+        text-transform: uppercase;
+      }
+
+      .button-bar {
+        margin-top: 32px;
+        display: flex;
+        gap: 4px;
+      }
+    }
+
+    .create-flow-card {
+      width: 50%;
+      border-radius: 4px;
+      box-shadow: 0px 2px 8px 1px rgba(40, 54, 54, 0.15);
+      cursor: pointer;
+      // transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transform: perspective(1px) translateZ(0);
+      transition: all 0.3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(1);
+        box-shadow: 0px 1px 1px 0px rgba(40, 54, 54, 0.15);
+      }
+
+      .header, .main {
+        padding: 16px;
+        display: flex;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 4px;
+
+        .title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .sub-title {
+          padding-left: 24px;
+        }
+      }
+
+      .main {
+        justify-content: center;
+        align-items: center;
+
+        img {
+          max-width: 100%;
+        }
+
+        .create-flow-card-content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 4px;
+          box-shadow: 0px 8px 16px 8px rgba(2, 3, 3, 0.05), 0px 4px 4px 4px rgba(0, 0, 0, 0.02);
+        }
+      }
+    }
+  }
+}
+
+.account-picker-option {
+  display: flex;
+  gap: 8px;
+
+  span:first-of-type {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span:last-of-type {
+    color: #6b757b;
+    text-align: right;
+    white-space: pre;
+    width: 8ch;
+  }
+}

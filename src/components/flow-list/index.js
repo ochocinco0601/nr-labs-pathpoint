@@ -50,7 +50,7 @@ const FlowList = forwardRef(({ flows = [], onClick = () => null }, ref) => {
           )
         : flows
     );
-  }, [searchPattern]);
+  }, [flows, searchPattern]);
 
   const toggleFavorite = useCallback(
     async (id) => {
