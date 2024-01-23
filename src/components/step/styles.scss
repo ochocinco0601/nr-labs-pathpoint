@@ -4,6 +4,25 @@
   background-color: #fff;
   max-width: 200px;
 
+  &.critical {
+    border: 1px solid $critical;
+  }
+
+  &.warning {
+    border: 1px solid $warning;
+  }
+
+  &.detail {
+    cursor: pointer;
+
+    &.selected {
+      @include status-colors(
+        $critical: 'critical',
+        $warning: 'warning',
+      );
+    }
+  }
+
   .edit-signals-list {
     display: flex;
     flex-direction: column;
@@ -15,8 +34,13 @@
     display: grid;
     gap: 8px;
     align-items: center;
-    margin-bottom: 8px;
 
+    .title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
     &.edit {
       grid-template-columns: min-content auto min-content min-content;
     }

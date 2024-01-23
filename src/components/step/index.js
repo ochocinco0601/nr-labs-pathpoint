@@ -120,9 +120,11 @@ const Step = ({
 
   const SignalsList = memo(
     () =>
-      signals.map(({ guid, name, status }) => (
+      signals.map(({ guid, name, status, type }) => (
         <Signal
           key={guid}
+          guid={guid}
+          type={type}
           name={signalsDetails[guid]?.name || name}
           onDelete={() => openDeleteModalHandler(guid, name)}
           status={status}
@@ -135,8 +137,12 @@ const Step = ({
 
   return (
     <div
-      className={`step ${status} ${
-        selections[COMPONENTS.STEP]?.[stepId] ? 'selected' : ''
+      className={`step ${mode === MODES.STACKED ? status : ''} ${
+        [STATUSES.CRITICAL, STATUSES.WARNING].includes(status) ? 'detail' : ''
+      } ${
+        selections[COMPONENTS.STEP]?.[stepId] && selections[COMPONENTS.SIGNAL]
+          ? ` selected ${status}`
+          : ''
       }`}
       onClick={() => toggleSelection(COMPONENTS.STEP, stepId)}
       draggable={mode === MODES.EDIT}
@@ -176,11 +182,13 @@ const Step = ({
             onClose={closeDeleteModalHandler}
           />
         </>
-      ) : null}
-      <div className="signals">
-        {mode === MODES.INLINE ? <SignalsGrid /> : null}
-        {mode === MODES.STACKED ? <SignalsList /> : null}
-      </div>
+      ) : mode === MODES.INLINE ? (
+        <div className="signals-grids">
+          <SignalsGrid />
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };
