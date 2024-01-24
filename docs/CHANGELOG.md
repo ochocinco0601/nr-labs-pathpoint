@@ -1,3 +1,15 @@
+# [1.55.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.54.0...v1.55.0) (2024-01-24)
+
+
+### Bug Fixes
+
+* incorrect params ([102225f](https://github.com/newrelic/nr-labs-hedgehog/commit/102225f09b9705f83a1673b5d265b860f5d8eb1a))
+
+
+### Features
+
+* import flow ([cf36cdd](https://github.com/newrelic/nr-labs-hedgehog/commit/cf36cddbcbfcf29d7a1ac338fc276c6e168a0385))
+
 # [1.54.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.53.0...v1.54.0) (2024-01-23)
 
 
