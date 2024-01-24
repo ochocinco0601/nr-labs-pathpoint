@@ -1,5 +1,27 @@
 import { SIGNAL_TYPES, STAGE_SHAPES_CLASSNAME_ARRAY } from '../constants';
+import { uuid } from './crypto';
 import { signalStatus, statusFromStatuses } from './signal';
+
+export const sanitizeStages = (stages = [], shouldExcludeSignals) =>
+  stages.map(({ levels = [], name = 'New Stage', related = {} }) => ({
+    id: uuid(),
+    name,
+    related,
+    levels: levels.map(({ steps = [] }) => ({
+      id: uuid(),
+      steps: steps.map(({ signals = [], title }) => ({
+        id: uuid(),
+        title,
+        signals: shouldExcludeSignals
+          ? []
+          : signals.map(({ guid, name: signalName, type }) => ({
+              type,
+              guid,
+              name: signalName,
+            })),
+      })),
+    })),
+  }));
 
 export const addSignalStatuses = (stages = [], statuses = {}) =>
   stages.map(({ levels = [], ...stage }) => ({

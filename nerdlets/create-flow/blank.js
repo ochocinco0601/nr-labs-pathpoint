@@ -64,7 +64,7 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
   );
 
   return (
-    <div className="content details">
+    <div className="content details slim">
       <div>
         <div className="flow-subtitle">Create blank flow</div>
         <HeadingText type={HeadingText.TYPE.HEADING_4}>
