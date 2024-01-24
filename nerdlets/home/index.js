@@ -55,7 +55,7 @@ const HomeNerdlet = () => {
   const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
-  const [currentFlowIndex, setCurrentFlowIndex] = useState(-1);
+  const [currentFlowId, setCurrentFlowId] = useState();
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
   const [{ filters: platformStateFilters }] = usePlatformState();
@@ -89,32 +89,31 @@ const HomeNerdlet = () => {
     nerdlet.setConfig({
       accountPicker: true,
       actionControls: true,
-      actionControlButtons:
-        currentFlowIndex > -1
-          ? [
-              {
-                ...createFlowButtonAttributes,
-                onClick: newFlowHandler,
-              },
-              {
-                ...editButtonFlowSettingsAttributes,
-                onClick: () => setEditFlowSettings(true),
-              },
-              {
-                ...editButtonAttributes,
-                onClick: () => setMode(MODES.EDIT),
-              },
-            ]
-          : [
-              {
-                ...createFlowButtonAttributes,
-                onClick: newFlowHandler,
-              },
-            ],
+      actionControlButtons: currentFlowId
+        ? [
+            {
+              ...createFlowButtonAttributes,
+              onClick: newFlowHandler,
+            },
+            {
+              ...editButtonFlowSettingsAttributes,
+              onClick: () => setEditFlowSettings(true),
+            },
+            {
+              ...editButtonAttributes,
+              onClick: () => setMode(MODES.EDIT),
+            },
+          ]
+        : [
+            {
+              ...createFlowButtonAttributes,
+              onClick: newFlowHandler,
+            },
+          ],
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Project Hedgehog 🦔',
     });
-  }, [user, newFlowHandler, currentFlowIndex, editFlowSettings]);
+  }, [user, newFlowHandler, currentFlowId, editFlowSettings]);
 
   useEffect(() => {
     if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
@@ -133,15 +132,20 @@ const HomeNerdlet = () => {
       id: 'create-flow',
     });
 
-  const flowClickHandler = useCallback(
-    (id) => setCurrentFlowIndex(flows.findIndex((f) => f.id === id)),
-    [flows]
-  );
+  const flowClickHandler = useCallback((id) => setCurrentFlowId(id), []);
 
   const backToFlowsHandler = useCallback(() => {
-    setCurrentFlowIndex(-1);
+    setCurrentFlowId();
     setMode(MODES.INLINE);
   }, []);
+
+  const currentFlowDoc = useMemo(
+    () =>
+      currentFlowId
+        ? (flows || []).find(({ id }) => id === currentFlowId)?.document
+        : null,
+    [currentFlowId, flows]
+  );
 
   useEffect(() => {
     const { nerdStorageWriteDocument: { id } = {} } = flowWriter?.data || {};
@@ -159,12 +163,12 @@ const HomeNerdlet = () => {
     )
       return <GetStarted />;
 
-    if (currentFlowIndex > -1 && flows?.[currentFlowIndex]?.document) {
+    if (currentFlowDoc)
       return (
         <AppContext.Provider value={app}>
           <SidebarProvider>
             <Flow
-              flowDoc={flows[currentFlowIndex].document}
+              flowDoc={currentFlowDoc}
               onClose={backToFlowsHandler}
               mode={mode}
               setMode={setMode}
@@ -177,7 +181,7 @@ const HomeNerdlet = () => {
           </SidebarProvider>
         </AppContext.Provider>
       );
-    }
+    // }
     if (flows && flows.length) {
       backToFlowsHandler();
       return <FlowList flows={flows} onClick={flowClickHandler} />;
@@ -190,7 +194,7 @@ const HomeNerdlet = () => {
   }, [
     flows,
     flowsLoading,
-    currentFlowIndex,
+    currentFlowDoc,
     accountId,
     mode,
     flowClickHandler,
