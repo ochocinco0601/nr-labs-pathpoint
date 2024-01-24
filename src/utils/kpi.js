@@ -1,3 +1,14 @@
+import { uuid } from './crypto';
+
+export const sanitizeKpis = (kpis = []) =>
+  kpis.map((accountIds = [], name, nrqlQuery, type) => ({
+    id: uuid(),
+    accountIds,
+    name,
+    nrqlQuery,
+    type,
+  }));
+
 export const formatKpiHoverDatime = (dateClause) => {
   if (!dateClause) {
     return '';

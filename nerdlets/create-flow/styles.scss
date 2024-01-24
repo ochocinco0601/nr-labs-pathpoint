@@ -16,18 +16,137 @@
 
     &.details {
       flex-direction: column;
-      width: max-content;
+      height: 100%;
 
       .flow-subtitle {
         color: #6B757B;
         text-transform: uppercase;
       }
 
+      .import-form {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .field-row {
+          display: flex;
+          gap: 24px;
+
+          .import-options {
+            .import-options-label {
+              font-size: 12px;
+              font-weight: 600;
+              line-height: 16px;
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
+
+            .import-options-choices {
+              height: 24px;
+              display: flex;
+              gap: 16px;
+              align-items: center;
+
+              .import-options-choice {
+                display: flex;
+                align-items: center;
+                gap: 8px
+              }
+            }
+          }
+        }
+
+        .file-drop {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          padding: 12px;
+          gap: 8px;
+          border-radius: 4px;
+          border: 1px solid #ECEEEE;
+
+          .file-drop-instructions {
+            display: flex;
+
+            gap: 4px;
+
+            .instructions {
+              font-size: 12px;
+              font-weight: 600;
+              line-height: 16px;
+              
+              .visually-hidden {
+                position: absolute !important;
+                height: 1px;
+                width: 1px;
+                overflow: hidden;
+                clip: rect(1px, 1px, 1px, 1px);
+              }
+              
+              input.visually-hidden:is(:focus, :focus-within) + label {
+                outline: thin dotted;
+              }
+
+              .upload {
+                color: #0b6fd5;
+                cursor: pointer;
+              }
+
+              .ok, .error {
+                margin-left: 4px;
+              }
+
+              .ok {
+                color: #017952;
+              }
+
+              .error {
+                color: #df2d24;
+              }
+            }
+          }
+
+          .drop-zone {
+            flex: 1;
+            display: flex;
+
+            .drop-zone-instructions {
+              flex: 1;
+              display: flex;
+              background: #F6FAFD;
+              border-radius: 4px;
+              box-sizing: border-box;
+              justify-content: center;
+              align-items: center;
+              font-size: 12px;
+              font-weight: 600;
+              line-height: 16px;
+            }
+
+            textarea {
+              font-family: Menlo, "Consolas", monospace;
+              font-size: 11px;
+            }
+          }
+        }
+      }
+
       .button-bar {
         margin-top: 32px;
         display: flex;
         gap: 4px;
+
+        &.align-right {
+          margin-left: auto;
+        }
       }
+    }
+
+    &.slim {
+      width: max-content;
     }
 
     .create-flow-card {

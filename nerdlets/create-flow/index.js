@@ -15,6 +15,7 @@ import StartPage from './start';
 import BlankFlow from './blank';
 import { uuid } from '../../src/utils';
 import { NERD_STORAGE, UI_CONTENT } from '../../src/constants';
+import ImportFlow from './import';
 
 const CreateFlowNerdlet = () => {
   const [page, setPage] = useState('start');
@@ -66,6 +67,15 @@ const CreateFlowNerdlet = () => {
     if (page === 'blank')
       return (
         <BlankFlow
+          accountId={accountId}
+          accounts={accounts}
+          onCreate={createHandler}
+          onCancel={cancelHandler}
+        />
+      );
+    if (page === 'import')
+      return (
+        <ImportFlow
           accountId={accountId}
           accounts={accounts}
           onCreate={createHandler}
