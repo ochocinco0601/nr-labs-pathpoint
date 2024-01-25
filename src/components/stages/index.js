@@ -5,11 +5,12 @@ import {
   Button,
   HeadingText,
   NerdGraphQuery,
+  Switch,
   useEntitiesByGuidsQuery,
 } from 'nr1';
 
 import { Stage } from '../';
-import { MODES, SIGNAL_TYPES } from '../../constants';
+import { MODES, SIGNAL_TYPES, SIGNAL_EXPAND } from '../../constants';
 import {
   addSignalStatuses,
   alertConditionsStatusGQL,
@@ -40,6 +41,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const [stagesData, setStagesData] = useState({ stages });
   const [signalsDetails, setSignalsDetails] = useState({});
   const [selections, setSelections] = useState({});
+  const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
   const entitiesDetails = useEntitiesByGuidsQuery({
@@ -121,7 +123,10 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
 
   const toggleSelection = (type, id) => {
     if (!type || !id) return;
-    setSelections((s) => ({ ...s, [type]: { [id]: !s[type]?.[id] } }));
+    setSelections((s) => ({
+      ...s,
+      [type]: { [id]: !s[type]?.[id] },
+    }));
   };
 
   const dragStartHandler = (e, index) => {
@@ -165,7 +170,37 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
               >
                 Add a stage
               </Button>
-            ) : null}
+            ) : (
+              <>
+                <Switch
+                  checked={signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY}
+                  label="Unhealthy only"
+                  onChange={() =>
+                    setSignalExpandOption(
+                      (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
+                    )
+                  }
+                />
+                <Switch
+                  checked={signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY}
+                  label="Critical only"
+                  onChange={() =>
+                    setSignalExpandOption(
+                      (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
+                    )
+                  }
+                />
+              </>
+            )}
+            {mode === MODES.INLINE && (
+              <Switch
+                checked={signalExpandOption & SIGNAL_EXPAND.ALL}
+                label="Expand all steps"
+                onChange={() =>
+                  setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
+                }
+              />
+            )}
           </div>
           <div className="stages">
             {(stagesData.stages || []).map(({ id }, i) => (
@@ -173,6 +208,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
                 key={id}
                 stageId={id}
                 mode={mode}
+                signalExpandOption={signalExpandOption}
                 onDragStart={(e) => dragStartHandler(e, i)}
                 onDragOver={(e) => dragOverHandler(e, i)}
                 onDrop={(e) => dropHandler(e)}

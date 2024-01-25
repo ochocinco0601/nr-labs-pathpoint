@@ -12,14 +12,42 @@
   .status {
     min-width: 12px;
     display: inline-flex;
-    
+
     .icons-lib {
       @include fill-colors(
         $critical: 'critical',
         $success: 'success',
         $unknown: 'unknown',
         $warning: 'warning',
-      ); 
+      );
+    }
+  }
+
+  &.detail {
+    cursor: pointer;
+
+    &.critical :hover {
+      color: $critical;
+    }
+
+    &.warning :hover {
+      color: $warning;
+    }
+
+    &.selected {
+
+      &.critical {
+        .name {
+          color: $critical;
+        }
+      }
+
+      &.warning {
+        .name {
+          color: $warning;
+        }
+      }
+
     }
   }
 
