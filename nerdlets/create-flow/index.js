@@ -14,12 +14,12 @@ import { useFetchUser } from '../../src/hooks';
 import StartPage from './start';
 import BlankFlow from './blank';
 import { uuid } from '../../src/utils';
-import { NERD_STORAGE, UI_CONTENT } from '../../src/constants';
+import { MODES, NERD_STORAGE } from '../../src/constants';
 import ImportFlow from './import';
 
 const CreateFlowNerdlet = () => {
   const [page, setPage] = useState('start');
-  const [{ accountId }, setPlatformUrlState] = usePlatformState();
+  const [{ accountId }] = usePlatformState();
   const { user } = useFetchUser();
   const { data: accounts = [] } = useAccountsQuery();
 
@@ -53,8 +53,14 @@ const CreateFlowNerdlet = () => {
       });
       if (error) console.error('Error creating flow', error);
       if (writeId === id) {
-        setPlatformUrlState({ filters: UI_CONTENT.DUMMY_FILTER });
-        navigation.closeNerdlet();
+        navigation.openNerdlet({
+          id: 'home',
+          urlState: {
+            flow: { id },
+            mode: MODES.EDIT,
+            refreshFlows: true,
+          },
+        });
       }
     },
     [user]
