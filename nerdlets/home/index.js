@@ -59,7 +59,7 @@ const HomeNerdlet = () => {
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
   const [{ filters: platformStateFilters }] = usePlatformState();
-  const [nerdletState] = useNerdletState();
+  const [nerdletState, setNerdletState] = useNerdletState();
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
     useReadUserPreferences();
@@ -115,6 +115,13 @@ const HomeNerdlet = () => {
     });
   }, [user, newFlowHandler, currentFlowId, editFlowSettings]);
 
+  useEffect(() => setCurrentFlowId(nerdletState.flow?.id), [nerdletState.flow]);
+
+  useEffect(
+    () => setMode(nerdletState.mode || MODES.INLINE),
+    [nerdletState.mode]
+  );
+
   useEffect(() => {
     if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
       flowsRefetch();
@@ -132,12 +139,27 @@ const HomeNerdlet = () => {
       id: 'create-flow',
     });
 
-  const flowClickHandler = useCallback((id) => setCurrentFlowId(id), []);
+  const changeMode = useCallback(
+    (mode = MODES.INLINE) =>
+      setNerdletState({
+        mode,
+      }),
+    []
+  );
 
-  const backToFlowsHandler = useCallback(() => {
-    setCurrentFlowId();
-    setMode(MODES.INLINE);
-  }, []);
+  const flowClickHandler = useCallback(
+    (id) => setNerdletState({ flow: { id } }),
+    []
+  );
+
+  const backToFlowsHandler = useCallback(
+    () =>
+      setNerdletState({
+        flow: {},
+        mode: MODES.INLINE,
+      }),
+    []
+  );
 
   const currentFlowDoc = useMemo(
     () =>
@@ -171,7 +193,7 @@ const HomeNerdlet = () => {
               flowDoc={currentFlowDoc}
               onClose={backToFlowsHandler}
               mode={mode}
-              setMode={setMode}
+              setMode={changeMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
               editFlowSettings={editFlowSettings}
@@ -181,7 +203,7 @@ const HomeNerdlet = () => {
           </SidebarProvider>
         </AppContext.Provider>
       );
-    // }
+
     if (flows && flows.length) {
       backToFlowsHandler();
       return <FlowList flows={flows} onClick={flowClickHandler} />;
