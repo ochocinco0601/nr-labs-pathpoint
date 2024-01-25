@@ -1,3 +1,15 @@
+# [1.56.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.55.0...v1.56.0) (2024-01-25)
+
+
+### Bug Fixes
+
+* updating signalExpandOption state changes ([f704cf9](https://github.com/newrelic/nr-labs-hedgehog/commit/f704cf9c899f434fd368a3f1045e42c1ef0f5d12))
+
+
+### Features
+
+* update stacked mode view ([cfb8c07](https://github.com/newrelic/nr-labs-hedgehog/commit/cfb8c0753800fb11274ca813a9f4999d15a84ea8))
+
 # [1.55.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.54.0...v1.55.0) (2024-01-24)
 
 
