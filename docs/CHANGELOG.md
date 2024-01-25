@@ -1,3 +1,16 @@
+# [1.57.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.56.0...v1.57.0) (2024-01-25)
+
+
+### Bug Fixes
+
+* mode and current flow id getting reset ([3bbeec6](https://github.com/newrelic/nr-labs-hedgehog/commit/3bbeec68f06c5e991cbc2d5847fea205651e544b))
+
+
+### Features
+
+* place flow in edit mode on create ([060d6b6](https://github.com/newrelic/nr-labs-hedgehog/commit/060d6b669a14b3a9ed9b92d7ab00f0991e3c6783))
+* use url state ([a620e91](https://github.com/newrelic/nr-labs-hedgehog/commit/a620e91730e11de6503ef446c838ca17db77149f))
+
 # [1.56.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.55.0...v1.56.0) (2024-01-25)
 
 
