@@ -203,10 +203,9 @@ const HomeNerdlet = () => {
         </AppContext.Provider>
       );
 
-    if (flows && flows.length) {
-      backToFlowsHandler();
+    if (flows && flows.length)
       return <FlowList flows={flows} onClick={flowClickHandler} />;
-    }
+
     if (flowsLoading) {
       return <Spinner />;
     } else {
