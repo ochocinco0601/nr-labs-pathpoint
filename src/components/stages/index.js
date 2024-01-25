@@ -177,7 +177,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
                   label="Unhealthy only"
                   onChange={() =>
                     setSignalExpandOption(
-                      signalExpandOption ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
+                      (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
                     )
                   }
                 />
@@ -186,7 +186,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
                   label="Critical only"
                   onChange={() =>
                     setSignalExpandOption(
-                      signalExpandOption ^ SIGNAL_EXPAND.CRITICAL_ONLY
+                      (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
                     )
                   }
                 />
@@ -197,7 +197,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
                 checked={signalExpandOption & SIGNAL_EXPAND.ALL}
                 label="Expand all steps"
                 onChange={() =>
-                  setSignalExpandOption(signalExpandOption ^ SIGNAL_EXPAND.ALL)
+                  setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
                 }
               />
             )}
