@@ -15,7 +15,6 @@ import {
   Spinner,
   useAccountsQuery,
   useNerdletState,
-  usePlatformState,
 } from 'nr1';
 
 import {
@@ -58,7 +57,6 @@ const HomeNerdlet = () => {
   const [currentFlowId, setCurrentFlowId] = useState();
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
-  const [{ filters: platformStateFilters }] = usePlatformState();
   const [nerdletState, setNerdletState] = useNerdletState();
   const { user } = useFetchUser();
   const { userPreferences, loading: userPreferencesLoading } =
@@ -123,10 +121,11 @@ const HomeNerdlet = () => {
   );
 
   useEffect(() => {
-    if (platformStateFilters === UI_CONTENT.DUMMY_FILTER) {
+    if (nerdletState.refreshFlows) {
       flowsRefetch();
+      setNerdletState({ refreshFlows: false });
     }
-  }, [platformStateFilters]);
+  }, [nerdletState.refreshFlows]);
 
   useEffect(() => setFlows(flowsData || []), [flowsData]);
 

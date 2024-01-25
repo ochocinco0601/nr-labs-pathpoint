@@ -22,7 +22,7 @@ import {
 } from '../../src/hooks';
 import { queryFromGuidsArray } from '../../src/queries';
 import { entitiesDetailsFromQueryResults } from '../../src/utils';
-import { SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
+import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
 
 const MAX_GUIDS_PER_CALL = 25;
 
@@ -56,7 +56,7 @@ const SignalSelectionNerdlet = () => {
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
   const [signalsDetails, setSignalsDetails] = useState({});
-  const [{ accountId }, setPlatformUrlState] = usePlatformState();
+  const [{ accountId }] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
   ] = useNerdletState();
@@ -230,8 +230,14 @@ const SignalSelectionNerdlet = () => {
     ];
 
     await flowWriter.write({ documentId: flowId, document });
-    setPlatformUrlState({ filters: UI_CONTENT.DUMMY_FILTER });
-    navigation.closeNerdlet();
+    navigation.openNerdlet({
+      id: 'home',
+      urlState: {
+        flow: { id: flowId },
+        mode: MODES.EDIT,
+        refreshFlows: true,
+      },
+    });
   }, [flow, stageId, levelId, stepId, selectedEntities, selectedAlerts]);
 
   return (
