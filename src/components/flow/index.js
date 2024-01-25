@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Spinner, useAccountStorageMutation } from 'nr1';
+import { AccountStorageMutation, Spinner } from 'nr1';
 
 import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
 import FlowHeader from './header';
@@ -36,7 +36,7 @@ const Flow = forwardRef(
     ref
   ) => {
     const [flow, dispatch] = useReducer(flowReducer, {});
-    const [isDeletingFlow, setDeletingFlow] = useState(false);
+    const [isDeletingFlow, setIsDeletingFlow] = useState(false);
     const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
@@ -79,31 +79,21 @@ const Flow = forwardRef(
     const updateKpisHandler = (updatedKpis) =>
       flowUpdateHandler({ kpis: updatedKpis });
 
-    const [deleteFlow, { data: deleteFlowData, error: deleteFlowError }] =
-      useAccountStorageMutation({
-        actionType: useAccountStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
-        collection: NERD_STORAGE.FLOWS_COLLECTION,
-        accountId: accountId,
-      });
-
     const deleteFlowHandler = useCallback(async () => {
-      setDeletingFlow(true);
-      await deleteFlow({
+      setIsDeletingFlow(true);
+      const {
+        data: { nerdStorageDeleteDocument: { deleted } = {} } = {},
+        error,
+      } = await AccountStorageMutation.mutate({
+        actionType: AccountStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
+        collection: NERD_STORAGE.FLOWS_COLLECTION,
+        accountId,
         documentId: flow.id,
       });
-      setDeletingFlow(false);
-    }, [flow]);
-
-    useEffect(() => {
-      const { nerdStorageDeleteDocument: { deleted } = {} } =
-        deleteFlowData || {};
+      setIsDeletingFlow(false);
+      if (error) console.error('Error deleting flow', error);
       if (deleted) onClose();
-    }, [deleteFlowData]);
-
-    useEffect(() => {
-      if (deleteFlowError)
-        console.error('Error deleting flow', deleteFlowError);
-    }, [deleteFlowError]);
+    }, [flow]);
 
     const exportFlowHandler = useCallback(() => {
       const { created, ...exportableFlow } = flow || {}; // eslint-disable-line no-unused-vars
@@ -128,7 +118,7 @@ const Flow = forwardRef(
                   name={flow.name}
                   type="flow"
                   hidden={deleteModalHidden}
-                  onConfirm={() => deleteFlowHandler()}
+                  onConfirm={deleteFlowHandler}
                   onClose={() => setDeleteModalHidden(true)}
                   isDeletingFlow={isDeletingFlow}
                 />
