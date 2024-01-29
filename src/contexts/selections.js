@@ -1,3 +1,3 @@
 import { createContext } from 'react';
 
-export const SelectionsContext = createContext(null);
+export const SelectionsContext = createContext({});
