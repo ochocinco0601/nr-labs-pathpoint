@@ -26,7 +26,6 @@ import {
 } from '../../src/components';
 import {
   useFlowLoader,
-  useFlowWriter,
   useFetchUser,
   useReadUserPreferences,
 } from '../../src/hooks';
@@ -67,7 +66,6 @@ const HomeNerdlet = () => {
     loading: flowsLoading,
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
-  const flowWriter = useFlowWriter({ accountId, user });
   const { data: accounts = [] } = useAccountsQuery();
 
   useEffect(
@@ -99,7 +97,7 @@ const HomeNerdlet = () => {
             },
             {
               ...editButtonAttributes,
-              onClick: () => setMode(MODES.EDIT),
+              onClick: () => changeMode(MODES.EDIT),
             },
           ]
         : [
@@ -167,14 +165,6 @@ const HomeNerdlet = () => {
         : null,
     [currentFlowId, flows]
   );
-
-  useEffect(() => {
-    const { nerdStorageWriteDocument: { id } = {} } = flowWriter?.data || {};
-    if (id) {
-      setMode(MODES.EDIT);
-      flowClickHandler(id);
-    }
-  }, [flowWriter.data]);
 
   const currentView = useMemo(() => {
     if (

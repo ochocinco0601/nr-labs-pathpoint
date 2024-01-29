@@ -26,6 +26,7 @@ import { KPI_MODES, MODES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 import { useFetchKpis } from '../../hooks';
 import KpiEditButtons from './edit-buttons';
 import KpiModal from '../kpi-modal';
+import { FlowContext } from '../../contexts';
 import { uuid, formatKpiHoverDatime } from '../../utils';
 
 const blankKpi = ({
@@ -47,7 +48,8 @@ const metricFromQuery = (results) => ({
   previousValue: isNaN(results?.previousValue) ? '' : results?.previousValue,
 });
 
-const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
+const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
+  const { kpis = [] } = useContext(FlowContext);
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
@@ -310,7 +312,6 @@ const KpiBar = ({ kpis = [], onChange = () => null, mode = MODES.INLINE }) => {
 };
 
 KpiBar.propTypes = {
-  kpis: PropTypes.array,
   onChange: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
 };

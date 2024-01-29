@@ -37,7 +37,6 @@ const Flow = forwardRef(
   ) => {
     const [flow, dispatch] = useReducer(flowReducer, {});
     const [isDeletingFlow, setIsDeletingFlow] = useState(false);
-    const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
@@ -52,10 +51,6 @@ const Flow = forwardRef(
         }),
       [flowDoc]
     );
-
-    useEffect(() => {
-      setKpis(flow.kpis || []);
-    }, [flow]);
 
     const saveFlow = useCallback((document) => {
       setLastSavedTimestamp(0);
@@ -151,7 +146,7 @@ const Flow = forwardRef(
                   setEditFlowSettings={setEditFlowSettings}
                 />
                 <Stages mode={mode} saveFlow={saveFlow} />
-                <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
+                <KpiBar onChange={updateKpisHandler} mode={mode} />
               </>
             ) : (
               <Spinner />
