@@ -1,3 +1,10 @@
+## [1.57.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.0...v1.57.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* set default value for selections context ([e4f6dd9](https://github.com/newrelic/nr-labs-hedgehog/commit/e4f6dd99556187baaf538bea2c20384a468c1c92))
+
 # [1.57.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.56.0...v1.57.0) (2024-01-25)
 
 
