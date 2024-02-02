@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { Icon } from 'nr1';
-import { StatusIcon } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import { COMPONENTS, MODES, SIGNAL_TYPES, STATUSES } from '../../constants';
@@ -39,9 +38,9 @@ const Signal = ({
             type={IconsLib.TYPES.ALERT}
           />
         ) : (
-          <StatusIcon
-            style={{ margin: '0 3px' }}
-            status={mode === MODES.EDIT ? STATUSES.UNKNOWN : status}
+          <IconsLib
+            className={mode === MODES.EDIT ? STATUSES.UNKNOWN : status}
+            type={IconsLib.TYPES.ENTITY}
           />
         )}
       </div>

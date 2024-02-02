@@ -2,12 +2,19 @@ import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, navigation } from 'nr1';
-import { StatusIconsLayout } from '@newrelic/nr-labs-components';
+import SignalsGridLayout from '../signals-grid-layout';
 
 import Signal from '../signal';
 import StepHeader from './header';
 import DeleteConfirmModal from '../delete-confirm-modal';
-import { COMPONENTS, MODES, STATUSES } from '../../constants';
+import {
+  COMPONENTS,
+  MODES,
+  SIGNAL_EXPAND,
+  SIGNAL_TYPES,
+  STATUSES,
+} from '../../constants';
+
 import {
   FlowContext,
   FlowDispatchContext,
@@ -22,6 +29,8 @@ const Step = ({
   levelId,
   levelOrder,
   stepId,
+  signals = [],
+  signalExpandOption = SIGNAL_EXPAND.NONE,
   onDelete,
   onDragStart,
   onDragOver,
@@ -35,10 +44,10 @@ const Step = ({
   const { selections, toggleSelection } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
-  const [signals, setSignals] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [stageName, setStageName] = useState('');
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
+  const [signalsListView, setSignalsListView] = useState(false);
   const signalToDelete = useRef({});
   const isDragHandleClicked = useRef(false);
 
@@ -49,9 +58,9 @@ const Step = ({
     const step = steps.find(({ id }) => id === stepId) || {};
     setStageName(name);
     setTitle(step.title);
-    setSignals(step.signals || []);
     setStatus(step.status || STATUSES.UNKNOWN);
-  }, [stageId, levelId, stepId, stages]);
+    setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
+  }, [stageId, levelId, stepId, stages, signals]);
 
   const updateSignalsHandler = () =>
     navigation.openStackedNerdlet({
@@ -108,14 +117,18 @@ const Step = ({
 
   const SignalsGrid = memo(
     () => (
-      <StatusIconsLayout
-        statuses={signals.map(({ status = STATUSES.UNKNOWN } = {}) => ({
-          status,
-        }))}
+      <SignalsGridLayout
+        statuses={signals.map(
+          ({ status = STATUSES.UNKNOWN, type = SIGNAL_TYPES.ENTITY } = {}) => ({
+            status,
+            type,
+          })
+        )}
       />
     ),
-    [signals]
+    [signals, mode, signalExpandOption]
   );
+
   SignalsGrid.displayName = 'SignalsGrid';
 
   const SignalsList = memo(
@@ -131,13 +144,21 @@ const Step = ({
           mode={mode}
         />
       )),
-    [signals, mode]
+    [signals, mode, signalExpandOption]
   );
   SignalsList.displayName = 'SignalsList';
 
+  const handleStepHeaderClick = () => {
+    if (
+      signals.length &&
+      [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
+    )
+      setSignalsListView((slw) => !slw);
+  };
+
   return (
     <div
-      className={`step ${mode === MODES.STACKED ? status : ''} ${
+      className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${status} ${
         [STATUSES.CRITICAL, STATUSES.WARNING].includes(status) ? 'detail' : ''
       } ${
         selections[COMPONENTS.STEP]?.[stepId] && selections[COMPONENTS.SIGNAL]
@@ -159,6 +180,7 @@ const Step = ({
         onDragHandle={dragHandleHandler}
         mode={mode}
         saveFlow={saveFlow}
+        handleStepHeaderClick={handleStepHeaderClick}
       />
       {mode === MODES.EDIT ? (
         <>
@@ -183,8 +205,13 @@ const Step = ({
           />
         </>
       ) : mode === MODES.INLINE ? (
-        <div className="signals-grids">
-          <SignalsGrid />
+        <div className="signals inline">
+          {Boolean(signalExpandOption & SIGNAL_EXPAND.ALL) ||
+          signalsListView ? (
+            <SignalsList />
+          ) : (
+            <SignalsGrid />
+          )}
         </div>
       ) : (
         ''
@@ -198,6 +225,8 @@ Step.propTypes = {
   levelId: PropTypes.string,
   levelOrder: PropTypes.string,
   stepId: PropTypes.string,
+  signals: PropTypes.array,
+  signalExpandOption: PropTypes.number,
   onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,

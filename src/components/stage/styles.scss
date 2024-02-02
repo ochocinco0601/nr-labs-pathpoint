@@ -83,8 +83,12 @@
       height: 100%;
 
       &.stacked {
-        height: calc((100% - 24px) / 2);
-        min-height: calc((100% - 24px) / 2);
+        max-height: calc((100% - 24px) / 3);
+        padding: 0 16px 8px;
+      }
+
+      &.inline {
+        padding: 0 16px 16px;
       }
 
       .section-title {
@@ -92,14 +96,13 @@
         align-items: center;
         box-sizing: border-box;
         gap: 0.25rem;
-        padding: 0 16px 8px 
+        padding: 0 0 8px;
       }
 
       .step-groups {
         display: flex;
         flex-direction: column;
         gap: 16px;
-        padding: 0 24px;
         box-sizing: border-box;
         overflow-y: auto;
       }
@@ -108,8 +111,17 @@
     .signals {
       display: flex;
       flex-direction: column;
-      height: calc((100% - 24px) / 2);
-      padding: 8px 24px;
+      gap: 4px;
+
+      &.stacked {
+        height: calc((100% - 72px) / 3 * 2);
+        padding: 16px 16px;
+      }
+
+      &.inline {
+        max-height: 160px;
+        overflow-y: scroll;
+      }
 
       .section-title {
         display: flex;
@@ -122,7 +134,7 @@
       .signals-listing {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 4px;
         overflow-y: auto;
         margin-bottom: 16px;
         box-sizing: border-box;

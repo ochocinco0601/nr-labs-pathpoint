@@ -4,23 +4,18 @@
   background-color: #fff;
   max-width: 200px;
 
-  &.critical {
-    border: 1px solid $critical;
-  }
+  &.stacked {
+    &.critical {
+      border: 1px solid $critical;
+    }
 
-  &.warning {
-    border: 1px solid $warning;
+    &.warning {
+      border: 1px solid $warning;
+    }
   }
 
   &.detail {
     cursor: pointer;
-
-    &.selected {
-      @include status-colors(
-        $critical: 'critical',
-        $warning: 'warning',
-      );
-    }
   }
 
   .edit-signals-list {
@@ -32,8 +27,8 @@
 
   .step-header {
     display: grid;
-    gap: 8px;
     align-items: center;
+    margin-bottom: 4px;
 
     .title {
       white-space: nowrap;
