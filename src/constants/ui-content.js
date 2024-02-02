@@ -1,7 +1,9 @@
 export const UI_CONTENT = {
   GLOBAL: {
     BUTTON_LABEL_CREATE_FLOW: 'Create new flow',
-    BUTTON_LABEL_EDIT_MODE: 'Edit Mode',
+    BUTTON_LABEL_EDIT_MODE: 'Edit mode',
+    BUTTON_LABEL_EDIT_SETTINGS: 'Settings',
+    BUTTON_LABEL_EXPORT_FLOW: 'Export flow as JSON',
     BUTTON_LABEL_EXIT_EDIT_MODE: 'Done Editing',
     BUTTON_LABEL_INLINE_MODE: 'Inline',
     BUTTON_LABEL_STACKED_MODE: 'Stacked',
