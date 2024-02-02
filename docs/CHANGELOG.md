@@ -1,3 +1,10 @@
+# [1.58.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.1...v1.58.0) (2024-02-02)
+
+
+### Features
+
+* updated action buttons ([ad264c5](https://github.com/newrelic/nr-labs-hedgehog/commit/ad264c5ba6128d216c8c20c05d9b2a3671dbdeda))
+
 ## [1.57.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.0...v1.57.1) (2024-01-31)
 
 
