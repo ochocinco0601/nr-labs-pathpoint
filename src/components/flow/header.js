@@ -26,7 +26,6 @@ const FlowHeader = ({
   setMode = () => null,
   flows = [],
   onSelectFlow = () => null,
-  onExportFlow = () => null,
   onDeleteFlow = () => null,
   lastSavedTimestamp,
   resetLastSavedTimestamp = () => null,
@@ -122,14 +121,6 @@ const FlowHeader = ({
         </PopoverBody>
       </Popover>
       <div className="flow-header-actions">
-        <Button
-          type={Button.TYPE.PLAIN}
-          sizeType={Button.SIZE_TYPE.SMALL}
-          iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__DOWNLOAD}
-          onClick={onExportFlow}
-        >
-          {UI_CONTENT.FLOW.BUTTON_EXPORT}
-        </Button>
         <SegmentedControl
           className="view-mode"
           value={mode}
@@ -162,7 +153,6 @@ FlowHeader.propTypes = {
   setMode: PropTypes.func,
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
-  onExportFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
   lastSavedTimestamp: PropTypes.number,
   resetLastSavedTimestamp: PropTypes.func,
