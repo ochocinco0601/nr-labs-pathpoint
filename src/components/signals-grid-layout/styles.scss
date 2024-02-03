@@ -1,19 +1,17 @@
-.new-status-icons-wrapper {
+.icons-grid-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 3px;
+  margin-bottom: 24px;
 }
 
-.new-status-icons-container {
+.icons-grid-container {
   font-size: 0;
 
   &::before {
     content: "";
-    width: 6px;
+    width: 8px;
     float: left;
     height: 120%;
-    shape-outside: repeating-linear-gradient(#0000 0 18px, #000 0 20px);
+    shape-outside: repeating-linear-gradient(#0000 0 24px, #000 0 32px);
   }
 
   .icons-lib {

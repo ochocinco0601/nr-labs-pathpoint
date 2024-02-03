@@ -208,9 +208,13 @@ const Step = ({
         <div className="signals inline">
           {Boolean(signalExpandOption & SIGNAL_EXPAND.ALL) ||
           signalsListView ? (
-            <SignalsList />
+            <div className="list">
+              <SignalsList />
+            </div>
           ) : (
-            <SignalsGrid />
+            <div className="grid">
+              <SignalsGrid />
+            </div>
           )}
         </div>
       ) : (

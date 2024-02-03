@@ -47,14 +47,18 @@ const SignalsGridLayout = ({ statuses }) => {
   }, []);
 
   return (
-    <div className="new-status-icons-wrapper" ref={wrapperRef}>
-      <div className="new-status-icons-container" style={{ width }}>
-        {entityGrid}
+    <>
+      <div className="icons-grid-wrapper" ref={wrapperRef}>
+        <div className="icons-grid-container" style={{ width }}>
+          {width && entityGrid.length ? entityGrid : null}
+        </div>
       </div>
-      <div className="new-status-icons-container" style={{ width }}>
-        {alertGrid}
+      <div className="icons-grid-wrapper" ref={wrapperRef}>
+        <div className="icons-grid-container" style={{ width }}>
+          {width && alertGrid?.length ? alertGrid : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -119,8 +119,16 @@
       }
 
       &.inline {
-        max-height: 160px;
-        overflow-y: scroll;
+
+        .grid {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .list {
+          max-height: 160px;
+          overflow-y: scroll;
+        }
       }
 
       .section-title {
