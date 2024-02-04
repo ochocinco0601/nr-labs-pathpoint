@@ -1,10 +1,10 @@
 .icons-grid-wrapper {
   display: flex;
-  margin-bottom: 24px;
 }
 
 .icons-grid-container {
   font-size: 0;
+  margin-bottom: 8px;
 
   &::before {
     content: "";
