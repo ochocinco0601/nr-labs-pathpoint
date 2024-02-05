@@ -27,9 +27,11 @@ const Flow = forwardRef(
       flowDoc = {},
       onClose,
       mode = MODES.INLINE,
+      prevNonEditMode,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
+      onTransition,
       editFlowSettings = false,
       setEditFlowSettings = () => null,
     },
@@ -39,6 +41,7 @@ const Flow = forwardRef(
     const [isDeletingFlow, setIsDeletingFlow] = useState(false);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
+    const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
     const flowWriter = useFlowWriter({ accountId, user });
 
@@ -52,10 +55,14 @@ const Flow = forwardRef(
       [flowDoc]
     );
 
-    const saveFlow = useCallback((document) => {
+    useEffect(() => {
+      if (isPreview) setMode(prevNonEditMode);
+    }, [isPreview]);
+
+    const saveFlow = useCallback(async (document) => {
       setLastSavedTimestamp(0);
       const documentId = document.id;
-      flowWriter.write({ documentId, document });
+      await flowWriter.write({ documentId, document });
     }, []);
 
     const flowUpdateHandler = (updates = {}) =>
@@ -63,8 +70,21 @@ const Flow = forwardRef(
         type: FLOW_DISPATCH_TYPES.UPDATED,
         component: FLOW_DISPATCH_COMPONENTS.FLOW,
         updates,
+      });
+
+    const persistFlowHandler = () => {
+      dispatch({
+        type: FLOW_DISPATCH_TYPES.PERSISTED,
+        component: FLOW_DISPATCH_COMPONENTS.FLOW,
         saveFlow,
       });
+      if (onTransition && prevNonEditMode) onTransition(prevNonEditMode);
+    };
+
+    const discardFlowHandler = useCallback(() => {
+      setIsPreview(false);
+      if (onTransition) onTransition(prevNonEditMode);
+    }, [prevNonEditMode]);
 
     useEffect(() => {
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
@@ -89,6 +109,11 @@ const Flow = forwardRef(
       if (error) console.error('Error deleting flow', error);
       if (deleted) onClose();
     }, [flow]);
+
+    const togglePreview = () => {
+      if (isPreview && mode !== MODES.EDIT) setMode(MODES.EDIT);
+      setIsPreview((p) => !p);
+    };
 
     return (
       <FlowContext.Provider value={flow}>
@@ -119,7 +144,11 @@ const Flow = forwardRef(
                 <FlowHeader
                   name={flow.name}
                   imageUrl={flow.imageUrl}
+                  isPreview={isPreview}
+                  onPreview={togglePreview}
                   onUpdate={flowUpdateHandler}
+                  onDiscard={discardFlowHandler}
+                  onPersist={persistFlowHandler}
                   onClose={onClose}
                   mode={mode}
                   setMode={setMode}
@@ -131,7 +160,7 @@ const Flow = forwardRef(
                   editFlowSettings={editFlowSettings}
                   setEditFlowSettings={setEditFlowSettings}
                 />
-                <Stages mode={mode} saveFlow={saveFlow} />
+                <Stages mode={mode} />
                 <KpiBar onChange={updateKpisHandler} mode={mode} />
               </>
             ) : (
@@ -148,8 +177,10 @@ Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  prevNonEditMode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
+  onTransition: PropTypes.func,
   onSelectFlow: PropTypes.func,
   editFlowSettings: PropTypes.bool,
   setEditFlowSettings: PropTypes.func,
