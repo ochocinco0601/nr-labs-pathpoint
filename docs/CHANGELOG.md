@@ -1,3 +1,10 @@
+# [1.59.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.58.0...v1.59.0) (2024-02-06)
+
+
+### Features
+
+* batched updates ([08744ff](https://github.com/newrelic/nr-labs-hedgehog/commit/08744ff22452fe403f92065cca39ced3e73a9f1a))
+
 # [1.58.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.1...v1.58.0) (2024-02-02)
 
 
