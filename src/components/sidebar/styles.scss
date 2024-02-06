@@ -4,6 +4,8 @@
   margin-left: 8px;
   background-color: #fff;
   border-top: 5px solid transparent;
+  display: flex;
+  flex-direction: column;
 
   @include border-colors(
     $critical: 'critical',
@@ -26,6 +28,8 @@
   }
   
   .content {
+    flex: 1;
+    overflow: auto;
     padding: 8px;
   }
 }

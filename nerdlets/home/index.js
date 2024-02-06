@@ -52,6 +52,10 @@ const ACTION_BTN_ATTRIBS = {
     type: Button.TYPE.TERTIARY,
     label: UI_CONTENT.GLOBAL.BUTTON_LABEL_EXPORT_FLOW,
   },
+  AUDIT_LOG: {
+    type: Button.TYPE.TERTIARY,
+    label: UI_CONTENT.GLOBAL.BUTTON_LABEL_AUDIT_LOG,
+  },
 };
 
 const HomeNerdlet = () => {
@@ -60,6 +64,7 @@ const HomeNerdlet = () => {
   const [prevNonEditMode, setPrevNonEditMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowId, setCurrentFlowId] = useState();
+  const [isAuditLogShown, setisAuditLogShown] = useState(false);
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const [transitionToFlow, setTransitionToFlow] = useState(false);
   const [transitionIntervalId, setTransitionIntervalId] = useState();
@@ -120,6 +125,10 @@ const HomeNerdlet = () => {
             {
               ...ACTION_BTN_ATTRIBS.EXPORT_FLOW,
               onClick: () => exportFlowDoc(flows, currentFlowId),
+            },
+            {
+              ...ACTION_BTN_ATTRIBS.AUDIT_LOG,
+              onClick: () => setisAuditLogShown(true),
             },
             ...defaultButtons,
             {
@@ -196,6 +205,8 @@ const HomeNerdlet = () => {
     if (newMode) changeMode(newMode);
   }, []);
 
+  const auditLogCloseHandler = () => setisAuditLogShown(false);
+
   const currentFlowDoc = useMemo(
     () => (currentFlowId ? flowDocument(flows, currentFlowId) : null),
     [currentFlowId, flows]
@@ -222,6 +233,8 @@ const HomeNerdlet = () => {
               flows={flows}
               onSelectFlow={flowClickHandler}
               onTransition={transitionToMode}
+              isAuditLogShown={isAuditLogShown}
+              onAuditLogClose={auditLogCloseHandler}
               editFlowSettings={editFlowSettings}
               setEditFlowSettings={setEditFlowSettings}
             />
@@ -245,6 +258,7 @@ const HomeNerdlet = () => {
     accountId,
     mode,
     flowClickHandler,
+    isAuditLogShown,
     editFlowSettings,
   ]);
 
