@@ -57,9 +57,12 @@ const ACTION_BTN_ATTRIBS = {
 const HomeNerdlet = () => {
   const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
+  const [prevNonEditMode, setPrevNonEditMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowId, setCurrentFlowId] = useState();
   const [editFlowSettings, setEditFlowSettings] = useState(false);
+  const [transitionToFlow, setTransitionToFlow] = useState(false);
+  const [transitionIntervalId, setTransitionIntervalId] = useState();
   const { accountId } = useContext(PlatformStateContext);
   const [nerdletState, setNerdletState] = useNerdletState();
   const { user } = useFetchUser();
@@ -72,6 +75,12 @@ const HomeNerdlet = () => {
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const { data: accounts = [] } = useAccountsQuery();
+
+  useEffect(() => {
+    return () => {
+      if (transitionIntervalId) clearInterval(transitionIntervalId);
+    };
+  }, [transitionIntervalId]);
 
   useEffect(
     () =>
@@ -131,10 +140,11 @@ const HomeNerdlet = () => {
 
   useEffect(() => setCurrentFlowId(nerdletState.flow?.id), [nerdletState.flow]);
 
-  useEffect(
-    () => setMode(nerdletState.mode || MODES.INLINE),
-    [nerdletState.mode]
-  );
+  useEffect(() => {
+    const newMode = nerdletState.mode || MODES.INLINE;
+    if (newMode !== MODES.EDIT) setPrevNonEditMode(newMode);
+    setMode(newMode);
+  }, [nerdletState.mode]);
 
   useEffect(() => {
     if (nerdletState.refreshFlows) {
@@ -155,9 +165,9 @@ const HomeNerdlet = () => {
     });
 
   const changeMode = useCallback(
-    (mode = MODES.INLINE) =>
+    (newMode = MODES.INLINE) =>
       setNerdletState({
-        mode,
+        mode: newMode,
       }),
     []
   );
@@ -175,6 +185,16 @@ const HomeNerdlet = () => {
       }),
     []
   );
+
+  const transitionToMode = useCallback((newMode) => {
+    setTransitionToFlow(true);
+    setTransitionIntervalId(
+      setInterval(() => {
+        setTransitionToFlow(false);
+      }, 3000)
+    );
+    if (newMode) changeMode(newMode);
+  }, []);
 
   const currentFlowDoc = useMemo(
     () => (currentFlowId ? flowDocument(flows, currentFlowId) : null),
@@ -198,8 +218,10 @@ const HomeNerdlet = () => {
               onClose={backToFlowsHandler}
               mode={mode}
               setMode={changeMode}
+              prevNonEditMode={prevNonEditMode}
               flows={flows}
               onSelectFlow={flowClickHandler}
+              onTransition={transitionToMode}
               editFlowSettings={editFlowSettings}
               setEditFlowSettings={setEditFlowSettings}
             />
@@ -226,7 +248,11 @@ const HomeNerdlet = () => {
     editFlowSettings,
   ]);
 
-  return <div className="container">{currentView}</div>;
+  return transitionToFlow ? (
+    <Spinner />
+  ) : (
+    <div className="container">{currentView}</div>
+  );
 };
 
 export default HomeNerdlet;
