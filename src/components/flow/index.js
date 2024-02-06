@@ -10,11 +10,22 @@ import PropTypes from 'prop-types';
 
 import { AccountStorageMutation, Spinner } from 'nr1';
 
-import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
+import {
+  KpiBar,
+  Stages,
+  DeleteConfirmModal,
+  EditFlowSettingsModal,
+  AuditLog,
+} from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { AppContext, FlowContext, FlowDispatchContext } from '../../contexts';
+import {
+  AppContext,
+  FlowContext,
+  FlowDispatchContext,
+  useSidebar,
+} from '../../contexts';
 import {
   FLOW_DISPATCH_COMPONENTS,
   FLOW_DISPATCH_TYPES,
@@ -32,6 +43,8 @@ const Flow = forwardRef(
       flows = [],
       onSelectFlow = () => null,
       onTransition,
+      isAuditLogShown = false,
+      onAuditLogClose,
       editFlowSettings = false,
       setEditFlowSettings = () => null,
     },
@@ -43,6 +56,7 @@ const Flow = forwardRef(
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
+    const { openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
 
     useEffect(
@@ -58,6 +72,14 @@ const Flow = forwardRef(
     useEffect(() => {
       if (isPreview) setMode(prevNonEditMode);
     }, [isPreview]);
+
+    useEffect(() => {
+      if (isAuditLogShown)
+        openSidebar({
+          content: <AuditLog flowId={flowDoc.id} accountId={accountId} />,
+          onClose: onAuditLogClose,
+        });
+    }, [isAuditLogShown, flowDoc]);
 
     const saveFlow = useCallback(async (document) => {
       setLastSavedTimestamp(0);
@@ -182,6 +204,8 @@ Flow.propTypes = {
   flows: PropTypes.array,
   onTransition: PropTypes.func,
   onSelectFlow: PropTypes.func,
+  isAuditLogShown: PropTypes.bool,
+  onAuditLogClose: PropTypes.func,
   editFlowSettings: PropTypes.bool,
   setEditFlowSettings: PropTypes.func,
 };
