@@ -1,3 +1,15 @@
+# [1.60.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.59.0...v1.60.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* sidebar overflow and onclose ([15e3b46](https://github.com/newrelic/nr-labs-hedgehog/commit/15e3b46b7598335192f1a202fb5289fa546681b8))
+
+
+### Features
+
+* audit log ([4c27200](https://github.com/newrelic/nr-labs-hedgehog/commit/4c2720095a7e0c4742ee2152c9f2d229d3c50446))
+
 # [1.59.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.58.0...v1.59.0) (2024-02-06)
 
 
