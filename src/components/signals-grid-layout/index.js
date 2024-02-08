@@ -5,38 +5,35 @@ import IconsLib from '../icons-lib';
 import { SIGNAL_TYPES } from '../../constants';
 
 const SignalsGridLayout = ({ statuses }) => {
-  const [entityGrid, setEntityGrid] = useState(null);
-  const [alertGrid, setAlertGrid] = useState(null);
+  const [grid, setGridData] = useState({ entities: [], alerts: [] });
   const [width, setWidth] = useState(null);
   const wrapperRef = useRef();
 
   useEffect(() => {
+    const renderSignalIcon = ({ style, type, status, ...statusProps }, i) => (
+      <IconsLib
+        key={i}
+        className={status}
+        type={type}
+        {...statusProps}
+        style={{ style, margin: 1, marginBottom: -3 }}
+      />
+    );
     if (statuses) {
-      setEntityGrid(
-        statuses
-          .filter((s) => s.type === SIGNAL_TYPES.ENTITY)
-          .map(({ style, type, status, ...statusProps }, i) => (
-            <IconsLib
-              key={i}
-              className={status}
-              type={type}
-              {...statusProps}
-              style={{ style, margin: 1, marginBottom: -3 }}
-            />
-          ))
-      );
-      setAlertGrid(
-        statuses
-          .filter((s) => s.type === SIGNAL_TYPES.ALERT)
-          .map(({ style, type, status, ...statusProps }, i) => (
-            <IconsLib
-              key={i}
-              className={status}
-              type={type}
-              {...statusProps}
-              style={{ style, margin: 1, marginBottom: -3 }}
-            />
-          ))
+      setGridData(
+        statuses.reduce(
+          (acc, signal, index) => ({
+            entities:
+              signal.type === SIGNAL_TYPES.ENTITY
+                ? [...acc.entities, renderSignalIcon(signal, index)]
+                : [...acc.entities],
+            alerts:
+              signal.type === SIGNAL_TYPES.ALERT
+                ? [...acc.alerts, renderSignalIcon(signal, index)]
+                : [...acc.alerts],
+          }),
+          { entities: [], alerts: [] }
+        )
       );
     }
   }, [statuses]);
@@ -49,18 +46,18 @@ const SignalsGridLayout = ({ statuses }) => {
   return (
     <>
       <div className="icons-grid-wrapper" ref={wrapperRef}>
-        {width && entityGrid.length ? (
+        {width && grid.entities.length ? (
           <div className="icons-grid-container" style={{ width }}>
-            {entityGrid}
+            {grid.entities}
           </div>
         ) : (
           ''
         )}
       </div>
       <div className="icons-grid-wrapper" ref={wrapperRef}>
-        {width && alertGrid.length ? (
+        {width && grid.alerts.length ? (
           <div className="icons-grid-container" style={{ width }}>
-            {alertGrid}
+            {grid.alerts}
           </div>
         ) : (
           ''
