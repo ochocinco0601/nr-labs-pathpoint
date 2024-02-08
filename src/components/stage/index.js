@@ -246,9 +246,7 @@ const Stage = ({
                 </Tooltip>
               </>
             ) : (
-              <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                &nbsp;
-              </HeadingText>
+              <div className="empty-header"></div>
             )}
             {mode === MODES.EDIT ? (
               <AddStep stageId={stageId} saveFlow={saveFlow} />
@@ -261,7 +259,9 @@ const Stage = ({
                   (acc, cur) =>
                     signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
                     signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
-                    acc + cur.signals.length,
+                    acc + cur.signals.length
+                      ? acc + cur.signals.length
+                      : acc,
                   0
                 )
               )
@@ -289,9 +289,7 @@ const Stage = ({
                   Signals
                 </HeadingText>
               ) : (
-                <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                  &nbsp;
-                </HeadingText>
+                <div className="empty-header"></div>
               )}
             </div>
             <div className="signals-listing">
