@@ -76,16 +76,15 @@
     flex-direction: column;
     gap: 16px;
     height: calc(100% - 72px);
+    justify-content: space-between;
 
     .levels {
       display: flex;
       flex-direction: column;
-      height: 100%;
 
       &.stacked {
-        height: calc((100% - 24px) / 3);
-        min-height: calc((100% - 24px) / 3);
-        margin: 0 16px 8px;
+        height: calc((100% - 24px) / 5 * 3);
+        margin: 0 16px;
       }
 
       .section-title {
@@ -111,8 +110,8 @@
       gap: 4px;
 
       &.stacked {
-        height: calc((100% - 36px) / 3 * 2);
-        margin: 16px;
+        height: calc((100% - 24px) / 5 * 2);
+        margin: 0 16px;
       }
 
       &.inline {
