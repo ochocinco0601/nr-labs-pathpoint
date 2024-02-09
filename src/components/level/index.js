@@ -6,8 +6,20 @@ import { Icon } from 'nr1';
 import Step from '../step';
 import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
-import { MODES, STATUSES } from '../../constants';
-import { FlowDispatchContext, StagesContext } from '../../contexts';
+import {
+  COMPONENTS,
+  MODES,
+  SIGNAL_EXPAND,
+  SIGNAL_TYPES,
+  STATUSES,
+} from '../../constants';
+
+import {
+  FlowDispatchContext,
+  StagesContext,
+  SelectionsContext,
+} from '../../contexts';
+
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Level = ({
@@ -19,9 +31,11 @@ const Level = ({
   onDrop,
   mode = MODES.INLINE,
   saveFlow,
+  signalExpandOption = SIGNAL_EXPAND.NONE,
 }) => {
   const stages = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
+  const { selections } = useContext(SelectionsContext);
   const [steps, setSteps] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -40,12 +54,76 @@ const Level = ({
   const stepsRows = useMemo(() => {
     if (!steps.length) return [];
 
-    return steps.reduce(
-      (acc, { id }, index, arr) => {
+    const orderedStatuses = [
+      STATUSES.CRITICAL,
+      STATUSES.WARNING,
+      STATUSES.SUCCESS,
+      STATUSES.UNKNOWN,
+    ];
+    const signalTypes = [SIGNAL_TYPES.ENTITY, SIGNAL_TYPES.ALERT];
+
+    let validStatuses = [...orderedStatuses];
+
+    if (signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY)
+      validStatuses = [STATUSES.CRITICAL, STATUSES.WARNING];
+
+    if (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY)
+      validStatuses = [STATUSES.CRITICAL];
+
+    const filteredSteps = steps.filter(
+      (step) =>
+        (Boolean(signalExpandOption % SIGNAL_EXPAND.ALL) &&
+          step.signals.length) ||
+        (!(signalExpandOption % SIGNAL_EXPAND.ALL) &&
+          validStatuses.includes(step.status))
+    );
+
+    return filteredSteps.reduce(
+      (acc, { id, signals = [], status }, index, arr) => {
+        let startNextRow = false;
+        if (
+          mode === MODES.INLINE &&
+          ((signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
+            [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) ||
+            (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
+              status === STATUSES.CRITICAL) ||
+            signalExpandOption & SIGNAL_EXPAND.ALL)
+        ) {
+          startNextRow = true;
+        }
+
+        const filteredSortedSignals = signals
+          .filter((s) => validStatuses.includes(s.status))
+          .sort((a, b) => {
+            const a1 =
+              a.status === STATUSES.UNKNOWN &&
+              a.guid === selections[COMPONENTS.SIGNAL]?.[a.guid]
+                ? 1.5 + signalTypes.indexOf(a.type) * 0.1
+                : orderedStatuses.indexOf(a.status) +
+                  signalTypes.indexOf(a.type) * 0.1;
+
+            const b1 =
+              b.status === STATUSES.UNKNOWN &&
+              b.guid === selections[COMPONENTS.SIGNAL]?.[b.guid]
+                ? 1.5 + signalTypes.indexOf(b.type) * 0.1
+                : orderedStatuses.indexOf(b.status) +
+                  signalTypes.indexOf(b.type) * 0.1;
+
+            return a1 - b1;
+          });
+
         const isLastStep = index + 1 === arr.length;
         const cell = (
           <div
-            className={`step-cell ${mode === MODES.EDIT ? 'edit' : ''}`}
+            className={`step-cell ${
+              mode === MODES.EDIT
+                ? 'edit'
+                : mode === MODES.STACKED &&
+                  signals?.length &&
+                  [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
+                ? status
+                : ''
+            }`}
             key={id}
           >
             <Step
@@ -53,6 +131,8 @@ const Level = ({
               levelId={levelId}
               levelOrder={order}
               stepId={id}
+              signals={filteredSortedSignals}
+              signalExpandOption={signalExpandOption}
               onDragStart={(e) => stepDragStartHandler(e, index)}
               onDragOver={(e) => stepDragOverHandler(e, index)}
               onDrop={(e) => stepDropHandler(e)}
@@ -71,8 +151,41 @@ const Level = ({
             </div>
           );
         } else {
+          if (
+            (signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
+              !['critical', 'warning'].includes(status)) ||
+            (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
+              status !== 'critical')
+          ) {
+            if (mode === MODES.STACKED && acc.cols.length) {
+              acc.rows.push(
+                <div
+                  className={`steps-row cols-${acc.cols.length}`}
+                  key={`steps_row_${order}_${index}`}
+                >
+                  {[...acc.cols]}
+                </div>
+              );
+              acc.cols = [];
+            }
+            return isLastStep ? acc.rows : acc;
+          }
+
           acc.cols.push(cell);
-          if (index % 3 === 2 || isLastStep) {
+
+          if (acc.cols.length === 3) startNextRow = true;
+          if (isLastStep) startNextRow = true;
+          if (mode === MODES.INLINE) {
+            if (['critical', 'warning'].includes(status)) startNextRow = true;
+            if (
+              !isLastStep &&
+              ['critical', 'warning'].includes(arr[index + 1].status)
+            ) {
+              startNextRow = true;
+            }
+          }
+
+          if (startNextRow) {
             acc.rows.push(
               <div
                 className={`steps-row cols-${acc.cols.length}`}
@@ -88,7 +201,7 @@ const Level = ({
       },
       { rows: [], cols: [] }
     );
-  }, [steps, mode]);
+  }, [steps, mode, signalExpandOption]);
 
   const deleteHandler = () => {
     setDeleteModalHidden(true);
@@ -146,7 +259,7 @@ const Level = ({
     dragOverItemIndex.current = null;
   };
 
-  return (
+  return mode === MODES.EDIT || stepsRows.length ? (
     <div
       className="level"
       draggable={mode === MODES.EDIT}
@@ -188,6 +301,8 @@ const Level = ({
       )}
       <div className="steps">{stepsRows}</div>
     </div>
+  ) : (
+    ''
   );
 };
 
@@ -201,6 +316,7 @@ Level.propTypes = {
   onDrop: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
   saveFlow: PropTypes.func,
+  signalExpandOption: PropTypes.number,
 };
 
 export default Level;

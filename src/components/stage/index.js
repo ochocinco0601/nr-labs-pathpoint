@@ -10,6 +10,7 @@ import AddStep from '../add-step';
 import {
   COMPONENTS,
   MODES,
+  SIGNAL_EXPAND,
   SIGNAL_TYPES,
   STATUSES,
   UI_CONTENT,
@@ -27,6 +28,7 @@ const Stage = ({
   stageId,
   mode = MODES.INLINE,
   signalExpandOption = 0,
+  stageIndex = -1,
   onDragStart,
   onDragOver,
   onDrop,
@@ -86,7 +88,7 @@ const Stage = ({
 
   const SignalsList = memo(() => {
     // set statuses in order of most critical to least critical -> 0: critical, 1: warning, 2: success, 3: unknown
-    const statuses = [
+    const orderedStatuses = [
       STATUSES.CRITICAL,
       STATUSES.WARNING,
       STATUSES.SUCCESS,
@@ -96,20 +98,22 @@ const Stage = ({
 
     return Object.values(signals)
       .filter((s) => {
-        // filter out signals based on "signalExpandOption"
         switch (signalExpandOption) {
-          case 1: // expand unhealthy only
-            return statuses.indexOf(s.status) < 2;
+          case SIGNAL_EXPAND.UNHEALTHY_ONLY:
+            return (
+              orderedStatuses.indexOf(s.status) <
+              orderedStatuses.indexOf(STATUSES.SUCCESS)
+            );
 
-          case 2: // expand critical only
-          case 3: // expand unhealthy & critical === only show critical
-            return statuses.indexOf(s.status) === 0;
-
-          case 0: // case 0: no signal expansion options selected
-            return true;
+          case SIGNAL_EXPAND.CRITICAL_ONLY:
+          case SIGNAL_EXPAND.UNHEALTHY_ONLY | SIGNAL_EXPAND.CRITICAL_ONLY:
+            return (
+              orderedStatuses.indexOf(s.status) ===
+              orderedStatuses.indexOf(STATUSES.CRITICAL)
+            );
 
           default:
-            return false;
+            return true;
         }
       })
       .sort((a, b) => {
@@ -117,13 +121,15 @@ const Stage = ({
           a.status === STATUSES.UNKNOWN &&
           a.guid === selections[COMPONENTS.SIGNAL]?.[a.guid]
             ? 1.5 + signalTypes.indexOf(a.type) * 0.1
-            : statuses.indexOf(a.status) + signalTypes.indexOf(a.type) * 0.1;
+            : orderedStatuses.indexOf(a.status) +
+              signalTypes.indexOf(a.type) * 0.1;
 
         const b1 =
           b.status === STATUSES.UNKNOWN &&
           b.guid === selections[COMPONENTS.SIGNAL]?.[b.guid]
             ? 1.5 + signalTypes.indexOf(b.type) * 0.1
-            : statuses.indexOf(b.status) + signalTypes.indexOf(b.type) * 0.1;
+            : orderedStatuses.indexOf(b.status) +
+              signalTypes.indexOf(b.type) * 0.1;
 
         return a1 - b1;
       })
@@ -227,39 +233,64 @@ const Stage = ({
       <div className="body">
         <div className={`levels ${mode}`}>
           <div className="section-title">
-            <HeadingText type={HeadingText.TYPE.HEADING_5}>Levels</HeadingText>
-            <Tooltip text={UI_CONTENT.LEVEL.TOOLTIP}>
-              <Icon
-                className="info-icon"
-                type={Icon.TYPE.INTERFACE__INFO__INFO}
-              />
-            </Tooltip>
+            {stageIndex === 0 ? (
+              <>
+                <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                  Levels
+                </HeadingText>
+                <Tooltip text={UI_CONTENT.LEVEL.TOOLTIP}>
+                  <Icon
+                    className="info-icon"
+                    type={Icon.TYPE.INTERFACE__INFO__INFO}
+                  />
+                </Tooltip>
+              </>
+            ) : (
+              <div className="empty-header"></div>
+            )}
             {mode === MODES.EDIT ? (
               <AddStep stageId={stageId} saveFlow={saveFlow} />
             ) : null}
           </div>
           <div className={`step-groups ${mode}`}>
-            {levels.map(({ id }, index) => (
-              <Level
-                key={id}
-                stageId={stageId}
-                levelId={id}
-                order={index + 1}
-                onDragStart={(e) => levelDragStartHandler(e, index)}
-                onDragOver={(e) => levelDragOverHandler(e, index)}
-                onDrop={(e) => levelDropHandler(e)}
-                mode={mode}
-                saveFlow={saveFlow}
-              />
-            ))}
+            {levels
+              .filter((level) =>
+                level.steps.reduce(
+                  (acc, cur) =>
+                    signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
+                    signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
+                    acc + cur.signals.length
+                      ? acc + cur.signals.length
+                      : acc,
+                  0
+                )
+              )
+              .map(({ id }, index) => (
+                <Level
+                  key={id}
+                  stageId={stageId}
+                  levelId={id}
+                  order={index + 1}
+                  onDragStart={(e) => levelDragStartHandler(e, index)}
+                  onDragOver={(e) => levelDragOverHandler(e, index)}
+                  onDrop={(e) => levelDropHandler(e)}
+                  mode={mode}
+                  signalExpandOption={signalExpandOption}
+                  saveFlow={saveFlow}
+                />
+              ))}
           </div>
         </div>
         {mode === MODES.STACKED ? (
           <div className="signals stacked">
             <div className="section-title">
-              <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                Signals
-              </HeadingText>
+              {stageIndex === 0 ? (
+                <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                  Signals
+                </HeadingText>
+              ) : (
+                <div className="empty-header"></div>
+              )}
             </div>
             <div className="signals-listing">
               <SignalsList />
@@ -275,6 +306,7 @@ Stage.propTypes = {
   stageId: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
   signalExpandOption: PropTypes.number,
+  stageIndex: PropTypes.number,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,

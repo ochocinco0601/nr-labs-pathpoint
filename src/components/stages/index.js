@@ -209,6 +209,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
                 stageId={id}
                 mode={mode}
                 signalExpandOption={signalExpandOption}
+                stageIndex={i}
                 onDragStart={(e) => dragStartHandler(e, i)}
                 onDragOver={(e) => dragOverHandler(e, i)}
                 onDrop={(e) => dropHandler(e)}

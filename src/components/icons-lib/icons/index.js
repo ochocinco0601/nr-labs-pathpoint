@@ -8,6 +8,7 @@ const icons = {
       d="M12 7V4.5C12 2 10 0 7.5 0C5 0 3 2 3 4.5V7L1 9V12H14V9L12 7ZM6 13H6.1H7.5H8.9H9H10C9.8 14.1 8.7 15 7.5 15C6.3 15 5.2 14.1 5 13H6Z"
     />
   ),
+  entity: <path d="M8 0.5L15 4.23333V11.7L8 15.4333L1 11.7V4.23333L8 0.5Z" />,
   camera: (
     <path
       fillRule="evenodd"
