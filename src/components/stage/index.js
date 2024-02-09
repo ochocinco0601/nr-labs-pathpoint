@@ -265,7 +265,7 @@ const Stage = ({
                     signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
                     signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
                     acc + cur.signals.length
-                      ? acc + cur.signals.length
+                      ? { ...acc, ...cur }
                       : acc,
                   0
                 )
