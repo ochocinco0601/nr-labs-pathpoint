@@ -1,3 +1,21 @@
+# [1.61.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.60.0...v1.61.0) (2024-02-09)
+
+
+### Bug Fixes
+
+* adjust margins for entity & alert grid layouts ([aa558ca](https://github.com/newrelic/nr-labs-hedgehog/commit/aa558ca49d84dda1b9d6da9679ef33700c051a17))
+* adjust marings and paddings to elimintate unnecessary scrolls ([6e14493](https://github.com/newrelic/nr-labs-hedgehog/commit/6e1449374f8f688f60a5beac67962e3d62550642))
+* adjust repeating-linear-gradient values ([4ab308c](https://github.com/newrelic/nr-labs-hedgehog/commit/4ab308cdda8044f872991b553eab04ec0e974051))
+* grid layout for rendering entities and alerts in inline mode with collapsed step ([5cc6652](https://github.com/newrelic/nr-labs-hedgehog/commit/5cc66520e2ad588854eb37ed113cafc7b9144006))
+* inline mode width for signal lists inside steps ([eb81ed1](https://github.com/newrelic/nr-labs-hedgehog/commit/eb81ed17710b4fefc0077eec840c41b434649492))
+* modre style adjustment in stages ([43db22d](https://github.com/newrelic/nr-labs-hedgehog/commit/43db22db39144060b8190f789c9bd17562eea895))
+
+
+### Features
+
+* add logic for inline mode view ([03d8905](https://github.com/newrelic/nr-labs-hedgehog/commit/03d89059e3bee4b06fc71160adc681fc1c50f999))
+* create status icon grid layout to present entity and alert statuses separately ([879cede](https://github.com/newrelic/nr-labs-hedgehog/commit/879cede114272a088c6ed68c7897f5651d82b279))
+
 # [1.60.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.59.0...v1.60.0) (2024-02-06)
 
 
