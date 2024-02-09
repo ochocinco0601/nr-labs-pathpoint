@@ -83,7 +83,7 @@
       flex-direction: column;
 
       &.stacked {
-        height: calc((100% - 24px) / 5 * 3);
+        height: calc((100% - 24px) * 0.7);
         margin: 0 16px;
       }
 
@@ -102,6 +102,10 @@
         box-sizing: border-box;
         overflow-y: auto;
       }
+
+      &.inline {
+        overflow-y: auto;
+      }
     }
     
     .signals {
@@ -110,7 +114,7 @@
       gap: 4px;
 
       &.stacked {
-        height: calc((100% - 24px) / 5 * 2);
+        height: calc((100% - 24px) * 0.3);
         margin: 0 16px;
       }
 
