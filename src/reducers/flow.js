@@ -1,4 +1,4 @@
-import { updateFlow } from './helpers/flows';
+import { persistFlow, updateFlow } from './helpers/flows';
 import {
   addStage,
   deleteStage,
@@ -15,6 +15,7 @@ export const FLOW_DISPATCH_TYPES = {
   UPDATED: 'updated',
   DELETED: 'deleted',
   REORDERED: 'reordered',
+  PERSISTED: 'persisted',
   CHANGED: 'changed',
 };
 
@@ -58,6 +59,11 @@ export const flowReducer = (flow, action) => {
         return reorderLevels({ flow, saveFlow, componentIds, updates });
       if (component === FLOW_DISPATCH_COMPONENTS.STEP)
         return reorderSteps({ flow, saveFlow, componentIds, updates });
+      return flow;
+    }
+    case FLOW_DISPATCH_TYPES.PERSISTED: {
+      if (component === FLOW_DISPATCH_COMPONENTS.FLOW)
+        return persistFlow({ flow, saveFlow });
       return flow;
     }
     case FLOW_DISPATCH_TYPES.CHANGED: {

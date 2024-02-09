@@ -1,3 +1,36 @@
+# [1.60.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.59.0...v1.60.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* sidebar overflow and onclose ([15e3b46](https://github.com/newrelic/nr-labs-hedgehog/commit/15e3b46b7598335192f1a202fb5289fa546681b8))
+
+
+### Features
+
+* audit log ([4c27200](https://github.com/newrelic/nr-labs-hedgehog/commit/4c2720095a7e0c4742ee2152c9f2d229d3c50446))
+
+# [1.59.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.58.0...v1.59.0) (2024-02-06)
+
+
+### Features
+
+* batched updates ([08744ff](https://github.com/newrelic/nr-labs-hedgehog/commit/08744ff22452fe403f92065cca39ced3e73a9f1a))
+
+# [1.58.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.1...v1.58.0) (2024-02-02)
+
+
+### Features
+
+* updated action buttons ([ad264c5](https://github.com/newrelic/nr-labs-hedgehog/commit/ad264c5ba6128d216c8c20c05d9b2a3671dbdeda))
+
+## [1.57.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.57.0...v1.57.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* set default value for selections context ([e4f6dd9](https://github.com/newrelic/nr-labs-hedgehog/commit/e4f6dd99556187baaf538bea2c20384a468c1c92))
+
 # [1.57.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.56.0...v1.57.0) (2024-01-25)
 
 

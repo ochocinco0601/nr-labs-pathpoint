@@ -10,11 +10,22 @@ import PropTypes from 'prop-types';
 
 import { AccountStorageMutation, Spinner } from 'nr1';
 
-import { KpiBar, Stages, DeleteConfirmModal, EditFlowSettingsModal } from '../';
+import {
+  KpiBar,
+  Stages,
+  DeleteConfirmModal,
+  EditFlowSettingsModal,
+  AuditLog,
+} from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
-import { AppContext, FlowContext, FlowDispatchContext } from '../../contexts';
+import {
+  AppContext,
+  FlowContext,
+  FlowDispatchContext,
+  useSidebar,
+} from '../../contexts';
 import {
   FLOW_DISPATCH_COMPONENTS,
   FLOW_DISPATCH_TYPES,
@@ -27,9 +38,13 @@ const Flow = forwardRef(
       flowDoc = {},
       onClose,
       mode = MODES.INLINE,
+      prevNonEditMode,
       setMode = () => null,
       flows = [],
       onSelectFlow = () => null,
+      onTransition,
+      isAuditLogShown = false,
+      onAuditLogClose,
       editFlowSettings = false,
       setEditFlowSettings = () => null,
     },
@@ -37,10 +52,11 @@ const Flow = forwardRef(
   ) => {
     const [flow, dispatch] = useReducer(flowReducer, {});
     const [isDeletingFlow, setIsDeletingFlow] = useState(false);
-    const [kpis, setKpis] = useState([]);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
+    const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
+    const { openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
 
     useEffect(
@@ -54,13 +70,21 @@ const Flow = forwardRef(
     );
 
     useEffect(() => {
-      setKpis(flow.kpis || []);
-    }, [flow]);
+      if (isPreview) setMode(prevNonEditMode);
+    }, [isPreview]);
 
-    const saveFlow = useCallback((document) => {
+    useEffect(() => {
+      if (isAuditLogShown)
+        openSidebar({
+          content: <AuditLog flowId={flowDoc.id} accountId={accountId} />,
+          onClose: onAuditLogClose,
+        });
+    }, [isAuditLogShown, flowDoc]);
+
+    const saveFlow = useCallback(async (document) => {
       setLastSavedTimestamp(0);
       const documentId = document.id;
-      flowWriter.write({ documentId, document });
+      await flowWriter.write({ documentId, document });
     }, []);
 
     const flowUpdateHandler = (updates = {}) =>
@@ -68,8 +92,21 @@ const Flow = forwardRef(
         type: FLOW_DISPATCH_TYPES.UPDATED,
         component: FLOW_DISPATCH_COMPONENTS.FLOW,
         updates,
+      });
+
+    const persistFlowHandler = () => {
+      dispatch({
+        type: FLOW_DISPATCH_TYPES.PERSISTED,
+        component: FLOW_DISPATCH_COMPONENTS.FLOW,
         saveFlow,
       });
+      if (onTransition && prevNonEditMode) onTransition(prevNonEditMode);
+    };
+
+    const discardFlowHandler = useCallback(() => {
+      setIsPreview(false);
+      if (onTransition) onTransition(prevNonEditMode);
+    }, [prevNonEditMode]);
 
     useEffect(() => {
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
@@ -95,18 +132,10 @@ const Flow = forwardRef(
       if (deleted) onClose();
     }, [flow]);
 
-    const exportFlowHandler = useCallback(() => {
-      const { created, ...exportableFlow } = flow || {}; // eslint-disable-line no-unused-vars
-      const exportBtn = document.createElement('a');
-      exportBtn.download = `${(flow?.name || 'flow')
-        .replace(/[^a-z0-9]/gi, '_')
-        .toLowerCase()}.json`;
-      exportBtn.href = URL.createObjectURL(
-        new Blob([JSON.stringify(exportableFlow)], { type: 'application/json' })
-      );
-      exportBtn.click();
-      exportBtn.remove();
-    }, [flow]);
+    const togglePreview = () => {
+      if (isPreview && mode !== MODES.EDIT) setMode(MODES.EDIT);
+      setIsPreview((p) => !p);
+    };
 
     return (
       <FlowContext.Provider value={flow}>
@@ -137,21 +166,24 @@ const Flow = forwardRef(
                 <FlowHeader
                   name={flow.name}
                   imageUrl={flow.imageUrl}
+                  isPreview={isPreview}
+                  onPreview={togglePreview}
                   onUpdate={flowUpdateHandler}
+                  onDiscard={discardFlowHandler}
+                  onPersist={persistFlowHandler}
                   onClose={onClose}
                   mode={mode}
                   setMode={setMode}
                   flows={flows}
                   onSelectFlow={onSelectFlow}
-                  onExportFlow={exportFlowHandler}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
                   editFlowSettings={editFlowSettings}
                   setEditFlowSettings={setEditFlowSettings}
                 />
-                <Stages mode={mode} saveFlow={saveFlow} />
-                <KpiBar kpis={kpis} onChange={updateKpisHandler} mode={mode} />
+                <Stages mode={mode} />
+                <KpiBar onChange={updateKpisHandler} mode={mode} />
               </>
             ) : (
               <Spinner />
@@ -167,9 +199,13 @@ Flow.propTypes = {
   flowDoc: PropTypes.object,
   onClose: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
+  prevNonEditMode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
+  onTransition: PropTypes.func,
   onSelectFlow: PropTypes.func,
+  isAuditLogShown: PropTypes.bool,
+  onAuditLogClose: PropTypes.func,
   editFlowSettings: PropTypes.bool,
   setEditFlowSettings: PropTypes.func,
 };
