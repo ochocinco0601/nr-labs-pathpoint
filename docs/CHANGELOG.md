@@ -1,3 +1,10 @@
+## [1.61.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.0...v1.61.1) (2024-02-13)
+
+
+### Bug Fixes
+
+* store guids as values not objects in selections context ([b466609](https://github.com/newrelic/nr-labs-hedgehog/commit/b46660986a7cf65e63cdc5b6a609193a50f4ea97))
+
 # [1.61.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.60.0...v1.61.0) (2024-02-09)
 
 
