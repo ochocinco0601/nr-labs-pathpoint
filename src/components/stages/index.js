@@ -125,7 +125,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
     if (!type || !id) return;
     setSelections((s) => ({
       ...s,
-      [type]: { [id]: !s[type]?.[id] },
+      [type]: s[type] === id ? null : id,
     }));
   };
 

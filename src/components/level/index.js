@@ -35,7 +35,8 @@ const Level = ({
 }) => {
   const stages = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
-  const { selections } = useContext(SelectionsContext);
+  const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
+    useContext(SelectionsContext);
   const [steps, setSteps] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -96,15 +97,13 @@ const Level = ({
           .filter((s) => validStatuses.includes(s.status))
           .sort((a, b) => {
             const a1 =
-              a.status === STATUSES.UNKNOWN &&
-              a.guid === selections[COMPONENTS.SIGNAL]?.[a.guid]
+              a.status === STATUSES.UNKNOWN && a.guid === selectedSignal
                 ? 1.5 + signalTypes.indexOf(a.type) * 0.1
                 : orderedStatuses.indexOf(a.status) +
                   signalTypes.indexOf(a.type) * 0.1;
 
             const b1 =
-              b.status === STATUSES.UNKNOWN &&
-              b.guid === selections[COMPONENTS.SIGNAL]?.[b.guid]
+              b.status === STATUSES.UNKNOWN && b.guid === selectedSignal
                 ? 1.5 + signalTypes.indexOf(b.type) * 0.1
                 : orderedStatuses.indexOf(b.status) +
                   signalTypes.indexOf(b.type) * 0.1;

@@ -41,7 +41,13 @@ const Step = ({
   const { id: flowId } = useContext(FlowContext);
   const stages = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
-  const { selections, toggleSelection } = useContext(SelectionsContext);
+  const {
+    selections: {
+      [COMPONENTS.STEP]: selectedStep,
+      [COMPONENTS.SIGNAL]: selectedSignal,
+    } = {},
+    toggleSelection,
+  } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
@@ -161,9 +167,7 @@ const Step = ({
       className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${status} ${
         [STATUSES.CRITICAL, STATUSES.WARNING].includes(status) ? 'detail' : ''
       } ${
-        selections[COMPONENTS.STEP]?.[stepId] && selections[COMPONENTS.SIGNAL]
-          ? ` selected ${status}`
-          : ''
+        selectedStep === stepId && selectedSignal ? ` selected ${status}` : ''
       }`}
       onClick={() => toggleSelection(COMPONENTS.STEP, stepId)}
       draggable={mode === MODES.EDIT}
