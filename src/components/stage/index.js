@@ -97,9 +97,14 @@ const Stage = ({
     ];
     const signalTypes = [SIGNAL_TYPES.ENTITY, SIGNAL_TYPES.ALERT];
 
+    const expandOption =
+      mode === MODES.STACKED && signalExpandOption & SIGNAL_EXPAND.ALL
+        ? signalExpandOption ^ SIGNAL_EXPAND.ALL
+        : signalExpandOption;
+
     return Object.values(signals)
       .filter((s) => {
-        switch (signalExpandOption) {
+        switch (expandOption) {
           case SIGNAL_EXPAND.UNHEALTHY_ONLY:
             return (
               orderedStatuses.indexOf(s.status) <
@@ -259,7 +264,7 @@ const Stage = ({
                     signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
                     signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
                     acc + cur.signals.length
-                      ? acc + cur.signals.length
+                      ? { ...acc, ...cur }
                       : acc,
                   0
                 )
