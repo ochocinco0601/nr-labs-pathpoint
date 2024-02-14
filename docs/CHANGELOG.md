@@ -1,3 +1,11 @@
+## [1.61.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.1...v1.61.2) (2024-02-14)
+
+
+### Bug Fixes
+
+* remove empty levels correctly when signal expand options selected ([cad5c41](https://github.com/newrelic/nr-labs-hedgehog/commit/cad5c41f0d2d03e9dded2294560fd889c61a44e6))
+* signal expansion option for hiding healthy signals ([c11aacf](https://github.com/newrelic/nr-labs-hedgehog/commit/c11aacfd7c6489f9f26d697a9b9fbd6a418b3b29))
+
 ## [1.61.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.0...v1.61.1) (2024-02-13)
 
 
