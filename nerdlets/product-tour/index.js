@@ -1,6 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { Button, Icon, navigation, nerdlet, PlatformStateContext } from 'nr1';
+import {
+  Button,
+  Icon,
+  navigation,
+  nerdlet,
+  PlatformStateContext,
+  useAccountsQuery,
+} from 'nr1';
 
 import { useSaveUserPreferences } from '../../src/hooks';
 import { MODES, UI_CONTENT } from '../../src/constants';
@@ -9,12 +16,29 @@ import flows from './flows.json';
 import content from './content.json';
 import FlowListSteps from './flow-list-steps';
 import FlowSteps from './flow-steps';
+import { AppContext, SidebarProvider } from '../../src/contexts';
+import { Sidebar } from '../../src/components';
 
 const ProductTourNerdlet = () => {
+  const [app, setApp] = useState({});
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState(MODES.INLINE);
   const { accountId } = useContext(PlatformStateContext);
   const saveUserPreferences = useSaveUserPreferences();
+  const { data: accounts = [] } = useAccountsQuery();
+
+  useEffect(
+    () =>
+      setApp({
+        account: {
+          id: accountId,
+          name: accounts.find(({ id }) => id === accountId)?.name,
+        },
+        accounts: accounts.map(({ id, name }) => ({ id, name })),
+        user: {},
+      }),
+    [accountId, accounts]
+  );
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -60,19 +84,23 @@ const ProductTourNerdlet = () => {
       dismissHandler={dismissHandler}
     />
   ) : (
-    <FlowSteps
-      step={step}
-      flow={flows[0].document}
-      accountId={accountId}
-      mode={mode}
-      setMode={setMode}
-      user={{}}
-      content={content[step]}
-      nextHandler={nextHandler}
-      backHandler={backHandler}
-      ctaHandler={createFlow}
-      dismissHandler={dismissHandler}
-    />
+    <AppContext.Provider value={app}>
+      <SidebarProvider>
+        <FlowSteps
+          step={step}
+          flow={flows[0].document}
+          accountId={accountId}
+          mode={mode}
+          setMode={setMode}
+          content={content[step]}
+          nextHandler={nextHandler}
+          backHandler={backHandler}
+          ctaHandler={createFlow}
+          dismissHandler={dismissHandler}
+        />
+        <Sidebar />
+      </SidebarProvider>
+    </AppContext.Provider>
   );
 };
 

@@ -2,63 +2,67 @@
   {
     "id": "d3c13c43-a2c8-4b2b-9763-acd5b936c272",
     "document": {
-      "createdBy": {
-        "name": "Amit Yathirajadasan", 
-        "email": "ayathirajadasan@newrelic.com",
-        "timestamp": 1695052800000
+      "created": {
+        "timestamp": 1695052800000,
+        "user": {
+          "email": "ayathirajadasan@newrelic.com",
+          "name": "Amit Yathirajadasan"
+        }
       },
       "id": "d3c13c43-a2c8-4b2b-9763-acd5b936c272",
-      "kpis": [
+      "kpis":[
         {
-          "accountIds": [630060],
-          "alias": "TXNs",
-          "id": 0,
-          "name": "Transactions",
-          "nrqlQuery": "SELECT count(*) FROM Transaction SINCE 1 DAY AGO COMPARE WITH 1 DAY AGO",
+          "id": "15315f97-5229-4602-bc96-1ce45dccc43a",
+          "name": "TXNs",
+          "nrqlQuery": "SELECT count(*) FROM Transaction SINCE 1 day ago COMPARE WITH 1 day ago",
           "type": "nrql_query"
+        },
+        {
+          "id": "6405bed3-dcad-48a8-94b0-7f3ad5868ff2",
+          "name": "Resp Time",
+          "nrqlQuery": "SELECT average(duration) FROM Transaction",
+          "type":"nrql_query"
         }
       ],
-      "name": "Demo Flow",
+      "name": "Demo flow",
+      "refreshInterval": 5000,
       "stages": [
         {
+          "id": "fa7cec65-bc94-4fcb-aedc-10ff048168c0",
           "levels": [
             {
-              "status": "critical",
+              "id": "ae7ab5f1-a237-432d-a168-d55e4a0a346c",
               "steps": [
                 {
+                  "id": "99c98ade-79de-4107-adf4-1e32bfc1aac3",
                   "signals": [
                     {
-                      "attainment": 96.99477777796193,
-                      "guid": "NjMwMDYwfEVYVHxTRVJWSUNFX0xFVkVMfDE5NDY1NQ",
-                      "name": "Origami Portal Legacy - Latency",
-                      "status": "success",
-                      "target": 95,
-                      "type": "service_level"
+                      "guid": "MTIzNDU2Nzg5fE1PQklMRXxBUFBMSUNBVElPTnwxMjM0NTY3ODk",
+                      "type": "entity",
+                      "name": "Portal Legacy - Latency",
+                      "status": "success"
                     },
                     {
-                      "attainment": 90.82627721022541,
-                      "guid": "NjMwMDYwfEVYVHxTRVJWSUNFX0xFVkVMfDE5NDY1Ng",
-                      "name": "Origami Portal Legacy - Availability",
-                      "status": "critical",
-                      "target": 95,
-                      "type": "service_level"
+                      "guid": "MTIzNDU2Nzg5fEFJT1BTfENPTkRJVElPTnwxMjM0NTY3ODk",
+                      "type": "alert",
+                      "name": "Portal Legacy - Availability",
+                      "status": "critical"
                     }
                   ],
-                  "status": "critical",
-                  "title": "Step 1"
+                  "title": "Step 1 in Level 1"
                 }
               ]
             }
           ],
-          "name": "Demo Stage",
+          "name": "Stage 1",
           "related": {
             "source": false,
-            "target": true
+            "target":true
           }
         },
         {
           "levels": [],
-          "name": "Another Stage",
+          "name": "Stage 2",
           "related": {
             "source": true,
             "target": false

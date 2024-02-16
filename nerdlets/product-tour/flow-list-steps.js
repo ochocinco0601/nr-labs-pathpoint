@@ -16,28 +16,13 @@ const FlowListSteps = ({
   const calloutRef = useRef();
 
   useEffect(() => {
-    const {
-      left = 0,
-      top = 0,
-      width = 0,
-      height = 0,
-    } = flowListRef?.current?.children?.[0]?.getBoundingClientRect?.() || {};
-    setOverlayStyle((os) => {
-      if (
-        os.left === left &&
-        os.top === top &&
-        os.width === width &&
-        os.height === height
-      )
-        return os;
-      return { ...os, left, top, width, height };
-    });
+    setOverlayStyle({ left: 0, top: 0, width: '100%', height: '100%' });
     setCalloutStyle({
-      top: 0,
+      top: '50%',
       left: '50%',
-      transform: `translate(-50%, ${top + height + 10}px)`,
+      transform: 'translate(-50%, -100%)',
     });
-  });
+  }, []);
 
   return (
     <div className="product-tour">
