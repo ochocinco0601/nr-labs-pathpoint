@@ -1,3 +1,10 @@
+## [1.61.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.2...v1.61.3) (2024-02-16)
+
+
+### Bug Fixes
+
+* update product tour to work with updated flow ([6fa7abe](https://github.com/newrelic/nr-labs-hedgehog/commit/6fa7abec11422b722b8792db25c1a204062fddec))
+
 ## [1.61.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.1...v1.61.2) (2024-02-14)
 
 
