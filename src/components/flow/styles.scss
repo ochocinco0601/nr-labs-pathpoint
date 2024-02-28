@@ -34,6 +34,13 @@
       align-items: center;
     }
 
+    .flow-status {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
     .logo-image {
       img {
         max-height: 24px;

@@ -1,4 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -33,7 +41,7 @@ import { queryFromGuidsArray } from '../../queries';
 
 const MAX_GUIDS_PER_CALL = 25;
 
-const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
+const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const { stages = [] } = useContext(FlowContext);
   const dispatch = useContext(FlowDispatchContext);
   const [guids, setGuids] = useState({});
@@ -44,9 +52,10 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
   const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
-  const entitiesDetails = useEntitiesByGuidsQuery({
-    entityGuids: guids[SIGNAL_TYPES.ENTITY] || [],
-  });
+  const { refetch: entitiesRefetchFn, ...entitiesDetails } =
+    useEntitiesByGuidsQuery({
+      entityGuids: guids[SIGNAL_TYPES.ENTITY] || [],
+    });
 
   useEffect(() => {
     setGuids(uniqueSignalGuidsInStages(stages));
@@ -93,26 +102,54 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
     const alertGuids = guids[SIGNAL_TYPES.ALERT] || [];
     if (!alertGuids.length) return;
 
-    const fetchAlerts = async (alertGuids) => {
-      if (alertGuids.length) {
-        const alerts = alertGuids.reduce(alertsTree, {});
-        const query = alertConditionsStatusGQL(alerts);
-        if (query) {
-          const { data: { actor: res = {} } = {} } = await NerdGraphQuery.query(
-            {
-              query,
-            }
-          );
-          setStatuses((s) => ({
-            ...s,
-            [SIGNAL_TYPES.ALERT]: alertsStatusFromQueryResults(alerts, res),
-          }));
-        }
-      }
-    };
-
     fetchAlerts(alertGuids);
   }, [stages, guids]);
+
+  const fetchAlerts = useCallback(async (alertGuids) => {
+    if (alertGuids.length) {
+      const alerts = alertGuids.reduce(alertsTree, {});
+      const query = alertConditionsStatusGQL(alerts);
+      if (query) {
+        const { data: { actor: res = {} } = {} } = await NerdGraphQuery.query({
+          query,
+        });
+        setStatuses((s) => ({
+          ...s,
+          [SIGNAL_TYPES.ALERT]: alertsStatusFromQueryResults(alerts, res),
+        }));
+      }
+    }
+  }, []);
+
+  const refetchEntities = useCallback(async () => {
+    if (entitiesRefetchFn) {
+      const {
+        data: {
+          actor: {
+            entitySearch: { results: { entities = [] } = {} } = {},
+          } = {},
+        } = {},
+      } = await entitiesRefetchFn();
+      setStatuses((s) => ({
+        ...s,
+        [SIGNAL_TYPES.ENTITY]: entities.reduce(
+          (acc, { guid, ...entity }) => ({ ...acc, [guid]: entity }),
+          {}
+        ),
+      }));
+    }
+  }, [entitiesRefetchFn]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      refresh: async () => {
+        await refetchEntities();
+        await fetchAlerts(guids[SIGNAL_TYPES.ALERT] || []);
+      },
+    }),
+    [refetchEntities, guids]
+  );
 
   const addStageHandler = () =>
     dispatch({
@@ -221,7 +258,7 @@ const Stages = ({ mode = MODES.INLINE, saveFlow }) => {
       </SignalsContext.Provider>
     </StagesContext.Provider>
   );
-};
+});
 
 Stages.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
