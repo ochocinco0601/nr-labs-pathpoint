@@ -265,4 +265,6 @@ Stages.propTypes = {
   saveFlow: PropTypes.func,
 };
 
+Stages.displayName = 'Stages';
+
 export default Stages;
