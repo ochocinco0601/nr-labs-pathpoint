@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from 'react';
 import PropTypes from 'prop-types';
@@ -58,6 +59,7 @@ const Flow = forwardRef(
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
     const { openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
+    const stagesRef = useRef();
 
     useEffect(
       () =>
@@ -137,6 +139,10 @@ const Flow = forwardRef(
       setIsPreview((p) => !p);
     };
 
+    const refresh = useCallback(() => {
+      stagesRef.current.refresh();
+    }, []);
+
     return (
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
@@ -177,12 +183,13 @@ const Flow = forwardRef(
                   flows={flows}
                   onSelectFlow={onSelectFlow}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
+                  onRefreshFlow={refresh}
                   lastSavedTimestamp={lastSavedTimestamp}
                   resetLastSavedTimestamp={() => setLastSavedTimestamp(0)}
                   editFlowSettings={editFlowSettings}
                   setEditFlowSettings={setEditFlowSettings}
                 />
-                <Stages mode={mode} />
+                <Stages mode={mode} ref={stagesRef} />
                 <KpiBar onChange={updateKpisHandler} mode={mode} />
               </>
             ) : (

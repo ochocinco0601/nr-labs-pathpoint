@@ -2,6 +2,7 @@ import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  Badge,
   Button,
   HeadingText,
   Icon,
@@ -10,6 +11,7 @@ import {
   PopoverBody,
   SegmentedControl,
   SegmentedControlItem,
+  Tooltip,
 } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
@@ -31,6 +33,7 @@ const FlowHeader = ({
   flows = [],
   onSelectFlow = () => null,
   onDeleteFlow = () => null,
+  onRefreshFlow = () => null,
   lastSavedTimestamp,
 }) => {
   const [imageModalHidden, setImageModalHidden] = useState(true);
@@ -185,6 +188,18 @@ const FlowHeader = ({
           </div>
         </PopoverBody>
       </Popover>
+      <div className="flow-status">
+        <Badge type={Badge.TYPE.INFO}>Showing current health status</Badge>
+        <Tooltip text="Refresh data in flow">
+          <Button
+            variant={Button.VARIANT.TERTIARY}
+            sizeType={Button.SIZE_TYPE.SMALL}
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
+            ariaLabel="Refresh data in flow"
+            onClick={onRefreshFlow}
+          />
+        </Tooltip>
+      </div>
       <div className="flow-header-actions">
         {isPreview ? (
           <>
@@ -213,6 +228,7 @@ FlowHeader.propTypes = {
   flows: PropTypes.array,
   onSelectFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
+  onRefreshFlow: PropTypes.func,
   lastSavedTimestamp: PropTypes.number,
 };
 
