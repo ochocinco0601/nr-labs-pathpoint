@@ -1,3 +1,15 @@
+# [1.62.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.3...v1.62.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* missing display name for forwardref component ([09ec2f8](https://github.com/newrelic/nr-labs-hedgehog/commit/09ec2f804ed12a27920bbd5ce22c52d2338255b4))
+
+
+### Features
+
+* flow current status badge and refresh ([d2331c4](https://github.com/newrelic/nr-labs-hedgehog/commit/d2331c4d19b3921ebafd62ffd31f54bef8093303))
+
 ## [1.61.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.2...v1.61.3) (2024-02-16)
 
 
