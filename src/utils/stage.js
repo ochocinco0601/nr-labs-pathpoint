@@ -71,17 +71,23 @@ export const annotateStageWithStatuses = (stage = {}) => {
   return { ...stage, levels, status };
 };
 
-export const uniqueSignalGuidsInStages = (stages = []) => {
+export const uniqueSignalGuidsInStages = (stages = [], accounts = []) => {
   const guids = Object.values(SIGNAL_TYPES).reduce(
     (acc, type) => ({ ...acc, [type]: new Set() }),
     {}
   );
-  stages.map(({ levels = [] }) =>
-    levels.map(({ steps = [] }) =>
-      steps.map(({ signals = [] }) =>
-        signals.forEach(({ guid, type }) =>
-          type in guids ? guids[type].add(guid) : null
-        )
+  stages.forEach(({ levels = [] }) =>
+    levels.forEach(({ steps = [] }) =>
+      steps.forEach(({ signals = [] }) =>
+        signals.forEach(({ guid, type }) => {
+          const [acctId] = atob(guid)?.split('|') || [];
+          if (!acctId || !accounts.length) return;
+          if (accounts.some(({ id }) => id === Number(acctId))) {
+            if (type in guids) guids[type].add(guid);
+          } else {
+            guids[SIGNAL_TYPES.NO_ACCESS].add(guid);
+          }
+        })
       )
     )
   );

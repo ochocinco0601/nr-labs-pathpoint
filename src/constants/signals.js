@@ -3,6 +3,7 @@ export const SIGNAL_TYPES = {
   NRQL_QUERY: 'nrql_query',
   ENTITY: 'entity',
   ALERT: 'alert',
+  NO_ACCESS: 'no_access',
 };
 
 export const SIGNAL_EXPAND = {

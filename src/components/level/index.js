@@ -18,6 +18,7 @@ import {
   FlowDispatchContext,
   StagesContext,
   SelectionsContext,
+  NoAccessGuidsContext,
 } from '../../contexts';
 
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
@@ -37,6 +38,7 @@ const Level = ({
   const dispatch = useContext(FlowDispatchContext);
   const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
     useContext(SelectionsContext);
+  const noAccessGuids = useContext(NoAccessGuidsContext);
   const [steps, setSteps] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
@@ -94,7 +96,10 @@ const Level = ({
         }
 
         const filteredSortedSignals = signals
-          .filter((s) => validStatuses.includes(s.status))
+          .filter(
+            ({ guid, status }) =>
+              !noAccessGuids?.includes(guid) && validStatuses.includes(status)
+          )
           .sort((a, b) => {
             const a1 =
               a.status === STATUSES.UNKNOWN && a.guid === selectedSignal
