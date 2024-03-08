@@ -1,3 +1,10 @@
+# [1.63.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.62.0...v1.63.0) (2024-03-08)
+
+
+### Features
+
+* no access guids ([dfaacd6](https://github.com/newrelic/nr-labs-hedgehog/commit/dfaacd6d3a8f8d7666dd19bf7b72e77496be3d96))
+
 # [1.62.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.61.3...v1.62.0) (2024-03-06)
 
 
