@@ -30,8 +30,10 @@ import {
   uniqueSignalGuidsInStages,
 } from '../../utils';
 import {
+  AppContext,
   FlowContext,
   FlowDispatchContext,
+  NoAccessGuidsContext,
   SelectionsContext,
   SignalsContext,
   StagesContext,
@@ -44,6 +46,7 @@ const MAX_GUIDS_PER_CALL = 25;
 const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const { stages = [] } = useContext(FlowContext);
   const dispatch = useContext(FlowDispatchContext);
+  const { accounts } = useContext(AppContext);
   const [guids, setGuids] = useState({});
   const [statuses, setStatuses] = useState({});
   const [stagesData, setStagesData] = useState({ stages });
@@ -58,9 +61,10 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     });
 
   useEffect(() => {
-    setGuids(uniqueSignalGuidsInStages(stages));
+    if (!accounts?.length) return;
+    setGuids(uniqueSignalGuidsInStages(stages, accounts));
     setStagesData(() => ({ stages: [...stages] }));
-  }, [stages]);
+  }, [stages, accounts]);
 
   useEffect(() => {
     const arrayOfGuids = guidsToArray(guids, MAX_GUIDS_PER_CALL);
@@ -73,6 +77,17 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     };
 
     if (arrayOfGuids.length) fetchSignalsDetails();
+
+    const alertGuids = guids[SIGNAL_TYPES.ALERT] || [];
+    if (alertGuids.length) fetchAlerts(alertGuids);
+
+    setStatuses((s) => ({
+      ...s,
+      [SIGNAL_TYPES.NO_ACCESS]: (guids[SIGNAL_TYPES.NO_ACCESS] || []).reduce(
+        (acc, cur) => ({ ...acc, [cur]: true }),
+        {}
+      ),
+    }));
   }, [guids]);
 
   useEffect(() => {
@@ -97,13 +112,6 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       stages: signalsWithStatuses.map(annotateStageWithStatuses),
     }));
   }, [stages, statuses]);
-
-  useEffect(() => {
-    const alertGuids = guids[SIGNAL_TYPES.ALERT] || [];
-    if (!alertGuids.length) return;
-
-    fetchAlerts(alertGuids);
-  }, [stages, guids]);
 
   const fetchAlerts = useCallback(async (alertGuids) => {
     if (alertGuids.length) {
@@ -196,64 +204,68 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     <StagesContext.Provider value={stagesData.stages}>
       <SignalsContext.Provider value={signalsDetails}>
         <SelectionsContext.Provider value={{ selections, toggleSelection }}>
-          <div className="stages-header">
-            <HeadingText type={HeadingText.TYPE.HEADING_4}>Stages</HeadingText>
-            {mode === MODES.EDIT ? (
-              <Button
-                type={Button.TYPE.SECONDARY}
-                sizeType={Button.SIZE_TYPE.SMALL}
-                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-                onClick={addStageHandler}
-              >
-                Add a stage
-              </Button>
-            ) : (
-              <>
+          <NoAccessGuidsContext.Provider value={guids[SIGNAL_TYPES.NO_ACCESS]}>
+            <div className="stages-header">
+              <HeadingText type={HeadingText.TYPE.HEADING_4}>
+                Stages
+              </HeadingText>
+              {mode === MODES.EDIT ? (
+                <Button
+                  type={Button.TYPE.SECONDARY}
+                  sizeType={Button.SIZE_TYPE.SMALL}
+                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+                  onClick={addStageHandler}
+                >
+                  Add a stage
+                </Button>
+              ) : (
+                <>
+                  <Switch
+                    checked={signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY}
+                    label="Unhealthy only"
+                    onChange={() =>
+                      setSignalExpandOption(
+                        (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
+                      )
+                    }
+                  />
+                  <Switch
+                    checked={signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY}
+                    label="Critical only"
+                    onChange={() =>
+                      setSignalExpandOption(
+                        (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
+                      )
+                    }
+                  />
+                </>
+              )}
+              {mode === MODES.INLINE && (
                 <Switch
-                  checked={signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY}
-                  label="Unhealthy only"
+                  checked={signalExpandOption & SIGNAL_EXPAND.ALL}
+                  label="Expand all steps"
                   onChange={() =>
-                    setSignalExpandOption(
-                      (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
-                    )
+                    setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
                   }
                 />
-                <Switch
-                  checked={signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY}
-                  label="Critical only"
-                  onChange={() =>
-                    setSignalExpandOption(
-                      (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
-                    )
-                  }
+              )}
+            </div>
+            <div className="stages">
+              {(stagesData.stages || []).map(({ id }, i) => (
+                <Stage
+                  key={id}
+                  stageId={id}
+                  mode={mode}
+                  signalExpandOption={signalExpandOption}
+                  stageIndex={i}
+                  onDragStart={(e) => dragStartHandler(e, i)}
+                  onDragOver={(e) => dragOverHandler(e, i)}
+                  onDrop={(e) => dropHandler(e)}
+                  saveFlow={saveFlow}
                 />
-              </>
-            )}
-            {mode === MODES.INLINE && (
-              <Switch
-                checked={signalExpandOption & SIGNAL_EXPAND.ALL}
-                label="Expand all steps"
-                onChange={() =>
-                  setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
-                }
-              />
-            )}
-          </div>
-          <div className="stages">
-            {(stagesData.stages || []).map(({ id }, i) => (
-              <Stage
-                key={id}
-                stageId={id}
-                mode={mode}
-                signalExpandOption={signalExpandOption}
-                stageIndex={i}
-                onDragStart={(e) => dragStartHandler(e, i)}
-                onDragOver={(e) => dragOverHandler(e, i)}
-                onDrop={(e) => dropHandler(e)}
-                saveFlow={saveFlow}
-              />
-            ))}
-          </div>
+              ))}
+            </div>
+          </NoAccessGuidsContext.Provider>
         </SelectionsContext.Provider>
       </SignalsContext.Provider>
     </StagesContext.Provider>

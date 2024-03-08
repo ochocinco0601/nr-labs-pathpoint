@@ -16,7 +16,7 @@ export const UI_CONTENT = {
     BUTTON_EXPORT: 'Export JSON',
   },
   STAGE: {
-    //
+    NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
   },
   LEVEL: {
     TOOLTIP:

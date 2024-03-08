@@ -18,6 +18,7 @@ import {
 
 import {
   FlowDispatchContext,
+  NoAccessGuidsContext,
   SelectionsContext,
   SignalsContext,
   StagesContext,
@@ -39,11 +40,13 @@ const Stage = ({
   const dispatch = useContext(FlowDispatchContext);
   const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
     useContext(SelectionsContext);
+  const noAccessGuids = useContext(NoAccessGuidsContext);
   const [name, setName] = useState('Stage');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
   const [signals, setSignals] = useState({});
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
+  const [hasNoAccessGuidsInStep, setHasNoAccessGuidsInStep] = useState(false);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
@@ -56,36 +59,38 @@ const Stage = ({
     setStatus(stage.status || STATUSES.UNKNOWN);
   }, [stageId, stages]);
 
-  useEffect(
-    () =>
-      setSignals(
-        levels.reduce(
-          (acc, { steps = [] }) => ({
+  useEffect(() => {
+    let foundNoAccessGuidsInStep = false;
+    const sigs = levels.reduce(
+      (acc, { steps = [] }) => ({
+        ...acc,
+        ...steps.reduce(
+          (acc, { signals = [] }) => ({
             ...acc,
-            ...steps.reduce(
-              (acc, { signals = [] }) => ({
+            ...signals.reduce((acc, { guid, name, status, type }) => {
+              if (noAccessGuids?.includes(guid)) {
+                foundNoAccessGuidsInStep = true;
+                return acc;
+              }
+              return {
                 ...acc,
-                ...signals.reduce(
-                  (acc, { guid, name, status, type }) => ({
-                    ...acc,
-                    [guid]: {
-                      name: signalsDetails[guid]?.name || name,
-                      status,
-                      guid,
-                      type,
-                    },
-                  }),
-                  {}
-                ),
-              }),
-              {}
-            ),
+                [guid]: {
+                  name: signalsDetails[guid]?.name || name,
+                  status,
+                  guid,
+                  type,
+                },
+              };
+            }, {}),
           }),
           {}
-        )
-      ),
-    [levels]
-  );
+        ),
+      }),
+      {}
+    );
+    setHasNoAccessGuidsInStep(foundNoAccessGuidsInStep);
+    setSignals(sigs);
+  }, [levels]);
 
   const SignalsList = memo(() => {
     // set statuses in order of most critical to least critical -> 0: critical, 1: warning, 2: success, 3: unknown
@@ -252,6 +257,13 @@ const Stage = ({
             ) : (
               <div className="empty-header"></div>
             )}
+            {hasNoAccessGuidsInStep ? (
+              <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
+                <span className="notify no-access">
+                  <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
+                </span>
+              </Tooltip>
+            ) : null}
             {mode === MODES.EDIT ? (
               <AddStep stageId={stageId} saveFlow={saveFlow} />
             ) : null}
