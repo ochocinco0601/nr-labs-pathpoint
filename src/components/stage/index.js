@@ -17,6 +17,7 @@ import {
 } from '../../constants';
 
 import {
+  AppContext,
   FlowDispatchContext,
   NoAccessGuidsContext,
   SelectionsContext,
@@ -41,12 +42,14 @@ const Stage = ({
   const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
     useContext(SelectionsContext);
   const noAccessGuids = useContext(NoAccessGuidsContext);
+  const { maxEntitiesInStep } = useContext(AppContext);
   const [name, setName] = useState('Stage');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
   const [signals, setSignals] = useState({});
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [hasNoAccessGuidsInStep, setHasNoAccessGuidsInStep] = useState(false);
+  const [tooManyEntitiesInStep, setTooManyEntitiesInStep] = useState(false);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
@@ -61,13 +64,17 @@ const Stage = ({
 
   useEffect(() => {
     let foundNoAccessGuidsInStep = false;
+    let foundTooManySignalsInStep = false;
     const sigs = levels.reduce(
       (acc, { steps = [] }) => ({
         ...acc,
         ...steps.reduce(
           (acc, { signals = [] }) => ({
             ...acc,
-            ...signals.reduce((acc, { guid, name, status, type }) => {
+            ...signals.reduce((acc, { guid, name, status, type }, i) => {
+              if (i > (maxEntitiesInStep - 1)) {
+                foundTooManySignalsInStep = true;
+              }
               if (noAccessGuids?.includes(guid)) {
                 foundNoAccessGuidsInStep = true;
                 return acc;
@@ -89,6 +96,7 @@ const Stage = ({
       {}
     );
     setHasNoAccessGuidsInStep(foundNoAccessGuidsInStep);
+    setTooManyEntitiesInStep(foundTooManySignalsInStep);
     setSignals(sigs);
   }, [levels]);
 
@@ -261,6 +269,13 @@ const Stage = ({
               <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
                 <span className="notify no-access">
                   <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
+                </span>
+              </Tooltip>
+            ) : null}
+            {tooManyEntitiesInStep ? (
+              <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
+                <span className="notify too-many-signals">
+                  <Icon type={Icon.TYPE.INTERFACE__STATE__CRITICAL__WEIGHT_BOLD} />
                 </span>
               </Tooltip>
             ) : null}
