@@ -1,3 +1,15 @@
+# [1.64.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.63.0...v1.64.0) (2024-03-12)
+
+
+### Bug Fixes
+
+* corrected value for max entities per step ([70dbeb3](https://github.com/newrelic/nr-labs-hedgehog/commit/70dbeb3d5b16fa8b6325200f66ede75bc9b357a2))
+
+
+### Features
+
+* too many signals notification ([4dcec9e](https://github.com/newrelic/nr-labs-hedgehog/commit/4dcec9e37a50eb223c3b353d556a4882e7282bbd))
+
 # [1.63.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.62.0...v1.63.0) (2024-03-08)
 
 
