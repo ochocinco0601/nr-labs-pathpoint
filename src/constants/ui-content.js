@@ -17,7 +17,8 @@ export const UI_CONTENT = {
   },
   STAGE: {
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
-    TOO_MANY_SIGNALS: 'You have steps exceeding the signal limits. Check your signal definition.'
+    TOO_MANY_SIGNALS:
+      'You have steps exceeding the signal limits. Check your signal definition.',
   },
   LEVEL: {
     TOOLTIP:

@@ -72,7 +72,7 @@ const Stage = ({
           (acc, { signals = [] }) => ({
             ...acc,
             ...signals.reduce((acc, { guid, name, status, type }, i) => {
-              if (i > (maxEntitiesInStep - 1)) {
+              if (i > maxEntitiesInStep - 1) {
                 foundTooManySignalsInStep = true;
               }
               if (noAccessGuids?.includes(guid)) {
@@ -275,7 +275,9 @@ const Stage = ({
             {tooManyEntitiesInStep ? (
               <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
                 <span className="notify too-many-signals">
-                  <Icon type={Icon.TYPE.INTERFACE__STATE__CRITICAL__WEIGHT_BOLD} />
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__STATE__CRITICAL__WEIGHT_BOLD}
+                  />
                 </span>
               </Tooltip>
             ) : null}
