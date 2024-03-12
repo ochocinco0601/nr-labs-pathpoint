@@ -6,5 +6,4 @@ export * from './kpis';
 export * from './stages';
 export * from './ui-content';
 export * from './nrql';
-export * from './refresh-intervals';
 export * from './app';

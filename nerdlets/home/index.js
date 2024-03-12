@@ -30,7 +30,7 @@ import {
   useReadUserPreferences,
 } from '../../src/hooks';
 import { exportFlowDoc, flowDocument } from '../../src/utils';
-import { MODES, UI_CONTENT } from '../../src/constants';
+import { MAX_ENTITIES_IN_STEP, MODES, UI_CONTENT } from '../../src/constants';
 import { AppContext, SidebarProvider } from '../../src/contexts';
 
 const ACTION_BTN_ATTRIBS = {
@@ -95,6 +95,7 @@ const HomeNerdlet = () => {
           name: accounts.find(({ id }) => id === accountId)?.name,
         },
         accounts: accounts.map(({ id, name }) => ({ id, name })),
+        maxEntitiesInStep: MAX_ENTITIES_IN_STEP,
         user,
       }),
     [accountId, accounts, user]
