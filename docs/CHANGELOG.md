@@ -1,3 +1,10 @@
+# [1.65.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.64.0...v1.65.0) (2024-03-12)
+
+
+### Features
+
+* add tooltips for signal icons in hexagon grid ([64a6fc0](https://github.com/newrelic/nr-labs-hedgehog/commit/64a6fc0c7b6aba95019ec3e34e293c9d2dc8c180))
+
 # [1.64.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.63.0...v1.64.0) (2024-03-12)
 
 
