@@ -1,26 +1,41 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { Tooltip } from 'nr1';
+
 import IconsLib from '../icons-lib';
-import { SIGNAL_TYPES } from '../../constants';
+import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+
+const renderSignalIcon = (
+  {
+    style,
+    name = UI_CONTENT.SIGNAL.DEFAULT_NAME,
+    type,
+    status,
+    ...statusProps
+  },
+  i
+) => (
+  <Tooltip text={name}>
+    <IconsLib
+      key={i}
+      className={status}
+      type={type}
+      shouldShowTitle={false}
+      {...statusProps}
+      style={{ style, margin: 1, marginBottom: -3 }}
+    />
+  </Tooltip>
+);
 
 const SignalsGridLayout = ({ statuses }) => {
-  const [grid, setGridData] = useState({ entities: [], alerts: [] });
+  const [grid, setGrid] = useState({ entities: [], alerts: [] });
   const [width, setWidth] = useState(null);
   const wrapperRef = useRef();
 
   useEffect(() => {
-    const renderSignalIcon = ({ style, type, status, ...statusProps }, i) => (
-      <IconsLib
-        key={i}
-        className={status}
-        type={type}
-        {...statusProps}
-        style={{ style, margin: 1, marginBottom: -3 }}
-      />
-    );
     if (statuses) {
-      setGridData(
+      setGrid(
         statuses.reduce(
           (acc, signal, index) => ({
             entities:
