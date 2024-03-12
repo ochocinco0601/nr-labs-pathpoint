@@ -13,4 +13,4 @@ export const REFRESH_INTERVALS = [
   { value: 60000, label: '1 minute' },
 ];
 
-export const MAX_ENTITIES_IN_STEP = 2;
+export const MAX_ENTITIES_IN_STEP = 25;
