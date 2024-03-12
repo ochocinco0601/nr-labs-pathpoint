@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 
 import { icons, TYPES } from './icons';
 
-const IconsLib = ({ type, style = {}, className = '' }) => {
+const IconsLib = ({
+  type,
+  style = {},
+  className = '',
+  title = '',
+  shouldShowTitle = true,
+}) => {
   return (
     <span className="icons-lib-wrapper">
       <svg
@@ -17,7 +23,7 @@ const IconsLib = ({ type, style = {}, className = '' }) => {
         role="img"
         style={style}
       >
-        <title>{`${type} icon`}</title>
+        {shouldShowTitle ? <title>{title || `${type} icon`}</title> : null}
         {icons[type]}
       </svg>
     </span>
@@ -30,6 +36,8 @@ IconsLib.propTypes = {
   type: PropTypes.oneOf(Object.keys(TYPES)),
   style: PropTypes.object,
   className: PropTypes.string,
+  title: PropTypes.string,
+  shouldShowTitle: PropTypes.bool,
 };
 
 export default IconsLib;

@@ -13,6 +13,7 @@ import {
   SIGNAL_EXPAND,
   SIGNAL_TYPES,
   STATUSES,
+  UI_CONTENT,
 } from '../../constants';
 
 import {
@@ -121,11 +122,24 @@ const Step = ({
     isDragHandleClicked.current = false;
   };
 
+  const signalDisplayName = ({ name = '', guid }) => {
+    const latestName = signalsDetails?.[guid]?.name;
+    if (latestName && latestName !== UI_CONTENT.SIGNAL.DEFAULT_NAME)
+      return latestName;
+    return name || UI_CONTENT.SIGNAL.DEFAULT_NAME;
+  };
+
   const SignalsGrid = memo(
     () => (
       <SignalsGridLayout
         statuses={signals.map(
-          ({ status = STATUSES.UNKNOWN, type = SIGNAL_TYPES.ENTITY } = {}) => ({
+          ({
+            name,
+            guid,
+            status = STATUSES.UNKNOWN,
+            type = SIGNAL_TYPES.ENTITY,
+          } = {}) => ({
+            name: signalDisplayName({ name, guid }),
             status,
             type,
           })
@@ -144,7 +158,7 @@ const Step = ({
           key={guid}
           guid={guid}
           type={type}
-          name={signalsDetails[guid]?.name || name}
+          name={signalDisplayName({ name, guid })}
           onDelete={() => openDeleteModalHandler(guid, name)}
           status={status}
           mode={mode}

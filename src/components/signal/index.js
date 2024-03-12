@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import { Icon } from 'nr1';
 
 import IconsLib from '../icons-lib';
-import { COMPONENTS, MODES, SIGNAL_TYPES, STATUSES } from '../../constants';
+import {
+  COMPONENTS,
+  MODES,
+  SIGNAL_TYPES,
+  STATUSES,
+  UI_CONTENT,
+} from '../../constants';
 import { SelectionsContext } from '../../contexts';
 
 const Signal = ({
@@ -32,22 +38,20 @@ const Signal = ({
       }}
     >
       <div className="status">
-        {type === SIGNAL_TYPES.ALERT ? (
-          <IconsLib
-            className={mode === MODES.EDIT ? STATUSES.UNKNOWN : status}
-            type={IconsLib.TYPES.ALERT}
-          />
-        ) : (
-          <IconsLib
-            className={mode === MODES.EDIT ? STATUSES.UNKNOWN : status}
-            type={IconsLib.TYPES.ENTITY}
-          />
-        )}
+        <IconsLib
+          className={mode === MODES.EDIT ? STATUSES.UNKNOWN : status}
+          type={
+            type === SIGNAL_TYPES.ALERT
+              ? IconsLib.TYPES.ALERT
+              : IconsLib.TYPES.ENTITY
+          }
+          shouldShowTitle={false}
+        />
       </div>
       {name ? (
         <span className={`name ${status}`}>{name}</span>
       ) : (
-        <span className="name unknown">(unknown)</span>
+        <span className="name unknown">{UI_CONTENT.SIGNAL.DEFAULT_NAME}</span>
       )}
       {mode === MODES.EDIT ? (
         <span

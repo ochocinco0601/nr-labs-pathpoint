@@ -27,6 +27,9 @@ export const UI_CONTENT = {
   STEP: {
     //
   },
+  SIGNAL: {
+    DEFAULT_NAME: '(unknown)',
+  },
   KPI_BAR: {
     TITLE: 'Flow KPIs',
     TITLE_TOOLTIP: 'Business performance metrics',

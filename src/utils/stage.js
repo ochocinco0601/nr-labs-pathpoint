@@ -1,4 +1,8 @@
-import { SIGNAL_TYPES, STAGE_SHAPES_CLASSNAME_ARRAY } from '../constants';
+import {
+  SIGNAL_TYPES,
+  STAGE_SHAPES_CLASSNAME_ARRAY,
+  UI_CONTENT,
+} from '../constants';
 import { uuid } from './crypto';
 import { signalStatus, statusFromStatuses } from './signal';
 
@@ -30,13 +34,13 @@ export const addSignalStatuses = (stages = [], statuses = {}) =>
       ...level,
       steps: steps.map(({ signals = [], ...step }) => ({
         ...step,
-        signals: signals.map(({ guid, type }) => {
-          const { name = '', ...entity } = (statuses[type] || {})[guid] || {};
+        signals: signals.map(({ guid, name, type }) => {
+          const entity = statuses[type]?.[guid] || {};
           const status = signalStatus({ type }, entity);
           return {
             type,
             guid,
-            name,
+            name: name || entity.name || UI_CONTENT.SIGNAL.DEFAULT_NAME,
             status,
           };
         }),
