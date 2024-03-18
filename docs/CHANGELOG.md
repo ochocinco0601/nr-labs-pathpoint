@@ -1,3 +1,10 @@
+# [1.66.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.65.0...v1.66.0) (2024-03-18)
+
+
+### Features
+
+* display missing signals; also includes refactor of too many signals and no access signals ([cbe27c9](https://github.com/newrelic/nr-labs-hedgehog/commit/cbe27c9b4cf6e697feeb8b8103deb9ac362d7144))
+
 # [1.65.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.64.0...v1.65.0) (2024-03-12)
 
 
