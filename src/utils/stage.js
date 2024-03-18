@@ -1,4 +1,5 @@
 import {
+  MAX_ENTITIES_IN_STEP,
   SIGNAL_TYPES,
   STAGE_SHAPES_CLASSNAME_ARRAY,
   UI_CONTENT,
@@ -27,26 +28,102 @@ export const sanitizeStages = (stages = [], shouldExcludeSignals) =>
     })),
   }));
 
-export const addSignalStatuses = (stages = [], statuses = {}) =>
-  stages.map(({ levels = [], ...stage }) => ({
+const addGuidToObjectTree = (obj, stageId, levelId, stepId, guid) => ({
+  ...obj,
+  [stageId]: {
+    ...obj[stageId],
+    [levelId]: {
+      ...obj[stageId]?.[levelId],
+      [stepId]: {
+        ...obj[stageId]?.[levelId]?.[stepId],
+        [guid]: null,
+      },
+    },
+  },
+});
+
+const incrementCountForStep = (obj, stageId, levelId, stepId) => ({
+  ...obj,
+  [stageId]: {
+    ...obj[stageId],
+    [levelId]: {
+      ...obj[stageId]?.[levelId],
+      [stepId]: (obj[stageId]?.[levelId]?.[stepId] || 0) + 1,
+    },
+  },
+});
+
+export const addSignalStatuses = (stages = [], statuses = {}) => {
+  let signalsWithNoStatus = {};
+  let signalsWithNoAccess = {};
+  let entitiesInStepCount = {};
+  const noAccessGuids =
+    Object.keys(statuses[SIGNAL_TYPES.NO_ACCESS] || {}) || [];
+  const signalsWithStatuses = stages.map(({ levels = [], ...stage }) => ({
     ...stage,
     levels: levels.map(({ steps = [], ...level }) => ({
       ...level,
       steps: steps.map(({ signals = [], ...step }) => ({
         ...step,
-        signals: signals.map(({ guid, name, type }) => {
+        signals: signals.reduce((signalsAcc, { guid, name, type }) => {
+          const isEntity = type === SIGNAL_TYPES.ENTITY;
+          if (isEntity)
+            entitiesInStepCount = incrementCountForStep(
+              entitiesInStepCount,
+              stage.id,
+              level.id,
+              step.id
+            );
           const entity = statuses[type]?.[guid] || {};
+          if (noAccessGuids.includes(guid)) {
+            signalsWithNoAccess = addGuidToObjectTree(
+              signalsWithNoAccess,
+              stage.id,
+              level.id,
+              step.id,
+              guid
+            );
+            return signalsAcc;
+          }
+          if (isEntity) {
+            if (!entity || !Object.keys(entity).length) {
+              signalsWithNoStatus = addGuidToObjectTree(
+                signalsWithNoStatus,
+                stage.id,
+                level.id,
+                step.id,
+                guid
+              );
+              return signalsAcc;
+            }
+            if (
+              entitiesInStepCount[stage.id][level.id][step.id] >
+              MAX_ENTITIES_IN_STEP
+            ) {
+              return signalsAcc;
+            }
+          }
           const status = signalStatus({ type }, entity);
-          return {
-            type,
-            guid,
-            name: name || entity.name || UI_CONTENT.SIGNAL.DEFAULT_NAME,
-            status,
-          };
-        }),
+          return [
+            ...signalsAcc,
+            {
+              type,
+              guid,
+              name: name || entity.name || UI_CONTENT.SIGNAL.DEFAULT_NAME,
+              status,
+            },
+          ];
+        }, []),
       })),
     })),
   }));
+  return {
+    entitiesInStepCount,
+    signalsWithNoAccess,
+    signalsWithNoStatus,
+    signalsWithStatuses,
+  };
+};
 
 export const annotateStageWithStatuses = (stage = {}) => {
   const { levels, levelStatuses } = (stage.levels || []).reduce(

@@ -98,8 +98,14 @@
           color: #F07A0E;
         }
 
+        .missing-signals {
+          color: #F07A0E;
+          cursor: pointer;
+        }
+
         .too-many-signals {
           color: #DF2D24;
+          cursor: pointer;
         }
 
         .notify:not(:first-child) {

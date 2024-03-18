@@ -16,6 +16,7 @@ export const UI_CONTENT = {
     BUTTON_EXPORT: 'Export JSON',
   },
   STAGE: {
+    MISSING_SIGNALS: 'Includes missing signals',
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
     TOO_MANY_SIGNALS:
       'You have steps exceeding the signal limits. Check your signal definition.',
@@ -29,6 +30,16 @@ export const UI_CONTENT = {
   },
   SIGNAL: {
     DEFAULT_NAME: '(unknown)',
+    TOO_MANY: {
+      HEADING: 'Steps going above signals limit',
+      DETAILS:
+        'The following steps exceed the signal limits. Not all signals are being evaluated as part of the flow. We recommend modifying the signal definition to get under the signal limits.',
+    },
+    MISSING: {
+      HEADING: 'Missing signals',
+      DETAILS:
+        'No response recieved for these signals. It could be that these signals no longer exist.',
+    },
   },
   KPI_BAR: {
     TITLE: 'Flow KPIs',

@@ -7,6 +7,7 @@ import Level from '../level';
 import Signal from '../signal';
 import StageHeader from './header';
 import AddStep from '../add-step';
+import StageNotifyModal from '../stage-notify-modal';
 import {
   COMPONENTS,
   MODES,
@@ -19,8 +20,8 @@ import {
 import {
   AppContext,
   FlowDispatchContext,
-  NoAccessGuidsContext,
   SelectionsContext,
+  SignalsClassificationsContext,
   SignalsContext,
   StagesContext,
 } from '../../contexts';
@@ -41,18 +42,24 @@ const Stage = ({
   const dispatch = useContext(FlowDispatchContext);
   const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
     useContext(SelectionsContext);
-  const noAccessGuids = useContext(NoAccessGuidsContext);
+  const {
+    entitiesInStepCount = {},
+    signalsWithNoAccess = {},
+    signalsWithNoStatus = {},
+  } = useContext(SignalsClassificationsContext);
   const { maxEntitiesInStep } = useContext(AppContext);
   const [name, setName] = useState('Stage');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
   const [signals, setSignals] = useState({});
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
-  const [hasNoAccessGuidsInStep, setHasNoAccessGuidsInStep] = useState(false);
-  const [tooManyEntitiesInStep, setTooManyEntitiesInStep] = useState(false);
+  const [tooManyEntitiesInStep, setTooManyEntitiesInStep] = useState([]);
+  const [missingSignals, setMissingSignals] = useState([]);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
+  const missingSignalsModal = useRef();
+  const tooManySignalsModal = useRef();
 
   useEffect(() => {
     const stage = (stages || []).find(({ id }) => id === stageId) || {};
@@ -63,41 +70,64 @@ const Stage = ({
   }, [stageId, stages]);
 
   useEffect(() => {
-    let foundNoAccessGuidsInStep = false;
-    let foundTooManySignalsInStep = false;
-    const sigs = levels.reduce(
-      (acc, { steps = [] }) => ({
-        ...acc,
-        ...steps.reduce(
-          (acc, { signals = [] }) => ({
-            ...acc,
-            ...signals.reduce((acc, { guid, name, status, type }, i) => {
-              if (i > maxEntitiesInStep - 1) {
-                foundTooManySignalsInStep = true;
-              }
-              if (noAccessGuids?.includes(guid)) {
-                foundNoAccessGuidsInStep = true;
-                return acc;
-              }
-              return {
-                ...acc,
-                [guid]: {
-                  name: signalsDetails[guid]?.name || name,
-                  status,
-                  guid,
-                  type,
-                },
-              };
-            }, {}),
-          }),
-          {}
-        ),
-      }),
-      {}
+    setTooManyEntitiesInStep(
+      Object.keys(entitiesInStepCount[stageId]).reduce(
+        (acc, levelId) =>
+          Object.keys(entitiesInStepCount[stageId][levelId]).reduce(
+            (acc, stepId) =>
+              entitiesInStepCount[stageId][levelId][stepId] > maxEntitiesInStep
+                ? [...acc, { stageId, levelId, stepId }]
+                : acc,
+            acc
+          ),
+        []
+      )
     );
-    setHasNoAccessGuidsInStep(foundNoAccessGuidsInStep);
-    setTooManyEntitiesInStep(foundTooManySignalsInStep);
-    setSignals(sigs);
+  }, [entitiesInStepCount]);
+
+  useEffect(() => {
+    setMissingSignals(
+      Object.keys(signalsWithNoStatus[stageId]).reduce(
+        (acc, levelId) =>
+          Object.keys(signalsWithNoStatus[stageId][levelId]).reduce(
+            (acc, stepId) =>
+              Object.keys(signalsWithNoStatus[stageId][levelId][stepId]).reduce(
+                (acc, guid) => [...acc, { stageId, levelId, stepId, guid }],
+                acc
+              ),
+            acc
+          ),
+        []
+      )
+    );
+  }, [signalsWithNoStatus]);
+
+  useEffect(() => {
+    setSignals(
+      levels.reduce(
+        (acc, { steps = [] }) => ({
+          ...acc,
+          ...steps.reduce(
+            (acc, { signals = [] }) => ({
+              ...acc,
+              ...signals.reduce((acc, { guid, name, status, type }) => {
+                return {
+                  ...acc,
+                  [guid]: {
+                    name: signalsDetails[guid]?.name || name,
+                    status,
+                    guid,
+                    type,
+                  },
+                };
+              }, {}),
+            }),
+            {}
+          ),
+        }),
+        {}
+      )
+    );
   }, [levels]);
 
   const SignalsList = memo(() => {
@@ -230,108 +260,140 @@ const Stage = ({
   };
 
   return (
-    <div
-      className="stage"
-      draggable={mode === MODES.EDIT}
-      onDragStart={dragStartHandler}
-      onDragOver={onDragOver}
-      onDrop={onDropHandler}
-      onDragEnd={dragEndHandler}
-    >
-      <StageHeader
-        name={name}
-        related={related}
-        status={status}
-        onUpdate={updateStageHandler}
-        onDelete={deleteStageHandler}
-        mode={mode}
-        onDragHandle={dragHandleHandler}
-      />
-      <div className="body">
-        <div className={`levels ${mode}`}>
-          <div className="section-title">
-            {stageIndex === 0 ? (
-              <>
-                <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                  Levels
-                </HeadingText>
-                <Tooltip text={UI_CONTENT.LEVEL.TOOLTIP}>
-                  <Icon
-                    className="info-icon"
-                    type={Icon.TYPE.INTERFACE__INFO__INFO}
-                  />
-                </Tooltip>
-              </>
-            ) : (
-              <div className="empty-header"></div>
-            )}
-            {hasNoAccessGuidsInStep ? (
-              <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
-                <span className="notify no-access">
-                  <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
-                </span>
-              </Tooltip>
-            ) : null}
-            {tooManyEntitiesInStep ? (
-              <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
-                <span className="notify too-many-signals">
-                  <Icon
-                    type={Icon.TYPE.INTERFACE__STATE__CRITICAL__WEIGHT_BOLD}
-                  />
-                </span>
-              </Tooltip>
-            ) : null}
-            {mode === MODES.EDIT ? (
-              <AddStep stageId={stageId} saveFlow={saveFlow} />
-            ) : null}
-          </div>
-          <div className={`step-groups ${mode}`}>
-            {levels
-              .filter((level) =>
-                level.steps.reduce(
-                  (acc, cur) =>
-                    signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
-                    signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
-                    acc + cur.signals.length
-                      ? { ...acc, ...cur }
-                      : acc,
-                  0
-                )
-              )
-              .map(({ id }, index) => (
-                <Level
-                  key={id}
-                  stageId={stageId}
-                  levelId={id}
-                  order={index + 1}
-                  onDragStart={(e) => levelDragStartHandler(e, index)}
-                  onDragOver={(e) => levelDragOverHandler(e, index)}
-                  onDrop={(e) => levelDropHandler(e)}
-                  mode={mode}
-                  signalExpandOption={signalExpandOption}
-                  saveFlow={saveFlow}
-                />
-              ))}
-          </div>
-        </div>
-        {mode === MODES.STACKED ? (
-          <div className="signals stacked">
+    <>
+      <div
+        className="stage"
+        draggable={mode === MODES.EDIT}
+        onDragStart={dragStartHandler}
+        onDragOver={onDragOver}
+        onDrop={onDropHandler}
+        onDragEnd={dragEndHandler}
+      >
+        <StageHeader
+          name={name}
+          related={related}
+          status={status}
+          onUpdate={updateStageHandler}
+          onDelete={deleteStageHandler}
+          mode={mode}
+          onDragHandle={dragHandleHandler}
+        />
+        <div className="body">
+          <div className={`levels ${mode}`}>
             <div className="section-title">
               {stageIndex === 0 ? (
-                <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                  Signals
-                </HeadingText>
+                <>
+                  <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                    Levels
+                  </HeadingText>
+                  <Tooltip text={UI_CONTENT.LEVEL.TOOLTIP}>
+                    <Icon
+                      className="info-icon"
+                      type={Icon.TYPE.INTERFACE__INFO__INFO}
+                    />
+                  </Tooltip>
+                </>
               ) : (
                 <div className="empty-header"></div>
               )}
+              {missingSignals.length ? (
+                <Tooltip text={UI_CONTENT.STAGE.MISSING_SIGNALS}>
+                  <span
+                    className="notify missing-signals"
+                    onClick={() => missingSignalsModal.current?.open?.()}
+                  >
+                    <Icon type={Icon.TYPE.INTERFACE__STATE__WARNING} />
+                  </span>
+                </Tooltip>
+              ) : null}
+              {tooManyEntitiesInStep.length ? (
+                <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
+                  <span
+                    className="notify too-many-signals"
+                    onClick={() => tooManySignalsModal.current?.open?.()}
+                  >
+                    <Icon type={Icon.TYPE.INTERFACE__STATE__CRITICAL} />
+                  </span>
+                </Tooltip>
+              ) : null}
+              {stageId in signalsWithNoAccess &&
+              Object.keys(signalsWithNoAccess[stageId]).length ? (
+                <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
+                  <span className="notify no-access">
+                    <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
+                  </span>
+                </Tooltip>
+              ) : null}
+              {mode === MODES.EDIT ? (
+                <AddStep stageId={stageId} saveFlow={saveFlow} />
+              ) : null}
             </div>
-            <div className="signals-listing">
-              <SignalsList />
+            <div className={`step-groups ${mode}`}>
+              {levels
+                .filter((level) =>
+                  level.steps.reduce(
+                    (acc, cur) =>
+                      signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
+                      signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
+                      acc + cur.signals.length
+                        ? { ...acc, ...cur }
+                        : acc,
+                    0
+                  )
+                )
+                .map(({ id }, index) => (
+                  <Level
+                    key={id}
+                    stageId={stageId}
+                    levelId={id}
+                    order={index + 1}
+                    onDragStart={(e) => levelDragStartHandler(e, index)}
+                    onDragOver={(e) => levelDragOverHandler(e, index)}
+                    onDrop={(e) => levelDropHandler(e)}
+                    mode={mode}
+                    signalExpandOption={signalExpandOption}
+                    saveFlow={saveFlow}
+                  />
+                ))}
             </div>
           </div>
-        ) : null}
+          {mode === MODES.STACKED ? (
+            <div className="signals stacked">
+              <div className="section-title">
+                {stageIndex === 0 ? (
+                  <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                    Signals
+                  </HeadingText>
+                ) : (
+                  <div className="empty-header"></div>
+                )}
+              </div>
+              <div className="signals-listing">
+                <SignalsList />
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
+      <StageNotifyModal
+        heading={UI_CONTENT.SIGNAL.MISSING.HEADING}
+        text={UI_CONTENT.SIGNAL.MISSING.DETAILS}
+        icon={Icon.TYPE.INTERFACE__STATE__WARNING__WEIGHT_BOLD}
+        iconColor="#F07A0E"
+        itemsTitle="Signal name"
+        items={missingSignals}
+        ref={missingSignalsModal}
+      />
+      <StageNotifyModal
+        heading={UI_CONTENT.SIGNAL.TOO_MANY.HEADING}
+        text={UI_CONTENT.SIGNAL.TOO_MANY.DETAILS}
+        icon={Icon.TYPE.INTERFACE__STATE__CRITICAL__WEIGHT_BOLD}
+        iconColor="#df2d24"
+        itemsTitle="Step name"
+        items={tooManyEntitiesInStep}
+        ref={tooManySignalsModal}
+      />
+    </>
   );
 };
 
