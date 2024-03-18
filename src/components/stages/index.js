@@ -33,8 +33,8 @@ import {
   AppContext,
   FlowContext,
   FlowDispatchContext,
-  NoAccessGuidsContext,
   SelectionsContext,
+  SignalsClassificationsContext,
   SignalsContext,
   StagesContext,
 } from '../../contexts';
@@ -52,6 +52,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const [stagesData, setStagesData] = useState({ stages });
   const [signalsDetails, setSignalsDetails] = useState({});
   const [selections, setSelections] = useState({});
+  const [classifications, setClassifications] = useState({});
   const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
@@ -107,10 +108,20 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   }, [entitiesDetails]);
 
   useEffect(() => {
-    const signalsWithStatuses = addSignalStatuses([...stages], statuses);
+    const {
+      entitiesInStepCount,
+      signalsWithNoAccess,
+      signalsWithNoStatus,
+      signalsWithStatuses,
+    } = addSignalStatuses([...stages], statuses);
     setStagesData(() => ({
       stages: signalsWithStatuses.map(annotateStageWithStatuses),
     }));
+    setClassifications({
+      entitiesInStepCount,
+      signalsWithNoAccess,
+      signalsWithNoStatus,
+    });
   }, [stages, statuses]);
 
   const fetchAlerts = useCallback(async (alertGuids) => {
@@ -204,7 +215,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     <StagesContext.Provider value={stagesData.stages}>
       <SignalsContext.Provider value={signalsDetails}>
         <SelectionsContext.Provider value={{ selections, toggleSelection }}>
-          <NoAccessGuidsContext.Provider value={guids[SIGNAL_TYPES.NO_ACCESS]}>
+          <SignalsClassificationsContext.Provider value={classifications}>
             <div className="stages-header">
               <HeadingText type={HeadingText.TYPE.HEADING_4}>
                 Stages
@@ -265,7 +276,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
                 />
               ))}
             </div>
-          </NoAccessGuidsContext.Provider>
+          </SignalsClassificationsContext.Provider>
         </SelectionsContext.Provider>
       </SignalsContext.Provider>
     </StagesContext.Provider>
