@@ -35,10 +35,10 @@ const Level = ({
 }) => {
   const stages = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
-  const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
-    useContext(SelectionsContext);
+  const { selections } = useContext(SelectionsContext);
   const [steps, setSteps] = useState([]);
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
+  const [isFaded, setIsFaded] = useState(false);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
@@ -48,9 +48,22 @@ const Level = ({
     const { levels = [] } =
       (stages || []).find(({ id }) => id === stageId) || {};
     const level = levels.find(({ id }) => id === levelId) || {};
+    if (
+      selections.type === COMPONENTS.STEP ||
+      selections.type === COMPONENTS.SIGNAL
+    ) {
+      setIsFaded(
+        !level.steps?.some(({ id, signals }) => {
+          if (selections.type === COMPONENTS.STEP) return selections.id === id;
+          return signals.some(({ guid }) => selections.id === guid);
+        })
+      );
+    } else {
+      setIsFaded(false);
+    }
     setSteps(level.steps || []);
     setStatus(level.status || STATUSES.UNKNOWN);
-  }, [stageId, levelId, stages]);
+  }, [stageId, levelId, stages, selections]);
 
   const stepsRows = useMemo(() => {
     if (!steps.length) return [];
@@ -97,16 +110,12 @@ const Level = ({
           .filter(({ status }) => validStatuses.includes(status))
           .sort((a, b) => {
             const a1 =
-              a.status === STATUSES.UNKNOWN && a.guid === selectedSignal
-                ? 1.5 + signalTypes.indexOf(a.type) * 0.1
-                : orderedStatuses.indexOf(a.status) +
-                  signalTypes.indexOf(a.type) * 0.1;
+              orderedStatuses.indexOf(a.status) +
+              signalTypes.indexOf(a.type) * 0.1;
 
             const b1 =
-              b.status === STATUSES.UNKNOWN && b.guid === selectedSignal
-                ? 1.5 + signalTypes.indexOf(b.type) * 0.1
-                : orderedStatuses.indexOf(b.status) +
-                  signalTypes.indexOf(b.type) * 0.1;
+              orderedStatuses.indexOf(b.status) +
+              signalTypes.indexOf(b.type) * 0.1;
 
             return a1 - b1;
           });
@@ -296,7 +305,9 @@ const Level = ({
           />
         </>
       ) : (
-        <div className={`order ${status}`}>{order}</div>
+        <div className={`order ${status} ${isFaded ? 'faded' : ''}`}>
+          {order}
+        </div>
       )}
       <div className="steps">{stepsRows}</div>
     </div>
