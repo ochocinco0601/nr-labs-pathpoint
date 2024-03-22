@@ -22,3 +22,4 @@ export { default as EditFlowSettingsModal } from './flow-settings-modal';
 export { default as Select } from './select';
 export { default as AuditLog } from './audit-log';
 export { default as StageNotifyModal } from './stage-notify-modal';
+export { default as SignalDetailSidebar } from './signal-detail-sidebar';
