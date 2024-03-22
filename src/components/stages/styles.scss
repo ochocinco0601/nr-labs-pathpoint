@@ -5,13 +5,18 @@
   flex-direction: row;
   gap: 16px;
   align-items: center;
+
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 }
 
 .stages {
   flex: 1;
   box-sizing: border-box;
   display: flex;
-  gap: 8px;
   padding: 8px 24px;
   background: #FFFFFF;
   height: calc(100vh - 135px);
