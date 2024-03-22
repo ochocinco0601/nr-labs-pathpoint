@@ -19,22 +19,30 @@ const Signal = ({
   type = SIGNAL_TYPES.ENTITY,
   onDelete,
   status = STATUSES.UNKNOWN,
+  isInSelectedStep,
   mode = MODES.INLINE,
 }) => {
-  const { selections, toggleSelection } = useContext(SelectionsContext);
+  const { selections, markSelection } = useContext(SelectionsContext);
 
   return (
     <div
       className={`signal ${mode === MODES.EDIT ? 'edit' : ''} ${
-        [MODES.INLINE, MODES.STACKED].includes(mode) &&
-        [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
+        [MODES.INLINE, MODES.STACKED].includes(mode)
           ? `detail ${status} ${
-              selections[COMPONENTS.SIGNAL]?.[guid] ? 'selected' : ''
+              selections?.type === COMPONENTS.SIGNAL && selections?.id === guid
+                ? 'selected'
+                : ''
             }`
           : ''
+      } ${
+        (selections.type === COMPONENTS.STEP && !isInSelectedStep) ||
+        (selections.type === COMPONENTS.SIGNAL && selections.id !== guid)
+          ? 'faded'
+          : ''
       }`}
-      onClick={() => {
-        toggleSelection(COMPONENTS.SIGNAL, guid);
+      onClick={(e) => {
+        e.stopPropagation();
+        markSelection(COMPONENTS.SIGNAL, guid, { name, type, status });
       }}
     >
       <div className="status">
@@ -71,6 +79,7 @@ Signal.propTypes = {
   type: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
   onDelete: PropTypes.func,
   status: PropTypes.oneOf(Object.values(STATUSES)),
+  isInSelectedStep: PropTypes.bool,
   mode: PropTypes.oneOf(Object.values(MODES)),
 };
 
