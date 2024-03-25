@@ -82,34 +82,41 @@ const Stage = ({
 
   useEffect(() => {
     setTooManyEntitiesInStep(
-      Object.keys(entitiesInStepCount[stageId]).reduce(
-        (acc, levelId) =>
-          Object.keys(entitiesInStepCount[stageId][levelId]).reduce(
-            (acc, stepId) =>
-              entitiesInStepCount[stageId][levelId][stepId] > maxEntitiesInStep
-                ? [...acc, { stageId, levelId, stepId }]
-                : acc,
-            acc
-          ),
-        []
-      )
+      entitiesInStepCount[stageId]
+        ? Object.keys(entitiesInStepCount[stageId]).reduce(
+            (acc, levelId) =>
+              Object.keys(entitiesInStepCount[stageId][levelId]).reduce(
+                (acc, stepId) =>
+                  entitiesInStepCount[stageId][levelId][stepId] >
+                  maxEntitiesInStep
+                    ? [...acc, { stageId, levelId, stepId }]
+                    : acc,
+                acc
+              ),
+            []
+          )
+        : []
     );
   }, [entitiesInStepCount]);
 
   useEffect(() => {
     setMissingSignals(
-      Object.keys(signalsWithNoStatus[stageId]).reduce(
-        (acc, levelId) =>
-          Object.keys(signalsWithNoStatus[stageId][levelId]).reduce(
-            (acc, stepId) =>
-              Object.keys(signalsWithNoStatus[stageId][levelId][stepId]).reduce(
-                (acc, guid) => [...acc, { stageId, levelId, stepId, guid }],
+      signalsWithNoStatus[stageId]
+        ? Object.keys(signalsWithNoStatus[stageId]).reduce(
+            (acc, levelId) =>
+              Object.keys(signalsWithNoStatus[stageId][levelId]).reduce(
+                (acc, stepId) =>
+                  Object.keys(
+                    signalsWithNoStatus[stageId][levelId][stepId]
+                  ).reduce(
+                    (acc, guid) => [...acc, { stageId, levelId, stepId, guid }],
+                    acc
+                  ),
                 acc
               ),
-            acc
-          ),
-        []
-      )
+            []
+          )
+        : []
     );
   }, [signalsWithNoStatus]);
 
