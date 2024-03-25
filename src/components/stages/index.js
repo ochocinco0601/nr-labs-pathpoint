@@ -12,13 +12,21 @@ import PropTypes from 'prop-types';
 import {
   Button,
   HeadingText,
+  Icon,
   NerdGraphQuery,
   Switch,
+  Tooltip,
   useEntitiesByGuidsQuery,
 } from 'nr1';
 
-import { Stage } from '../';
-import { MODES, SIGNAL_TYPES, SIGNAL_EXPAND } from '../../constants';
+import { SignalDetailSidebar, Stage } from '../';
+import {
+  MODES,
+  SIGNAL_TYPES,
+  SIGNAL_EXPAND,
+  COMPONENTS,
+  UI_CONTENT,
+} from '../../constants';
 import {
   addSignalStatuses,
   alertConditionsStatusGQL,
@@ -37,6 +45,7 @@ import {
   SignalsClassificationsContext,
   SignalsContext,
   StagesContext,
+  useSidebar,
 } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 import { queryFromGuidsArray } from '../../queries';
@@ -60,6 +69,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     useEntitiesByGuidsQuery({
       entityGuids: guids[SIGNAL_TYPES.ENTITY] || [],
     });
+  const { openSidebar, closeSidebar } = useSidebar();
 
   useEffect(() => {
     if (!accounts?.length) return;
@@ -159,6 +169,33 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     }
   }, [entitiesRefetchFn]);
 
+  useEffect(() => {
+    if (selections.type === COMPONENTS.SIGNAL && selections.id) {
+      openSidebar({
+        content: (
+          <SignalDetailSidebar
+            guid={selections.id}
+            name={selections.data?.name}
+            type={selections.data?.type}
+          />
+        ),
+        status: selections.data?.status,
+        onClose: closeSidebarHandler,
+      });
+    } else {
+      closeSidebar();
+    }
+  }, [selections, closeSidebarHandler]);
+
+  const markSelection = useCallback((type, id, data) => {
+    if (!type || !id) return;
+    setSelections((sel) =>
+      sel.type === type && sel.id === id ? {} : { type, id, data }
+    );
+  }, []);
+
+  const closeSidebarHandler = useCallback(() => setSelections({}), []);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -176,14 +213,6 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       component: FLOW_DISPATCH_COMPONENTS.STAGE,
       saveFlow,
     });
-
-  const toggleSelection = (type, id) => {
-    if (!type || !id) return;
-    setSelections((s) => ({
-      ...s,
-      [type]: s[type] === id ? null : id,
-    }));
-  };
 
   const dragStartHandler = (e, index) => {
     dragItemIndex.current = index;
@@ -214,12 +243,20 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   return (
     <StagesContext.Provider value={stagesData.stages}>
       <SignalsContext.Provider value={signalsDetails}>
-        <SelectionsContext.Provider value={{ selections, toggleSelection }}>
+        <SelectionsContext.Provider value={{ selections, markSelection }}>
           <SignalsClassificationsContext.Provider value={classifications}>
             <div className="stages-header">
-              <HeadingText type={HeadingText.TYPE.HEADING_4}>
-                Stages
-              </HeadingText>
+              <div className="heading">
+                <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                  Stages
+                </HeadingText>
+                <Tooltip text={UI_CONTENT.STAGE.TOOLTIP}>
+                  <Icon
+                    className="info-icon"
+                    type={Icon.TYPE.INTERFACE__INFO__INFO}
+                  />
+                </Tooltip>
+              </div>
               {mode === MODES.EDIT ? (
                 <Button
                   type={Button.TYPE.SECONDARY}

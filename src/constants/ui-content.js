@@ -16,6 +16,7 @@ export const UI_CONTENT = {
     BUTTON_EXPORT: 'Export JSON',
   },
   STAGE: {
+    TOOLTIP: 'A high-level functional category in the flow',
     MISSING_SIGNALS: 'Includes missing signals',
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
     TOO_MANY_SIGNALS:
@@ -39,6 +40,11 @@ export const UI_CONTENT = {
       HEADING: 'Missing signals',
       DETAILS:
         'No response recieved for these signals. It could be that these signals no longer exist.',
+    },
+    DETAILS: {
+      NO_INCIDENTS: 'No open incidents from past 30 days',
+      FOUND_RECENT:
+        'No incidents were found for the selected time period. The incident displayed below is the most recent incident located.',
     },
   },
   KPI_BAR: {

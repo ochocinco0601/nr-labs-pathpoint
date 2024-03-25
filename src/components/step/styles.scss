@@ -4,17 +4,20 @@
   background-color: #fff;
 
   &.stacked {
-    &.critical {
-      border: 1px solid $critical;
-    }
+    cursor: pointer;
 
-    &.warning {
-      border: 1px solid $warning;
+    &.selected {
+      @include status-colors(
+        $critical: 'critical',
+        $warning: 'warning',
+        $success: 'success',
+        $unknown: 'unknown',
+      );
     }
   }
 
-  &.detail {
-    cursor: pointer;
+  &.faded {
+    opacity: 0.3;
   }
 
   .edit-signals-list {
@@ -28,6 +31,11 @@
     display: grid;
     align-items: center;
     margin-bottom: 4px;
+    cursor: pointer;
+
+    h6 {
+      color: currentColor;
+    }
 
     .title {
       white-space: nowrap;

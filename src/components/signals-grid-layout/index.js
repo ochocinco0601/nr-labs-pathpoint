@@ -1,10 +1,17 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import { Tooltip } from 'nr1';
 
 import IconsLib from '../icons-lib';
-import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+import { SelectionsContext } from '../../contexts';
+import { COMPONENTS, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 
 const renderSignalIcon = (
   {
@@ -14,7 +21,8 @@ const renderSignalIcon = (
     status,
     ...statusProps
   },
-  i
+  i,
+  onClick
 ) => (
   <Tooltip text={name}>
     <IconsLib
@@ -23,7 +31,8 @@ const renderSignalIcon = (
       type={type}
       shouldShowTitle={false}
       {...statusProps}
-      style={{ style, margin: 1, marginBottom: -3 }}
+      style={style}
+      onClick={onClick}
     />
   </Tooltip>
 );
@@ -31,22 +40,26 @@ const renderSignalIcon = (
 const SignalsGridLayout = ({ statuses }) => {
   const [grid, setGrid] = useState({ entities: [], alerts: [] });
   const [width, setWidth] = useState(null);
+  const { markSelection } = useContext(SelectionsContext);
   const wrapperRef = useRef();
 
   useEffect(() => {
     if (statuses) {
       setGrid(
         statuses.reduce(
-          (acc, signal, index) => ({
-            entities:
-              signal.type === SIGNAL_TYPES.ENTITY
-                ? [...acc.entities, renderSignalIcon(signal, index)]
-                : [...acc.entities],
-            alerts:
-              signal.type === SIGNAL_TYPES.ALERT
-                ? [...acc.alerts, renderSignalIcon(signal, index)]
-                : [...acc.alerts],
-          }),
+          (acc, signal, index) => {
+            const signalIcon = renderSignalIcon(signal, index, (e) => {
+              e.stopPropagation();
+              markSelection(COMPONENTS.SIGNAL, signal.guid, signal);
+            });
+            if (signal.type === SIGNAL_TYPES.ENTITY) {
+              acc.entities = [...acc.entities, signalIcon];
+            }
+            if (signal.type === SIGNAL_TYPES.ALERT) {
+              acc.alerts = [...acc.alerts, signalIcon];
+            }
+            return acc;
+          },
           { entities: [], alerts: [] }
         )
       );

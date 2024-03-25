@@ -42,17 +42,13 @@ const Step = ({
   const { id: flowId } = useContext(FlowContext);
   const stages = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
-  const {
-    selections: {
-      [COMPONENTS.STEP]: selectedStep,
-      [COMPONENTS.SIGNAL]: selectedSignal,
-    } = {},
-    toggleSelection,
-  } = useContext(SelectionsContext);
+  const { selections, markSelection } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [stageName, setStageName] = useState('');
+  const [isFaded, setIsFaded] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [signalsListView, setSignalsListView] = useState(false);
   const signalToDelete = useRef({});
@@ -63,11 +59,22 @@ const Step = ({
       (stages || []).find(({ id }) => id === stageId) || {};
     const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
     const step = steps.find(({ id }) => id === stepId) || {};
+    setIsFaded(() => {
+      if (selections.type === COMPONENTS.STEP) {
+        return selections.id !== step.id;
+      } else if (selections.type === COMPONENTS.SIGNAL) {
+        return !step.signals?.some(({ guid }) => selections.id === guid);
+      }
+      return false;
+    });
+    setIsSelected(
+      () => selections.type === COMPONENTS.STEP && selections.id === step.id
+    );
     setStageName(name);
     setTitle(step.title);
     setStatus(step.status || STATUSES.UNKNOWN);
     setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
-  }, [stageId, levelId, stepId, stages, signals]);
+  }, [stageId, levelId, stepId, stages, signals, selections]);
 
   const updateSignalsHandler = () =>
     navigation.openStackedNerdlet({
@@ -140,6 +147,7 @@ const Step = ({
             type = SIGNAL_TYPES.ENTITY,
           } = {}) => ({
             name: signalDisplayName({ name, guid }),
+            guid,
             status,
             type,
           })
@@ -168,22 +176,17 @@ const Step = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const handleStepHeaderClick = () => {
-    if (
-      signals.length &&
-      [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
-    )
-      setSignalsListView((slw) => !slw);
+  const handleStepHeaderClick = (e) => {
+    e.stopPropagation();
+    if (signals.length) setSignalsListView((slw) => !slw);
   };
 
   return (
     <div
-      className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${status} ${
-        [STATUSES.CRITICAL, STATUSES.WARNING].includes(status) ? 'detail' : ''
-      } ${
-        selectedStep === stepId && selectedSignal ? ` selected ${status}` : ''
-      }`}
-      onClick={() => toggleSelection(COMPONENTS.STEP, stepId)}
+      className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${
+        isSelected ? 'selected' : ''
+      } ${status} ${isFaded ? 'faded' : ''}`}
+      onClick={() => markSelection(COMPONENTS.STEP, stepId)}
       draggable={mode === MODES.EDIT}
       onDragStart={dragStartHandler}
       onDragOver={onDragOver}

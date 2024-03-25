@@ -27,6 +27,17 @@ import {
 } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
+// set statuses in order of most critical to least critical -> 0: critical, 1: warning, 2: success, 3: unknown
+const ORDERED_STATUSES = [
+  STATUSES.CRITICAL,
+  STATUSES.WARNING,
+  STATUSES.SUCCESS,
+  STATUSES.UNKNOWN,
+];
+const SUCCESS_STATUS_INDEX = ORDERED_STATUSES.indexOf(STATUSES.SUCCESS);
+const CRITICAL_STATUS_INDEX = ORDERED_STATUSES.indexOf(STATUSES.CRITICAL);
+const ORDERED_SIGNAL_TYPES = [SIGNAL_TYPES.ENTITY, SIGNAL_TYPES.ALERT];
+
 const Stage = ({
   stageId,
   mode = MODES.INLINE,
@@ -40,8 +51,7 @@ const Stage = ({
   const stages = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
   const dispatch = useContext(FlowDispatchContext);
-  const { selections: { [COMPONENTS.SIGNAL]: selectedSignal } = {} } =
-    useContext(SelectionsContext);
+  const { selections } = useContext(SelectionsContext);
   const {
     entitiesInStepCount = {},
     signalsWithNoAccess = {},
@@ -55,6 +65,7 @@ const Stage = ({
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [tooManyEntitiesInStep, setTooManyEntitiesInStep] = useState([]);
   const [missingSignals, setMissingSignals] = useState([]);
+  const [guidsInSelectedStep, setGuidsInSelectedStep] = useState([]);
   const isDragHandleClicked = useRef(false);
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
@@ -103,80 +114,72 @@ const Stage = ({
   }, [signalsWithNoStatus]);
 
   useEffect(() => {
-    setSignals(
-      levels.reduce(
-        (acc, { steps = [] }) => ({
-          ...acc,
-          ...steps.reduce(
-            (acc, { signals = [] }) => ({
-              ...acc,
-              ...signals.reduce((acc, { guid, name, status, type }) => {
-                return {
-                  ...acc,
-                  [guid]: {
-                    name: signalsDetails[guid]?.name || name,
-                    status,
-                    guid,
-                    type,
-                  },
-                };
-              }, {}),
-            }),
-            {}
-          ),
-        }),
-        {}
-      )
+    const selGuids = [];
+    const sigs = levels.reduce(
+      (acc, { steps = [] }) => ({
+        ...acc,
+        ...steps.reduce(
+          (acc, { id, signals = [] }) => ({
+            ...acc,
+            ...signals.reduce((acc, { guid, name, status, type }) => {
+              const isInSelectedStep =
+                selections.type === COMPONENTS.STEP && selections.id === id;
+              if (isInSelectedStep) selGuids.push(guid);
+              return {
+                ...acc,
+                [guid]: {
+                  name: signalsDetails[guid]?.name || name,
+                  status,
+                  guid,
+                  type,
+                  statusIndex: ORDERED_STATUSES.indexOf(status),
+                  typeIndex: ORDERED_SIGNAL_TYPES.indexOf(type),
+                  isInSelectedStep,
+                },
+              };
+            }, {}),
+          }),
+          {}
+        ),
+      }),
+      {}
     );
-  }, [levels]);
+    setSignals(sigs);
+    setGuidsInSelectedStep(selGuids);
+  }, [levels, selections]);
 
   const SignalsList = memo(() => {
-    // set statuses in order of most critical to least critical -> 0: critical, 1: warning, 2: success, 3: unknown
-    const orderedStatuses = [
-      STATUSES.CRITICAL,
-      STATUSES.WARNING,
-      STATUSES.SUCCESS,
-      STATUSES.UNKNOWN,
-    ];
-    const signalTypes = [SIGNAL_TYPES.ENTITY, SIGNAL_TYPES.ALERT];
-
     const expandOption =
       mode === MODES.STACKED && signalExpandOption & SIGNAL_EXPAND.ALL
         ? signalExpandOption ^ SIGNAL_EXPAND.ALL
         : signalExpandOption;
 
+    const sortFactor = guidsInSelectedStep.length ? ORDERED_STATUSES.length : 0;
+
     return Object.values(signals)
       .filter((s) => {
         switch (expandOption) {
           case SIGNAL_EXPAND.UNHEALTHY_ONLY:
-            return (
-              orderedStatuses.indexOf(s.status) <
-              orderedStatuses.indexOf(STATUSES.SUCCESS)
-            );
-
+            return s.statusIndex < SUCCESS_STATUS_INDEX;
           case SIGNAL_EXPAND.CRITICAL_ONLY:
           case SIGNAL_EXPAND.UNHEALTHY_ONLY | SIGNAL_EXPAND.CRITICAL_ONLY:
-            return (
-              orderedStatuses.indexOf(s.status) ===
-              orderedStatuses.indexOf(STATUSES.CRITICAL)
-            );
-
+            return s.statusIndex === CRITICAL_STATUS_INDEX;
           default:
             return true;
         }
       })
       .sort((a, b) => {
         const a1 =
-          a.status === STATUSES.UNKNOWN && a.guid === selectedSignal
-            ? 1.5 + signalTypes.indexOf(a.type) * 0.1
-            : orderedStatuses.indexOf(a.status) +
-              signalTypes.indexOf(a.type) * 0.1;
+          selections.type === COMPONENTS.STEP &&
+          guidsInSelectedStep.some((guid) => guid === a.guid)
+            ? a.statusIndex - sortFactor + a.typeIndex * 0.1
+            : a.statusIndex + a.typeIndex * 0.1;
 
         const b1 =
-          b.status === STATUSES.UNKNOWN && b.guid === selectedSignal
-            ? 1.5 + signalTypes.indexOf(b.type) * 0.1
-            : orderedStatuses.indexOf(b.status) +
-              signalTypes.indexOf(b.type) * 0.1;
+          selections.type === COMPONENTS.STEP &&
+          guidsInSelectedStep.some((guid) => guid === b.guid)
+            ? b.statusIndex - sortFactor + b.typeIndex * 0.1
+            : b.statusIndex + b.typeIndex * 0.1;
 
         return a1 - b1;
       })
@@ -187,6 +190,7 @@ const Stage = ({
           guid={signal.guid}
           type={signal.type}
           status={signal.status}
+          isInSelectedStep={signal.isInSelectedStep}
           mode={mode}
         />
       ));

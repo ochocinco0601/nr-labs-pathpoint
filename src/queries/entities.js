@@ -9,4 +9,18 @@ const queryFromGuidsArray = (arrayOfGuids = []) => ngql`{
   }
 }`;
 
-export { queryFromGuidsArray };
+const goldenMetricsForEntityQuery = (guid = '') => ngql`{
+  actor {
+    entity(guid: "${guid}") {
+      accountId
+      goldenMetrics {
+        metrics {
+          query
+          title
+        }
+      }
+    }
+  }
+}`;
+
+export { queryFromGuidsArray, goldenMetricsForEntityQuery };

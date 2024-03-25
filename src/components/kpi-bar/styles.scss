@@ -27,8 +27,8 @@ $kpiBarEditModeMaxWidth: calc(99% - 190px);
 
     .heading-title {
       display: flex;
-      gap: 0.5rem;
-      align-items: end;
+      gap: 4px;
+      align-items: center;
 
       .headingViewModeWidth {
         width: $headingViewModeWidth;

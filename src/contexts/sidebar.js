@@ -14,7 +14,7 @@ export const SidebarProvider = ({ children }) => {
   const openSidebar = ({ content, status = '', onClose }) => {
     setSidebarContent(content);
     setSidebarStatus(status);
-    setSidebarOnClose(onClose);
+    setSidebarOnClose(() => onClose);
     setIsOpen(true);
   };
 

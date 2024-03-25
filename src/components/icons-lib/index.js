@@ -9,6 +9,7 @@ const IconsLib = ({
   className = '',
   title = '',
   shouldShowTitle = true,
+  onClick,
 }) => {
   return (
     <span className="icons-lib-wrapper">
@@ -22,6 +23,7 @@ const IconsLib = ({
         focusable="false"
         role="img"
         style={style}
+        onClick={onClick}
       >
         {shouldShowTitle ? <title>{title || `${type} icon`}</title> : null}
         {icons[type]}
@@ -38,6 +40,7 @@ IconsLib.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
   shouldShowTitle: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default IconsLib;
