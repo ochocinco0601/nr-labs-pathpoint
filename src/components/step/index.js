@@ -76,7 +76,8 @@ const Step = ({
     setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
   }, [stageId, levelId, stepId, stages, signals, selections]);
 
-  const updateSignalsHandler = () =>
+  const updateSignalsHandler = (e) => {
+    e.stopPropagation();
     navigation.openStackedNerdlet({
       id: 'signal-selection',
       urlState: {
@@ -89,6 +90,7 @@ const Step = ({
         stepTitle: title,
       },
     });
+  };
 
   const openDeleteModalHandler = (guid, name) => {
     signalToDelete.current = { guid, name };
@@ -186,7 +188,11 @@ const Step = ({
       className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${
         isSelected ? 'selected' : ''
       } ${status} ${isFaded ? 'faded' : ''}`}
-      onClick={() => markSelection(COMPONENTS.STEP, stepId)}
+      onClick={() =>
+        mode !== MODES.EDIT && markSelection
+          ? markSelection(COMPONENTS.STEP, stepId)
+          : null
+      }
       draggable={mode === MODES.EDIT}
       onDragStart={dragStartHandler}
       onDragOver={onDragOver}
@@ -212,7 +218,7 @@ const Step = ({
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
               onClick={updateSignalsHandler}
             >
-              Add a signal
+              {`${signals.length ? 'Update' : 'Add'} signals`}
             </Button>
           </div>
           <div className="edit-signals-list">
