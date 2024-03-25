@@ -1,3 +1,10 @@
+## [1.67.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.0...v1.67.1) (2024-03-25)
+
+
+### Bug Fixes
+
+* issue with adding stage ([6a2d0a5](https://github.com/newrelic/nr-labs-hedgehog/commit/6a2d0a56cb46d44ac52d97faa386970b5674f671))
+
 # [1.67.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.66.0...v1.67.0) (2024-03-25)
 
 
