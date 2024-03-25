@@ -1,3 +1,23 @@
+# [1.67.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.66.0...v1.67.0) (2024-03-25)
+
+
+### Bug Fixes
+
+* adding missing files ffrom commit for signals details sidebar ([571a66b](https://github.com/newrelic/nr-labs-hedgehog/commit/571a66b59ba4698f836ecbfa45457da4312a051d))
+* import signal details sidebar ([64d1907](https://github.com/newrelic/nr-labs-hedgehog/commit/64d19071f62645f1c10efec8dd6d816e9d01d4e7))
+* prevent onclose callback from getting called on init ([1963f69](https://github.com/newrelic/nr-labs-hedgehog/commit/1963f695d19c68b305e61923ccc0f62f46d5a944))
+
+
+### Features
+
+* add support for onclick for iconslib ([33fdc96](https://github.com/newrelic/nr-labs-hedgehog/commit/33fdc9626446a8b4d621eae2205a4bde5fb492bc))
+* datetime functions ([6c8b073](https://github.com/newrelic/nr-labs-hedgehog/commit/6c8b0730edc04354ea09e2e2eab50f8bc89c5af3))
+* handle clicking on step ([93012b3](https://github.com/newrelic/nr-labs-hedgehog/commit/93012b3392ca85ef02b0be944ecebb3cb1edba70))
+* handle signal selection ([6a1ea35](https://github.com/newrelic/nr-labs-hedgehog/commit/6a1ea353c8a0223ca54c9bcf04ac133b997e014d))
+* highlight levels on selected steps/signals ([e42f294](https://github.com/newrelic/nr-labs-hedgehog/commit/e42f294ae8dd081736df074d42ddea5c2510b491))
+* open signal detail sidebar on click; refactors selections context; add info icon to stages ([a023964](https://github.com/newrelic/nr-labs-hedgehog/commit/a023964674e52f025b7b65bc3f879313022652c2))
+* signal detail sidebar component ([0ecabb0](https://github.com/newrelic/nr-labs-hedgehog/commit/0ecabb0d430b5e08f975f41c045d542e5c027cf3))
+
 # [1.66.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.65.0...v1.66.0) (2024-03-18)
 
 
