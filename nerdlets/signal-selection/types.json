@@ -1,0 +1,1687 @@
+[
+  {
+    "domain": "APM",
+    "type": "APPLICATION",
+    "displayName": "Service - APM"
+  },
+  {
+    "domain": "BROWSER",
+    "type": "APPLICATION",
+    "displayName": "Browser application"
+  },
+  {
+    "domain": "BROWSER",
+    "type": "MICRO_FRONTEND",
+    "displayName": "Micro frontend"
+  },
+  {
+    "domain": "INFRA",
+    "type": "APACHESERVER",
+    "displayName": "Apache server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSALB",
+    "displayName": "ELB application load balancer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSALBTARGETGROUP",
+    "displayName": "ELB application target group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAPIGATEWAYAPI",
+    "displayName": "API Gateway API"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAPIGATEWAYRESOURCEWITHMETRICS",
+    "displayName": "API Gateway resource"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAPIGATEWAYSTAGE",
+    "displayName": "API Gateway stage"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAPPSTREAM",
+    "displayName": "AppStream"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAPPSYNCAPI",
+    "displayName": "AppSync api"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSATHENAWORKGROUP",
+    "displayName": "Athena workgroup"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSAUTOSCALINGGROUP",
+    "displayName": "AutoScaling group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSBACKUP",
+    "displayName": "Backup"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSBILLINGACCOUNTCOST",
+    "displayName": "Account Cost"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSBILLINGACCOUNTSERVICECOST",
+    "displayName": "Account Service Cost"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSBILLINGBUDGET",
+    "displayName": "Budget"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSBILLINGSERVICECOST",
+    "displayName": "Service Cost"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCHATBOT",
+    "displayName": "Chatbot"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCLOUDFRONTDISTRIBUTION",
+    "displayName": "CloudFront distribution"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCLOUDSEARCH",
+    "displayName": "CloudSearch"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCLOUDWATCHMETRICSTREAM",
+    "displayName": "CloudWatch Metric Stream"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCODEBUILD",
+    "displayName": "CodeBuild"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCOGNITOUSERPOOL",
+    "displayName": "Cognito user pool"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCONNECTCONTACTFLOW",
+    "displayName": "Connect contact flow"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCONNECTINSTANCE",
+    "displayName": "Connect instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSCONNECTQUEUE",
+    "displayName": "Connect queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDATASYNC",
+    "displayName": "DataSync"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDIRECTCONNECTCONNECTION",
+    "displayName": "Direct Connect connection"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDMSHOST",
+    "displayName": "Database Migration Service Host"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDMSREPLICATIONTASK",
+    "displayName": "Database Migration Service Replication Task"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDOCDBCLUSTER",
+    "displayName": "DocumentDB cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDOCDBCLUSTERBYROLE",
+    "displayName": "DocumentDB cluster by role"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDOCDBINSTANCE",
+    "displayName": "DocumentDB instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDYNAMODBGLOBALSECONDARYINDEX",
+    "displayName": "DynamoDB global secondary index"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDYNAMODBREGION",
+    "displayName": "DynamoDB region"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSDYNAMODBTABLE",
+    "displayName": "DynamoDB table"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSEBSVOLUME",
+    "displayName": "EBS volume"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSECSCLUSTER",
+    "displayName": "ECS cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSECSSERVICE",
+    "displayName": "ECS service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSEFSFILESYSTEM",
+    "displayName": "EFS filesystem"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEMEMCACHEDCLUSTER",
+    "displayName": "ElastiCache Memcached cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEMEMCACHEDNODE",
+    "displayName": "ElastiCache Memcached node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEREDISCLUSTER",
+    "displayName": "ElastiCache Redis cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEREDISNODE",
+    "displayName": "ElastiCache Redis node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEREDISREPLICATIONGROUP",
+    "displayName": "ElastiCache Redis Replication Group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICACHEREDISSHARD",
+    "displayName": "ElastiCache Redis Shard"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICBEANSTALKENVIRONMENT",
+    "displayName": "Elastic Beanstalk environment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICBEANSTALKINSTANCE",
+    "displayName": "Elastic Beanstalk instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICMAPREDUCECLUSTER",
+    "displayName": "EMR cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICSEARCHCLUSTER",
+    "displayName": "Elasticsearch cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICSEARCHNODE",
+    "displayName": "Elasticsearch node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELASTICTRANSCODER",
+    "displayName": "ElasticTranscoder"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSELB",
+    "displayName": "ELB classic load balancer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSEVENTSRULE",
+    "displayName": "Events Rule"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSFSXFORLUSTRE",
+    "displayName": "FSxForLustre"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSFSXVOLUME",
+    "displayName": "FSx Volume"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSFSXWINDOWSFILESERVER",
+    "displayName": "FSx windows file server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSGAMELIFT",
+    "displayName": "GameLift"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSGLUEJOB",
+    "displayName": "Glue job"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSINSPECTOR",
+    "displayName": "Inspector"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSIOTBROKER",
+    "displayName": "IOT broker"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSIOTRULE",
+    "displayName": "IOT rule"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSIOTRULEACTION",
+    "displayName": "IOT rule action"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSIOTTWINMAKER",
+    "displayName": "IOTTWINMAKER"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKEYSPACES",
+    "displayName": "Keyspaces"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKINESISANALYTICSAPPLICATION",
+    "displayName": "Kinesis Data Analytics application"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKINESISANALYTICSTASK",
+    "displayName": "Kinesis Data Analytics task"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKINESISDELIVERYSTREAM",
+    "displayName": "Kinesis delivery stream"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKINESISSTREAM",
+    "displayName": "Kinesis stream"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSKINESISSTREAMSHARD",
+    "displayName": "Kinesis shard"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSLAMBDAFUNCTION",
+    "displayName": "Lambda function"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSLAMBDAFUNCTIONALIAS",
+    "displayName": "Lambda Function Alias"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSLAMBDAREGION",
+    "displayName": "Lambda Region"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSLEX",
+    "displayName": "Lex"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSLOGS",
+    "displayName": "Logs"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMEDIACONVERTOPERATION",
+    "displayName": "Elemental MediaConvert operation"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMEDIACONVERTQUEUE",
+    "displayName": "Elemental MediaConvert queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMEDIAPACKAGEVODPACKAGINGCONFIGURATION",
+    "displayName": "MediaPackage VOD packaging configuration"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMEDIATAILOR",
+    "displayName": "Elemental MediaTailor"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMQBROKER",
+    "displayName": "MQ broker"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMQQUEUE",
+    "displayName": "MQ queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMQTOPIC",
+    "displayName": "MQ topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMSKBROKER",
+    "displayName": "Managed Kafka broker"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMSKCLUSTER",
+    "displayName": "Managed Kafka cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSMSKTOPIC",
+    "displayName": "Managed Kafka topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNATGATEWAY",
+    "displayName": "VPC NAT Gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNEPTUNECLUSTER",
+    "displayName": "Neptune cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNEPTUNECLUSTERBYROLE",
+    "displayName": "Neptune cluster by role"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNEPTUNEDATABASECLASS",
+    "displayName": "Neptune database class"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNEPTUNEINSTANCE",
+    "displayName": "Neptune instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNLB",
+    "displayName": "ELB network load balancer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSNLBTARGETGROUP",
+    "displayName": "ELB network target group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSPOLLYLEXICON",
+    "displayName": "Polly (Lexicon)"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSPOLLYOPERATION",
+    "displayName": "Polly (Operation)"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSPRIVATELINKENDPOINT",
+    "displayName": "Private Link Endpoint"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSQLDBLEDGER",
+    "displayName": "QLDB ledger"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSRDSDBCLUSTER",
+    "displayName": "RDS cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSRDSDBINSTANCE",
+    "displayName": "RDS instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSRDSPROXY",
+    "displayName": "RDS Proxy"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSREDSHIFTCLUSTER",
+    "displayName": "Redshift cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSREDSHIFTNODE",
+    "displayName": "Redshift node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSREKOGNITION",
+    "displayName": "Rekognition"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSREKOGNITIONOPERATION",
+    "displayName": "Rekognition Operation"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSROUTE53HEALTHCHECK",
+    "displayName": "Route 53 health check"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSROUTE53RESOLVERENDPOINT",
+    "displayName": "Route53 Resolver endpoint"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSS3BUCKET",
+    "displayName": "S3 bucket"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSAGEMAKER",
+    "displayName": "SageMaker"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSESREGION",
+    "displayName": "SES region"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSIMPLEWORKFLOW",
+    "displayName": "SimpleWorkFlow"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSNSTOPIC",
+    "displayName": "SNS topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSQSQUEUE",
+    "displayName": "SQS queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESACTIVITY",
+    "displayName": "Step Functions activity"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESAPIUSAGE",
+    "displayName": "Step Functions apiusage"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESLAMBDAFUNCTION",
+    "displayName": "Step Functions lambdafunction"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESSERVICE",
+    "displayName": "Step Functions service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESSERVICEINTEGRATION",
+    "displayName": "Step Functions serviceintegration"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSSTATESSTATEMACHINE",
+    "displayName": "Step Functions statemachine"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTEXTRACT",
+    "displayName": "Textract"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTIMESTREAMDATABASE",
+    "displayName": "Timestream Database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTIMESTREAMTABLE",
+    "displayName": "Timestream Table"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTRANSCRIBE",
+    "displayName": "Transcribe"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTRANSFERFAMILY",
+    "displayName": "TransferFamily"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTRANSITGATEWAYTRANSITGATEWAY",
+    "displayName": "Transit Gateway transit gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSTRANSLATE",
+    "displayName": "Translate"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSUSAGE",
+    "displayName": "Usage"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSVPCLATTICESERVICE",
+    "displayName": "Awsvpclatticeservice"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSVPCNETWORKINTERFACE",
+    "displayName": "VPC Network Interface"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSVPCVPNTUNNEL",
+    "displayName": "VPC VPN tunnel"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSVPN",
+    "displayName": "Awsvpn"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSVPNCONNECTION",
+    "displayName": "VPN Connection"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSWAFV2RULEGROUP",
+    "displayName": "WAFV2 rule group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSWAFV2WEBACL",
+    "displayName": "WAFV2 web acl"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSWAFWEBACL",
+    "displayName": "WAF web ACL"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSWORKMAIL",
+    "displayName": "Workmail"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AWSWORKSPACES",
+    "displayName": "WorkSpaces"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPIMANAGEMENTSERVICE",
+    "displayName": "API Management service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPCONFIGURATION",
+    "displayName": "App Configuration"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPLICATIONGATEWAY",
+    "displayName": "App Gateway application gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPLICATIONINSIGHT",
+    "displayName": "Application Insight"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPSERVICEENVIRONMENT",
+    "displayName": "App Service Environment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPSERVICEPLAN",
+    "displayName": "App Service Plan"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAPPSERVICEWEBAPP",
+    "displayName": "App Service web app"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREAUTOMATIONACCOUNT",
+    "displayName": "Automation Account"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREBATCHACCOUNT",
+    "displayName": "Batch Account"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREBINGSEARCH",
+    "displayName": "Bing Search"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECDNPROFILE",
+    "displayName": "CDN profile"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECLOUDSERVICE",
+    "displayName": "Cloud Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECOGNITIVESEARCH",
+    "displayName": "Cognitive Search"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECOGNITIVESERVICE",
+    "displayName": "Cognitive Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECONTAINERSINSTANCEGROUP",
+    "displayName": "Containers instance group"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECONTAINERSMANAGEDCLUSTER",
+    "displayName": "Containers managed cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECONTAINERSREGISTRY",
+    "displayName": "Containers registry"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECOSMOSDBACCOUNT",
+    "displayName": "Cosmos DB account"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECOSMOSDBCOLLECTION",
+    "displayName": "Cosmos DB collection"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURECOSMOSDBDATABASE",
+    "displayName": "Cosmos DB database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATABOXEDGE",
+    "displayName": "Data Box Edge"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATAEXPLORER",
+    "displayName": "Data Explorer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATAFACTORYDATAFACTORY",
+    "displayName": "Data Factory data factory"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATAFACTORYFACTORY",
+    "displayName": "Data Factory factory"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATALAKEANALYTIC",
+    "displayName": "Data Lake Analytic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATALAKESTORAGE",
+    "displayName": "Data Lake Storage"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDATASHARE",
+    "displayName": "Data Share"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDEVICEPROVISIONINGSERVICE",
+    "displayName": "Device Provisioning Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDISKSTORAGE",
+    "displayName": "Disk Storage"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREDNSZONE",
+    "displayName": "DNS Zone"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDDOMAIN",
+    "displayName": "Event Grid Domain"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDPARTNERNAMESPACE",
+    "displayName": "Event Grid Partner Namespace"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDPARTNERTOPIC",
+    "displayName": "Event Grid Partner Topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDSUBSCRIPTION",
+    "displayName": "Event Grid Subscription"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDSYSTEMTOPIC",
+    "displayName": "Event Grid System Topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTGRIDTOPIC",
+    "displayName": "Event Grid Topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTHUBCLUSTER",
+    "displayName": "Event Hub cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEVENTHUBNAMESPACE",
+    "displayName": "Event Hub namespace"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEXPRESSROUTECIRCUIT",
+    "displayName": "Express Route circuit"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEXPRESSROUTECONNECTION",
+    "displayName": "Express Route connection"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREEXPRESSROUTEGATEWAY",
+    "displayName": "Express Route gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREFIREWALL",
+    "displayName": "Firewalls azure firewall entity"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREFRONTDOORFRONTDOOR",
+    "displayName": "Front Door front door"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREFUNCTIONSAPP",
+    "displayName": "Azure Function"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREFUNCTIONSWORKFLOW",
+    "displayName": "Functions Workflow"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREHDINSIGHT",
+    "displayName": "HDInsight"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREINTEGRATIONSERVICEENVIRONMENT",
+    "displayName": "Integration Service Environment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREIOTCENTRALAPPLICATION",
+    "displayName": "IoT Central Application"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREIOTHUB",
+    "displayName": "IoT Hub"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREKEYVAULTVAULT",
+    "displayName": "Key Vault vault"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURELOADBALANCER",
+    "displayName": "Load balancer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURELOGICAPPSINTEGRATIONSERVICEENVIRONMENT",
+    "displayName": "Logic Apps integration service environment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURELOGICAPPSWORKFLOW",
+    "displayName": "Logic Apps workflow"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMACHINELEARNINGDEPLOYMENT",
+    "displayName": "Machine Learning Deployment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMACHINELEARNINGENDPOINTS",
+    "displayName": "Machine Learning Endpoints"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMACHINELEARNINGWORKSPACE",
+    "displayName": "Machine Learning workspace"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMAP",
+    "displayName": "Map"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMARIADBSERVER",
+    "displayName": "MariaDB Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMEDIASERVICE",
+    "displayName": "Media Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMEDIASERVICESLIVEEVENT",
+    "displayName": "Media Services Live Event"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMEDIASERVICESSTREAMINGENDPOINT",
+    "displayName": "Media Services Streaming Endpoint"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMEDIASERVICESVIDEOANALYZER",
+    "displayName": "Media Services Video Analyzer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMYSQLFLEXIBLESERVER",
+    "displayName": "MySQL Flexible Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREMYSQLSERVER",
+    "displayName": "MySQL Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURENETAPPCAPACITYPOOL",
+    "displayName": "NetApp Capacity Pool"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURENETAPPFILE",
+    "displayName": "NetApp File"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURENETWORKWATCHER",
+    "displayName": "Network Watcher"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURENOTIFICATIONHUB",
+    "displayName": "Notification Hub"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPEERING",
+    "displayName": "Peering"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPEERINGSERVICE",
+    "displayName": "Peering Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPOSTGRESQLFLEXIBLESERVER",
+    "displayName": "PostgreSQL Flexible Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPOSTGRESQLSERVER",
+    "displayName": "PostgreSQL Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPOWERBIDEDICATEDCAPACITY",
+    "displayName": "Power BI Dedicated capacity"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPRIVATEDNSZONE",
+    "displayName": "Private DNS Zone"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREPURVIEW",
+    "displayName": "Purview"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREREDISCACHE",
+    "displayName": "Redis cache"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREREDISCACHESHARD",
+    "displayName": "Redis shard"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURERELAY",
+    "displayName": "Relay"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESERVICEBUSNAMESPACE",
+    "displayName": "Service Bus namespace"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESIGNALR",
+    "displayName": "SignalR"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESPRINGAPP",
+    "displayName": "Spring App"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESQLDATABASE",
+    "displayName": "SQL database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESQLELASTICPOOL",
+    "displayName": "SQL ElasticPool"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESQLMANAGEDINSTANCE",
+    "displayName": "SQL Managed instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESTORAGEACCOUNT",
+    "displayName": "Storage account"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESTORAGESYNC",
+    "displayName": "Storage Sync"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESTREAMANALYTIC",
+    "displayName": "Stream Analytic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURESYNAPSEANALYTIC",
+    "displayName": "Synapse Analytic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURETIMESERIESINSIGHT",
+    "displayName": "Time Series Insight"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZURETRAFFICMANAGER",
+    "displayName": "Traffic Manager"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREVIRTUALHUB",
+    "displayName": "Virtual Hub"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREVIRTUALMACHINESCALESET",
+    "displayName": "Virtual machine scale set"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREVIRTUALNETWORKSPUBLICIPADDRESS",
+    "displayName": "Virtual Network public IP address"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREVPNGATEWAY",
+    "displayName": "VPN Gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREVPNGATEWAYSVPNGATEWAY",
+    "displayName": "Virtual Network Gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "AZUREWEBAPP",
+    "displayName": "Web App"
+  },
+  {
+    "domain": "INFRA",
+    "type": "CASSANDRANODE",
+    "displayName": "Cassandra node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "CONSULAGENT",
+    "displayName": "Consul agent"
+  },
+  {
+    "domain": "INFRA",
+    "type": "CONTAINER",
+    "displayName": "Container"
+  },
+  {
+    "domain": "INFRA",
+    "type": "COUCHBASEBUCKET",
+    "displayName": "Couchbase bucket"
+  },
+  {
+    "domain": "INFRA",
+    "type": "COUCHBASECLUSTER",
+    "displayName": "Couchbase cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "COUCHBASENODE",
+    "displayName": "Couchbase node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "ELASTICSEARCHNODE",
+    "displayName": "Elasticsearch node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "ETCD_CLUSTER",
+    "displayName": "ETCD cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "F5NODE",
+    "displayName": "F5 node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "F5POOL",
+    "displayName": "F5 pool"
+  },
+  {
+    "domain": "INFRA",
+    "type": "F5POOLMEMBER",
+    "displayName": "F5 poolMember"
+  },
+  {
+    "domain": "INFRA",
+    "type": "F5SYSTEM",
+    "displayName": "F5 system"
+  },
+  {
+    "domain": "INFRA",
+    "type": "F5VIRTUALSERVER",
+    "displayName": "F5 virtual server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAIPLATFORMENDPOINT",
+    "displayName": "VertexAI Endpoint"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAIPLATFORMFEATUREONLINESTORE",
+    "displayName": "VertexAI Feature Online Store"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAIPLATFORMFEATURESTORE",
+    "displayName": "VertexAI Feature Store"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAIPLATFORMINDEX",
+    "displayName": "VertexAI Index"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAIPLATFORMLOCATION",
+    "displayName": "VertexAI Location"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPALLOYDBCLUSTER",
+    "displayName": "AlloyDB Cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPALLOYDBDATABASE",
+    "displayName": "AlloyDB Database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPALLOYDBINSTANCE",
+    "displayName": "AlloyDB Instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPAPPENGINESERVICE",
+    "displayName": "App Engine service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPBIGQUERYDATASET",
+    "displayName": "Big Query dataset"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPBIGQUERYPROJECT",
+    "displayName": "Big Query project"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPBIGQUERYTABLE",
+    "displayName": "Big Query table"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPBIGTABLECLUSTER",
+    "displayName": "Bigtable cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPBIGTABLETABLE",
+    "displayName": "Bigtable table"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPCLOUDFUNCTION",
+    "displayName": "Cloud Function"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPCLOUDSQL",
+    "displayName": "Cloud SQL"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPCLOUDTASKSQUEUE",
+    "displayName": "Cloud tasks queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPCOMPOSERENVIRONMENT",
+    "displayName": "Composer environment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPCOMPOSERWORKFLOW",
+    "displayName": "Composer workflow"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPDATAFLOWJOB",
+    "displayName": "Dataflow job"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPDATAPROCCLUSTER",
+    "displayName": "Dataproc cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPDATASTOREREQUEST",
+    "displayName": "Datastore request"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPFIREBASEDATABASENAMESPACE",
+    "displayName": "Firebase Database namespace"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPFIREBASEHOSTINGDOMAIN",
+    "displayName": "Firebase Hosting domain"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPFIREBASESTORAGEBUCKET",
+    "displayName": "Firebase Storage bucket"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPFIRESTOREINSTANCE",
+    "displayName": "Firestore instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPFIRESTOREREQUEST",
+    "displayName": "Firestore request"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPHTTPLOADBALANCER",
+    "displayName": "HTTP load balancer"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPINTERCONNECTATTACHMENT",
+    "displayName": "Interconnect attachment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPINTERCONNECTINTERCONNECT",
+    "displayName": "Interconnect"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPKUBERNETESCONTAINER",
+    "displayName": "Kubernetes Container"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPKUBERNETESNODE",
+    "displayName": "Kubernetes node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPMEMCACHEMEMCACHENODE",
+    "displayName": "Memcache memcache node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPPUBSUBSUBSCRIPTION",
+    "displayName": "Pub/Sub subscription"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPPUBSUBTOPIC",
+    "displayName": "Pub/Sub topic"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPREDISINSTANCE",
+    "displayName": "Redis instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPROUTERCLOUDROUTER",
+    "displayName": "Router cloud router"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPROUTERNATGATEWAY",
+    "displayName": "Router nat gateway"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPRUNREVISION",
+    "displayName": "Run revision"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPSPANNERDATABASE",
+    "displayName": "Spanner database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPSPANNERINSTANCE",
+    "displayName": "Spanner instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPSTORAGEBUCKET",
+    "displayName": "Storage bucket"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPVIRTUALMACHINEDISK",
+    "displayName": "Virtual Machine Disk"
+  },
+  {
+    "domain": "INFRA",
+    "type": "GCPVPCACCESSCONNECTOR",
+    "displayName": "VPC Access connector"
+  },
+  {
+    "domain": "INFRA",
+    "type": "HOST",
+    "displayName": "Host"
+  },
+  {
+    "domain": "INFRA",
+    "type": "IBMMQ_MANAGER",
+    "displayName": "IBM MQ Manager"
+  },
+  {
+    "domain": "INFRA",
+    "type": "IBMMQ_QUEUE",
+    "displayName": "IBM MQ Queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KAFKABROKER",
+    "displayName": "Kafka broker"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETESCLUSTER",
+    "displayName": "Kubernetes Cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_APISERVER",
+    "displayName": "Kubernetes API Server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_CRONJOB",
+    "displayName": "Kubernetes CronJob"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_DAEMONSET",
+    "displayName": "Kubernetes DaemonSet"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_DEPLOYMENT",
+    "displayName": "Kubernetes Deployment"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_JOB",
+    "displayName": "Kubernetes Job"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_PERSISTENTVOLUME",
+    "displayName": "Kubernetes PersistentVolume"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_PERSISTENTVOLUMECLAIM",
+    "displayName": "Kubernetes PersistentVolumeClaim"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_POD",
+    "displayName": "Kubernetes Pod"
+  },
+  {
+    "domain": "INFRA",
+    "type": "KUBERNETES_STATEFULSET",
+    "displayName": "Kubernetes StatefulSet"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MEMCACHEDINSTANCE",
+    "displayName": "Memcached instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MONGODB_COLLECTION",
+    "displayName": "MongoDB Collection"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MONGODB_DATABASE",
+    "displayName": "MongoDB Database"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MONGODB_INSTANCE",
+    "displayName": "MongoDB Instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MSSQLINSTANCE",
+    "displayName": "MSSQL instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "MYSQLNODE",
+    "displayName": "MySQL node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "NGINXSERVER",
+    "displayName": "NGINX server"
+  },
+  {
+    "domain": "INFRA",
+    "type": "ORACLEDBINSTANCE",
+    "displayName": "Oracledb instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "POSTGRESQLINSTANCE",
+    "displayName": "PostgreSQL instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "POWERDNS_AUTHORITATIVE",
+    "displayName": "PowerDNS Authoritative"
+  },
+  {
+    "domain": "INFRA",
+    "type": "POWERDNS_RECURSOR",
+    "displayName": "PowerDNS Recursor"
+  },
+  {
+    "domain": "INFRA",
+    "type": "RABBITMQCLUSTER",
+    "displayName": "Rabbitmq cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "RABBITMQEXCHANGE",
+    "displayName": "RabbitMQ exchange"
+  },
+  {
+    "domain": "INFRA",
+    "type": "RABBITMQNODE",
+    "displayName": "RabbitMQ node"
+  },
+  {
+    "domain": "INFRA",
+    "type": "RABBITMQQUEUE",
+    "displayName": "RabbitMQ queue"
+  },
+  {
+    "domain": "INFRA",
+    "type": "REDISINSTANCE",
+    "displayName": "Redis instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "SQUID_CACHEMGR",
+    "displayName": "Squid Cache manager"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VARNISHINSTANCE",
+    "displayName": "Varnish instance"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHERECLUSTER",
+    "displayName": "vSphere cluster"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHEREDATACENTER",
+    "displayName": "vSphere datacenter"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHEREDATASTORE",
+    "displayName": "vSphere datastore"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHEREHOST",
+    "displayName": "vSphere host"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHERERESOURCEPOOL",
+    "displayName": "vSphere resource pool"
+  },
+  {
+    "domain": "INFRA",
+    "type": "VSPHEREVM",
+    "displayName": "vSphere virtual machine"
+  },
+  {
+    "domain": "INFRA",
+    "type": "WINDOWSSERVICE",
+    "displayName": "Legacy Windows Service"
+  },
+  {
+    "domain": "INFRA",
+    "type": "WIN_SERVICE",
+    "displayName": "Windows Service"
+  },
+  {
+    "domain": "MLOPS",
+    "type": "LLM_APPLICATION",
+    "displayName": "Application"
+  },
+  {
+    "domain": "MLOPS",
+    "type": "MACHINE_LEARNING_ENDPOINT",
+    "displayName": "Endpoint"
+  },
+  {
+    "domain": "MLOPS",
+    "type": "MACHINE_LEARNING_MODEL",
+    "displayName": "Model"
+  },
+  {
+    "domain": "MLOPS",
+    "type": "MACHINE_LEARNING_MODEL_DATA",
+    "displayName": "Model Inference Data"
+  },
+  {
+    "domain": "MOBILE",
+    "type": "APPLICATION",
+    "displayName": "Mobile application"
+  },
+  {
+    "domain": "NR1",
+    "type": "FLEET",
+    "displayName": "Fleet"
+  },
+  {
+    "domain": "NR1",
+    "type": "WORKLOAD",
+    "displayName": "Workload"
+  },
+  {
+    "domain": "SYNTH",
+    "type": "MONITOR",
+    "displayName": "Synthetic monitor"
+  }
+]
