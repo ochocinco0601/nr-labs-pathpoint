@@ -94,8 +94,11 @@ const SignalSelectionNerdlet = () => {
     const step = steps.find(({ id }) => id === stepId) || {};
     const [existingEntities, existingAlerts] = (step?.signals || []).reduce(
       (acc, signal) => {
-        if (signal.type === SIGNAL_TYPES.ENTITY) acc[0].push(signal);
-        if (signal.type === SIGNAL_TYPES.ALERT) acc[1].push(signal);
+        if (signal?.type === SIGNAL_TYPES.ENTITY) {
+          acc[0].push(signal);
+        } else if (signal?.type === SIGNAL_TYPES.ALERT) {
+          acc[1].push(signal);
+        }
         return acc;
       },
       [[], []]
@@ -197,6 +200,11 @@ const SignalSelectionNerdlet = () => {
       setSelectedAlerts((sa) => uniqueGuidsArray(sa, item, !checked));
   }, []);
 
+  const deleteItemHandler = useCallback(
+    (type, guid) => selectItemHandler(type, false, { guid }),
+    [selectItemHandler]
+  );
+
   const cancelHandler = useCallback(() => navigation.closeNerdlet(), []);
 
   const saveHandler = useCallback(async () => {
@@ -272,6 +280,7 @@ const SignalSelectionNerdlet = () => {
           selectedAlerts={selectedAlerts}
           signalsDetails={signalsDetails}
           onSelect={selectItemHandler}
+          onDelete={deleteItemHandler}
         />
         <Footer
           noFlow={!flow}

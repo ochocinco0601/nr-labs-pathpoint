@@ -5,7 +5,7 @@ import { Button, HeadingText } from 'nr1';
 
 import ListingTable from './listing-table';
 import { Signal } from '../../src/components';
-import { SIGNAL_TYPES, STATUSES } from '../../src/constants';
+import { MODES, SIGNAL_TYPES, STATUSES } from '../../src/constants';
 import { signalStatus } from '../../src/utils';
 
 const Listing = ({
@@ -16,6 +16,7 @@ const Listing = ({
   selectedAlerts = [],
   signalsDetails = {},
   onSelect,
+  onDelete,
 }) => {
   return (
     <div className="listing">
@@ -60,6 +61,8 @@ const Listing = ({
                   type: SIGNAL_TYPES.ENTITY,
                   alertSeverity,
                 })}
+                mode={MODES.EDIT}
+                onDelete={() => onDelete(SIGNAL_TYPES.ENTITY, guid)}
               />
             ))}
           </div>
@@ -78,6 +81,8 @@ const Listing = ({
                 name={signalsDetails[guid]?.name || name}
                 type={SIGNAL_TYPES.ALERT}
                 status={STATUSES.UNKNOWN}
+                mode={MODES.EDIT}
+                onDelete={() => onDelete(SIGNAL_TYPES.ALERT, guid)}
               />
             ))}
           </div>
@@ -95,6 +100,7 @@ Listing.propTypes = {
   selectedAlerts: PropTypes.array,
   signalsDetails: PropTypes.object,
   onSelect: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default Listing;

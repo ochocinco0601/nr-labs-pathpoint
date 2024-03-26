@@ -35,15 +35,21 @@ const Signal = ({
             }`
           : ''
       } ${
-        (selections.type === COMPONENTS.STEP && !isInSelectedStep) ||
-        (selections.type === COMPONENTS.SIGNAL && selections.id !== guid)
+        mode !== MODES.EDIT &&
+        ((selections?.type === COMPONENTS.STEP && !isInSelectedStep) ||
+          (selections?.type === COMPONENTS.SIGNAL && selections.id !== guid))
           ? 'faded'
           : ''
       }`}
-      onClick={(e) => {
-        e.stopPropagation();
-        markSelection(COMPONENTS.SIGNAL, guid, { name, type, status });
-      }}
+      onClick={
+        mode !== MODES.EDIT
+          ? (e) => {
+              e.stopPropagation();
+              if (markSelection)
+                markSelection(COMPONENTS.SIGNAL, guid, { name, type, status });
+            }
+          : null
+      }
     >
       <div className="status">
         <IconsLib
