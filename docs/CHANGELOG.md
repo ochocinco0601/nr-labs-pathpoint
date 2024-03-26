@@ -1,3 +1,10 @@
+## [1.67.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.1...v1.67.2) (2024-03-26)
+
+
+### Bug Fixes
+
+* error in signal selection nerdlet ([c866226](https://github.com/newrelic/nr-labs-hedgehog/commit/c8662268f2de2f1a82efde16ce5b6738c81e9974))
+
 ## [1.67.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.0...v1.67.1) (2024-03-25)
 
 
