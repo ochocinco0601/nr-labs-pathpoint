@@ -48,24 +48,6 @@
     flex-direction: column;
     box-sizing: border-box;
 
-    div:first-child {
-      div.step-cell {
-        border-top-width: .5px;
-      }
-      div:last-child {
-        border-top-right-radius: 4px;
-      }
-    }
-
-    div:last-child {
-      div.step-cell {
-        border-bottom-width: .5px;
-      }
-      div:last-child {
-        border-bottom-right-radius: 4px;
-      }
-    }
-
     .steps-row {
       box-sizing: border-box;
       width: 100%;
@@ -83,28 +65,48 @@
         grid-template-columns: 1fr 1fr 1fr;
       }
 
-      div:last-child {
-        border-right-width: 0.5px;
-      }
-
       .step-cell {
         box-sizing: border-box;
-        border: 0.25px solid #dedede;
 
-        @include border-colors(
-          $critical: 'critical',
-          $warning: 'warning',
-        );
-
-        &.healthy {
-          @include border-colors(
-            $success: 'success',
-            $unknown: 'unknown',
-          );
+        .step {
+          height: 100%;
         }
 
-        &.faded {
-          opacity: 0.3;
+        &:not(.edit) {
+          .step {
+            @include inset-borders(
+              $critical: 'critical',
+              $warning: 'warning',
+              $success: 'success',
+              $unknown: 'unknown',
+            );
+          }
+        }
+
+        &:is(.edit) {
+          .step {
+            box-shadow: inset 0px 0px 0px 0.5px #dedede;
+          }
+        }
+      }
+
+      &:first-child {
+        .step-cell {
+          &:last-child {
+            .step {
+              border-top-right-radius: 4px;
+            }
+          }
+        }
+      }
+
+      &:last-child {
+        .step-cell {
+          &:last-child {
+            .step {
+              border-bottom-right-radius: 4px;
+            }
+          }
         }
       }
     }
