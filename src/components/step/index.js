@@ -73,8 +73,11 @@ const Step = ({
     setStageName(name);
     setTitle(step.title);
     setStatus(step.status || STATUSES.UNKNOWN);
-    setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
   }, [stageId, levelId, stepId, stages, signals, selections]);
+
+  useEffect(() => {
+    setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
+  }, [status]);
 
   const updateSignalsHandler = (e) => {
     e.stopPropagation();
@@ -152,6 +155,13 @@ const Step = ({
             guid,
             status,
             type,
+            style: {
+              opacity:
+                selections.type === COMPONENTS.SIGNAL && selections.id !== guid
+                  ? 0.3
+                  : 1.0,
+              cursor: 'pointer',
+            },
           })
         )}
       />
@@ -179,14 +189,18 @@ const Step = ({
   SignalsList.displayName = 'SignalsList';
 
   const handleStepHeaderClick = (e) => {
-    e.stopPropagation();
-    if (signals.length) setSignalsListView((slw) => !slw);
+    if (mode === MODES.INLINE) {
+      e.stopPropagation();
+      if (signals.length) setSignalsListView((slw) => !slw);
+    }
   };
 
   return (
     <div
       className={`step ${mode === MODES.STACKED ? 'stacked' : ''} ${
-        isSelected ? 'selected' : ''
+        isSelected || (selections.type === COMPONENTS.SIGNAL && !isFaded)
+          ? 'selected'
+          : ''
       } ${status} ${isFaded ? 'faded' : ''}`}
       onClick={() =>
         mode !== MODES.EDIT && markSelection
