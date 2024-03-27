@@ -46,7 +46,7 @@ const Filters = ({
               key={`${item.domain}_${item.type}`}
               onClick={() => entityTypeChangeHandler(item)}
             >
-              {`${item.domain}/${item.type} (${item.count})`}
+              {`${item.displayName} (${item.count})`}
             </DropdownItem>
           )}
         </Dropdown>
