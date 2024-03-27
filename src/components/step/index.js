@@ -155,13 +155,8 @@ const Step = ({
             guid,
             status,
             type,
-            style: {
-              opacity:
-                selections.type === COMPONENTS.SIGNAL && selections.id !== guid
-                  ? 0.3
-                  : 1.0,
-              cursor: 'pointer',
-            },
+            isFaded:
+              selections.type === COMPONENTS.SIGNAL && selections.id !== guid,
           })
         )}
       />

@@ -19,6 +19,7 @@ const renderSignalIcon = (
     name = UI_CONTENT.SIGNAL.DEFAULT_NAME,
     type,
     status,
+    isFaded = false,
     ...statusProps
   },
   i,
@@ -27,7 +28,7 @@ const renderSignalIcon = (
   <Tooltip text={name}>
     <IconsLib
       key={i}
-      className={status}
+      className={`${status} ${isFaded ? ' faded' : ''}`}
       type={type}
       shouldShowTitle={false}
       {...statusProps}
