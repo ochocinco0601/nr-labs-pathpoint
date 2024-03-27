@@ -55,9 +55,9 @@
   @each $status, $name in meta.keywords($statuses) {
     &.#{$name} {
       @if $status == 'critical' {
-        box-shadow: inset 0px 0px 0px 0.5px $critical;
+        box-shadow: inset 0px 0px 0px 1px $critical;
       } @else if $status == 'success' {
-        box-shadow: inset 0px 0px 0px 0.5px $success;
+        box-shadow: inset 0px 0px 0px 1px $success;
       } @else if $status == 'unknown' {
         box-shadow: inset 0px 0px 0px 0.5px $unknown;
       } @else if $status == 'warning' {
