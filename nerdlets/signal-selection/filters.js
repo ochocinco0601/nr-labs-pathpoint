@@ -20,7 +20,10 @@ const Filters = ({
     if (!entitySearchText.trim()) return entityTypes;
     const est = entitySearchText.toLocaleUpperCase();
     return entityTypes.filter(
-      ({ domain, type }) => domain.includes(est) || type.includes(est)
+      ({ domain, type, searchDisplayName }) =>
+        domain.includes(est) ||
+        type.includes(est) ||
+        searchDisplayName.includes(est)
     );
   }, [entityTypes, entitySearchText]);
 

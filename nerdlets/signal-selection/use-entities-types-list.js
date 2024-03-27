@@ -16,7 +16,13 @@ const useEntitiesTypesList = () => {
             const { count } = data.types.find(
               (et) => et.domain === domain && et.type === type
             ) || { count: 0 };
-            return count ? [...acc, { type, domain, displayName, count }] : acc;
+            const searchDisplayName = displayName.toLocaleUpperCase();
+            return count
+              ? [
+                  ...acc,
+                  { type, domain, displayName, searchDisplayName, count },
+                ]
+              : acc;
           }, [])
         : [];
 
