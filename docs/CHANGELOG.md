@@ -1,3 +1,15 @@
+# [1.68.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.3...v1.68.0) (2024-03-27)
+
+
+### Bug Fixes
+
+* missing search functionality for displayname ([103957e](https://github.com/newrelic/nr-labs-hedgehog/commit/103957ea4f0577d1255e86946cc2ca2492198956))
+
+
+### Features
+
+* replace domain and types with human readable names in signal selection ([db12d3e](https://github.com/newrelic/nr-labs-hedgehog/commit/db12d3eb8d9badc9ce82da5430a295a232760e9c))
+
 ## [1.67.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.2...v1.67.3) (2024-03-27)
 
 
