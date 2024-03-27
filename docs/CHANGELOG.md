@@ -1,3 +1,10 @@
+## [1.67.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.2...v1.67.3) (2024-03-27)
+
+
+### Bug Fixes
+
+* border styles for steps ([8a32806](https://github.com/newrelic/nr-labs-hedgehog/commit/8a328063421793b0271db829cc71074c819b60a7))
+
 ## [1.67.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.1...v1.67.2) (2024-03-26)
 
 
