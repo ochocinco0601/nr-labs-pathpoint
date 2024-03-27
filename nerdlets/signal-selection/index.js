@@ -4,7 +4,6 @@ import {
   NerdGraphQuery,
   navigation,
   nerdlet,
-  useEntityCountQuery,
   useNerdletState,
   usePlatformState,
 } from 'nr1';
@@ -14,6 +13,7 @@ import Header from './header';
 import TabBar from './tab-bar';
 import Filters from './filters';
 import Footer from './footer';
+import useEntitiesTypesList from './use-entities-types-list';
 import {
   useFetchSignals,
   useFetchUser,
@@ -47,8 +47,6 @@ const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
 const SignalSelectionNerdlet = () => {
   const [currentTab, setCurrentTab] = useState(SIGNAL_TYPES.ENTITY);
   const [acctId, setAcctId] = useState();
-  const [entityCount, setEntityCount] = useState(0);
-  const [entityTypes, setEntityTypes] = useState([]);
   const [selectedEntityType, setSelectedEntityType] = useState();
   const [entities, setEntities] = useState([]);
   const [selectedEntities, setSelectedEntities] = useState([]);
@@ -60,11 +58,7 @@ const SignalSelectionNerdlet = () => {
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
   ] = useNerdletState();
-  const {
-    data: entityCountData,
-    error: entityCountError,
-    loading: entityCountLoading,
-  } = useEntityCountQuery();
+  const { entitiesCount, entitiesTypesList } = useEntitiesTypesList();
   const { user } = useFetchUser();
   const { flows: flow } = useFlowLoader({ accountId, flowId });
   const flowWriter = useFlowWriter({ accountId, user });
@@ -144,7 +138,7 @@ const SignalSelectionNerdlet = () => {
 
     if (currentTab === SIGNAL_TYPES.ENTITY) {
       if (
-        (entityCount && entityCount <= 200) ||
+        (entitiesCount && entitiesCount <= 200) ||
         (selectedEntityType && selectedEntityType.count <= 200)
       ) {
         getEntities().catch(console.error);
@@ -166,17 +160,6 @@ const SignalSelectionNerdlet = () => {
     alertCount,
     fetchAlerts,
   ]);
-
-  useEffect(() => {
-    if (entityCountData && !entityCountLoading) {
-      setEntityCount(entityCountData.count || 0);
-      setEntityTypes(entityCountData.types || []);
-    }
-  }, [entityCountData, entityCountLoading]);
-
-  useEffect(() => {
-    if (entityCountError) console.error(entityCountError);
-  }, [entityCountError]);
 
   const accountChangeHandler = useCallback((ai) => setAcctId(ai), []);
 
@@ -260,7 +243,7 @@ const SignalSelectionNerdlet = () => {
           currentTab={currentTab}
           setCurrentTab={setCurrentTab}
           labels={{
-            [SIGNAL_TYPES.ENTITY]: `Entities (${entityCount})`,
+            [SIGNAL_TYPES.ENTITY]: `Entities (${entitiesCount})`,
             [SIGNAL_TYPES.ALERT]: `Alerts (${alertCount})`,
           }}
         />
@@ -268,7 +251,7 @@ const SignalSelectionNerdlet = () => {
           currentTab={currentTab}
           accountId={acctId}
           entityTypeTitle={entityTypeTitle}
-          entityTypes={entityTypes}
+          entityTypes={entitiesTypesList}
           onAccountChange={accountChangeHandler}
           onEntityTypeChange={entityTypeChangeHandler}
         />
