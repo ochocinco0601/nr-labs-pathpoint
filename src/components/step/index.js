@@ -201,7 +201,7 @@ const Step = ({
         isSelected || (selections.type === COMPONENTS.SIGNAL && !isFaded)
           ? 'selected'
           : ''
-      } ${status} ${isFaded ? 'faded' : ''}`}
+      } ${mode !== MODES.INLINE ? status : ''} ${isFaded ? 'faded' : ''}`}
       onClick={() =>
         mode !== MODES.EDIT && markSelection
           ? markSelection(COMPONENTS.STEP, stepId)
