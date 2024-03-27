@@ -1,3 +1,10 @@
+## [1.68.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.0...v1.68.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* click behavior for inline and stacked view modes ([47fe73f](https://github.com/newrelic/nr-labs-hedgehog/commit/47fe73f3f6920367116614f5fc93647139c7f9aa))
+
 # [1.68.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.67.3...v1.68.0) (2024-03-27)
 
 
