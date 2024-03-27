@@ -57,11 +57,11 @@
       @if $status == 'critical' {
         box-shadow: inset 0px 0px 0px 1px $critical;
       } @else if $status == 'success' {
-        box-shadow: inset 0px 0px 0px 1px $success;
+        box-shadow: inset 0px 0px 0px 0.5px $success;
       } @else if $status == 'unknown' {
         box-shadow: inset 0px 0px 0px 0.5px $unknown;
       } @else if $status == 'warning' {
-        box-shadow: inset 0px 0px 0px 0.5px $warning;
+        box-shadow: inset 0px 0px 0px 1px $warning;
       }
     }
   }
