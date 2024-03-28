@@ -29,6 +29,8 @@ const ListingTable = ({
   alerts = [],
   selectedEntities = [],
   selectedAlerts = [],
+  rowCount,
+  onLoadMore,
   onSelect,
 }) => {
   const selectedHandler = useCallback(
@@ -63,6 +65,8 @@ const ListingTable = ({
     return (
       <Table
         items={entities}
+        rowCount={rowCount}
+        onLoadMore={onLoadMore}
         selected={selectedHandler}
         onSelect={selectItemHandler}
       >
@@ -120,6 +124,8 @@ ListingTable.propTypes = {
   alerts: PropTypes.array,
   selectedEntities: PropTypes.array,
   selectedAlerts: PropTypes.array,
+  rowCount: PropTypes.number,
+  onLoadMore: PropTypes.func,
   onSelect: PropTypes.func,
 };
 

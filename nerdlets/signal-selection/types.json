@@ -1683,5 +1683,660 @@
     "domain": "SYNTH",
     "type": "MONITOR",
     "displayName": "Synthetic monitor"
+  },
+  {
+    "domain": "EXT",
+    "type": "ACCESS_POINT",
+    "displayName": "Access Point"
+  },
+  {
+    "domain": "EXT",
+    "type": "AEROSPIKE",
+    "displayName": "Aerospike"
+  },
+  {
+    "domain": "EXT",
+    "type": "AIR_CONDITIONER",
+    "displayName": "Air conditioner"
+  },
+  {
+    "domain": "EXT",
+    "type": "AIX_ORACLE",
+    "displayName": "Aix Oracle"
+  },
+  {
+    "domain": "EXT",
+    "type": "ARGOCD",
+    "displayName": "Argocd"
+  },
+  {
+    "domain": "EXT",
+    "type": "AUDIOCODES_GATEWAY",
+    "displayName": "Audiocodes Gateway"
+  },
+  {
+    "domain": "EXT",
+    "type": "AWS_ELEMENTAL",
+    "displayName": "AWS Elemental"
+  },
+  {
+    "domain": "EXT",
+    "type": "BILLABLE_USER",
+    "displayName": "Billable User"
+  },
+  {
+    "domain": "EXT",
+    "type": "CDN_GENERIC",
+    "displayName": "CDN"
+  },
+  {
+    "domain": "EXT",
+    "type": "CISCO_APIC",
+    "displayName": "Cisco APIC"
+  },
+  {
+    "domain": "EXT",
+    "type": "CISCO_DCNM",
+    "displayName": "Cisco Dcnm"
+  },
+  {
+    "domain": "EXT",
+    "type": "CISCO_UCS",
+    "displayName": "Cisco UCS"
+  },
+  {
+    "domain": "EXT",
+    "type": "CLOUDFLARE_HOST",
+    "displayName": "Cloudflare Host"
+  },
+  {
+    "domain": "EXT",
+    "type": "COHESITY",
+    "displayName": "Cohesity"
+  },
+  {
+    "domain": "EXT",
+    "type": "COREDNS",
+    "displayName": "Coredns"
+  },
+  {
+    "domain": "EXT",
+    "type": "CUSTOMER_CONSUMPTION",
+    "displayName": "Customer Consumption"
+  },
+  {
+    "domain": "EXT",
+    "type": "DB2",
+    "displayName": "DB2 Database"
+  },
+  {
+    "domain": "EXT",
+    "type": "DDI",
+    "displayName": "DDI"
+  },
+  {
+    "domain": "EXT",
+    "type": "DEEPER_CONNECT",
+    "displayName": "Deeper Connect"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_AVAMAR",
+    "displayName": "Dell Avamar"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_COMPELLENT",
+    "displayName": "Dell Compellent"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_DATADOMAIN",
+    "displayName": "Dell Datadomain"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_RECOVERPOINT",
+    "displayName": "Dell Recoverpoint"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_VMAX",
+    "displayName": "Dell Vmax"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_VNX",
+    "displayName": "Dell Vnx"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_VPLEX",
+    "displayName": "Dell Vplex"
+  },
+  {
+    "domain": "EXT",
+    "type": "DELL_XTREMIO",
+    "displayName": "Dell Xtremio"
+  },
+  {
+    "domain": "EXT",
+    "type": "DORA",
+    "displayName": "Dora"
+  },
+  {
+    "domain": "EXT",
+    "type": "EMAIL_GATEWAY",
+    "displayName": "Email gateway"
+  },
+  {
+    "domain": "EXT",
+    "type": "ENDPOINT",
+    "displayName": "Network endpoint"
+  },
+  {
+    "domain": "EXT",
+    "type": "ENVIRONMENT_SENSOR",
+    "displayName": "Environment sensor"
+  },
+  {
+    "domain": "EXT",
+    "type": "FACTORIO_GAME",
+    "displayName": "Factorio Game"
+  },
+  {
+    "domain": "EXT",
+    "type": "FASTLY_POP",
+    "displayName": "Fastly datacenter"
+  },
+  {
+    "domain": "EXT",
+    "type": "FIBRE_CHANNEL_SWITCH",
+    "displayName": "Fibre Channel Switch"
+  },
+  {
+    "domain": "EXT",
+    "type": "FIREWALL",
+    "displayName": "Firewall"
+  },
+  {
+    "domain": "EXT",
+    "type": "FLEX_REMOTE",
+    "displayName": "Flex Remote"
+  },
+  {
+    "domain": "EXT",
+    "type": "FLOW_DEVICE",
+    "displayName": "Flow Device"
+  },
+  {
+    "domain": "EXT",
+    "type": "GATSBY_BUILD",
+    "displayName": "Gatsby Build"
+  },
+  {
+    "domain": "EXT",
+    "type": "HARBORREGISTRY",
+    "displayName": "Harborregistry"
+  },
+  {
+    "domain": "EXT",
+    "type": "HARDWARE_SECURITY_MODULE",
+    "displayName": "Hardware Security Module"
+  },
+  {
+    "domain": "EXT",
+    "type": "HCP_VAULT",
+    "displayName": "Hcp Vault"
+  },
+  {
+    "domain": "EXT",
+    "type": "HOST",
+    "displayName": "Host - External"
+  },
+  {
+    "domain": "EXT",
+    "type": "IBMMQMANAGER",
+    "displayName": "IBM MQ Manager"
+  },
+  {
+    "domain": "EXT",
+    "type": "IBMMQQUEUE",
+    "displayName": "IBM MQ Queue"
+  },
+  {
+    "domain": "EXT",
+    "type": "IBM_DATAPOWER",
+    "displayName": "IBM DataPower"
+  },
+  {
+    "domain": "EXT",
+    "type": "IBM_WGA",
+    "displayName": "IBM WGA"
+  },
+  {
+    "domain": "EXT",
+    "type": "IDRAC",
+    "displayName": "iDRAC"
+  },
+  {
+    "domain": "EXT",
+    "type": "ILO",
+    "displayName": "ILO"
+  },
+  {
+    "domain": "EXT",
+    "type": "INFLUXDB",
+    "displayName": "Influxdb"
+  },
+  {
+    "domain": "EXT",
+    "type": "ISILON",
+    "displayName": "Isilon"
+  },
+  {
+    "domain": "EXT",
+    "type": "ISTIO_SERVICE",
+    "displayName": "Istio Service"
+  },
+  {
+    "domain": "EXT",
+    "type": "JFROG_SERVER",
+    "displayName": "Jfrog Server"
+  },
+  {
+    "domain": "EXT",
+    "type": "KENTIK_DEFAULT",
+    "displayName": "Kentik Default"
+  },
+  {
+    "domain": "EXT",
+    "type": "KENTIK_PING",
+    "displayName": "Ping device"
+  },
+  {
+    "domain": "EXT",
+    "type": "KEY_TRANSACTION",
+    "displayName": "Key Transaction"
+  },
+  {
+    "domain": "EXT",
+    "type": "LOAD_BALANCER",
+    "displayName": "Load balancer"
+  },
+  {
+    "domain": "EXT",
+    "type": "MEDIA_GATEWAY",
+    "displayName": "Media gateway"
+  },
+  {
+    "domain": "EXT",
+    "type": "MEDIA_SERVER",
+    "displayName": "Media server"
+  },
+  {
+    "domain": "EXT",
+    "type": "MERAKI_CONTROLLER",
+    "displayName": "Meraki Controller"
+  },
+  {
+    "domain": "EXT",
+    "type": "MERAKI_DEVICE",
+    "displayName": "Meraki Device"
+  },
+  {
+    "domain": "EXT",
+    "type": "MOBILITY_CONTROLLER",
+    "displayName": "Mobility Controller"
+  },
+  {
+    "domain": "EXT",
+    "type": "NAS",
+    "displayName": "NAS"
+  },
+  {
+    "domain": "EXT",
+    "type": "NETGEAR_READYNAS",
+    "displayName": "Netgear Readynas"
+  },
+  {
+    "domain": "EXT",
+    "type": "NETWORK_DHCP_SERVICE",
+    "displayName": "Network Dhcp Service"
+  },
+  {
+    "domain": "EXT",
+    "type": "NETWORK_DNS_SERVICE",
+    "displayName": "Network Dns Service"
+  },
+  {
+    "domain": "EXT",
+    "type": "NETWORK_SYNTH",
+    "displayName": "Network Synthetic"
+  },
+  {
+    "domain": "EXT",
+    "type": "NET_SNMP",
+    "displayName": "Net-SNMP"
+  },
+  {
+    "domain": "EXT",
+    "type": "OTELCOL",
+    "displayName": "OpenTelemetry collector"
+  },
+  {
+    "domain": "EXT",
+    "type": "PACKAGE",
+    "displayName": "Package"
+  },
+  {
+    "domain": "EXT",
+    "type": "PACKET_BROKER",
+    "displayName": "Packet broker"
+  },
+  {
+    "domain": "EXT",
+    "type": "PDU",
+    "displayName": "PDU"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIHOLE",
+    "displayName": "Pi-Hole"
+  },
+  {
+    "domain": "EXT",
+    "type": "PINECONE_INDEX",
+    "displayName": "Pinecone Index"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_AMQP",
+    "displayName": "AMQP - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_CASSANDRA",
+    "displayName": "Cassandra - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_DNS",
+    "displayName": "DNS - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_KAFKABROKER",
+    "displayName": "Kafka - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_MYSQL",
+    "displayName": "MySQL - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_POSTGRES",
+    "displayName": "Postgres - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PIXIE_REDIS",
+    "displayName": "Redis - Pixie"
+  },
+  {
+    "domain": "EXT",
+    "type": "PRINTER",
+    "displayName": "Printer"
+  },
+  {
+    "domain": "EXT",
+    "type": "PURE",
+    "displayName": "Pure"
+  },
+  {
+    "domain": "EXT",
+    "type": "REDIS",
+    "displayName": "Redis cluster"
+  },
+  {
+    "domain": "EXT",
+    "type": "RF_SCANNER",
+    "displayName": "RF Scanner"
+  },
+  {
+    "domain": "EXT",
+    "type": "RHOST",
+    "displayName": "OpMon Host"
+  },
+  {
+    "domain": "EXT",
+    "type": "ROUTER",
+    "displayName": "Router"
+  },
+  {
+    "domain": "EXT",
+    "type": "RSERVICE",
+    "displayName": "RService"
+  },
+  {
+    "domain": "EXT",
+    "type": "RSERVICEV2",
+    "displayName": "Rservicev2"
+  },
+  {
+    "domain": "EXT",
+    "type": "RUBRIK",
+    "displayName": "Rubrik"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_ABAPWS",
+    "displayName": "SAP ABAP Web Service"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_HANA",
+    "displayName": "SAP HANA DB"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_HTTPDEST",
+    "displayName": "HTTP Destination"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_IDOC",
+    "displayName": "IDOC"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_INSTANCE",
+    "displayName": "App Server Instance"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_JOB",
+    "displayName": "Background Job"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_MAXDB",
+    "displayName": "SAP MaxDB"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_MSSQL",
+    "displayName": "SAP SQLServer DB"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_ORACLE",
+    "displayName": "SAP Oracle DB"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_QRFC",
+    "displayName": "RFC Queue"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_RFCDEST",
+    "displayName": "RFC Destination"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_SYSTEM",
+    "displayName": "System"
+  },
+  {
+    "domain": "EXT",
+    "type": "SAP_TRANSACTION",
+    "displayName": "SAP Transaction"
+  },
+  {
+    "domain": "EXT",
+    "type": "SD_WAN",
+    "displayName": "SD WAN"
+  },
+  {
+    "domain": "EXT",
+    "type": "SERVICE",
+    "displayName": "Service - OpenTelemetry"
+  },
+  {
+    "domain": "EXT",
+    "type": "SERVICE_LEVEL",
+    "displayName": "Service Level"
+  },
+  {
+    "domain": "EXT",
+    "type": "SHELLED_SPA",
+    "displayName": "Shelled Spa"
+  },
+  {
+    "domain": "EXT",
+    "type": "SITE",
+    "displayName": "Site"
+  },
+  {
+    "domain": "EXT",
+    "type": "SNMP_APPLIANCE",
+    "displayName": "SNMP appliance"
+  },
+  {
+    "domain": "EXT",
+    "type": "SOLARWINDS_NETWORK",
+    "displayName": "Solarwinds Network"
+  },
+  {
+    "domain": "EXT",
+    "type": "SOLARWINDS_OTHER",
+    "displayName": "Solarwinds Other"
+  },
+  {
+    "domain": "EXT",
+    "type": "SOLARWINDS_SERVER",
+    "displayName": "Solarwinds Server"
+  },
+  {
+    "domain": "EXT",
+    "type": "SSL_CERTIFICATE",
+    "displayName": "Ssl Certificate"
+  },
+  {
+    "domain": "EXT",
+    "type": "SWITCH",
+    "displayName": "Switch"
+  },
+  {
+    "domain": "EXT",
+    "type": "SYNOLOGY",
+    "displayName": "Synology"
+  },
+  {
+    "domain": "EXT",
+    "type": "TEAM",
+    "displayName": "Team"
+  },
+  {
+    "domain": "EXT",
+    "type": "TINYPROXY",
+    "displayName": "Tinyproxy"
+  },
+  {
+    "domain": "EXT",
+    "type": "TRAP_DEVICE",
+    "displayName": "Trap Device"
+  },
+  {
+    "domain": "EXT",
+    "type": "UNIX_HOST",
+    "displayName": "Unix host"
+  },
+  {
+    "domain": "EXT",
+    "type": "UPS",
+    "displayName": "UPS"
+  },
+  {
+    "domain": "EXT",
+    "type": "VPC_NETWORK",
+    "displayName": "VPC Network"
+  },
+  {
+    "domain": "EXT",
+    "type": "WAF",
+    "displayName": "Web Application Firewall"
+  },
+  {
+    "domain": "EXT",
+    "type": "WAN_OPTIMIZER",
+    "displayName": "WAN Optimizer"
+  },
+  {
+    "domain": "EXT",
+    "type": "WEB_GATEWAY",
+    "displayName": "Web gateway"
+  },
+  {
+    "domain": "EXT",
+    "type": "WIRELESS_CONTROLLER",
+    "displayName": "Wireless Controller"
+  },
+  {
+    "domain": "EXT",
+    "type": "ZERTO",
+    "displayName": "Zerto"
+  },
+  {
+    "domain": "EXT",
+    "type": "ZFS",
+    "displayName": "Zfs"
+  },
+  {
+    "domain": "VIDEO",
+    "type": "BROWSER_VIDEO",
+    "displayName": "Browser Video"
+  },
+  {
+    "domain": "VIDEO",
+    "type": "CONVIVA",
+    "displayName": "Conviva"
+  },
+  {
+    "domain": "VIDEO",
+    "type": "MOBILE_VIDEO",
+    "displayName": "Mobile Video"
+  },
+  {
+    "domain": "VIDEO",
+    "type": "ROKU_SYSTEM",
+    "displayName": "Roku System"
+  },
+  {
+    "domain": "VIDEO",
+    "type": "ROKU_VIDEO",
+    "displayName": "Roku Video"
   }
 ]
