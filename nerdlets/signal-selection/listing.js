@@ -15,6 +15,8 @@ const Listing = ({
   selectedEntities = [],
   selectedAlerts = [],
   signalsDetails = {},
+  rowCount,
+  onLoadMore,
   onSelect,
   onDelete,
 }) => {
@@ -26,6 +28,8 @@ const Listing = ({
         alerts={alerts}
         selectedEntities={selectedEntities}
         selectedAlerts={selectedAlerts}
+        rowCount={rowCount}
+        onLoadMore={onLoadMore}
         onSelect={onSelect}
       />
       <div className="selection">
@@ -99,6 +103,8 @@ Listing.propTypes = {
   selectedEntities: PropTypes.array,
   selectedAlerts: PropTypes.array,
   signalsDetails: PropTypes.object,
+  rowCount: PropTypes.number,
+  onLoadMore: PropTypes.func,
   onSelect: PropTypes.func,
   onDelete: PropTypes.func,
 };

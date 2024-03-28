@@ -13,13 +13,9 @@ import Header from './header';
 import TabBar from './tab-bar';
 import Filters from './filters';
 import Footer from './footer';
+import useFetchSignals from './use-fetch-signals';
 import useEntitiesTypesList from './use-entities-types-list';
-import {
-  useFetchSignals,
-  useFetchUser,
-  useFlowLoader,
-  useFlowWriter,
-} from '../../src/hooks';
+import { useFetchUser, useFlowLoader, useFlowWriter } from '../../src/hooks';
 import { queryFromGuidsArray } from '../../src/queries';
 import { entitiesDetailsFromQueryResults } from '../../src/utils';
 import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
@@ -54,6 +50,7 @@ const SignalSelectionNerdlet = () => {
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
   const [signalsDetails, setSignalsDetails] = useState({});
+  const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
   const [{ accountId }] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
@@ -120,10 +117,12 @@ const SignalSelectionNerdlet = () => {
 
   useEffect(() => {
     const getEntities = async () => {
-      const { data: { entities: e = [] } = {} } = await fetchEntities({
-        entityDomainType: selectedEntityType,
-      });
+      const { data: { entities: e = [], nextCursor } = {} } =
+        await fetchEntities({
+          entityDomainType: selectedEntityType,
+        });
       setEntities(() => (e && e.length ? e : []));
+      setFetchEntitiesNextCursor(nextCursor);
     };
 
     const getAlerts = async (id, searchQuery) => {
@@ -137,10 +136,7 @@ const SignalSelectionNerdlet = () => {
     };
 
     if (currentTab === SIGNAL_TYPES.ENTITY) {
-      if (
-        (entitiesCount && entitiesCount <= 200) ||
-        (selectedEntityType && selectedEntityType.count <= 200)
-      ) {
+      if (entitiesCount && selectedEntityType) {
         getEntities().catch(console.error);
       } else {
         setEntities(() => []);
@@ -161,6 +157,25 @@ const SignalSelectionNerdlet = () => {
     fetchAlerts,
   ]);
 
+  useEffect(
+    () =>
+      setSelectedEntityType((et) =>
+        entitiesTypesList?.length ? entitiesTypesList[0] : et
+      ),
+    [entitiesTypesList]
+  );
+
+  const onLoadMore = useCallback(async () => {
+    const { data: { entities: e = [], nextCursor } = {} } = await fetchEntities(
+      {
+        entityDomainType: selectedEntityType,
+        cursor: fetchEntitiesNextCursor,
+      }
+    );
+    setEntities((ent) => (e && e.length ? [...ent, ...e] : ent));
+    setFetchEntitiesNextCursor(nextCursor);
+  }, [fetchEntities, selectedEntityType, fetchEntitiesNextCursor]);
+
   const accountChangeHandler = useCallback((ai) => setAcctId(ai), []);
 
   const entityTypeChangeHandler = useCallback(
@@ -171,7 +186,8 @@ const SignalSelectionNerdlet = () => {
   const entityTypeTitle = useMemo(
     () =>
       selectedEntityType
-        ? `${selectedEntityType.domain}/${selectedEntityType.type}`
+        ? selectedEntityType.displayName ||
+          `${selectedEntityType.domain}/${selectedEntityType.type}`
         : UI_CONTENT.SIGNAL_SELECTION.ENTITY_TYPE_DROPDOWN_PLACEHOLDER,
     [selectedEntityType]
   );
@@ -262,6 +278,8 @@ const SignalSelectionNerdlet = () => {
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
           signalsDetails={signalsDetails}
+          rowCount={selectedEntityType?.count}
+          onLoadMore={onLoadMore}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
         />

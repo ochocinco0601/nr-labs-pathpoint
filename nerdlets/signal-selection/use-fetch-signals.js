@@ -1,22 +1,24 @@
 import { useCallback } from 'react';
 
 import { EntitiesByDomainTypeQuery, NerdGraphQuery } from 'nr1';
-import { nrqlConditionsSearchQuery } from '../../queries';
+import { nrqlConditionsSearchQuery } from '../../src/queries';
 
 const useFetchSignals = () => {
-  const fetchEntities = useCallback(async ({ entityDomainType, filters }) => {
-    const { data, fetchMore, error, loading } =
-      await EntitiesByDomainTypeQuery.query({
+  const fetchEntities = useCallback(
+    async ({ entityDomainType, filters, cursor }) => {
+      const { data, error, loading } = await EntitiesByDomainTypeQuery.query({
         entityDomain: entityDomainType.domain,
         entityType: entityDomainType.type,
         filters,
+        cursor,
       });
 
-    if (error) throw error;
-    if (fetchMore) fetchMore();
-    if (data && !loading) return { data };
-    return {};
-  }, []);
+      if (error) throw error;
+      if (data && !loading) return { data };
+      return {};
+    },
+    []
+  );
 
   const fetchAlerts = useCallback(async ({ id, searchQuery, countOnly }) => {
     if (id) {
