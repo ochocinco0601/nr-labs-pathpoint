@@ -155,13 +155,8 @@ const Step = ({
             guid,
             status,
             type,
-            style: {
-              opacity:
-                selections.type === COMPONENTS.SIGNAL && selections.id !== guid
-                  ? 0.3
-                  : 1.0,
-              cursor: 'pointer',
-            },
+            isFaded:
+              selections.type === COMPONENTS.SIGNAL && selections.id !== guid,
           })
         )}
       />
@@ -201,7 +196,7 @@ const Step = ({
         isSelected || (selections.type === COMPONENTS.SIGNAL && !isFaded)
           ? 'selected'
           : ''
-      } ${status} ${isFaded ? 'faded' : ''}`}
+      } ${mode !== MODES.INLINE ? status : ''} ${isFaded ? 'faded' : ''}`}
       onClick={() =>
         mode !== MODES.EDIT && markSelection
           ? markSelection(COMPONENTS.STEP, stepId)

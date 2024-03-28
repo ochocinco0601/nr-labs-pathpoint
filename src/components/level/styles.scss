@@ -67,6 +67,7 @@
 
       .step-cell {
         box-sizing: border-box;
+        border: 0.25px solid #dedede;
 
         .step {
           height: 100%;
@@ -77,8 +78,6 @@
             @include inset-borders(
               $critical: 'critical',
               $warning: 'warning',
-              $success: 'success',
-              $unknown: 'unknown',
             );
           }
         }
