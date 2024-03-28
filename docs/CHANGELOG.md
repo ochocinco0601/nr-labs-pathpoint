@@ -1,3 +1,10 @@
+## [1.68.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.1...v1.68.2) (2024-03-28)
+
+
+### Bug Fixes
+
+* errors caught - remove duplicate line + set border thickness for warning instead of success status ([d756511](https://github.com/newrelic/nr-labs-hedgehog/commit/d7565116491911aae0bdcea1b5d1449d0445b372))
+
 ## [1.68.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.0...v1.68.1) (2024-03-27)
 
 
