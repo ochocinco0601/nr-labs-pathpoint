@@ -1,3 +1,10 @@
+# [1.69.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.2...v1.69.0) (2024-03-28)
+
+
+### Features
+
+* lazy loading of entities in signal selection ([97ef360](https://github.com/newrelic/nr-labs-hedgehog/commit/97ef3603e9332ed1bfb36f0b50e0ae9237682f12))
+
 ## [1.68.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.1...v1.68.2) (2024-03-28)
 
 
