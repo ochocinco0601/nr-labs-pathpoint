@@ -16,6 +16,20 @@ import Incidents from './incidents';
 import GoldenMetrics from './golden-metrics';
 import { AppContext } from '../../contexts';
 
+import typesList from '../../../nerdlets/signal-selection/types.json';
+
+const NO_ENTITY_TYPE = '(unknown entity type)';
+
+const entityTypeFromGuid = (guid) => {
+  if (!guid) return NO_ENTITY_TYPE;
+  const [, domain, type] = atob(guid)?.split('|') || [];
+  if (!domain || !type) return NO_ENTITY_TYPE;
+  return (
+    typesList.find((t) => t.domain === domain && t.type === type)
+      ?.displayName || NO_ENTITY_TYPE
+  );
+};
+
 const SignalDetailSidebar = ({ guid, name, type }) => {
   const { account = {}, accounts = [] } = useContext(AppContext);
   const [conditionId, setConditionId] = useState();
@@ -54,9 +68,11 @@ const SignalDetailSidebar = ({ guid, name, type }) => {
             </HeadingText>
             <HeadingText type={HeadingText.TYPE.HEADING_3}>{name}</HeadingText>
             <HeadingText type={HeadingText.TYPE.HEADING_5}>
-              {signalAccount
-                ? `${signalAccount?.name} | ${signalAccount?.id}`
-                : ''}
+              {`${signalAccount?.name || '(unknown account)'} | ${
+                type === SIGNAL_TYPES.ENTITY
+                  ? entityTypeFromGuid(guid)
+                  : 'Alert condition'
+              }`}
             </HeadingText>
             {hasAccessToEntity ? (
               <Link

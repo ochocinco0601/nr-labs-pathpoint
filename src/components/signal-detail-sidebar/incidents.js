@@ -41,6 +41,9 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
         : `entity.guid = '${guid}'`;
     const timeClause = timeRangeToNrql({ timeRange });
     const limitStatement = 'LIMIT MAX';
+    setBannerMessage('');
+    setIncidentsList([]);
+    setMaxIncidentsShown(1);
     fetchIncidents({ accountId, whereClause, timeClause, limitStatement });
   }, [guid, type, accountId, conditionId, timeRange, fetchIncidents]);
 
