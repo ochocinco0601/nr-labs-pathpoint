@@ -16,12 +16,16 @@
     display: flex;
     gap: 8px;
 
-    button {
-      height: 32px;
-    }
+    .entity-type-filter {
+      button {
+        background-color: #e1edff;
+        color: #074382;
+        border-width: 0;
 
-    .add-filter-btn {
-      min-width: 140px;
+        &:hover {
+          background-color: #a4d1fc;
+        }
+      }
     }
   }
 
