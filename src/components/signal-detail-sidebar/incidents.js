@@ -17,10 +17,10 @@ import { timeRangeToNrql } from '@newrelic/nr-labs-components';
 
 import { incidentsQuery } from '../../queries';
 import { formatTimestamp, getIncidentDuration } from '../../utils';
-import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+import { SIGNAL_TYPES, STATUSES, UI_CONTENT } from '../../constants';
 
-const Incidents = ({ guid, type, conditionId, accountId }) => {
-  const [bannerMessage, setBannerMessage] = useState();
+const Incidents = ({ guid, type, conditionId, accountId, status }) => {
+  const [bannerMessage, setBannerMessage] = useState('');
   const [incidentsList, setIncidentsList] = useState([]);
   const [maxIncidentsShown, setMaxIncidentsShown] = useState(1);
   const { timeRange } = useContext(PlatformStateContext);
@@ -50,16 +50,18 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
     const isAlert = type === SIGNAL_TYPES.ALERT;
     fetchIncidents({
       accountId,
+      status,
       whereClause,
       timeClause,
       limitStatement,
       isAlert,
     });
-  }, [guid, type, accountId, conditionId, timeRange, fetchIncidents]);
+  }, [guid, type, accountId, conditionId, status, timeRange, fetchIncidents]);
 
   const fetchIncidents = useCallback(
     async ({
       accountId,
+      status,
       whereClause,
       timeClause = 'SINCE 30 DAYS AGO',
       limitStatement = 'LIMIT 1',
@@ -76,20 +78,27 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
 
       if (!events?.length) {
         if (!secondAttempt) {
-          fetchIncidents({
-            accountId,
-            whereClause,
-            isAlert,
-            secondAttempt: true,
-          });
+          if ([STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) {
+            fetchIncidents({
+              accountId,
+              whereClause,
+              isAlert,
+              secondAttempt: true,
+            });
+          } else {
+            setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE); // signal with success or unknown status -- make only one attempt to fetch incidents
+          }
         } else {
-          setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_INCIDENTS);
+          setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_INCIDENTS); // nothing found after secondAttempt
         }
       } else {
         setIncidentsList(events);
         setMaxIncidentsShown(isAlert ? events.length : 1);
-        if (secondAttempt)
-          setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.FOUND_RECENT);
+        if (secondAttempt) {
+          setBannerMessage(
+            `${UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE} ${UI_CONTENT.SIGNAL.DETAILS.FOUND_RECENT}` // most recent incident fiund outside of selected timerange
+          );
+        }
       }
     },
     []
@@ -112,56 +121,64 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
   }, []);
 
   return (
-    <div className="alert-incidents">
-      {bannerMessage && <SectionMessage description={bannerMessage} />}
-      {incidentsList.reduce(
-        (acc, incident, i) =>
-          i < maxIncidentsShown
-            ? [
-                ...acc,
-                <div key={incident.incidentId} className="alert-incident">
-                  <Card>
-                    <CardBody className="incident-card-body">
-                      <div className="incident-header">
-                        <div className={`square ${incident.priority}`}></div>
-                        <div className={`signal-status ${incident.priority}`}>
-                          <span>
-                            <span className="priority">
-                              {incident.priority}
+    <div className="alert-incidents-wrapper">
+      <HeadingText
+        className="alert-incidents-header"
+        type={HeadingText.TYPE.HEADING_4}
+      >
+        Activity stream
+      </HeadingText>
+      <div className="alert-incidents">
+        {bannerMessage && <SectionMessage description={bannerMessage} />}
+        {incidentsList.reduce(
+          (acc, incident, i) =>
+            i < maxIncidentsShown
+              ? [
+                  ...acc,
+                  <div key={incident.incidentId} className="alert-incident">
+                    <Card>
+                      <CardBody className="incident-card-body">
+                        <div className="incident-header">
+                          <div className={`square ${incident.priority}`}></div>
+                          <div className={`signal-status ${incident.priority}`}>
+                            <span>
+                              <span className="priority">
+                                {incident.priority}
+                              </span>
+                              {' Issue '}
+                              <span className="event">{incident.event}</span>
                             </span>
-                            {' Issue '}
-                            <span className="event">{incident.event}</span>
-                          </span>
+                          </div>
                         </div>
-                      </div>
-                      <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                        {incident.title}
-                      </HeadingText>
-                      <div className="incident-links">
-                        <Link
-                          className="detail-link"
-                          onClick={() => openIncidentNerdlet(incident)}
-                        >
-                          View incident
-                        </Link>
-                        {type === SIGNAL_TYPES.ENTITY && (
+                        <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                          {incident.title}
+                        </HeadingText>
+                        <div className="incident-links">
                           <Link
                             className="detail-link"
-                            onClick={() => openConditionNerdlet(incident)}
+                            onClick={() => openIncidentNerdlet(incident)}
                           >
-                            View condition
+                            View incident
                           </Link>
-                        )}
-                      </div>
-                      <div>Started: {formatTimestamp(incident.openTime)}</div>
-                      <div>Duration: {getIncidentDuration(incident)}</div>
-                    </CardBody>
-                  </Card>
-                </div>,
-              ]
-            : acc,
-        []
-      )}
+                          {type === SIGNAL_TYPES.ENTITY && (
+                            <Link
+                              className="detail-link"
+                              onClick={() => openConditionNerdlet(incident)}
+                            >
+                              View condition
+                            </Link>
+                          )}
+                        </div>
+                        <div>Started: {formatTimestamp(incident.openTime)}</div>
+                        <div>Duration: {getIncidentDuration(incident)}</div>
+                      </CardBody>
+                    </Card>
+                  </div>,
+                ]
+              : acc,
+          []
+        )}
+      </div>
       {type === SIGNAL_TYPES.ENTITY && incidentsList?.length > 1 ? (
         <div className="incidents-footer">
           <Button
@@ -187,6 +204,7 @@ Incidents.propTypes = {
   type: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
   conditionId: PropTypes.number,
   accountId: PropTypes.number,
+  status: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
 };
 
 export default Incidents;

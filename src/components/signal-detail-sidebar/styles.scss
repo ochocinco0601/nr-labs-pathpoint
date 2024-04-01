@@ -17,127 +17,158 @@
     line-height: 16px;
   }
 
-  .alert-incidents {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  .alert-incidents-wrapper {
+    .alert-incidents-header {
+      margin-bottom: 8px;
+    }
 
-    .timerange-badge {
-      padding: 16px;
+    .alert-incidents {
       display: flex;
-      flex-direction: row;
-      gap: 8px;
-      background: #f6fafd;
-      margin-bottom: -16px;
+      flex-direction: column;
+      gap: 16px;
 
-      .badge-title {
-        display: inline-block;
+      .timerange-badge {
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        background: #f6fafd;
+        margin-bottom: -16px;
+
+        .badge-title {
+          display: inline-block;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 16px;
+        }
+
+        .badge-message {
+          display: inline-block;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 16px;
+        }
+
+        .dismiss-banner {
+          cursor: pointer;
+        }
+      }
+
+      .alert-incident {
+        .incident-header {
+          margin: 4px 0px;
+          display: flex;
+          flex-direction: row;
+          gap: 4px;
+          justify-items: center;
+
+          .square {
+            height: 8px;
+            width: 8px;
+            margin: 4px 0;
+            &.critical {
+              background: $critical;
+            }
+
+            &.warning {
+              background: $warning;
+            }
+
+            &.success {
+              background: $success;
+            }
+
+            &.unknown {
+              background: $unknown;
+            }
+          }
+
+          .signal-status {
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 16px;
+
+            &.critical {
+              color: $critical;
+            }
+
+            &.warning {
+              color: $alt-warning;
+            }
+
+            &.success {
+              color: $success;
+            }
+
+            &.unknown {
+              color: $alt-unknown;
+            }
+
+            .priority, .event {
+              text-transform: capitalize;
+            }
+          }
+
+        }
+
+        .incident-links {
+          display: flex;
+          gap: 4px;
+        }
+      }
+    }
+
+    .incidents-footer {
+      display: block;
+      margin: 8px auto 0;;
+      width: fit-content;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+
+      button {
         font-size: 12px;
         font-weight: 600;
         line-height: 16px;
       }
-
-      .badge-message {
-        display: inline-block;
-        font-size: 12px;
-        font-weight: 400;
-        line-height: 16px;
-      }
-
-      .dismiss-banner {
-        cursor: pointer;
-      }
     }
-
-    .alert-incident {
-      .incident-header {
-        margin: 4px 0px;
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
-        justify-items: center;
-
-        .square {
-          height: 8px;
-          width: 8px;
-          margin: 4px 0;
-          &.critical {
-            background: $critical;
-          }
-
-          &.warning {
-            background: $warning;
-          }
-
-          &.success {
-            background: $success;
-          }
-
-          &.unknown {
-            background: $unknown;
-          }
-        }
-
-        .signal-status {
-          font-size: 12px;
-          font-weight: 500;
-          line-height: 16px;
-
-          &.critical {
-            color: $critical;
-          }
-
-          &.warning {
-            color: $alt-warning;
-          }
-
-          &.success {
-            color: $success;
-          }
-
-          &.unknown {
-            color: $alt-unknown;
-          }
-
-          .priority, .event {
-            text-transform: capitalize;
-          }
-        }
-
-      }
-
-      .incident-links {
-        display: flex;
-        gap: 4px;
-      }
-    }
-  }
-
-  .incidents-footer {
-    display: block;
-    margin: 0 auto;
-  }
 
     .incident-card-body {
-    margin: 0;
-  }
-
-  .golden-metric-card {
-    .golden-metric-card-header {
-      margin: 16px 0 4px;
-
-      h4 {
-        font-size: 14px;
-      }
-
-      p {
-        font-size: 10px;
-      }
-    }
-
-    .golden-metric-card-body {
-      margin: 4px 0 16px;
+      margin: 0;
     }
   }
 
+  .golden-metrics-wrapper {
+    .golden-metrics-header {
+      margin-bottom: 8px;
+    }
+
+    .golden-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .golden-metric-card {
+        .golden-metric-card-header {
+          margin: 0px;
+
+          h4 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 10px;
+            margin-top: 0;
+          }
+        }
+
+        .golden-metric-card-body {
+          margin: 4px 0 16px;
+          ul {
+            margin-left: -4px;
+          }
+        }
+      }
+    }
+  }
 }

@@ -10,7 +10,7 @@ import {
   navigation,
 } from 'nr1';
 
-import { SIGNAL_TYPES } from '../../constants';
+import { SIGNAL_TYPES, STATUSES } from '../../constants';
 
 import Incidents from './incidents';
 import GoldenMetrics from './golden-metrics';
@@ -30,7 +30,7 @@ const entityTypeFromGuid = (guid) => {
   );
 };
 
-const SignalDetailSidebar = ({ guid, name, type }) => {
+const SignalDetailSidebar = ({ guid, name, type, status }) => {
   const { account = {}, accounts = [] } = useContext(AppContext);
   const [conditionId, setConditionId] = useState();
   const [hasAccessToEntity, setHasAccessToEntity] = useState(false);
@@ -92,6 +92,7 @@ const SignalDetailSidebar = ({ guid, name, type }) => {
             type={type}
             conditionId={conditionId}
             accountId={signalAccount.id}
+            status={status}
           />
           {type === SIGNAL_TYPES.ENTITY ? <GoldenMetrics guid={guid} /> : null}
         </>
@@ -109,6 +110,7 @@ SignalDetailSidebar.propTypes = {
   guid: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
+  status: PropTypes.oneOf(Object.values(STATUSES)),
 };
 
 export default SignalDetailSidebar;
