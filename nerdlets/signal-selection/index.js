@@ -40,17 +40,26 @@ const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
   return idx < 0 ? [...arr, item] : [...arr];
 };
 
+const nameFilter = (items, searchText) =>
+  items.filter(({ name = '' }) =>
+    name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
+  );
+
 const SignalSelectionNerdlet = () => {
   const [currentTab, setCurrentTab] = useState(SIGNAL_TYPES.ENTITY);
   const [acctId, setAcctId] = useState();
   const [selectedEntityType, setSelectedEntityType] = useState();
   const [entities, setEntities] = useState([]);
   const [selectedEntities, setSelectedEntities] = useState([]);
+  const [filteredEntities, setFilteredEntities] = useState([]);
   const [alertCount, setAlertCount] = useState(0);
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
+  const [filteredAlerts, setFilteredAlerts] = useState([]);
   const [signalsDetails, setSignalsDetails] = useState({});
   const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
+  const [searchText, setSearchText] = useState('');
+  const [lazyLoadingProps, setLazyLoadingProps] = useState({});
   const [{ accountId }] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
@@ -165,6 +174,28 @@ const SignalSelectionNerdlet = () => {
     [entitiesTypesList]
   );
 
+  useEffect(() => {
+    if (searchText) {
+      setFilteredAlerts(nameFilter(alerts, searchText));
+      setFilteredEntities(nameFilter(entities, searchText));
+      setLazyLoadingProps({});
+    } else {
+      setFilteredAlerts(alerts);
+      setFilteredEntities(entities);
+      setLazyLoadingProps({
+        rowCount: selectedEntityType?.count,
+        onLoadMore,
+      });
+    }
+  }, [
+    currentTab,
+    alerts,
+    entities,
+    searchText,
+    selectedEntityType,
+    onLoadMore,
+  ]);
+
   const onLoadMore = useCallback(async () => {
     const { data: { entities: e = [], nextCursor } = {} } = await fetchEntities(
       {
@@ -270,18 +301,19 @@ const SignalSelectionNerdlet = () => {
           entityTypes={entitiesTypesList}
           onAccountChange={accountChangeHandler}
           onEntityTypeChange={entityTypeChangeHandler}
+          searchText={searchText}
+          setSearchText={setSearchText}
         />
         <Listing
           currentTab={currentTab}
-          entities={entities}
-          alerts={alerts}
+          entities={filteredEntities}
+          alerts={filteredAlerts}
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
           signalsDetails={signalsDetails}
-          rowCount={selectedEntityType?.count}
-          onLoadMore={onLoadMore}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
+          {...lazyLoadingProps}
         />
         <Footer
           noFlow={!flow}

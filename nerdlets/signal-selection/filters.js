@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { AccountPicker, Button, Dropdown, DropdownItem } from 'nr1';
-import { FilterBar } from '@newrelic/nr-labs-components';
+import { AccountPicker, Dropdown, DropdownItem, TextField } from 'nr1';
 
 import { SIGNAL_TYPES } from '../../src/constants';
 
@@ -13,35 +12,48 @@ const Filters = ({
   entityTypes,
   onAccountChange,
   onEntityTypeChange,
+  searchText,
+  setSearchText,
 }) => {
-  const [entitySearchText, setEntitySearchText] = useState('');
+  const [entityTypeSearchText, setEntityTypeSearchText] = useState('');
 
   const filteredEntityTypes = useMemo(() => {
-    if (!entitySearchText.trim()) return entityTypes;
-    const est = entitySearchText.toLocaleUpperCase();
+    if (!entityTypeSearchText.trim()) return entityTypes;
+    const est = entityTypeSearchText.toLocaleUpperCase();
     return entityTypes.filter(
       ({ domain, type, searchDisplayName }) =>
         domain.includes(est) ||
         type.includes(est) ||
         searchDisplayName.includes(est)
     );
-  }, [entityTypes, entitySearchText]);
+  }, [entityTypes, entityTypeSearchText]);
 
   const entityTypeChangeHandler = useCallback((e) => {
-    setEntitySearchText('');
+    setEntityTypeSearchText('');
     if (onEntityTypeChange) onEntityTypeChange(e);
   }, []);
 
   return (
     <div className="filters">
       <AccountPicker value={accountId} onChange={onAccountChange} />
+      <TextField
+        type={TextField.TYPE.SEARCH}
+        placeholder={`Search by ${
+          currentTab === SIGNAL_TYPES.ENTITY ? 'entity' : 'condition'
+        } name`}
+        value={searchText}
+        onChange={({ target: { value } = {} } = {}) =>
+          setSearchText(value || '')
+        }
+      />
       {currentTab === SIGNAL_TYPES.ENTITY ? (
         <Dropdown
+          className="entity-type-filter"
           title={entityTypeTitle}
           items={filteredEntityTypes}
-          search={entitySearchText}
+          search={entityTypeSearchText}
           onSearch={({ target: { value } = {} } = {}) =>
-            setEntitySearchText(value)
+            setEntityTypeSearchText(value)
           }
         >
           {({ item }) => (
@@ -54,15 +66,6 @@ const Filters = ({
           )}
         </Dropdown>
       ) : null}
-      <FilterBar options={[]} />
-      <Button
-        className="add-filter-btn"
-        type={Button.TYPE.PRIMARY}
-        disabled={true}
-        iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-      >
-        Add this filter
-      </Button>
     </div>
   );
 };
@@ -74,6 +77,8 @@ Filters.propTypes = {
   entityTypes: PropTypes.array,
   onAccountChange: PropTypes.func,
   onEntityTypeChange: PropTypes.func,
+  searchText: PropTypes.string,
+  setSearchText: PropTypes.func,
 };
 
 export default Filters;
