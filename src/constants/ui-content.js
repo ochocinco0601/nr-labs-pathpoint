@@ -14,6 +14,7 @@ export const UI_CONTENT = {
   },
   FLOW: {
     BUTTON_EXPORT: 'Export JSON',
+    CURRENT_STATUS: 'Showing current health',
   },
   STAGE: {
     TOOLTIP: 'A high-level functional category in the flow',
