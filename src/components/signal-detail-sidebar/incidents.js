@@ -26,6 +26,12 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
   const { timeRange } = useContext(PlatformStateContext);
 
   useEffect(() => {
+    setBannerMessage('');
+    setIncidentsList([]);
+    setMaxIncidentsShown(1);
+  }, [guid]);
+
+  useEffect(() => {
     if (
       !guid ||
       !accountId ||
@@ -41,10 +47,14 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
         : `entity.guid = '${guid}'`;
     const timeClause = timeRangeToNrql({ timeRange });
     const limitStatement = 'LIMIT MAX';
-    setBannerMessage('');
-    setIncidentsList([]);
-    setMaxIncidentsShown(1);
-    fetchIncidents({ accountId, whereClause, timeClause, limitStatement });
+    const isAlert = type === SIGNAL_TYPES.ALERT;
+    fetchIncidents({
+      accountId,
+      whereClause,
+      timeClause,
+      limitStatement,
+      isAlert,
+    });
   }, [guid, type, accountId, conditionId, timeRange, fetchIncidents]);
 
   const fetchIncidents = useCallback(
@@ -53,6 +63,7 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
       whereClause,
       timeClause = 'SINCE 30 DAYS AGO',
       limitStatement = 'LIMIT 1',
+      isAlert,
       secondAttempt = false,
     }) => {
       const query = incidentsQuery(whereClause, timeClause, limitStatement);
@@ -65,13 +76,18 @@ const Incidents = ({ guid, type, conditionId, accountId }) => {
 
       if (!events?.length) {
         if (!secondAttempt) {
-          fetchIncidents({ accountId, whereClause, secondAttempt: true });
+          fetchIncidents({
+            accountId,
+            whereClause,
+            isAlert,
+            secondAttempt: true,
+          });
         } else {
           setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_INCIDENTS);
         }
       } else {
         setIncidentsList(events);
-        setMaxIncidentsShown(1);
+        setMaxIncidentsShown(isAlert ? events.length : 1);
         if (secondAttempt)
           setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.FOUND_RECENT);
       }
