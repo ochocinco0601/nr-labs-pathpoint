@@ -1,3 +1,15 @@
+# [1.70.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.69.0...v1.70.0) (2024-04-01)
+
+
+### Bug Fixes
+
+* issue with table repeating entities ([a54d584](https://github.com/newrelic/nr-labs-hedgehog/commit/a54d584a11ea5e742f3bda1fcbb11d5d66149fc2))
+
+
+### Features
+
+* updated filter bar in signal selection ([cf16540](https://github.com/newrelic/nr-labs-hedgehog/commit/cf165406f83184b6234d6c9b03f43a324ce3f212))
+
 # [1.69.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.68.2...v1.69.0) (2024-03-28)
 
 
