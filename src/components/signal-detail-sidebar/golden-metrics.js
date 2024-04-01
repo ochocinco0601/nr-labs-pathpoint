@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  HeadingText,
   LineChart,
   NerdGraphQuery,
   PlatformStateContext,
@@ -50,28 +51,36 @@ const GoldenMetrics = ({ guid }) => {
   );
 
   return (
-    <>
-      {metrics.map(({ query, title }) =>
-        entityAcctId && query ? (
-          <Card
-            key={`${title.replace(/\s+/g, '')}`}
-            className="golden-metric-card"
-          >
-            <CardHeader
-              className="golden-metric-card-header"
-              title={title || ''}
-              subtitle={formattedTimeRange}
-            />
-            <CardBody className="golden-metric-card-body">
-              <LineChart
-                accountIds={[entityAcctId]}
-                query={`${query} ${timeStatement}`}
+    <div className="golden-metrics-wrapper">
+      <HeadingText
+        className="golden-metrics-header"
+        type={HeadingText.TYPE.HEADING_4}
+      >
+        Golden metrics
+      </HeadingText>
+      <div className="golden-metrics">
+        {metrics.map(({ query, title }) =>
+          entityAcctId && query ? (
+            <Card
+              key={`${title.replace(/\s+/g, '')}`}
+              className="golden-metric-card"
+            >
+              <CardHeader
+                className="golden-metric-card-header"
+                title={title || ''}
+                subtitle={formattedTimeRange}
               />
-            </CardBody>
-          </Card>
-        ) : null
-      )}
-    </>
+              <CardBody className="golden-metric-card-body">
+                <LineChart
+                  accountIds={[entityAcctId]}
+                  query={`${query} ${timeStatement}`}
+                />
+              </CardBody>
+            </Card>
+          ) : null
+        )}
+      </div>
+    </div>
   );
 };
 

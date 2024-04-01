@@ -63,7 +63,9 @@ const Signal = ({
         />
       </div>
       {name ? (
-        <span className={`name ${status}`}>{name}</span>
+        <span className={`name`} title={name}>
+          {name}
+        </span>
       ) : (
         <span className="name unknown">{UI_CONTENT.SIGNAL.DEFAULT_NAME}</span>
       )}
