@@ -43,8 +43,10 @@ export const UI_CONTENT = {
     },
     DETAILS: {
       NO_INCIDENTS: 'No open incidents from past 30 days',
+      NOT_FOUND_IN_TIMERANGE:
+        'No incidents were found for the selected time period.',
       FOUND_RECENT:
-        'No incidents were found for the selected time period. The incident displayed below is the most recent incident located.',
+        'The incident displayed below is the most recent incident located.',
     },
   },
   KPI_BAR: {
