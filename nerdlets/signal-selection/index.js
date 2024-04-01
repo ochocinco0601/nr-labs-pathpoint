@@ -59,6 +59,7 @@ const SignalSelectionNerdlet = () => {
   const [signalsDetails, setSignalsDetails] = useState({});
   const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
   const [searchText, setSearchText] = useState('');
+  const [lazyLoadingProps, setLazyLoadingProps] = useState({});
   const [{ accountId }] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
@@ -177,11 +178,23 @@ const SignalSelectionNerdlet = () => {
     if (searchText) {
       setFilteredAlerts(nameFilter(alerts, searchText));
       setFilteredEntities(nameFilter(entities, searchText));
+      setLazyLoadingProps({});
     } else {
       setFilteredAlerts(alerts);
       setFilteredEntities(entities);
+      setLazyLoadingProps({
+        rowCount: selectedEntityType?.count,
+        onLoadMore,
+      });
     }
-  }, [currentTab, alerts, entities, searchText]);
+  }, [
+    currentTab,
+    alerts,
+    entities,
+    searchText,
+    selectedEntityType,
+    onLoadMore,
+  ]);
 
   const onLoadMore = useCallback(async () => {
     const { data: { entities: e = [], nextCursor } = {} } = await fetchEntities(
@@ -298,14 +311,9 @@ const SignalSelectionNerdlet = () => {
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
           signalsDetails={signalsDetails}
-          rowCount={
-            currentTab === SIGNAL_TYPES.ENTITY && searchText
-              ? filteredEntities.length
-              : selectedEntityType?.count
-          }
-          onLoadMore={onLoadMore}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
+          {...lazyLoadingProps}
         />
         <Footer
           noFlow={!flow}
