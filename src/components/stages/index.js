@@ -177,6 +177,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
             guid={selections.id}
             name={selections.data?.name}
             type={selections.data?.type}
+            status={selections.data?.status}
           />
         ),
         status: selections.data?.status,
