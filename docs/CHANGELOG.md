@@ -1,3 +1,10 @@
+## [1.70.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.1...v1.70.2) (2024-04-02)
+
+
+### Bug Fixes
+
+* entities not showing in flow when added in signal selection ([eb4a778](https://github.com/newrelic/nr-labs-hedgehog/commit/eb4a7780c6e7b70d396f46cf29b858f4446ca1cd))
+
 ## [1.70.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.0...v1.70.1) (2024-04-01)
 
 
