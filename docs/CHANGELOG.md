@@ -1,3 +1,12 @@
+## [1.70.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.0...v1.70.1) (2024-04-01)
+
+
+### Bug Fixes
+
+* pass signal status as prop to sidebar ([d3362fa](https://github.com/newrelic/nr-labs-hedgehog/commit/d3362faf083fc36c70475a0da76e2f6914f21242))
+* set correct max incidents shown value ([cecca64](https://github.com/newrelic/nr-labs-hedgehog/commit/cecca64f4f8cf41563a7dfb4c5a73e9ea76314f5))
+* updated subtitle for signal sidebar; clear incidents list on load ([b4c2910](https://github.com/newrelic/nr-labs-hedgehog/commit/b4c2910e7ead021b2fff48b5c97a0633adba42a1))
+
 # [1.70.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.69.0...v1.70.0) (2024-04-01)
 
 
