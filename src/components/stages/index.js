@@ -102,12 +102,17 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   }, [guids]);
 
   useEffect(() => {
-    if (statuses[SIGNAL_TYPES.ENTITY]) return;
     const {
       loading,
       data: { entities = [] },
     } = entitiesDetails;
     if (loading || !entities.length) return;
+    const entitiesStatuses = statuses[SIGNAL_TYPES.ENTITY];
+    if (
+      entitiesStatuses &&
+      entities.every(({ guid }) => guid in entitiesStatuses)
+    )
+      return;
     setStatuses((s) => ({
       ...s,
       [SIGNAL_TYPES.ENTITY]: entities.reduce(
