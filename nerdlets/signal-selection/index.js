@@ -15,7 +15,7 @@ import Filters from './filters';
 import Footer from './footer';
 import useFetchSignals from './use-fetch-signals';
 import useEntitiesTypesList from './use-entities-types-list';
-import { useFetchUser, useFlowLoader, useFlowWriter } from '../../src/hooks';
+import { useFlowLoader } from '../../src/hooks';
 import { queryFromGuidsArray } from '../../src/queries';
 import { entitiesDetailsFromQueryResults } from '../../src/utils';
 import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
@@ -65,9 +65,7 @@ const SignalSelectionNerdlet = () => {
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
   ] = useNerdletState();
   const { entitiesCount, entitiesTypesList } = useEntitiesTypesList();
-  const { user } = useFetchUser();
   const { flows: flow } = useFlowLoader({ accountId, flowId });
-  const flowWriter = useFlowWriter({ accountId, user });
   const { fetchEntities, fetchAlerts } = useFetchSignals();
 
   useEffect(() => {
@@ -239,41 +237,28 @@ const SignalSelectionNerdlet = () => {
 
   const saveHandler = useCallback(async () => {
     if (!flow) return;
-
-    const stageIndex = (flow.stages || []).findIndex(
-      ({ id }) => id === stageId
-    );
-    if (stageIndex < 0) return;
-    const levelIndex = (flow.stages[stageIndex].levels || []).findIndex(
-      ({ id }) => id === levelId
-    );
-    if (levelIndex < 0) return;
-    const stepIndex = (
-      flow.stages[stageIndex].levels[levelIndex].steps || []
-    ).findIndex(({ id }) => id === stepId);
-    if (stepIndex < 0) return;
-
-    const document = { ...flow };
-    document.stages[stageIndex].levels[levelIndex].steps[stepIndex].signals = [
-      ...(selectedEntities || []).map(({ guid, name }) => ({
-        guid,
-        name,
-        type: SIGNAL_TYPES.ENTITY,
-      })),
-      ...(selectedAlerts || []).map(({ guid, name }) => ({
-        guid,
-        name,
-        type: SIGNAL_TYPES.ALERT,
-      })),
-    ];
-
-    await flowWriter.write({ documentId: flowId, document });
     navigation.openNerdlet({
       id: 'home',
       urlState: {
         flow: { id: flowId },
         mode: MODES.EDIT,
-        refreshFlows: true,
+        staging: {
+          stageId,
+          levelId,
+          stepId,
+          signals: [
+            ...(selectedEntities || []).map(({ guid, name }) => ({
+              guid,
+              name,
+              type: SIGNAL_TYPES.ENTITY,
+            })),
+            ...(selectedAlerts || []).map(({ guid, name }) => ({
+              guid,
+              name,
+              type: SIGNAL_TYPES.ALERT,
+            })),
+          ],
+        },
       },
     });
   }, [flow, stageId, levelId, stepId, selectedEntities, selectedAlerts]);

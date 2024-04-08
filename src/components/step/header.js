@@ -19,7 +19,7 @@ const StepHeader = ({
   saveFlow,
   handleStepHeaderClick = () => null,
 }) => {
-  const stages = useContext(StagesContext);
+  const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
   const [title, setTitle] = useState();
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);

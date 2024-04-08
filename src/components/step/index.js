@@ -40,7 +40,7 @@ const Step = ({
   saveFlow,
 }) => {
   const { id: flowId } = useContext(FlowContext);
-  const stages = useContext(StagesContext);
+  const { stages, updateStagesDataRef } = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
   const { selections, markSelection } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
@@ -81,6 +81,7 @@ const Step = ({
 
   const updateSignalsHandler = (e) => {
     e.stopPropagation();
+    if (updateStagesDataRef) updateStagesDataRef();
     navigation.openStackedNerdlet({
       id: 'signal-selection',
       urlState: {
