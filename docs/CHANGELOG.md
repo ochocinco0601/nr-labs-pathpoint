@@ -1,3 +1,10 @@
+## [1.70.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.2...v1.70.3) (2024-04-08)
+
+
+### Bug Fixes
+
+* issue with adding signals in new steps ([809934a](https://github.com/newrelic/nr-labs-hedgehog/commit/809934ad508ffa749e39ff81de9b8df2e97c472d))
+
 ## [1.70.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.1...v1.70.2) (2024-04-02)
 
 
