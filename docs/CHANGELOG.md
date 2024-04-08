@@ -1,3 +1,10 @@
+# [1.71.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.3...v1.71.0) (2024-04-08)
+
+
+### Features
+
+* loading indicator in signal sidebar ([023109b](https://github.com/newrelic/nr-labs-hedgehog/commit/023109b3790940249c16745884ba4f29e3a82ae6))
+
 ## [1.70.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.2...v1.70.3) (2024-04-08)
 
 
