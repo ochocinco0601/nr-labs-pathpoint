@@ -11,6 +11,7 @@ import {
   NrqlQuery,
   PlatformStateContext,
   SectionMessage,
+  Spinner,
 } from 'nr1';
 
 import { timeRangeToNrql } from '@newrelic/nr-labs-components';
@@ -23,12 +24,14 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
   const [bannerMessage, setBannerMessage] = useState('');
   const [incidentsList, setIncidentsList] = useState([]);
   const [maxIncidentsShown, setMaxIncidentsShown] = useState(1);
+  const [loading, setLoading] = useState(true);
   const { timeRange } = useContext(PlatformStateContext);
 
   useEffect(() => {
     setBannerMessage('');
     setIncidentsList([]);
     setMaxIncidentsShown(1);
+    setLoading(true);
   }, [guid]);
 
   useEffect(() => {
@@ -48,6 +51,8 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     const timeClause = timeRangeToNrql({ timeRange });
     const limitStatement = 'LIMIT MAX';
     const isAlert = type === SIGNAL_TYPES.ALERT;
+    setLoading(true);
+    setBannerMessage('');
     fetchIncidents({
       accountId,
       status,
@@ -86,14 +91,17 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
               secondAttempt: true,
             });
           } else {
+            setLoading(false);
             setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE); // signal with success or unknown status -- make only one attempt to fetch incidents
           }
         } else {
+          setLoading(false);
           setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_INCIDENTS); // nothing found after secondAttempt
         }
       } else {
         setIncidentsList(events);
         setMaxIncidentsShown(isAlert ? events.length : 1);
+        setLoading(false);
         if (secondAttempt) {
           setBannerMessage(
             `${UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE} ${UI_CONTENT.SIGNAL.DETAILS.FOUND_RECENT}` // most recent incident fiund outside of selected timerange
@@ -119,6 +127,13 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     ).replace(/=+$/, '');
     navigation.openStackedEntity(entityGuid);
   }, []);
+
+  if (loading)
+    return (
+      <div className="alert-incidents-wrapper">
+        <Spinner type={Spinner.TYPE.DOT} />
+      </div>
+    );
 
   return (
     <div className="alert-incidents-wrapper">
