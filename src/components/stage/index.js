@@ -48,7 +48,7 @@ const Stage = ({
   onDrop,
   saveFlow,
 }) => {
-  const stages = useContext(StagesContext);
+  const { stages } = useContext(StagesContext);
   const signalsDetails = useContext(SignalsContext);
   const dispatch = useContext(FlowDispatchContext);
   const { selections } = useContext(SelectionsContext);

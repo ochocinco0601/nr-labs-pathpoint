@@ -7,7 +7,7 @@ import { FlowDispatchContext, StagesContext } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const AddStep = ({ stageId, saveFlow }) => {
-  const stages = useContext(StagesContext);
+  const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
   const [levels, setLevels] = useState([]);
   const [nextLevel, setNextLevel] = useState(levels.length + 1);

@@ -33,7 +33,7 @@ const Level = ({
   saveFlow,
   signalExpandOption = SIGNAL_EXPAND.NONE,
 }) => {
-  const stages = useContext(StagesContext);
+  const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
   const { selections } = useContext(SelectionsContext);
   const [steps, setSteps] = useState([]);

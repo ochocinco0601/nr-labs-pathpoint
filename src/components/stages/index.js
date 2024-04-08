@@ -17,6 +17,7 @@ import {
   Switch,
   Tooltip,
   useEntitiesByGuidsQuery,
+  useNerdletState,
 } from 'nr1';
 
 import { SignalDetailSidebar, Stage } from '../';
@@ -65,11 +66,13 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
   const dragItemIndex = useRef();
   const dragOverItemIndex = useRef();
+  const stagesDataRef = useRef(stages);
   const { refetch: entitiesRefetchFn, ...entitiesDetails } =
     useEntitiesByGuidsQuery({
       entityGuids: guids[SIGNAL_TYPES.ENTITY] || [],
     });
   const { openSidebar, closeSidebar } = useSidebar();
+  const [nerdletState, setNerdletState] = useNerdletState();
 
   useEffect(() => {
     if (!accounts?.length) return;
@@ -139,6 +142,45 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     });
   }, [stages, statuses]);
 
+  useEffect(() => {
+    if (nerdletState.staging) {
+      const { stageId, levelId, stepId, signals = [] } = nerdletState.staging;
+      const updates = (stagesDataRef.current || []).reduce(
+        (acc, stage) =>
+          stage.id === stageId
+            ? {
+                ...stage,
+                levels: (stage.levels || []).map((level) =>
+                  level.id === levelId
+                    ? {
+                        ...level,
+                        steps: (level.steps || []).map((step) =>
+                          step.id === stepId
+                            ? {
+                                ...step,
+                                signals,
+                              }
+                            : step
+                        ),
+                      }
+                    : level
+                ),
+              }
+            : acc,
+        null
+      );
+      if (updates)
+        dispatch({
+          type: FLOW_DISPATCH_TYPES.UPDATED,
+          component: FLOW_DISPATCH_COMPONENTS.STAGE,
+          componentIds: { stageId },
+          updates,
+          saveFlow,
+        });
+      setNerdletState({ staging: false });
+    }
+  }, [nerdletState.staging]);
+
   const fetchAlerts = useCallback(async (alertGuids) => {
     if (alertGuids.length) {
       const alerts = alertGuids.reduce(alertsTree, {});
@@ -202,6 +244,10 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
 
   const closeSidebarHandler = useCallback(() => setSelections({}), []);
 
+  const updateStagesDataRef = useCallback(() => {
+    stagesDataRef.current = [...stages];
+  }, [stages]);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -247,7 +293,9 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   };
 
   return (
-    <StagesContext.Provider value={stagesData.stages}>
+    <StagesContext.Provider
+      value={{ stages: stagesData.stages, updateStagesDataRef }}
+    >
       <SignalsContext.Provider value={signalsDetails}>
         <SelectionsContext.Provider value={{ selections, markSelection }}>
           <SignalsClassificationsContext.Provider value={classifications}>

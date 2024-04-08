@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 import { BlockText, Button, HeadingText, Icon, Modal, navigation } from 'nr1';
 
-import { FlowContext } from '../../contexts';
+import { FlowContext, StagesContext } from '../../contexts';
 
 const StageNotifyModal = forwardRef(
   (
@@ -25,6 +25,7 @@ const StageNotifyModal = forwardRef(
     ref
   ) => {
     const { id: flowId, stages = [] } = useContext(FlowContext);
+    const { updateStagesDataRef } = useContext(StagesContext);
     const [hidden, setHidden] = useState(true);
     const [itemNames, setItemNames] = useState({});
 
@@ -67,6 +68,7 @@ const StageNotifyModal = forwardRef(
     const updateSignalsHandler = useCallback(
       (stageId, levelId, stepId) => {
         closeHandler();
+        if (updateStagesDataRef) updateStagesDataRef();
         const {
           stageName,
           levelOrder,
