@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { AutoSizer, HeadingText, Icon } from 'nr1';
 
-import BlankFlowImg from './images/blank.svg';
+import BlankFlowImg from './images/blank.png';
 import ImportImg from './images/import.svg';
 
 const StartPage = ({ onSelect }) => {
