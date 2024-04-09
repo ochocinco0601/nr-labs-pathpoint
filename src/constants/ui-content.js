@@ -28,7 +28,12 @@ export const UI_CONTENT = {
       'Collection of potential paths a user may traverse through this stage',
   },
   STEP: {
-    //
+    DEFAULT_TITLE: 'Untitled step',
+    NO_SIGNALS: {
+      TITLE: 'No signals yet',
+      DESCRIPTION:
+        'A signal is a service level that reflects the underlying health of its parent step.',
+    },
   },
   SIGNAL: {
     DEFAULT_NAME: '(unknown)',

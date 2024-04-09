@@ -5,7 +5,7 @@ import {
   reorderStages,
   updateStage,
 } from './helpers/stages';
-import { deleteLevel, reorderLevels } from './helpers/levels';
+import { addLevel, deleteLevel, reorderLevels } from './helpers/levels';
 import { addStep, deleteStep, reorderSteps, updateStep } from './helpers/steps';
 import { deleteSignal } from './helpers/signals';
 import { COMPONENTS } from '../constants';
@@ -28,6 +28,8 @@ export const flowReducer = (flow, action) => {
     case FLOW_DISPATCH_TYPES.ADDED: {
       if (component === FLOW_DISPATCH_COMPONENTS.STAGE)
         return addStage({ flow, saveFlow });
+      if (component === FLOW_DISPATCH_COMPONENTS.LEVEL)
+        return addLevel({ flow, saveFlow, componentIds });
       if (component === FLOW_DISPATCH_COMPONENTS.STEP)
         return addStep({ flow, saveFlow, componentIds, updates });
       return flow;

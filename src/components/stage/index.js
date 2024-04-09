@@ -1,12 +1,11 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText, Icon, Tooltip } from 'nr1';
+import { Button, HeadingText, Icon, Tooltip } from 'nr1';
 
 import Level from '../level';
 import Signal from '../signal';
 import StageHeader from './header';
-import AddStep from '../add-step';
 import StageNotifyModal from '../stage-notify-modal';
 import {
   COMPONENTS,
@@ -221,6 +220,14 @@ const Stage = ({
       saveFlow,
     });
 
+  const addLevelHandler = () =>
+    dispatch({
+      type: FLOW_DISPATCH_TYPES.ADDED,
+      component: FLOW_DISPATCH_COMPONENTS.LEVEL,
+      componentIds: { stageId },
+      saveFlow,
+    });
+
   const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
 
   const dragStartHandler = (e) => {
@@ -336,7 +343,19 @@ const Stage = ({
                 </Tooltip>
               ) : null}
               {mode === MODES.EDIT ? (
-                <AddStep stageId={stageId} saveFlow={saveFlow} />
+                <span className="add-level">
+                  <Button
+                    className="button-tertiary-border"
+                    variant={Button.VARIANT.TERTIARY}
+                    sizeType={Button.SIZE_TYPE.SMALL}
+                    iconType={
+                      Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
+                    }
+                    onClick={addLevelHandler}
+                  >
+                    Add a level
+                  </Button>
+                </span>
               ) : null}
             </div>
             <div className={`step-groups ${mode}`}>
