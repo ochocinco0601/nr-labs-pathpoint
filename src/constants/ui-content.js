@@ -32,7 +32,7 @@ export const UI_CONTENT = {
     NO_SIGNALS: {
       TITLE: 'No signals yet',
       DESCRIPTION:
-        'A signal is a service level that reflects the underlying health of its parent step.',
+        'A signal is an entity or alert that reflects the underlying health of its parent step.',
     },
   },
   SIGNAL: {
