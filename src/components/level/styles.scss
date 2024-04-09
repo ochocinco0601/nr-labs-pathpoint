@@ -67,10 +67,10 @@
 
       .step-cell {
         box-sizing: border-box;
-        border: 0.25px solid #dedede;
-
+        
         .step {
           height: 100%;
+          box-shadow: inset 0px 0px 0px 0.25px #dedede;
         }
 
         &:not(.edit) {
@@ -79,12 +79,6 @@
               $critical: 'critical',
               $warning: 'warning',
             );
-          }
-        }
-
-        &:is(.edit) {
-          .step {
-            box-shadow: inset 0px 0px 0px 0.5px #dedede;
           }
         }
       }

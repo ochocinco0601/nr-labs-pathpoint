@@ -116,8 +116,12 @@
           cursor: pointer;
         }
 
-        .notify:not(:first-child) {
+        .notify {
           margin-left: 4px;
+        }
+
+        .add-level {
+          margin-left: 12px;
         }
       }
 

@@ -8,3 +8,11 @@
   box-sizing: border-box;
   justify-content: center;
 }
+
+.button-tertiary-border {
+  box-shadow: inset 0 0 0 1px #293338;
+
+  &:hover {
+    box-shadow: inset 0 0 0 1px #293338;
+  }
+}

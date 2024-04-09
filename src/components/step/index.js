@@ -1,7 +1,7 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, navigation } from 'nr1';
+import { BlockText, Button, HeadingText, Icon, navigation } from 'nr1';
 import SignalsGridLayout from '../signals-grid-layout';
 
 import Signal from '../signal';
@@ -221,16 +221,43 @@ const Step = ({
       />
       {mode === MODES.EDIT ? (
         <>
-          <div className="add-signal-btn">
-            <Button
-              type={Button.TYPE.SECONDARY}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-              onClick={updateSignalsHandler}
-            >
-              {`${signals.length ? 'Update' : 'Add'} signals`}
-            </Button>
-          </div>
+          {signals.length ? (
+            <div className="add-signal-btn">
+              <Button
+                className="button-tertiary-border"
+                variant={Button.VARIANT.TERTIARY}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+                onClick={updateSignalsHandler}
+              >
+                Update signals
+              </Button>
+            </div>
+          ) : (
+            <div className="no-signals">
+              <Icon
+                className="icon"
+                type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
+              />
+              <HeadingText className="title">
+                {UI_CONTENT.STEP.NO_SIGNALS.TITLE}
+              </HeadingText>
+              <BlockText className="description">
+                {UI_CONTENT.STEP.NO_SIGNALS.DESCRIPTION}
+              </BlockText>
+              <div className="action">
+                <Button
+                  className="button-tertiary-border"
+                  variant={Button.VARIANT.TERTIARY}
+                  sizeType={Button.SIZE_TYPE.SMALL}
+                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+                  onClick={updateSignalsHandler}
+                >
+                  Add signals
+                </Button>
+              </div>
+            </div>
+          )}
           <div className="edit-signals-list">
             <SignalsList />
           </div>
@@ -254,9 +281,7 @@ const Step = ({
             </div>
           )}
         </div>
-      ) : (
-        ''
-      )}
+      ) : null}
     </div>
   );
 };
