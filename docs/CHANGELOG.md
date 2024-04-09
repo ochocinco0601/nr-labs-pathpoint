@@ -1,3 +1,10 @@
+# [1.72.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.71.0...v1.72.0) (2024-04-09)
+
+
+### Features
+
+* updated level and step creation process ([ac2fe81](https://github.com/newrelic/nr-labs-hedgehog/commit/ac2fe8136c587a82f76627ed04eada213333cfe3))
+
 # [1.71.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.70.3...v1.71.0) (2024-04-08)
 
 
