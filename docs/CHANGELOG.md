@@ -1,3 +1,10 @@
+# [1.73.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.72.3...v1.73.0) (2024-04-10)
+
+
+### Features
+
+* updates for creating stages, levels, and steps, when they are empty ([24e6bc5](https://github.com/newrelic/nr-labs-hedgehog/commit/24e6bc57de8c15250de7ceafcf4521439fdde8eb))
+
 ## [1.72.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.72.2...v1.72.3) (2024-04-10)
 
 
