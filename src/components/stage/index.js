@@ -1,7 +1,7 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, Icon, Tooltip } from 'nr1';
+import { BlockText, Button, HeadingText, Icon, Tooltip } from 'nr1';
 
 import Level from '../level';
 import Signal from '../signal';
@@ -360,16 +360,18 @@ const Stage = ({
             </div>
             <div className={`step-groups ${mode}`}>
               {levels
-                .filter((level) =>
-                  level.steps.reduce(
-                    (acc, cur) =>
-                      signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
-                      signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
-                      acc + cur.signals.length
-                        ? { ...acc, ...cur }
-                        : acc,
-                    0
-                  )
+                .filter(
+                  (level) =>
+                    mode === MODES.EDIT ||
+                    level.steps.reduce(
+                      (acc, cur) =>
+                        signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
+                        signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
+                        acc + cur.signals.length
+                          ? { ...acc, ...cur }
+                          : acc,
+                      0
+                    )
                 )
                 .map(({ id }, index) => (
                   <Level
@@ -385,6 +387,33 @@ const Stage = ({
                     saveFlow={saveFlow}
                   />
                 ))}
+              {mode === MODES.EDIT && !levels.length ? (
+                <div className="empty-block">
+                  <Icon
+                    className="icon"
+                    type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
+                  />
+                  <HeadingText className="title">
+                    {UI_CONTENT.STAGE.NO_LEVELS.TITLE}
+                  </HeadingText>
+                  <BlockText className="description">
+                    {UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
+                  </BlockText>
+                  <div className="action">
+                    <Button
+                      className="button-tertiary-border"
+                      variant={Button.VARIANT.TERTIARY}
+                      sizeType={Button.SIZE_TYPE.SMALL}
+                      iconType={
+                        Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
+                      }
+                      onClick={addLevelHandler}
+                    >
+                      Add a level
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
           {mode === MODES.STACKED ? (

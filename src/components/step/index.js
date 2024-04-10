@@ -234,7 +234,7 @@ const Step = ({
               </Button>
             </div>
           ) : (
-            <div className="no-signals">
+            <div className="empty-block">
               <Icon
                 className="icon"
                 type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}

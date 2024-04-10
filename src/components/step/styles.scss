@@ -56,32 +56,6 @@
     }
   }
 
-  .no-signals {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 24px 32px;
-
-    .icon {
-      margin-bottom: 16px;
-      color: #535e65;
-    }
-
-    .title {
-      margin-bottom: 4px;
-    }
-
-    .description {
-      color: #535e65;
-      text-align: center;
-    }
-
-    .action {
-      margin-top: 16px;
-    }
-  }
-
   &.add-step {
     padding: 0;
 

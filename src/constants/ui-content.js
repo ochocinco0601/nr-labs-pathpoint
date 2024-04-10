@@ -15,6 +15,11 @@ export const UI_CONTENT = {
   FLOW: {
     BUTTON_EXPORT: 'Export JSON',
     CURRENT_STATUS: 'Showing current health',
+    NO_STAGES: {
+      TITLE: 'No stages yet.',
+      DESCRIPTION:
+        'A stage represents a high-level functional category in the flow, which consists of multiple steps to complete.',
+    },
   },
   STAGE: {
     TOOLTIP: 'A high-level functional category in the flow',
@@ -22,10 +27,20 @@ export const UI_CONTENT = {
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
     TOO_MANY_SIGNALS:
       'You have steps exceeding the signal limits. Check your signal definition.',
+    NO_LEVELS: {
+      TITLE: 'No levels yet.',
+      DESCRIPTION:
+        'A level collects the potential alternate paths a user may traverse as they progress through this level of the stage.',
+    },
   },
   LEVEL: {
     TOOLTIP:
       'Collection of potential paths a user may traverse through this stage',
+    NO_STEPS: {
+      TITLE: 'No steps yet.',
+      DESCRIPTION:
+        'A step is an individual gate in the path, usually representing in aggregate an underlying system.',
+    },
   },
   STEP: {
     DEFAULT_TITLE: 'Untitled step',

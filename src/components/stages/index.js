@@ -10,6 +10,7 @@ import React, {
 import PropTypes from 'prop-types';
 
 import {
+  BlockText,
   Button,
   HeadingText,
   Icon,
@@ -313,7 +314,8 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
               </div>
               {mode === MODES.EDIT ? (
                 <Button
-                  type={Button.TYPE.SECONDARY}
+                  className="button-tertiary-border"
+                  variant={Button.VARIANT.TERTIARY}
                   sizeType={Button.SIZE_TYPE.SMALL}
                   iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
                   onClick={addStageHandler}
@@ -366,6 +368,33 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
                   saveFlow={saveFlow}
                 />
               ))}
+              {mode === MODES.EDIT && !stagesData.stages.length ? (
+                <div className="empty-block full-width">
+                  <Icon
+                    className="icon"
+                    type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
+                  />
+                  <HeadingText className="title">
+                    {UI_CONTENT.FLOW.NO_STAGES.TITLE}
+                  </HeadingText>
+                  <BlockText className="description">
+                    {UI_CONTENT.FLOW.NO_STAGES.DESCRIPTION}
+                  </BlockText>
+                  <div className="action">
+                    <Button
+                      className="button-tertiary-border"
+                      variant={Button.VARIANT.TERTIARY}
+                      sizeType={Button.SIZE_TYPE.SMALL}
+                      iconType={
+                        Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
+                      }
+                      onClick={addStageHandler}
+                    >
+                      Add a stage
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </SignalsClassificationsContext.Provider>
         </SelectionsContext.Provider>

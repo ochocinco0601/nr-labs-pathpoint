@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Icon } from 'nr1';
+import { BlockText, Button, HeadingText, Icon } from 'nr1';
 
 import Step from '../step';
 import IconsLib from '../icons-lib';
@@ -322,20 +322,46 @@ const Level = ({
       <div className="steps">
         {stepsRows}
         {mode === MODES.EDIT ? (
-          <div className="steps-row cols-1">
-            <div className="step-cell edit">
-              <div className="step unknown add-step">
+          steps.length ? (
+            <div className="steps-row cols-1">
+              <div className="step-cell edit">
+                <div className="step unknown add-step">
+                  <Button
+                    variant={Button.VARIANT.TERTIARY}
+                    sizeType={Button.SIZE_TYPE.SMALL}
+                    iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                    onClick={addStepHandler}
+                  >
+                    New step
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="empty-block">
+              <Icon
+                className="icon"
+                type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
+              />
+              <HeadingText className="title">
+                {UI_CONTENT.LEVEL.NO_STEPS.TITLE}
+              </HeadingText>
+              <BlockText className="description">
+                {UI_CONTENT.LEVEL.NO_STEPS.DESCRIPTION}
+              </BlockText>
+              <div className="action">
                 <Button
+                  className="button-tertiary-border"
                   variant={Button.VARIANT.TERTIARY}
                   sizeType={Button.SIZE_TYPE.SMALL}
-                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
                   onClick={addStepHandler}
                 >
-                  New step
+                  Add a step
                 </Button>
               </div>
             </div>
-          </div>
+          )
         ) : null}
       </div>
     </div>
