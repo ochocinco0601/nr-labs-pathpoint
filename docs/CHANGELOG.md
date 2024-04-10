@@ -1,3 +1,10 @@
+## [1.72.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.72.2...v1.72.3) (2024-04-10)
+
+
+### Bug Fixes
+
+* kick build one more time ([589579c](https://github.com/newrelic/nr-labs-hedgehog/commit/589579cff015e506707277341f01e030fdb754c3))
+
 ## [1.72.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.72.1...v1.72.2) (2024-04-10)
 
 
