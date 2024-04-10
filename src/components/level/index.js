@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button, Icon } from 'nr1';
 
-import Step from '../step';
-import IconsLib from '../icons-lib';
-import DeleteConfirmModal from '../delete-confirm-modal';
+import { EmptyBlock, DeleteConfirmModal, IconsLib, Step } from '../';
 import {
   COMPONENTS,
   MODES,
@@ -14,13 +12,11 @@ import {
   STATUSES,
   UI_CONTENT,
 } from '../../constants';
-
 import {
   FlowDispatchContext,
   StagesContext,
   SelectionsContext,
 } from '../../contexts';
-
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Level = ({
@@ -322,20 +318,29 @@ const Level = ({
       <div className="steps">
         {stepsRows}
         {mode === MODES.EDIT ? (
-          <div className="steps-row cols-1">
-            <div className="step-cell edit">
-              <div className="step unknown add-step">
-                <Button
-                  variant={Button.VARIANT.TERTIARY}
-                  sizeType={Button.SIZE_TYPE.SMALL}
-                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
-                  onClick={addStepHandler}
-                >
-                  New step
-                </Button>
+          steps.length ? (
+            <div className="steps-row cols-1">
+              <div className="step-cell edit">
+                <div className="step unknown add-step">
+                  <Button
+                    variant={Button.VARIANT.TERTIARY}
+                    sizeType={Button.SIZE_TYPE.SMALL}
+                    iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+                    onClick={addStepHandler}
+                  >
+                    New step
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <EmptyBlock
+              title={UI_CONTENT.LEVEL.NO_STEPS.TITLE}
+              description={UI_CONTENT.LEVEL.NO_STEPS.DESCRIPTION}
+              actionButtonText="Add a step"
+              onAdd={addStepHandler}
+            />
+          )
         ) : null}
       </div>
     </div>

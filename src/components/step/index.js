@@ -1,12 +1,10 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Icon, navigation } from 'nr1';
-import SignalsGridLayout from '../signals-grid-layout';
+import { Button, navigation } from 'nr1';
 
-import Signal from '../signal';
+import { EmptyBlock, DeleteConfirmModal, Signal, SignalsGridLayout } from '../';
 import StepHeader from './header';
-import DeleteConfirmModal from '../delete-confirm-modal';
 import {
   COMPONENTS,
   MODES,
@@ -15,7 +13,6 @@ import {
   STATUSES,
   UI_CONTENT,
 } from '../../constants';
-
 import {
   FlowContext,
   FlowDispatchContext,
@@ -234,29 +231,12 @@ const Step = ({
               </Button>
             </div>
           ) : (
-            <div className="no-signals">
-              <Icon
-                className="icon"
-                type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
-              />
-              <HeadingText className="title">
-                {UI_CONTENT.STEP.NO_SIGNALS.TITLE}
-              </HeadingText>
-              <BlockText className="description">
-                {UI_CONTENT.STEP.NO_SIGNALS.DESCRIPTION}
-              </BlockText>
-              <div className="action">
-                <Button
-                  className="button-tertiary-border"
-                  variant={Button.VARIANT.TERTIARY}
-                  sizeType={Button.SIZE_TYPE.SMALL}
-                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-                  onClick={updateSignalsHandler}
-                >
-                  Add signals
-                </Button>
-              </div>
-            </div>
+            <EmptyBlock
+              title={UI_CONTENT.STEP.NO_SIGNALS.TITLE}
+              description={UI_CONTENT.STEP.NO_SIGNALS.DESCRIPTION}
+              actionButtonText="Add signals"
+              onAdd={updateSignalsHandler}
+            />
           )}
           <div className="edit-signals-list">
             <SignalsList />

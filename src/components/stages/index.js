@@ -20,7 +20,7 @@ import {
   useNerdletState,
 } from 'nr1';
 
-import { SignalDetailSidebar, Stage } from '../';
+import { EmptyBlock, SignalDetailSidebar, Stage } from '../';
 import {
   MODES,
   SIGNAL_TYPES,
@@ -313,7 +313,8 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
               </div>
               {mode === MODES.EDIT ? (
                 <Button
-                  type={Button.TYPE.SECONDARY}
+                  className="button-tertiary-border"
+                  variant={Button.VARIANT.TERTIARY}
                   sizeType={Button.SIZE_TYPE.SMALL}
                   iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
                   onClick={addStageHandler}
@@ -366,6 +367,15 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
                   saveFlow={saveFlow}
                 />
               ))}
+              {mode === MODES.EDIT && !stagesData.stages.length ? (
+                <EmptyBlock
+                  title={UI_CONTENT.FLOW.NO_STAGES.TITLE}
+                  description={UI_CONTENT.FLOW.NO_STAGES.DESCRIPTION}
+                  actionButtonText="Add a stage"
+                  onAdd={addStageHandler}
+                  fullWidth
+                />
+              ) : null}
             </div>
           </SignalsClassificationsContext.Provider>
         </SelectionsContext.Provider>

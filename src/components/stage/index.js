@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Icon, Tooltip } from 'nr1';
 
-import Level from '../level';
-import Signal from '../signal';
+import { EmptyBlock, Level, Signal, StageNotifyModal } from '../';
 import StageHeader from './header';
-import StageNotifyModal from '../stage-notify-modal';
 import {
   COMPONENTS,
   MODES,
@@ -360,16 +358,18 @@ const Stage = ({
             </div>
             <div className={`step-groups ${mode}`}>
               {levels
-                .filter((level) =>
-                  level.steps.reduce(
-                    (acc, cur) =>
-                      signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
-                      signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
-                      acc + cur.signals.length
-                        ? { ...acc, ...cur }
-                        : acc,
-                    0
-                  )
+                .filter(
+                  (level) =>
+                    mode === MODES.EDIT ||
+                    level.steps.reduce(
+                      (acc, cur) =>
+                        signalExpandOption === SIGNAL_EXPAND.NONE || // no expansion options selected
+                        signalExpandOption === SIGNAL_EXPAND.ALL || // expand all signals
+                        acc + cur.signals.length
+                          ? { ...acc, ...cur }
+                          : acc,
+                      0
+                    )
                 )
                 .map(({ id }, index) => (
                   <Level
@@ -385,6 +385,14 @@ const Stage = ({
                     saveFlow={saveFlow}
                   />
                 ))}
+              {mode === MODES.EDIT && !levels.length ? (
+                <EmptyBlock
+                  title={UI_CONTENT.STAGE.NO_LEVELS.TITLE}
+                  description={UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
+                  actionButtonText="Add a level"
+                  onAdd={addLevelHandler}
+                />
+              ) : null}
             </div>
           </div>
           {mode === MODES.STACKED ? (

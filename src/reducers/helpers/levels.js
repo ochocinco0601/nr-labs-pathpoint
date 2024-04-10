@@ -1,4 +1,3 @@
-import { UI_CONTENT } from '../../constants';
 import { uuid } from '../../utils';
 import { reorderComponent } from './reorder';
 
@@ -15,13 +14,7 @@ export const addLevel = ({ flow, saveFlow, componentIds }) => {
               ...stage.levels,
               {
                 id: uuid(),
-                steps: [
-                  {
-                    id: uuid(),
-                    signals: [],
-                    title: UI_CONTENT.STEP.DEFAULT_TITLE,
-                  },
-                ],
+                steps: [],
               },
             ],
           }
