@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Icon } from 'nr1';
+import { Button, Icon } from 'nr1';
 
-import Step from '../step';
-import IconsLib from '../icons-lib';
-import DeleteConfirmModal from '../delete-confirm-modal';
+import { EmptyBlock, DeleteConfirmModal, IconsLib, Step } from '../';
 import {
   COMPONENTS,
   MODES,
@@ -14,13 +12,11 @@ import {
   STATUSES,
   UI_CONTENT,
 } from '../../constants';
-
 import {
   FlowDispatchContext,
   StagesContext,
   SelectionsContext,
 } from '../../contexts';
-
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const Level = ({
@@ -338,29 +334,12 @@ const Level = ({
               </div>
             </div>
           ) : (
-            <div className="empty-block">
-              <Icon
-                className="icon"
-                type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
-              />
-              <HeadingText className="title">
-                {UI_CONTENT.LEVEL.NO_STEPS.TITLE}
-              </HeadingText>
-              <BlockText className="description">
-                {UI_CONTENT.LEVEL.NO_STEPS.DESCRIPTION}
-              </BlockText>
-              <div className="action">
-                <Button
-                  className="button-tertiary-border"
-                  variant={Button.VARIANT.TERTIARY}
-                  sizeType={Button.SIZE_TYPE.SMALL}
-                  iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
-                  onClick={addStepHandler}
-                >
-                  Add a step
-                </Button>
-              </div>
-            </div>
+            <EmptyBlock
+              title={UI_CONTENT.LEVEL.NO_STEPS.TITLE}
+              description={UI_CONTENT.LEVEL.NO_STEPS.DESCRIPTION}
+              actionButtonText="Add a step"
+              onAdd={addStepHandler}
+            />
           )
         ) : null}
       </div>

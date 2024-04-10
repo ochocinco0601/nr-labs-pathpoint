@@ -1,12 +1,10 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Icon, Tooltip } from 'nr1';
+import { Button, HeadingText, Icon, Tooltip } from 'nr1';
 
-import Level from '../level';
-import Signal from '../signal';
+import { EmptyBlock, Level, Signal, StageNotifyModal } from '../';
 import StageHeader from './header';
-import StageNotifyModal from '../stage-notify-modal';
 import {
   COMPONENTS,
   MODES,
@@ -388,31 +386,12 @@ const Stage = ({
                   />
                 ))}
               {mode === MODES.EDIT && !levels.length ? (
-                <div className="empty-block">
-                  <Icon
-                    className="icon"
-                    type={Icon.TYPE.INTERFACE__PLACEHOLDERS__ICON_PLACEHOLDER}
-                  />
-                  <HeadingText className="title">
-                    {UI_CONTENT.STAGE.NO_LEVELS.TITLE}
-                  </HeadingText>
-                  <BlockText className="description">
-                    {UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
-                  </BlockText>
-                  <div className="action">
-                    <Button
-                      className="button-tertiary-border"
-                      variant={Button.VARIANT.TERTIARY}
-                      sizeType={Button.SIZE_TYPE.SMALL}
-                      iconType={
-                        Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
-                      }
-                      onClick={addLevelHandler}
-                    >
-                      Add a level
-                    </Button>
-                  </div>
-                </div>
+                <EmptyBlock
+                  title={UI_CONTENT.STAGE.NO_LEVELS.TITLE}
+                  description={UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
+                  actionButtonText="Add a level"
+                  onAdd={addLevelHandler}
+                />
               ) : null}
             </div>
           </div>
