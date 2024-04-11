@@ -1,3 +1,10 @@
+## [1.73.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.0...v1.73.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* blank flow image not showing ([cac9b1e](https://github.com/newrelic/nr-labs-hedgehog/commit/cac9b1e42868c4de575e440789cf578cdebc9579))
+
 # [1.73.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.72.3...v1.73.0) (2024-04-10)
 
 
