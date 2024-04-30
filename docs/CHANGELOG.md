@@ -1,3 +1,10 @@
+## [1.73.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.2...v1.73.3) (2024-04-30)
+
+
+### Bug Fixes
+
+* text overflow in missing signals modal ([03abe75](https://github.com/newrelic/nr-labs-hedgehog/commit/03abe754501fe6a0c3214cbc1128a11b00f2d115))
+
 ## [1.73.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.1...v1.73.2) (2024-04-30)
 
 
