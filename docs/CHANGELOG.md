@@ -1,3 +1,10 @@
+## [1.73.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.1...v1.73.2) (2024-04-30)
+
+
+### Bug Fixes
+
+* use badge to display entity/alert count ([891ba3b](https://github.com/newrelic/nr-labs-hedgehog/commit/891ba3bba0734e15a466d9c46a28c002ae9f3294))
+
 ## [1.73.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.0...v1.73.1) (2024-04-11)
 
 
