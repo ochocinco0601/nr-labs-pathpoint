@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText } from 'nr1';
+import { Badge, Button, HeadingText } from 'nr1';
 
 import ListingTable from './listing-table';
 import { Signal } from '../../src/components';
@@ -41,10 +41,7 @@ const Listing = ({
             <HeadingText type={HeadingText.TYPE.HEADING_6}>
               Entities
             </HeadingText>
-            <span className="selection-count">
-              <span>{selectedEntities.length}</span>
-              /25 entities
-            </span>
+            <Badge>{`${selectedEntities.length}/25`}</Badge>
             <Button
               type={Button.TYPE.SECONDARY}
               sizeType={Button.SIZE_TYPE.SMALL}
@@ -73,10 +70,7 @@ const Listing = ({
           <hr className="rule" />
           <div className="title">
             <HeadingText type={HeadingText.TYPE.HEADING_6}>Alerts</HeadingText>
-            <span className="selection-count">
-              <span>{selectedAlerts.length}</span>
-              /50 conditions
-            </span>
+            <Badge>{`${selectedAlerts.length}/25`}</Badge>
           </div>
           <div className="list">
             {selectedAlerts.map(({ name, guid }) => (
