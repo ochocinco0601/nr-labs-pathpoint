@@ -1,4 +1,5 @@
 import React, {
+  Fragment,
   forwardRef,
   useCallback,
   useContext,
@@ -115,20 +116,23 @@ const StageNotifyModal = forwardRef(
             {items.length ? (
               <div className="items-table">
                 {itemsTitle ? (
-                  <div className="item-row heading">
-                    <HeadingText type={HeadingText.TYPE.HEADING_6}>
+                  <>
+                    <HeadingText
+                      className="items-table-cell heading"
+                      type={HeadingText.TYPE.HEADING_6}
+                    >
                       {itemsTitle}
                     </HeadingText>
-                  </div>
+                    <div className="items-table-cell rule" />
+                  </>
                 ) : null}
                 {items.map(({ stageId, levelId, stepId }, i) => (
-                  <div className="item-row" key={i}>
-                    <div className="item-name">
-                      <BlockText>
-                        {displayName(stageId, levelId, stepId)}
-                      </BlockText>
-                    </div>
+                  <Fragment key={i}>
+                    <BlockText className="items-table-cell item-name">
+                      {displayName(stageId, levelId, stepId)}
+                    </BlockText>
                     <Button
+                      className="items-table-cell"
                       variant={Button.VARIANT.PRIMARY}
                       sizeType={Button.SIZE_TYPE.SMALL}
                       onClick={() =>
@@ -137,7 +141,8 @@ const StageNotifyModal = forwardRef(
                     >
                       Update signals
                     </Button>
-                  </div>
+                    <div className="items-table-cell rule" />
+                  </Fragment>
                 ))}
               </div>
             ) : null}

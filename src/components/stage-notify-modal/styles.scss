@@ -17,25 +17,24 @@
     gap: 16px;
 
     .items-table {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr min-content;
+      align-items: center;
+      gap: 8px;
 
-      .item-row {
-        display: flex;
-        padding: 8px;
-        align-items: center;
-        gap: 8px;
-        border-bottom: 1px solid #ECEEEE;
-
-        .item-name {
-          flex: 1;
-          min-width: 0;
-
-          div {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
+      .items-table-cell {
+        &.item-name {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        &.heading {
+          grid-column: span 2;
+        }
+        &.rule {
+          grid-column: span 2;
+          height: 1px;
+          border-bottom: 1px solid #ECEEEE;
         }
       }
     }
