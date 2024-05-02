@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  DataTable,
+  DataTableHeader,
+  DataTableHeaderCell,
+  DataTableBody,
+  DataTableRow,
+  DataTableRowCell,
   EmptyState,
-  Table,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-  TableRowCell,
 } from 'nr1';
 import { SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
 
@@ -33,27 +34,45 @@ const ListingTable = ({
   onLoadMore,
   onSelect,
 }) => {
-  const selectedHandler = useCallback(
-    ({ item: { guid } = {} }) => {
-      let selectionLookup = {};
-      if (type === SIGNAL_TYPES.ENTITY)
-        selectionLookup = selectedEntities.reduce(
-          (acc, { guid }) => ({ ...acc, [guid]: null }),
-          {}
-        );
-      if (type === SIGNAL_TYPES.ALERT)
-        selectionLookup = selectedAlerts.reduce(
-          (acc, { guid }) => ({ ...acc, [guid]: null }),
-          {}
-        );
-      return guid in selectionLookup;
-    },
-    [type, selectedEntities, selectedAlerts]
-  );
+  const [selection, setSelection] = useState({});
+  const selectionsSet = useRef();
 
-  const selectItemHandler = ({ target: { checked } = {} } = {}, { item }) => {
-    if (onSelect) onSelect(type, checked, item);
-  };
+  useEffect(() => {
+    let selectedItems, sel;
+    if (type === SIGNAL_TYPES.ENTITY) selectedItems = selectedEntities;
+    if (type === SIGNAL_TYPES.ALERT) selectedItems = selectedAlerts;
+    const selectionLookup = selectedItems.reduce(
+      (acc, { guid }) => ({ ...acc, [guid]: true }),
+      {}
+    );
+    const selectionReducer = (acc, { guid }, idx) =>
+      selectionLookup[guid] ? { ...acc, [idx]: true } : acc;
+    if (type === SIGNAL_TYPES.ENTITY)
+      sel = entities.reduce(selectionReducer, {});
+    if (type === SIGNAL_TYPES.ALERT) sel = alerts.reduce(selectionReducer, {});
+    if (sel) {
+      setSelection(sel);
+      selectionsSet.current = new Set(Object.keys(sel));
+    }
+  }, [type, entities, alerts, selectedEntities, selectedAlerts]);
+
+  const itemSelectionHandler = useCallback(
+    (sel) => {
+      const curSelectionsSet = new Set(Object.keys(sel));
+      const added = curSelectionsSet.difference(selectionsSet.current);
+      const removed = selectionsSet.current.difference(curSelectionsSet);
+      selectionsSet.current = curSelectionsSet;
+      let items = [];
+      if (type === SIGNAL_TYPES.ENTITY) items = entities;
+      if (type === SIGNAL_TYPES.ALERT) items = alerts;
+      if (added.size === 1) {
+        onSelect?.(type, true, items[added.keys().next().value]);
+      } else if (removed.size === 1) {
+        onSelect?.(type, false, items[removed.keys().next().value]);
+      }
+    },
+    [type, entities, alerts, onSelect]
+  );
 
   if (
     (type === SIGNAL_TYPES.ALERT && !alerts.length) ||
@@ -63,56 +82,66 @@ const ListingTable = ({
 
   if (type === SIGNAL_TYPES.ENTITY)
     return (
-      <Table
-        items={entities}
-        rowCount={rowCount}
-        onLoadMore={onLoadMore}
-        selected={selectedHandler}
-        onSelect={selectItemHandler}
-      >
-        <TableHeader>
-          <TableHeaderCell value={({ item }) => item?.name}>
-            Name
-          </TableHeaderCell>
-          <TableHeaderCell value={({ item }) => item?.type}>
-            Entity type
-          </TableHeaderCell>
-          <TableHeaderCell value={({ item }) => item?.account?.id}>
-            Account
-          </TableHeaderCell>
-        </TableHeader>
-        {({ item }) => (
-          <TableRow>
-            <TableRowCell>{item?.name}</TableRowCell>
-            <TableRowCell>
-              {item?.domain}/{item?.type}
-            </TableRowCell>
-            <TableRowCell>
-              {item?.account?.name} - {item?.account?.id}
-            </TableRowCell>
-          </TableRow>
-        )}
-      </Table>
+      <div className="data-table">
+        <DataTable
+          ariaLabel="Entities"
+          items={entities}
+          height={`${entities.length}rows`}
+          itemCount={rowCount}
+          onLoadMoreItems={onLoadMore}
+          selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
+          selection={selection}
+          onSelectionChange={itemSelectionHandler}
+        >
+          <DataTableHeader>
+            <DataTableHeaderCell name="name" value="name">
+              Name
+            </DataTableHeaderCell>
+            <DataTableHeaderCell name="type" value="type">
+              Entity type
+            </DataTableHeaderCell>
+          </DataTableHeader>
+          <DataTableBody>
+            {() => (
+              <DataTableRow>
+                <DataTableRowCell />
+                <DataTableRowCell />
+              </DataTableRow>
+            )}
+          </DataTableBody>
+        </DataTable>
+      </div>
     );
 
   if (type === SIGNAL_TYPES.ALERT)
     return (
-      <Table
-        items={alerts}
-        selected={selectedHandler}
-        onSelect={selectItemHandler}
-      >
-        <TableHeader>
-          <TableHeaderCell value={({ item }) => item?.name}>
-            Name
-          </TableHeaderCell>
-        </TableHeader>
-        {({ item }) => (
-          <TableRow>
-            <TableRowCell>{item?.name}</TableRowCell>
-          </TableRow>
-        )}
-      </Table>
+      <div className="data-table">
+        <DataTable
+          ariaLabel="Alert conditions"
+          items={alerts}
+          height={`${alerts.length}rows`}
+          selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
+          selection={selection}
+          onSelectionChange={itemSelectionHandler}
+        >
+          <DataTableHeader>
+            <DataTableHeaderCell name="condition" value="name">
+              Condition
+            </DataTableHeaderCell>
+            <DataTableHeaderCell name="policy" value="policyName">
+              Policy
+            </DataTableHeaderCell>
+          </DataTableHeader>
+          <DataTableBody>
+            {() => (
+              <DataTableRow>
+                <DataTableRowCell />
+                <DataTableRowCell />
+              </DataTableRow>
+            )}
+          </DataTableBody>
+        </DataTable>
+      </div>
     );
 
   return EMPTY_STATE;
