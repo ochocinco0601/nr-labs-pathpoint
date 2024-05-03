@@ -1,19 +1,42 @@
 import { ngql } from 'nr1';
 
-const nrqlConditions = `nrqlConditions {
-  guid: entityGuid
-  name
-  id
-  policyId
-}`;
+const nrqlConditions = `
+  nextCursor
+  nrqlConditions {
+    guid: entityGuid
+    name
+    id
+    policyId
+  }
+  totalCount`;
 
 const nrqlConditionsSearchQuery = (searchCriteria = '', countOnly) => ngql`
+query($id: Int!, $cursor: String) {
+  actor {
+    account(id: $id) {
+      alerts {
+        nrqlConditionsSearch(
+          cursor: $cursor
+          searchCriteria: {${searchCriteria}}
+        ) {
+          ${countOnly ? 'totalCount' : nrqlConditions}
+        }
+      }
+    }
+  }
+}`;
+
+const policiesSearchQuery = (policyIds = '""') => ngql`
 query($id: Int!) {
   actor {
     account(id: $id) {
       alerts {
-        nrqlConditionsSearch(searchCriteria: {${searchCriteria}}) {
-          ${countOnly ? 'totalCount' : nrqlConditions}
+        policiesSearch(searchCriteria: {ids: ${policyIds}}) {
+          nextCursor
+          policies {
+            id
+            name
+          }
         }
       }
     }
@@ -46,6 +69,7 @@ const incidentsQuery = (whereClause, timeClause, limitStatement) =>
 
 export {
   nrqlConditionsSearchQuery,
+  policiesSearchQuery,
   latestStatusForAlertConditions,
   incidentsQuery,
 };
