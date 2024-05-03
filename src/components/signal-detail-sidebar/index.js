@@ -77,7 +77,8 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
             {hasAccessToEntity ? (
               <Link
                 className="detail-link"
-                onClick={() => navigation.openStackedEntity(guid)}
+                to={navigation.getOpenEntityLocation(guid)}
+                onClick={(e) => e.target.setAttribute('target', '_blank')}
               >
                 {detailLinkText}
               </Link>
