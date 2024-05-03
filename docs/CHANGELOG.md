@@ -1,3 +1,10 @@
+## [1.73.6](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.5...v1.73.6) (2024-05-03)
+
+
+### Bug Fixes
+
+* open entity/conditions in new tab in signal detail sidebar ([8a88a5f](https://github.com/newrelic/nr-labs-hedgehog/commit/8a88a5fa7f422f78af4f3119c6eed93f93f24b54))
+
 ## [1.73.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.4...v1.73.5) (2024-05-03)
 
 
