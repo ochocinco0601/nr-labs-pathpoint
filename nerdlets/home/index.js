@@ -228,7 +228,7 @@ const HomeNerdlet = () => {
             <Flow
               flowDoc={currentFlowDoc}
               onClose={backToFlowsHandler}
-              mode={mode}
+              mode={currentFlowDoc?.stages?.length ? mode : MODES.EDIT}
               setMode={changeMode}
               prevNonEditMode={prevNonEditMode}
               flows={flows}
