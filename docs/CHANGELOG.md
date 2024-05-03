@@ -1,3 +1,10 @@
+## [1.73.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.4...v1.73.5) (2024-05-03)
+
+
+### Bug Fixes
+
+* open empty flows in edit mode by default ([0bdb6ca](https://github.com/newrelic/nr-labs-hedgehog/commit/0bdb6ca122a2b7c493d86725bd4283bcf32ec9c7))
+
 ## [1.73.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.3...v1.73.4) (2024-05-03)
 
 
