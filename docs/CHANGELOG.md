@@ -1,3 +1,10 @@
+## [1.73.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.3...v1.73.4) (2024-05-03)
+
+
+### Bug Fixes
+
+* alerts not completely loading in signal selection; also displays policy now ([a28ad2d](https://github.com/newrelic/nr-labs-hedgehog/commit/a28ad2d87d1b4a77eba95217f186dc65a4be1295))
+
 ## [1.73.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.2...v1.73.3) (2024-04-30)
 
 
