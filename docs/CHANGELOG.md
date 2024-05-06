@@ -1,3 +1,10 @@
+## [1.73.7](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.6...v1.73.7) (2024-05-06)
+
+
+### Bug Fixes
+
+* set default shape for stage when new one added to flow ([4bfd91f](https://github.com/newrelic/nr-labs-hedgehog/commit/4bfd91fa0cc510e72d6e2c543c15f536b117b21c))
+
 ## [1.73.6](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.5...v1.73.6) (2024-05-03)
 
 
