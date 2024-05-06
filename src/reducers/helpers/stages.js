@@ -2,15 +2,27 @@ import { uuid } from '../../utils';
 import { reorderComponent } from './reorder';
 
 export const addStage = ({ flow, saveFlow }) => {
+  const { stages = [] } = flow;
+  const related = stages.length ? { source: true } : {};
   const updatedFlow = {
     ...flow,
     stages: [
-      ...flow.stages,
+      ...stages.map((stage, idx, arr) =>
+        idx === arr.length - 1
+          ? {
+              ...stage,
+              related: {
+                ...stage.related,
+                target: true,
+              },
+            }
+          : stage
+      ),
       {
         id: uuid(),
         name: 'New Stage',
         levels: [],
-        related: {},
+        related,
       },
     ],
   };
