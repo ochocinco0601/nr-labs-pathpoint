@@ -1,3 +1,11 @@
+# [1.74.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.7...v1.74.0) (2024-05-14)
+
+
+### Features
+
+* change max steps per row ([d795c5c](https://github.com/newrelic/nr-labs-hedgehog/commit/d795c5cf0f2df546cb49b0d77c9b4a453f92d342))
+* increase the default stage column width ([cf16b3f](https://github.com/newrelic/nr-labs-hedgehog/commit/cf16b3f08417af092755ac244f3b7a1f1aa988dc))
+
 ## [1.73.7](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.6...v1.73.7) (2024-05-06)
 
 
