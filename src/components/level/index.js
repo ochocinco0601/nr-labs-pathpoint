@@ -178,7 +178,7 @@ const Level = ({
 
           acc.cols.push(cell);
 
-          if (acc.cols.length === 3) startNextRow = true;
+          if (acc.cols.length === 2) startNextRow = true;
           if (isLastStep) startNextRow = true;
           if (mode === MODES.INLINE) {
             if (['critical', 'warning'].includes(status)) startNextRow = true;
