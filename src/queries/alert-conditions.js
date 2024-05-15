@@ -54,17 +54,25 @@ const latestStatusForAlertConditions = (conditionIds = []) =>
 
 const incidentsQuery = (whereClause, timeClause, limitStatement) =>
   `
-  SELECT 
-    account.id AS accountId, 
-    conditionId, 
-    priority, 
-    event, 
-    title, 
-    incidentId, 
-    openTime, 
-    durationSeconds 
-  FROM NrAiIncident 
-  WHERE ${whereClause} AND closeTime IS NULL 
+SELECT 
+  accountId, 
+  conditionId, 
+  priority, 
+  latestEvent, 
+  title, 
+  incidentId, 
+  openTime, 
+  durationSeconds  
+FROM 
+(SELECT latest(account.id) AS accountId, 
+latest(conditionId) as conditionId, 
+latest(priority) as priority, 
+latest(event) as latestEvent, 
+latest(title) as title, 
+latest(incidentId) as incidentId, 
+latest(openTime) as openTime, 
+latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('open', 'close') and ${whereClause} facet incidentId ${limitStatement})
+where latestEvent = 'open'
   ${timeClause} ${limitStatement}`.replace(/\s+/g, ' ');
 
 export {
