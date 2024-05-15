@@ -205,7 +205,7 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
             }}
           >
             {maxIncidentsShown === 1
-              ? `Show ${incidentsList.length - 1} more incidents`
+              ? `Show ${incidentsList.length - 1} more open incidents`
               : 'Show less incidents'}
           </Button>
         </div>
