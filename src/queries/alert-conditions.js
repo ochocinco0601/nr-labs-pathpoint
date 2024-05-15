@@ -71,9 +71,9 @@ latest(event) as latestEvent,
 latest(title) as title, 
 latest(incidentId) as incidentId, 
 latest(openTime) as openTime, 
-latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('open', 'close') and ${whereClause} facet incidentId ${limitStatement})
+latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('open', 'close') and ${whereClause} facet incidentId LIMIT MAX)
 where latestEvent = 'open'
-  ${timeClause} ${limitStatement}`.replace(/\s+/g, ' ');
+  ${timeClause} order by openTime desc ${limitStatement}`.replace(/\s+/g, ' ');
 
 export {
   nrqlConditionsSearchQuery,
