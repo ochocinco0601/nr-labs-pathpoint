@@ -43,14 +43,28 @@ query($id: Int!) {
   }
 }`;
 
-const latestStatusForAlertConditions = (conditionIds = []) =>
-  `SELECT 
-    latest(event) AS event, 
-    latest(priority) AS priority, 
-    latest(conditionName) as name 
-  FROM NrAiIncident 
-  FACET string(conditionId) 
-  WHERE conditionId IN (${conditionIds.join(', ')})`.replace(/\s+/g, ' ');
+const latestStatusForAlertConditions = (conditionIds = []) => {
+  const query = `SELECT 
+      event, 
+      priority, 
+      name,
+      conditionId
+    FROM (
+      SELECT 
+        latest(event) AS event, 
+        latest(priority) AS priority, 
+        latest(conditionName) as name,
+        latest(conditionId) as conditionId
+      FROM NrAiIncident 
+      WHERE event IN ('open', 'close') and conditionId IN (${conditionIds.join(
+        ', '
+      )}) FACET incidentId LIMIT MAX) 
+    WHERE event = 'open' 
+    SINCE 10 DAYS AGO
+    LIMIT MAX`.replace(/\s+/g, ' ');
+  console.info('alert query', query);
+  return query;
+};
 
 const incidentsQuery = (whereClause, timeClause, limitStatement) =>
   `

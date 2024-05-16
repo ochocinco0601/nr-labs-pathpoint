@@ -68,7 +68,7 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
       accountId,
       status,
       whereClause,
-      timeClause = 'SINCE 30 DAYS AGO',
+      timeClause = 'SINCE 10 DAYS AGO',
       limitStatement = 'LIMIT 1',
       isAlert,
       secondAttempt = false,
