@@ -1,3 +1,17 @@
+# [1.75.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.74.0...v1.75.0) (2024-05-16)
+
+
+### Bug Fixes
+
+* correct open alerts query ([817ad24](https://github.com/newrelic/nr-labs-hedgehog/commit/817ad249ba2dbb32b896397f23cdecae61bf49bd))
+* limit and ordering on incident query ([ab5544b](https://github.com/newrelic/nr-labs-hedgehog/commit/ab5544b44dc82880dd1254f2c30de41d3f1f6200))
+
+
+### Features
+
+* fix alert signal status lookup ([d6afe41](https://github.com/newrelic/nr-labs-hedgehog/commit/d6afe412b8e5dc9bb0f90263ab02b2437848ce37))
+* update button label for clarity ([6864bae](https://github.com/newrelic/nr-labs-hedgehog/commit/6864baef0fe3c3e065a629a561bec6009b5dc33b))
+
 # [1.74.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.73.7...v1.74.0) (2024-05-14)
 
 
