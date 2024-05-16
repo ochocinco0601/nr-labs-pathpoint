@@ -68,7 +68,7 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
       accountId,
       status,
       whereClause,
-      timeClause = 'SINCE 30 DAYS AGO',
+      timeClause = 'SINCE 10 DAYS AGO',
       limitStatement = 'LIMIT 1',
       isAlert,
       secondAttempt = false,
@@ -205,7 +205,7 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
             }}
           >
             {maxIncidentsShown === 1
-              ? `Show ${incidentsList.length - 1} more incidents`
+              ? `Show ${incidentsList.length - 1} more open incidents`
               : 'Show less incidents'}
           </Button>
         </div>

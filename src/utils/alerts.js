@@ -41,12 +41,22 @@ export const alertConditionsStatusGQL = (alerts = {}) => {
   return queries.length ? queriesGQL(queries) : null;
 };
 
-export const alertsStatusFromQueryResults = (alerts = {}, queryResult = {}) =>
-  Object.keys(alerts).reduce((acc, acctId) => {
+export const alertsStatusFromQueryResults = (alerts = {}, queryResult = {}) => {
+  const statuses = Object.keys(alerts).reduce((acc, acctId) => {
     const { [`q${acctId}`]: { results: acctIncidents = [] } = {} } =
       queryResult;
-    acctIncidents.forEach(
-      (incident) => (acc[alerts[acctId][incident.facet]] = incident)
-    );
+    acctIncidents.forEach((incident) => {
+      const condition = acc[alerts[acctId][incident.conditionId]];
+      if (
+        !condition ||
+        (condition.priority !== CRITICAL &&
+          condition.priority !== incident.priority)
+      ) {
+        return (acc[alerts[acctId][incident.conditionId]] = incident);
+      }
+    });
     return acc;
   }, {});
+
+  return statuses;
+};
