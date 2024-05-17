@@ -112,9 +112,6 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     []
   );
 
-  const getConditionEntityGuid = (accountId, conditionId) =>
-    btoa(`${accountId}|AIOPS|CONDITION|${conditionId}`).replace(/=+$/, '');
-
   if (loading)
     return (
       <div className="alert-incidents-wrapper">
@@ -168,12 +165,7 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
                           {type === SIGNAL_TYPES.ENTITY && (
                             <Link
                               className="detail-link"
-                              to={navigation.getOpenEntityLocation(
-                                getConditionEntityGuid(
-                                  incident.accountId,
-                                  incident.conditionId
-                                )
-                              )}
+                              to={navigation.getOpenEntityLocation(guid)}
                               onClick={(e) =>
                                 e.target.setAttribute('target', '_blank')
                               }
