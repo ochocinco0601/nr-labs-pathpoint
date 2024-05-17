@@ -1,3 +1,10 @@
+## [1.75.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.0...v1.75.1) (2024-05-17)
+
+
+### Bug Fixes
+
+* alert links to open in new window ([c807f4a](https://github.com/newrelic/nr-labs-hedgehog/commit/c807f4a13a741bb67b33325938a55fa53a221be1))
+
 # [1.75.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.74.0...v1.75.0) (2024-05-16)
 
 
