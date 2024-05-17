@@ -38,6 +38,7 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
   const [detailLinkText, setDetailLinkText] = useState('View entity details');
 
   useEffect(() => {
+    console.info('changing state', guid, type, account)
     const [acctId, condId] = ((atob(guid) || '').split('|') || []).reduce(
       (acc, cur, idx) => (idx === 0 || idx === 3 ? [...acc, Number(cur)] : acc),
       []
@@ -55,6 +56,8 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
     if (type === SIGNAL_TYPES.ALERT && condId) {
       setConditionId(condId);
       setDetailLinkText('View alert condition');
+    } else {
+      setDetailLinkText('View entity details');
     }
   }, [guid, type, account, accounts]);
 
