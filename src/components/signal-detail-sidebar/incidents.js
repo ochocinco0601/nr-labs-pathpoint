@@ -112,22 +112,6 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     []
   );
 
-  const openIncidentNerdlet = useCallback(({ accountId, incidentId }) => {
-    if (accountId && incidentId)
-      navigation.openStackedNerdlet({
-        id: 'incident-analysis.home',
-        urlState: { accountId, incidentId },
-      });
-  }, []);
-
-  const openConditionNerdlet = useCallback(({ accountId, conditionId }) => {
-    if (!accountId || !conditionId) return;
-    const entityGuid = btoa(
-      `${accountId}|AIOPS|CONDITION|${conditionId}`
-    ).replace(/=+$/, '');
-    navigation.openStackedEntity(entityGuid);
-  }, []);
-
   if (loading)
     return (
       <div className="alert-incidents-wrapper">
@@ -171,14 +155,20 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
                         <div className="incident-links">
                           <Link
                             className="detail-link"
-                            onClick={() => openIncidentNerdlet(incident)}
+                            to={incident.incidentLink}
+                            onClick={(e) =>
+                              e.target.setAttribute('target', '_blank')
+                            }
                           >
                             View incident
                           </Link>
                           {type === SIGNAL_TYPES.ENTITY && (
                             <Link
                               className="detail-link"
-                              onClick={() => openConditionNerdlet(incident)}
+                              to={navigation.getOpenEntityLocation(guid)}
+                              onClick={(e) =>
+                                e.target.setAttribute('target', '_blank')
+                              }
                             >
                               View condition
                             </Link>

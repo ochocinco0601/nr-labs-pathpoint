@@ -62,7 +62,6 @@ const latestStatusForAlertConditions = (conditionIds = []) => {
     WHERE event = 'open' 
     SINCE 10 DAYS AGO
     LIMIT MAX`.replace(/\s+/g, ' ');
-  console.info('alert query', query);
   return query;
 };
 
@@ -75,6 +74,7 @@ SELECT
   latestEvent, 
   title, 
   incidentId, 
+  incidentLink,
   openTime, 
   durationSeconds  
 FROM 
@@ -84,6 +84,7 @@ latest(priority) as priority,
 latest(event) as latestEvent, 
 latest(title) as title, 
 latest(incidentId) as incidentId, 
+latest(incidentLink) as incidentLink,
 latest(openTime) as openTime, 
 latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('open', 'close') and ${whereClause} facet incidentId LIMIT MAX)
 where latestEvent = 'open'
