@@ -1,3 +1,12 @@
+## [1.75.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.1...v1.75.2) (2024-05-21)
+
+
+### Bug Fixes
+
+* entity link bug ([04f83e4](https://github.com/newrelic/nr-labs-hedgehog/commit/04f83e4f3d351070510eec8bf4c50986ba25b167)), closes [#270](https://github.com/newrelic/nr-labs-hedgehog/issues/270)
+* entity link overwrite ([7ffc1e8](https://github.com/newrelic/nr-labs-hedgehog/commit/7ffc1e8a3363ce7afcfe9268d269b8493d30c78a))
+* incident state handling & no incidents ([2d31913](https://github.com/newrelic/nr-labs-hedgehog/commit/2d31913a3f6e77ab93ea29eca26fa5f7eb9a3f54)), closes [#268](https://github.com/newrelic/nr-labs-hedgehog/issues/268)
+
 ## [1.75.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.0...v1.75.1) (2024-05-17)
 
 
