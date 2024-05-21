@@ -52,9 +52,16 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
         setSignalAccount(acct);
       }
     }
-    if (type === SIGNAL_TYPES.ALERT && condId) {
-      setConditionId(condId);
-      setDetailLinkText('View alert condition');
+    if (type === SIGNAL_TYPES.ALERT) {
+      if (condId) {
+        setConditionId(condId);
+        setDetailLinkText('View alert condition');
+      } else {
+        setConditionId('');
+        setDetailLinkText('');
+      }
+    } else {
+      setDetailLinkText('View entity details');
     }
   }, [guid, type, account, accounts]);
 
