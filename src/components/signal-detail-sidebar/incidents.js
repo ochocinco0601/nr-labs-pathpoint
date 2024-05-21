@@ -31,8 +31,12 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     setBannerMessage('');
     setIncidentsList([]);
     setMaxIncidentsShown(1);
-    setLoading(true);
-  }, [guid]);
+    if ([STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [guid, accountId, timeRange, status]);
 
   useEffect(() => {
     if (
@@ -40,7 +44,8 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
       !accountId ||
       (type === SIGNAL_TYPES.ALERT && !conditionId) ||
       !timeRange ||
-      !fetchIncidents
+      !fetchIncidents ||
+      !loading
     )
       return;
 
@@ -51,7 +56,6 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
     const timeClause = timeRangeToNrql({ timeRange });
     const limitStatement = 'LIMIT MAX';
     const isAlert = type === SIGNAL_TYPES.ALERT;
-    setLoading(true);
     setBannerMessage('');
     fetchIncidents({
       accountId,
@@ -60,8 +64,8 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
       timeClause,
       limitStatement,
       isAlert,
-    });
-  }, [guid, type, accountId, conditionId, status, timeRange, fetchIncidents]);
+    }).catch(console.error);
+  }, [loading]);
 
   const fetchIncidents = useCallback(
     async ({
@@ -91,117 +95,137 @@ const Incidents = ({ guid, type, conditionId, accountId, status }) => {
               secondAttempt: true,
             });
           } else {
-            setLoading(false);
             setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE); // signal with success or unknown status -- make only one attempt to fetch incidents
+            setLoading(false);
           }
         } else {
-          setLoading(false);
           setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_INCIDENTS); // nothing found after secondAttempt
+          setLoading(false);
         }
       } else {
         setIncidentsList(events);
         setMaxIncidentsShown(isAlert ? events.length : 1);
-        setLoading(false);
         if (secondAttempt) {
           setBannerMessage(
             `${UI_CONTENT.SIGNAL.DETAILS.NOT_FOUND_IN_TIMERANGE} ${UI_CONTENT.SIGNAL.DETAILS.FOUND_RECENT}` // most recent incident fiund outside of selected timerange
           );
         }
+        setLoading(false);
       }
     },
     []
   );
 
-  if (loading)
+  if (![STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) {
     return (
-      <div className="alert-incidents-wrapper">
-        <Spinner type={Spinner.TYPE.DOT} />
-      </div>
-    );
-
-  return (
-    <div className="alert-incidents-wrapper">
       <HeadingText
         className="alert-incidents-header"
         type={HeadingText.TYPE.HEADING_4}
       >
-        Activity stream
+        No Open Incidents
       </HeadingText>
-      <div className="alert-incidents">
-        {bannerMessage && <SectionMessage description={bannerMessage} />}
-        {incidentsList.reduce(
-          (acc, incident, i) =>
-            i < maxIncidentsShown
-              ? [
-                  ...acc,
-                  <div key={incident.incidentId} className="alert-incident">
-                    <Card>
-                      <CardBody className="incident-card-body">
-                        <div className="incident-header">
-                          <div className={`square ${incident.priority}`}></div>
-                          <div className={`signal-status ${incident.priority}`}>
-                            <span>
-                              <span className="priority">
-                                {incident.priority}
-                              </span>
-                              {' Issue '}
-                              <span className="event">{incident.event}</span>
-                            </span>
-                          </div>
-                        </div>
-                        <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                          {incident.title}
-                        </HeadingText>
-                        <div className="incident-links">
-                          <Link
-                            className="detail-link"
-                            to={incident.incidentLink}
-                            onClick={(e) =>
-                              e.target.setAttribute('target', '_blank')
-                            }
-                          >
-                            View incident
-                          </Link>
-                          {type === SIGNAL_TYPES.ENTITY && (
-                            <Link
-                              className="detail-link"
-                              to={navigation.getOpenEntityLocation(guid)}
-                              onClick={(e) =>
-                                e.target.setAttribute('target', '_blank')
-                              }
-                            >
-                              View condition
-                            </Link>
-                          )}
-                        </div>
-                        <div>Started: {formatTimestamp(incident.openTime)}</div>
-                        <div>Duration: {getIncidentDuration(incident)}</div>
-                      </CardBody>
-                    </Card>
-                  </div>,
-                ]
-              : acc,
-          []
-        )}
-      </div>
-      {type === SIGNAL_TYPES.ENTITY && incidentsList?.length > 1 ? (
-        <div className="incidents-footer">
-          <Button
-            type={Button.TYPE.PLAIN_NEUTRAL}
-            onClick={() => {
-              setMaxIncidentsShown((mis) =>
-                mis === 1 ? incidentsList.length : 1
-              );
-            }}
-          >
-            {maxIncidentsShown === 1
-              ? `Show ${incidentsList.length - 1} more open incidents`
-              : 'Show less incidents'}
-          </Button>
+    );
+  } else {
+    if (loading) {
+      return (
+        <div className="alert-incidents-wrapper">
+          <Spinner type={Spinner.TYPE.DOT} />
         </div>
-      ) : null}
-    </div>
-  );
+      );
+    } else {
+      return (
+        <div className="alert-incidents-wrapper">
+          <HeadingText
+            className="alert-incidents-header"
+            type={HeadingText.TYPE.HEADING_4}
+          >
+            Open Incidents
+          </HeadingText>
+          <div className="alert-incidents">
+            {bannerMessage && <SectionMessage description={bannerMessage} />}
+            {incidentsList.reduce(
+              (acc, incident, i) =>
+                i < maxIncidentsShown
+                  ? [
+                      ...acc,
+                      <div key={incident.incidentId} className="alert-incident">
+                        <Card>
+                          <CardBody className="incident-card-body">
+                            <div className="incident-header">
+                              <div
+                                className={`square ${incident.priority}`}
+                              ></div>
+                              <div
+                                className={`signal-status ${incident.priority}`}
+                              >
+                                <span>
+                                  <span className="priority">
+                                    {incident.priority}
+                                  </span>
+                                  {' Issue '}
+                                  <span className="event">
+                                    {incident.event}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                            <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                              {incident.title}
+                            </HeadingText>
+                            <div className="incident-links">
+                              <Link
+                                className="detail-link"
+                                to={incident.incidentLink}
+                                onClick={(e) =>
+                                  e.target.setAttribute('target', '_blank')
+                                }
+                              >
+                                View incident
+                              </Link>
+                              {type === SIGNAL_TYPES.ENTITY && (
+                                <Link
+                                  className="detail-link"
+                                  to={navigation.getOpenEntityLocation(guid)}
+                                  onClick={(e) =>
+                                    e.target.setAttribute('target', '_blank')
+                                  }
+                                >
+                                  View condition
+                                </Link>
+                              )}
+                            </div>
+                            <div>
+                              Started: {formatTimestamp(incident.openTime)}
+                            </div>
+                            <div>Duration: {getIncidentDuration(incident)}</div>
+                          </CardBody>
+                        </Card>
+                      </div>,
+                    ]
+                  : acc,
+              []
+            )}
+          </div>
+          {type === SIGNAL_TYPES.ENTITY && incidentsList?.length > 1 ? (
+            <div className="incidents-footer">
+              <Button
+                type={Button.TYPE.PLAIN_NEUTRAL}
+                onClick={() => {
+                  setMaxIncidentsShown((mis) =>
+                    mis === 1 ? incidentsList.length : 1
+                  );
+                }}
+              >
+                {maxIncidentsShown === 1
+                  ? `Show ${incidentsList.length - 1} more open incidents`
+                  : 'Show less incidents'}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+  }
 };
 
 Incidents.propTypes = {
