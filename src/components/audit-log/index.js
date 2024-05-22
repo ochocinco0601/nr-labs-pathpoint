@@ -40,17 +40,23 @@ const AuditLog = ({ flowId, accountId }) => {
       <div className="audit-logs-header">
         <HeadingText type={HeadingText.TYPE.HEADING_2}>Audit Log</HeadingText>
       </div>
-      <div className="items">
-        {logs.reverse().map(({ id, user, timestamp }) => (
-          <div key={id} className="item">
-            <div className="line">
-              <span className="title">{user?.name}</span>
-              <span>({user?.email})</span>
+      {logs ? (
+        <div className="items">
+          {logs?.reverse().map(({ id, user, timestamp }) => (
+            <div key={id} className="item">
+              <div className="line">
+                <span className="title">{user?.name}</span>
+                <span>({user?.email})</span>
+              </div>
+              <div className="line light">{formatTimestamp(timestamp)}</div>
             </div>
-            <div className="line light">{formatTimestamp(timestamp)}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <HeadingText type={HeadingText.TYPE.HEADING_4}>
+          No logs found
+        </HeadingText>
+      )}
     </div>
   );
 };

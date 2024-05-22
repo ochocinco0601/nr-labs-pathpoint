@@ -1,21 +1,25 @@
-import { useEffect } from 'react';
-import {
-  AccountStorageMutation,
-  AccountStorageQuery,
-  useAccountStorageMutation,
-} from 'nr1';
+import { useCallback } from 'react';
+import { AccountStorageMutation, AccountStorageQuery } from 'nr1';
 
 import { NERD_STORAGE } from '../../constants';
 
 const useFlowWriter = ({ accountId, user }) => {
-  const [write, { data, error: writeError }] = useAccountStorageMutation({
-    actionType: useAccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-    collection: NERD_STORAGE.FLOWS_COLLECTION,
-    accountId,
-  });
+  const write = useCallback(async ({ documentId, document }) => {
+    const { data: flowData, error: flowWriteError } =
+      await AccountStorageMutation.mutate({
+        actionType: AccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+        collection: NERD_STORAGE.FLOWS_COLLECTION,
+        accountId,
+        documentId,
+        document: document,
+      });
 
-  useEffect(() => {
-    const writeToLog = async (documentId) => {
+    if (flowWriteError) {
+      console.error(flowWriteError);
+      return;
+    }
+
+    if (flowData) {
       const { data: logsData, error: logReadError } =
         await AccountStorageQuery.query({
           accountId,
@@ -40,17 +44,10 @@ const useFlowWriter = ({ accountId, user }) => {
           ],
         },
       });
-    };
+    }
+  }, []);
 
-    const { nerdStorageWriteDocument: { id } = {} } = data || {};
-    if (id) writeToLog(id);
-  }, [data]);
-
-  useEffect(() => {
-    if (writeError) console.error('Error writing flow', writeError);
-  }, [writeError]);
-
-  return { write, data };
+  return { write };
 };
 
 export default useFlowWriter;
