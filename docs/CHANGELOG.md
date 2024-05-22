@@ -1,3 +1,11 @@
+## [1.75.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.2...v1.75.3) (2024-05-22)
+
+
+### Bug Fixes
+
+* audit log write bug ([6599507](https://github.com/newrelic/nr-labs-hedgehog/commit/659950738c65d076a700c817ebb69874f0724878)), closes [#275](https://github.com/newrelic/nr-labs-hedgehog/issues/275)
+* handle null logs ([5022dd9](https://github.com/newrelic/nr-labs-hedgehog/commit/5022dd99b74b727f65ced22cb15ee13e001657f4)), closes [#253](https://github.com/newrelic/nr-labs-hedgehog/issues/253)
+
 ## [1.75.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.1...v1.75.2) (2024-05-21)
 
 
