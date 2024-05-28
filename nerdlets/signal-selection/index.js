@@ -149,7 +149,7 @@ const SignalSelectionNerdlet = () => {
         setEntities(() => []);
       }
     } else if (currentTab === SIGNAL_TYPES.ALERT) {
-      if (acctId && alertCount && alertCount <= 200) {
+      if (acctId && alertCount) {
         getAlerts(acctId).catch(console.error);
       } else {
         setAlerts(() => []);
