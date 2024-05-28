@@ -1,3 +1,10 @@
+## [1.75.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.3...v1.75.4) (2024-05-28)
+
+
+### Bug Fixes
+
+* remove limit check before fetching alerts in signal selection ([d99ed26](https://github.com/newrelic/nr-labs-hedgehog/commit/d99ed26af38f6daf500b7efb33b19acde9d19245))
+
 ## [1.75.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.2...v1.75.3) (2024-05-22)
 
 
