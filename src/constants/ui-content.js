@@ -169,6 +169,11 @@ export const UI_CONTENT = {
       DESCRIPTION:
         'Please use the filtering options above to load your signal list.',
     },
+    SIGNALS_NOT_FOUND: {
+      TITLE: 'No signals found',
+      DESCRIPTION: 'There were no matching signals with the specified criteria',
+    },
+    SIGNALS_LOADING: 'Loading signals...',
     TOO_MANY_ENTITIES_ERROR_MESSAGE:
       'Note: You exceeded your signal limit. Remove entities or convert to workload to save changes.',
   },
