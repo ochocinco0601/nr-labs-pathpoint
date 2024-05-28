@@ -1,3 +1,10 @@
+## [1.75.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.4...v1.75.5) (2024-05-28)
+
+
+### Bug Fixes
+
+* empty state when loading signals during selection ([9d63eb4](https://github.com/newrelic/nr-labs-hedgehog/commit/9d63eb40be3d365f3d5ad2b8787baf4914e23ffa))
+
 ## [1.75.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.3...v1.75.4) (2024-05-28)
 
 
