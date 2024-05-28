@@ -12,17 +12,23 @@ import {
 } from 'nr1';
 import { SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
 
-const EMPTY_STATE = (
-  <EmptyState
-    fullHeight
-    fullWidth
-    iconType={EmptyState.ICON_TYPE.INTERFACE__STATE__CRITICAL}
-    title={UI_CONTENT.SIGNAL_SELECTION.TOO_MANY_ENTITIES_EMPTY_STATE.TITLE}
-    description={
-      UI_CONTENT.SIGNAL_SELECTION.TOO_MANY_ENTITIES_EMPTY_STATE.DESCRIPTION
-    }
-  />
-);
+const emptyState = (hasNoSignals) =>
+  hasNoSignals ? (
+    <EmptyState
+      fullHeight
+      fullWidth
+      iconType={EmptyState.ICON_TYPE.INTERFACE__STATE__CRITICAL}
+      title={UI_CONTENT.SIGNAL_SELECTION.SIGNALS_NOT_FOUND.TITLE}
+      description={UI_CONTENT.SIGNAL_SELECTION.SIGNALS_NOT_FOUND.DESCRIPTION}
+    />
+  ) : (
+    <EmptyState
+      fullHeight
+      fullWidth
+      title={UI_CONTENT.SIGNAL_SELECTION.SIGNALS_LOADING}
+      type={EmptyState.TYPE.LOADING}
+    />
+  );
 
 const ListingTable = ({
   type,
@@ -78,7 +84,7 @@ const ListingTable = ({
     (type === SIGNAL_TYPES.ALERT && !alerts.length) ||
     (type === SIGNAL_TYPES.ENTITY && !entities.length)
   )
-    return EMPTY_STATE;
+    return emptyState();
 
   if (type === SIGNAL_TYPES.ENTITY)
     return (
@@ -144,7 +150,7 @@ const ListingTable = ({
       </div>
     );
 
-  return EMPTY_STATE;
+  return emptyState();
 };
 
 ListingTable.propTypes = {
