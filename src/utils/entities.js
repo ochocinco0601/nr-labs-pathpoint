@@ -1,8 +1,15 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
+import { ALERT_STATUSES } from './alerts';
 
 const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
 } = StatusIcon;
+
+const alertSeverities = [
+  ALERT_STATUSES.NOT_ALERTING,
+  ALERT_STATUSES.WARNING,
+  ALERT_STATUSES.CRITICAL,
+];
 
 export const entityStatus = ({ alertSeverity } = {}) => {
   switch (alertSeverity) {
@@ -37,10 +44,28 @@ export const guidsToArray = (guids = {}, maxArrayLen = 10) =>
     ];
   }, []);
 
+const statusFromViolations = (violations = []) =>
+  alertSeverities[
+    violations.reduce((acc, { alertSeverity }) => {
+      const statusIndex =
+        alertSeverities.findIndex((severity) => severity === alertSeverity) ||
+        0;
+      return Math.max(acc, statusIndex);
+    }, 0)
+  ];
+
 export const entitiesDetailsFromQueryResults = (res = {}) =>
   Object.keys(res).reduce((acc, cur) => {
     const signalsArray = res[cur];
     if (!Array.isArray(signalsArray)) return acc;
-    signalsArray.forEach(({ guid, name }) => (acc[guid] = { name }));
+    signalsArray.forEach(
+      (entity) =>
+        (acc[entity.guid] = {
+          ...entity,
+          alertSeverity:
+            entity.alertSeverity ||
+            statusFromViolations(entity.alertViolations),
+        })
+    );
     return acc;
   }, {});
