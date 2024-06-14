@@ -5,7 +5,7 @@ import { Button, Dropdown, DropdownItem, Icon } from 'nr1';
 
 import { TimeRangePicker } from '@newrelic/nr-labs-components';
 import { uuid } from '../../utils';
-import { STATUSES } from '../../constants';
+import { SHORT_DATETIME_FORMATTER, STATUSES } from '../../constants';
 
 const playbackIncrementOptions = [
   { display: '1 minute', timeInMs: 60000 },
@@ -45,6 +45,9 @@ const timesForTimeBand = (firstBandStartTime, timeBandDurationMs, index) => {
   return { start, end };
 };
 
+const hintDateTimeFormat = (timestamp) =>
+  SHORT_DATETIME_FORMATTER.format(new Date(timestamp));
+
 const PlaybackBar = ({ onPreload, onSeek }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [shouldLoopCheck, setShouldLoopCheck] = useState(false);
@@ -59,6 +62,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
   });
   const [timeBands, setTimeBands] = useState([]);
   const [displayBands, setDisplayBands] = useState([]);
+  const [seekHintText, setSeekHintText] = useState('');
   const seek = useRef();
   const intervalId = useRef();
   const shouldLoop = useRef(false);
@@ -187,6 +191,9 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
       end !== showingTimeWindow.current.end
     ) {
       showingTimeWindow.current = { start, end };
+      setSeekHintText(
+        `${hintDateTimeFormat(start)} - ${hintDateTimeFormat(end)}`
+      );
       if (onSeek) onSeek(showingTimeWindow.current);
     }
   }, [seekerStyle, timeBands]);
@@ -263,6 +270,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
         onClick={() => setIsPlaying((p) => !p)}
       />
       <div className="seek" ref={seek}>
+        <div className="seek-hint">{seekHintText}</div>
         <div className="bands">
           {displayBands.map(({ key, status, style }) => (
             <div
