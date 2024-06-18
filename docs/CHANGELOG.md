@@ -1,3 +1,10 @@
+## [1.76.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.2...v1.76.3) (2024-06-18)
+
+
+### Bug Fixes
+
+* multiple playback fixes and other fixes ([1d02207](https://github.com/newrelic/nr-labs-hedgehog/commit/1d02207fd2466985c78e6c427087d7576c7b40bb))
+
 ## [1.76.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.1...v1.76.2) (2024-06-18)
 
 
