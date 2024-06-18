@@ -16,7 +16,10 @@ import Footer from './footer';
 import useFetchSignals from './use-fetch-signals';
 import useEntitiesTypesList from './use-entities-types-list';
 import { useFlowLoader } from '../../src/hooks';
-import { queryFromGuidsArray } from '../../src/queries';
+import {
+  entitiesByDomainTypeAccountQuery,
+  queryFromGuidsArray,
+} from '../../src/queries';
 import { entitiesDetailsFromQueryResults } from '../../src/utils';
 import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
 
@@ -60,13 +63,16 @@ const SignalSelectionNerdlet = () => {
   const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
   const [searchText, setSearchText] = useState('');
   const [lazyLoadingProps, setLazyLoadingProps] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [{ accountId }] = usePlatformState();
   const [
     { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
   ] = useNerdletState();
-  const { entitiesCount, entitiesTypesList } = useEntitiesTypesList();
+  const { entitiesCount, entitiesTypesList } = useEntitiesTypesList({
+    accountId: acctId,
+  });
   const { flows: flow } = useFlowLoader({ accountId, flowId });
-  const { fetchEntities, fetchAlerts } = useFetchSignals();
+  const { fetchAlerts } = useFetchSignals();
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -123,20 +129,32 @@ const SignalSelectionNerdlet = () => {
   }, [acctId, fetchAlerts]);
 
   useEffect(() => {
-    const getEntities = async () => {
-      const { data: { entities: e = [], nextCursor } = {} } =
-        await fetchEntities({
-          entityDomainType: selectedEntityType,
-        });
+    const getEntities = async (id) => {
+      setIsLoading(true);
+      const {
+        data: {
+          actor: {
+            entitySearch: {
+              results: { entities: e = [], nextCursor } = {},
+            } = {},
+          } = {},
+        } = {},
+      } = await NerdGraphQuery.query({
+        query: entitiesByDomainTypeAccountQuery(selectedEntityType, id),
+        variables: { cursor: null },
+      });
+      setIsLoading(false);
       setEntities(() => (e && e.length ? e : []));
       setFetchEntitiesNextCursor(nextCursor);
     };
 
     const getAlerts = async (id, searchQuery) => {
+      setIsLoading(true);
       const { data: { nrqlConditions = [] } = {} } = await fetchAlerts({
         id,
         searchQuery,
       });
+      setIsLoading(false);
       setAlerts(() =>
         nrqlConditions && nrqlConditions.length ? nrqlConditions : []
       );
@@ -144,7 +162,7 @@ const SignalSelectionNerdlet = () => {
 
     if (currentTab === SIGNAL_TYPES.ENTITY) {
       if (entitiesCount && selectedEntityType) {
-        getEntities().catch(console.error);
+        getEntities(acctId).catch(console.error);
       } else {
         setEntities(() => []);
       }
@@ -155,22 +173,15 @@ const SignalSelectionNerdlet = () => {
         setAlerts(() => []);
       }
     }
-  }, [
-    currentTab,
-    acctId,
-    selectedEntityType,
-    fetchEntities,
-    alertCount,
-    fetchAlerts,
-  ]);
+  }, [currentTab, acctId, selectedEntityType, alertCount, fetchAlerts]);
 
-  useEffect(
-    () =>
-      setSelectedEntityType((et) =>
-        entitiesTypesList?.length ? entitiesTypesList[0] : et
-      ),
-    [entitiesTypesList]
-  );
+  useEffect(() => {
+    setSelectedEntityType((et) =>
+      entitiesTypesList?.length ? entitiesTypesList[0] : et
+    );
+    setEntities([]);
+    setAlerts([]);
+  }, [entitiesTypesList]);
 
   useEffect(() => {
     if (searchText) {
@@ -195,22 +206,38 @@ const SignalSelectionNerdlet = () => {
   ]);
 
   const onLoadMore = useCallback(async () => {
-    const { data: { entities: e = [], nextCursor } = {} } = await fetchEntities(
-      {
-        entityDomainType: selectedEntityType,
-        cursor: fetchEntitiesNextCursor,
-      }
+    const {
+      data: {
+        actor: {
+          entitySearch: { results: { entities: e = [], nextCursor } = {} } = {},
+        } = {},
+      } = {},
+    } = await NerdGraphQuery.query({
+      query: entitiesByDomainTypeAccountQuery(selectedEntityType, acctId),
+      variables: { cursor: fetchEntitiesNextCursor },
+    });
+    setEntities((ent) =>
+      e && e.length
+        ? [
+            ...ent,
+            ...e.filter(({ guid }) => !ent.some((en) => en.guid === guid)),
+          ]
+        : ent
     );
-    setEntities((ent) => (e && e.length ? [...ent, ...e] : ent));
     setFetchEntitiesNextCursor(nextCursor);
-  }, [fetchEntities, selectedEntityType, fetchEntitiesNextCursor]);
+  }, [acctId, selectedEntityType, fetchEntitiesNextCursor]);
 
-  const accountChangeHandler = useCallback((ai) => setAcctId(ai), []);
+  const accountChangeHandler = useCallback((_, ai) => {
+    setAcctId(ai);
+    setEntities([]);
+    setAlerts([]);
+  }, []);
 
-  const entityTypeChangeHandler = useCallback(
-    (e) => setSelectedEntityType(e),
-    []
-  );
+  const entityTypeChangeHandler = useCallback((e) => {
+    setSelectedEntityType(e);
+    setEntities([]);
+    setAlerts([]);
+  }, []);
 
   const entityTypeTitle = useMemo(
     () =>
@@ -296,6 +323,7 @@ const SignalSelectionNerdlet = () => {
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
           signalsDetails={signalsDetails}
+          isLoading={isLoading}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
           {...lazyLoadingProps}
