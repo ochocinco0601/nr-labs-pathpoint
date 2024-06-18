@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -67,7 +68,6 @@ const HomeNerdlet = () => {
   const [isAuditLogShown, setisAuditLogShown] = useState(false);
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const [transitionToFlow, setTransitionToFlow] = useState(false);
-  const [transitionIntervalId, setTransitionIntervalId] = useState();
   const { accountId } = useContext(PlatformStateContext);
   const [nerdletState, setNerdletState] = useNerdletState();
   const { user } = useFetchUser();
@@ -80,12 +80,14 @@ const HomeNerdlet = () => {
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
   const { data: accounts = [] } = useAccountsQuery();
+  const transitionTimeoutId = useRef();
 
   useEffect(() => {
     return () => {
-      if (transitionIntervalId) clearInterval(transitionIntervalId);
+      if (transitionTimeoutId.current)
+        clearTimeout(transitionTimeoutId.current);
     };
-  }, [transitionIntervalId]);
+  }, []);
 
   useEffect(
     () =>
@@ -198,11 +200,9 @@ const HomeNerdlet = () => {
 
   const transitionToMode = useCallback((newMode) => {
     setTransitionToFlow(true);
-    setTransitionIntervalId(
-      setInterval(() => {
-        setTransitionToFlow(false);
-      }, 3000)
-    );
+    transitionTimeoutId.current = setTimeout(() => {
+      setTransitionToFlow(false);
+    }, 3000);
     if (newMode) changeMode(newMode);
   }, []);
 
