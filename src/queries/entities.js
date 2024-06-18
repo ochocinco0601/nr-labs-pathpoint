@@ -23,4 +23,31 @@ const goldenMetricsForEntityQuery = (guid = '') => ngql`{
   }
 }`;
 
-export { queryFromGuidsArray, goldenMetricsForEntityQuery };
+const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
+  actor {
+    ${arrayOfGuids.map(
+      (arr, idx) => `
+      e${idx}: entities(
+        guids: ["${arr.join('", "')}"]
+      ) {
+        ${
+          timeWindow?.start && timeWindow?.end
+            ? `alertViolations(startTime: ${timeWindow.start}, endTime: ${timeWindow.end}) {
+                alertSeverity
+              }`
+            : 'alertSeverity'
+        }
+        guid
+        name
+        reporting
+      }
+    `
+    )}
+  }
+}`;
+
+export {
+  queryFromGuidsArray,
+  goldenMetricsForEntityQuery,
+  statusesFromGuidsArray,
+};

@@ -31,6 +31,8 @@ const FlowHeader = ({
   mode = MODES.INLINE,
   setMode = () => null,
   flows = [],
+  isPlayback,
+  togglePlayback,
   onSelectFlow = () => null,
   onDeleteFlow = () => null,
   onRefreshFlow = () => null,
@@ -188,6 +190,22 @@ const FlowHeader = ({
           </div>
         </PopoverBody>
       </Popover>
+      <div className="playback-btn">
+        <Button
+          variant={Button.VARIANT.TERTIARY}
+          sizeType={Button.SIZE_TYPE.SMALL}
+          iconType={
+            isPlayback
+              ? Button.ICON_TYPE.INTERFACE__SIGN__TIMES__V_ALTERNATE
+              : Button.ICON_TYPE
+                  .INTERFACE__OPERATIONS__PLAY_ALTERNATE__V_ALTERNATE
+          }
+          ariaLabel="Toggle playback"
+          onClick={togglePlayback}
+        >
+          {isPlayback ? 'Exit playback' : 'Playback'}
+        </Button>
+      </div>
       <div className="flow-status">
         <Badge type={Badge.TYPE.INFO}>{UI_CONTENT.FLOW.CURRENT_STATUS}</Badge>
         <Tooltip text="Refresh data in flow">
@@ -226,6 +244,8 @@ FlowHeader.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
+  isPlayback: PropTypes.bool,
+  togglePlayback: PropTypes.func,
   onSelectFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
   onRefreshFlow: PropTypes.func,

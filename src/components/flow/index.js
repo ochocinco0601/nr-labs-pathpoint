@@ -17,6 +17,7 @@ import {
   DeleteConfirmModal,
   EditFlowSettingsModal,
   AuditLog,
+  PlaybackBar,
 } from '../';
 import FlowHeader from './header';
 import { MODES, NERD_STORAGE } from '../../constants';
@@ -55,6 +56,7 @@ const Flow = forwardRef(
     const [isDeletingFlow, setIsDeletingFlow] = useState(false);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
+    const [isPlayback, setIsPlayback] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
     const { openSidebar } = useSidebar();
@@ -134,13 +136,23 @@ const Flow = forwardRef(
       if (deleted) onClose();
     }, [flow]);
 
+    const togglePlayback = useCallback(() => setIsPlayback((p) => !p), []);
+
     const togglePreview = () => {
       if (isPreview && mode !== MODES.EDIT) setMode(MODES.EDIT);
       setIsPreview((p) => !p);
     };
 
     const refresh = useCallback(() => {
-      stagesRef.current.refresh();
+      stagesRef.current?.refresh?.();
+    }, []);
+
+    const preloadData = useCallback(async (timeBands, callback) => {
+      await stagesRef.current?.preload?.(timeBands, callback);
+    }, []);
+
+    const seekHandler = useCallback((timeWindow) => {
+      stagesRef.current?.seek?.(timeWindow);
     }, []);
 
     return (
@@ -181,6 +193,8 @@ const Flow = forwardRef(
                   mode={mode}
                   setMode={setMode}
                   flows={flows}
+                  isPlayback={isPlayback}
+                  togglePlayback={togglePlayback}
                   onSelectFlow={onSelectFlow}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
                   onRefreshFlow={refresh}
@@ -189,6 +203,9 @@ const Flow = forwardRef(
                   editFlowSettings={editFlowSettings}
                   setEditFlowSettings={setEditFlowSettings}
                 />
+                {isPlayback ? (
+                  <PlaybackBar onPreload={preloadData} onSeek={seekHandler} />
+                ) : null}
                 <Stages mode={mode} ref={stagesRef} />
                 <KpiBar onChange={updateKpisHandler} mode={mode} />
               </>

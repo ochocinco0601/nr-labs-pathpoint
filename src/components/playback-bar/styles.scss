@@ -1,0 +1,66 @@
+.playback-bar {
+  padding: 24px 24px 0;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .seek {
+    flex: 1;
+    height: 24px;
+    border-radius: 1px;
+    display: flex;
+    position: relative;
+    width: 100%;
+
+    .seek-hint {
+      position: relative;
+      top: -16px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: #293338;
+    }
+
+    .bands {
+      .band {
+        position: absolute;
+        height: 24px;
+        background-color: #F3F4F4;
+
+        &.critical {
+          background-color: #F5554B;
+        }
+        &.success {
+          background-color: #01A76A;
+        }
+        &.warning {
+          background-color: #FFD23D;
+        }
+      }
+    }
+
+    .seeker {
+      position: absolute;
+      min-width: 8px;
+      height: 24px;
+      box-sizing: border-box;
+      border: 2px solid #293338;
+      transition: transform 1s;
+      cursor: grab;
+    }
+  }
+}
+
+.playback-setting {
+  display: flex;
+  align-items: center;
+
+  .setting-name {
+    font-weight: 500;
+  }
+
+  .setting-value {
+    margin-left: auto;
+  }
+}
