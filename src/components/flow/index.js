@@ -59,19 +59,23 @@ const Flow = forwardRef(
     const [isPlayback, setIsPlayback] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
-    const { openSidebar } = useSidebar();
+    const { closeSidebar, isOpen: sidebarIsOpen, openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
     const stagesRef = useRef();
+    const flowIdRef = useRef();
 
-    useEffect(
-      () =>
-        dispatch({
-          type: FLOW_DISPATCH_TYPES.CHANGED,
-          component: FLOW_DISPATCH_COMPONENTS.FLOW,
-          updates: flowDoc,
-        }),
-      [flowDoc]
-    );
+    useEffect(() => {
+      dispatch({
+        type: FLOW_DISPATCH_TYPES.CHANGED,
+        component: FLOW_DISPATCH_COMPONENTS.FLOW,
+        updates: flowDoc,
+      });
+      if (flowIdRef.current !== flowDoc.id) {
+        if (sidebarIsOpen) closeSidebar();
+        setIsPlayback(false);
+        flowIdRef.current = flowDoc.id;
+      }
+    }, [flowDoc]);
 
     useEffect(() => {
       if (isPreview) setMode(prevNonEditMode);

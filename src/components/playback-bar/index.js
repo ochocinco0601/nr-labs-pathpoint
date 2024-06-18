@@ -88,7 +88,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
       setDisplayBands(
         Array.from({ length: seekBandsCount.current }, (_, i) => ({
           key: uuid(),
-          style: { left: i * width, width },
+          style: { left: i * width, width: width - 1 },
         }))
       );
       const newSeekX = Math.round(seekX.current / width) * width;
@@ -172,7 +172,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
             transform: `translateX(${newX}px)`,
           };
         });
-      }, 3000);
+      }, 1500);
     } else {
       clearInterval(intervalId.current);
     }
