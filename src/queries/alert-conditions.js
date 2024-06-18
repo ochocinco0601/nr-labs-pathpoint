@@ -90,9 +90,96 @@ latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('op
 where latestEvent = 'open'
   ${timeClause} order by openTime desc ${limitStatement}`.replace(/\s+/g, ' ');
 
+const condsDetailsNrql = (conds = [], timeWindow) =>
+  conds.length
+    ? `nrql(
+  query: ${`"
+    SELECT uniques(incidentId) AS incidentIds 
+    FROM NrAiIncident 
+    WHERE conditionId IN (${conds.join(', ')}) 
+    ${
+      timeWindow?.start && timeWindow?.end
+        ? `
+          SINCE ${timeWindow.start}
+          UNTIL ${timeWindow.end}
+        `
+        : 'SINCE 10 days ago'
+    }
+    LIMIT MAX
+  "`.replace(/\s\s+/g, ' ')}
+) {
+  results
+}`
+    : '';
+
+const conditionsDetailsByAccountQuery = (accounts = [], timeWindow) => `{
+  actor {
+    ${Object.keys(accounts).map(
+      (acct) => `
+      a${acct}: account(id: ${acct}) {
+        alerts {
+          ${Object.keys(accounts[acct]).map(
+            (condId) => `
+            c${condId}: nrqlCondition(id: ${condId}) {
+              enabled
+              entityGuid
+              id
+              name
+            }
+          `
+          )}
+        }
+        id
+        ${condsDetailsNrql(Object.keys(accounts[acct]), timeWindow)}
+      }
+    `
+    )}
+  }
+}`;
+
+const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
+  actor {
+    ${Object.keys(acctIncidentIds).map(
+      (acct) => `
+      a${acct}: account(id: ${acct}) {
+        ${acctIncidentIds[acct].map(
+          (incidentIds, idx) => `
+          a${idx}: aiIssues {
+            incidents(
+              filter: {ids: ["${incidentIds.join('", "')}"]}
+              ${
+                timeWindow?.start && timeWindow?.end
+                  ? `timeWindow: {startTime: ${timeWindow.start}, endTime: ${timeWindow.end}}`
+                  : ''
+              }
+            ) {
+              incidents {
+                ... on AiIssuesNewRelicIncident {
+                  closedAt
+                  conditionFamilyId
+                  createdAt
+                  incidentId
+                  priority
+                  state
+                  title
+                }
+              }
+            }
+          }
+          id
+        `
+        )}
+      }
+    `
+    )}
+  }
+}`;
+
 export {
   nrqlConditionsSearchQuery,
   policiesSearchQuery,
   latestStatusForAlertConditions,
   incidentsQuery,
+  conditionsDetailsByAccountQuery,
+  incidentsByAccountsQuery,
 };

@@ -49,3 +49,21 @@ export const statusFromStatuses = (statusesArray = []) => {
   const leastStatusValue = valuesArray.length ? Math.min(...valuesArray) : 0;
   return statusesOrder[leastStatusValue];
 };
+
+const signalDetailsFromStatuses = (statuses = {}) =>
+  Object.keys(statuses).reduce(
+    (acc, guid) => ({ ...acc, [guid]: statuses[guid].name }),
+    {}
+  );
+
+export const signalDetailsObject = (statuses = {}) => {
+  if (!statuses || !Object.keys(statuses).length) return;
+  const {
+    [SIGNAL_TYPES.ENTITY]: entitiesStatuses = {},
+    [SIGNAL_TYPES.ALERT]: alertsStatuses = {},
+  } = statuses;
+  return {
+    ...signalDetailsFromStatuses(entitiesStatuses),
+    ...signalDetailsFromStatuses(alertsStatuses),
+  };
+};

@@ -1,3 +1,18 @@
+## [1.76.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.0...v1.76.1) (2024-06-18)
+
+
+### Bug Fixes
+
+* update height of signal section in stacked mode ([172d7d6](https://github.com/newrelic/nr-labs-hedgehog/commit/172d7d6a9d17bdda9c385791cc3633a400a82627))
+
+# [1.76.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.5...v1.76.0) (2024-06-18)
+
+
+### Features
+
+* playback mode ([e76877e](https://github.com/newrelic/nr-labs-hedgehog/commit/e76877e0d025cfa17ab90d8ba23cb97d80adee2c))
+* playback seek hint text ([6f8b59f](https://github.com/newrelic/nr-labs-hedgehog/commit/6f8b59fa0e3d96d67304a322f78143bfc32bb140))
+
 ## [1.75.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.4...v1.75.5) (2024-05-28)
 
 

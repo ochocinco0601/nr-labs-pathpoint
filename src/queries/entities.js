@@ -23,6 +23,29 @@ const goldenMetricsForEntityQuery = (guid = '') => ngql`{
   }
 }`;
 
+const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
+  actor {
+    ${arrayOfGuids.map(
+      (arr, idx) => `
+      e${idx}: entities(
+        guids: ["${arr.join('", "')}"]
+      ) {
+        ${
+          timeWindow?.start && timeWindow?.end
+            ? `alertViolations(startTime: ${timeWindow.start}, endTime: ${timeWindow.end}) {
+                alertSeverity
+              }`
+            : 'alertSeverity'
+        }
+        guid
+        name
+        reporting
+      }
+    `
+    )}
+  }
+}`;
+
 const entitiesByDomainTypeAccountQuery = ({ type, domain }, accountId) => ngql`
 query($cursor: String){
   actor {
@@ -70,4 +93,5 @@ export {
   entityCountByAccountQuery,
   queryFromGuidsArray,
   goldenMetricsForEntityQuery,
+  statusesFromGuidsArray,
 };
