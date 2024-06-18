@@ -1,32 +1,42 @@
 import { useEffect, useState } from 'react';
 
-import { useEntityCountQuery } from 'nr1';
+import { NerdGraphQuery } from 'nr1';
+
+import { entityCountByAccountQuery } from '../../src/queries';
 
 import typesList from './types.json';
 
-const useEntitiesTypesList = () => {
+const useEntitiesTypesList = ({ accountId }) => {
   const [entitiesCount, setEntitiesCount] = useState(0);
   const [entitiesTypesList, setEntitiesTypesList] = useState([]);
-  const { data, error, loading } = useEntityCountQuery();
 
   useEffect(() => {
-    if (data && !loading) {
-      const entityTypesWithCount = data.types
-        ? typesList.reduce((acc, { type, domain, displayName }) => {
-            const { count } = data.types.find(
-              (et) => et.domain === domain && et.type === type
-            ) || { count: 0 };
-            const searchDisplayName = displayName.toLocaleUpperCase();
-            return count
-              ? [
-                  ...acc,
+    const getEntityCount = async () => {
+      const entityCountRes = await NerdGraphQuery.query({
+        query: entityCountByAccountQuery(accountId),
+        variables: { cursor: null },
+      });
+      const {
+        data: { actor: { entitySearch: { types = [] } = {} } = {} } = {},
+      } = entityCountRes || {};
+      const { entityTypesWithCount, count } = typesList.reduce(
+        (acc, { type, domain, displayName }) => {
+          const { count } =
+            types.find((et) => et.domain === domain && et.type === type) || {};
+          const searchDisplayName = displayName.toLocaleUpperCase();
+          return count
+            ? {
+                entityTypesWithCount: [
+                  ...acc.entityTypesWithCount,
                   { type, domain, displayName, searchDisplayName, count },
-                ]
-              : acc;
-          }, [])
-        : [];
-
-      setEntitiesCount(data.count || 0);
+                ],
+                count: acc.count + count,
+              }
+            : acc;
+        },
+        { entityTypesWithCount: [], count: 0 }
+      );
+      setEntitiesCount(count);
       setEntitiesTypesList((etl) =>
         etl.length === entityTypesWithCount.length &&
         entityTypesWithCount.every(
@@ -38,12 +48,10 @@ const useEntitiesTypesList = () => {
           ? etl
           : entityTypesWithCount
       );
-    }
-  }, [data, loading]);
+    };
 
-  useEffect(() => {
-    if (error) console.error('Error fetching entities counts', error);
-  }, [error]);
+    getEntityCount();
+  }, [accountId]);
 
   return { entitiesCount, entitiesTypesList };
 };

@@ -30,6 +30,28 @@ const emptyState = (hasNoSignals) =>
     />
   );
 
+const entitiesTableHeader = (
+  <DataTableHeader>
+    <DataTableHeaderCell name="name" value="name">
+      Name
+    </DataTableHeaderCell>
+    <DataTableHeaderCell name="type" value="type">
+      Entity type
+    </DataTableHeaderCell>
+  </DataTableHeader>
+);
+
+const alertsTableHeader = (
+  <DataTableHeader>
+    <DataTableHeaderCell name="condition" value="name">
+      Condition
+    </DataTableHeaderCell>
+    <DataTableHeaderCell name="policy" value="policyName">
+      Policy
+    </DataTableHeaderCell>
+  </DataTableHeader>
+);
+
 const ListingTable = ({
   type,
   entities = [],
@@ -39,7 +61,10 @@ const ListingTable = ({
   rowCount,
   onLoadMore,
   onSelect,
+  isLoading,
 }) => {
+  const [tableSettings, setTableSettings] = useState({});
+  const [tableHeader, setTableHeader] = useState(null);
   const [selection, setSelection] = useState({});
   const selectionsSet = useRef();
 
@@ -53,9 +78,26 @@ const ListingTable = ({
     );
     const selectionReducer = (acc, { guid }, idx) =>
       selectionLookup[guid] ? { ...acc, [idx]: true } : acc;
-    if (type === SIGNAL_TYPES.ENTITY)
+    if (type === SIGNAL_TYPES.ENTITY) {
       sel = entities.reduce(selectionReducer, {});
-    if (type === SIGNAL_TYPES.ALERT) sel = alerts.reduce(selectionReducer, {});
+      setTableSettings({
+        ariaLabel: 'Entities',
+        items: entities,
+        height: `${entities.length}rows`,
+        itemCount: rowCount,
+        onLoadMoreItems: onLoadMore,
+      });
+      setTableHeader(entitiesTableHeader);
+    }
+    if (type === SIGNAL_TYPES.ALERT) {
+      sel = alerts.reduce(selectionReducer, {});
+      setTableSettings({
+        ariaLabel: 'Alert conditions',
+        items: alerts,
+        height: `${alerts.length}rows`,
+      });
+      setTableHeader(alertsTableHeader);
+    }
     if (sel) {
       setSelection(sel);
       selectionsSet.current = new Set(Object.keys(sel));
@@ -80,77 +122,31 @@ const ListingTable = ({
     [type, entities, alerts, onSelect]
   );
 
-  if (
-    (type === SIGNAL_TYPES.ALERT && !alerts.length) ||
-    (type === SIGNAL_TYPES.ENTITY && !entities.length)
-  )
-    return emptyState();
+  if (isLoading) return emptyState();
 
-  if (type === SIGNAL_TYPES.ENTITY)
-    return (
-      <div className="data-table">
-        <DataTable
-          ariaLabel="Entities"
-          items={entities}
-          height={`${entities.length}rows`}
-          itemCount={rowCount}
-          onLoadMoreItems={onLoadMore}
-          selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
-          selection={selection}
-          onSelectionChange={itemSelectionHandler}
-        >
-          <DataTableHeader>
-            <DataTableHeaderCell name="name" value="name">
-              Name
-            </DataTableHeaderCell>
-            <DataTableHeaderCell name="type" value="type">
-              Entity type
-            </DataTableHeaderCell>
-          </DataTableHeader>
-          <DataTableBody>
-            {() => (
-              <DataTableRow>
-                <DataTableRowCell />
-                <DataTableRowCell />
-              </DataTableRow>
-            )}
-          </DataTableBody>
-        </DataTable>
-      </div>
-    );
-
-  if (type === SIGNAL_TYPES.ALERT)
-    return (
-      <div className="data-table">
-        <DataTable
-          ariaLabel="Alert conditions"
-          items={alerts}
-          height={`${alerts.length}rows`}
-          selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
-          selection={selection}
-          onSelectionChange={itemSelectionHandler}
-        >
-          <DataTableHeader>
-            <DataTableHeaderCell name="condition" value="name">
-              Condition
-            </DataTableHeaderCell>
-            <DataTableHeaderCell name="policy" value="policyName">
-              Policy
-            </DataTableHeaderCell>
-          </DataTableHeader>
-          <DataTableBody>
-            {() => (
-              <DataTableRow>
-                <DataTableRowCell />
-                <DataTableRowCell />
-              </DataTableRow>
-            )}
-          </DataTableBody>
-        </DataTable>
-      </div>
-    );
-
-  return emptyState();
+  return (type === SIGNAL_TYPES.ALERT && !alerts.length) ||
+    (type === SIGNAL_TYPES.ENTITY && !entities.length) ? (
+    emptyState(true)
+  ) : (
+    <div className="data-table">
+      <DataTable
+        {...tableSettings}
+        selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
+        selection={selection}
+        onSelectionChange={itemSelectionHandler}
+      >
+        {tableHeader}
+        <DataTableBody>
+          {() => (
+            <DataTableRow>
+              <DataTableRowCell />
+              <DataTableRowCell />
+            </DataTableRow>
+          )}
+        </DataTableBody>
+      </DataTable>
+    </div>
+  );
 };
 
 ListingTable.propTypes = {
@@ -162,6 +158,7 @@ ListingTable.propTypes = {
   rowCount: PropTypes.number,
   onLoadMore: PropTypes.func,
   onSelect: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default ListingTable;

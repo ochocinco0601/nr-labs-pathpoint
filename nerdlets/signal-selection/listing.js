@@ -16,6 +16,7 @@ const Listing = ({
   selectedAlerts = [],
   signalsDetails = {},
   rowCount,
+  isLoading,
   onLoadMore,
   onSelect,
   onDelete,
@@ -31,6 +32,7 @@ const Listing = ({
         rowCount={rowCount}
         onLoadMore={onLoadMore}
         onSelect={onSelect}
+        isLoading={isLoading}
       />
       <div className="selection">
         <HeadingText type={HeadingText.TYPE.HEADING_4}>
@@ -98,6 +100,7 @@ Listing.propTypes = {
   selectedAlerts: PropTypes.array,
   signalsDetails: PropTypes.object,
   rowCount: PropTypes.number,
+  isLoading: PropTypes.bool,
   onLoadMore: PropTypes.func,
   onSelect: PropTypes.func,
   onDelete: PropTypes.func,
