@@ -1,3 +1,10 @@
+## [1.76.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.1...v1.76.2) (2024-06-18)
+
+
+### Bug Fixes
+
+* multiple issues in signal selection ([f7cc496](https://github.com/newrelic/nr-labs-hedgehog/commit/f7cc4968deae4a9dd4e578a14cd42a70c926de32))
+
 ## [1.76.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.0...v1.76.1) (2024-06-18)
 
 
