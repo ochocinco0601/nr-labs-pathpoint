@@ -1,3 +1,10 @@
+## [1.76.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.0...v1.76.1) (2024-06-18)
+
+
+### Bug Fixes
+
+* update height of signal section in stacked mode ([172d7d6](https://github.com/newrelic/nr-labs-hedgehog/commit/172d7d6a9d17bdda9c385791cc3633a400a82627))
+
 # [1.76.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.75.5...v1.76.0) (2024-06-18)
 
 
