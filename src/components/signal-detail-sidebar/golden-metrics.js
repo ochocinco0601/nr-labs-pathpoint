@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -7,76 +7,49 @@ import {
   CardHeader,
   HeadingText,
   LineChart,
-  NerdGraphQuery,
-  PlatformStateContext,
+  NrqlQuery,
 } from 'nr1';
 
-import { timeRangeToNrql } from '@newrelic/nr-labs-components';
-
-import { goldenMetricsForEntityQuery } from '../../queries';
-import { formatForDisplay } from '../../utils';
-
-const GoldenMetrics = ({ guid }) => {
-  const platformState = useContext(PlatformStateContext);
+const GoldenMetrics = ({ data }) => {
   const [entityAcctId, setEntityAcctId] = useState();
   const [metrics, setMetrics] = useState([]);
 
   useEffect(() => {
-    if (!guid) return;
-
-    const fetchGoldenMetricQueries = async () => {
-      const query = goldenMetricsForEntityQuery(guid);
-      const { data: { actor: { entity } = {} } = {} } =
-        await NerdGraphQuery.query({
-          query,
-        });
-
-      if (entity) {
-        setEntityAcctId(entity.accountId);
-        setMetrics(entity.goldenMetrics?.metrics || []);
-      }
-    };
-
-    fetchGoldenMetricQueries();
-  }, [guid]);
-
-  const timeStatement = useMemo(
-    () => timeRangeToNrql(platformState),
-    [platformState]
-  );
-
-  const formattedTimeRange = useMemo(
-    () => formatForDisplay(platformState.timeRange),
-    [platformState]
-  );
+    if (!data) return;
+    setEntityAcctId(data.accountId);
+    setMetrics(data.goldenMetrics?.metrics || []);
+  }, [data]);
 
   return (
     <div className="golden-metrics-wrapper">
-      <HeadingText
-        className="golden-metrics-header"
-        type={HeadingText.TYPE.HEADING_4}
-      >
-        Golden metrics
-      </HeadingText>
+      {metrics.length ? (
+        <HeadingText
+          className="golden-metrics-header"
+          type={HeadingText.TYPE.HEADING_4}
+        >
+          Golden metrics
+        </HeadingText>
+      ) : null}
       <div className="golden-metrics">
         {metrics.map(({ query, title }) =>
           entityAcctId && query ? (
-            <Card
-              key={`${title.replace(/\s+/g, '')}`}
-              className="golden-metric-card"
-            >
-              <CardHeader
-                className="golden-metric-card-header"
-                title={title || ''}
-                subtitle={formattedTimeRange}
-              />
-              <CardBody className="golden-metric-card-body">
-                <LineChart
-                  accountIds={[entityAcctId]}
-                  query={`${query} ${timeStatement}`}
-                />
-              </CardBody>
-            </Card>
+            <NrqlQuery key={title} accountIds={[entityAcctId]} query={query}>
+              {({ data: queryData }) => (
+                <Card
+                  key={`${title.replace(/\s+/g, '')}`}
+                  className="golden-metric-card"
+                >
+                  <CardHeader
+                    className="golden-metric-card-header"
+                    title={title || ''}
+                    subtitle={queryData?.metadata?.since || ''}
+                  />
+                  <CardBody className="golden-metric-card-body">
+                    <LineChart data={queryData} />
+                  </CardBody>
+                </Card>
+              )}
+            </NrqlQuery>
           ) : null
         )}
       </div>
@@ -85,7 +58,7 @@ const GoldenMetrics = ({ guid }) => {
 };
 
 GoldenMetrics.propTypes = {
-  guid: PropTypes.string,
+  data: PropTypes.object,
 };
 
 export default GoldenMetrics;

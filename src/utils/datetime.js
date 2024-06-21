@@ -32,18 +32,20 @@ export const formatForDisplay = (timeRange) => {
   return '';
 };
 
-export const getIncidentDuration = ({ openTime, durationSeconds = 0 }) => {
-  if (!openTime) return '';
-  const incidentDuration = durationSeconds || (Date.now() - openTime) / 1000;
-  return incidentDuration < 60
-    ? `lestt then 1 m`
-    : incidentDuration < 3600
-    ? `${Number(incidentDuration / 60).toFixed()} m`
-    : incidentDuration < 86400
-    ? `${Number(incidentDuration / 3600).toFixed()} h ${Number(
-        (incidentDuration % 3600) / 60
-      ).toFixed()} m`
-    : `${Number(incidentDuration / 86400).toFixed()} d ${Number(
-        (incidentDuration % 86400) / 3600
-      ).toFixed()} h ${Number((incidentDuration % 3600) / 60).toFixed()} m`;
+export const durationStringForViolation = (closed = Date.now(), opened) => {
+  if (!opened) return '';
+  const duration = (closed - opened) / 1000;
+  if (duration < 60) return 'less than 1 m';
+  if (duration < 3600) {
+    const mins = Number(duration / 60).toFixed();
+    return `${mins} m`;
+  }
+  const mins = Number((duration % 3600) / 60).toFixed();
+  if (duration < 86400) {
+    const hours = Number(duration / 3600).toFixed();
+    return `${hours} h ${mins} m`;
+  }
+  const days = Number(duration / 86400).toFixed();
+  const hours = Number((duration % 86400) / 3600).toFixed();
+  return `${days} d ${hours} h ${mins} m`;
 };

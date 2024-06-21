@@ -80,6 +80,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const alertsGuidsLastState = useRef([]);
   const noAccessGuidsLastState = useRef([]);
   const timeBandDataCache = useRef(new Map());
+  const playbackTimeWindow = useRef(null);
   const { openSidebar, closeSidebar } = useSidebar();
   const [nerdletState, setNerdletState] = useNerdletState();
 
@@ -275,6 +276,8 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
             name={selections.data?.name}
             type={selections.data?.type}
             status={selections.data?.status}
+            data={statuses[selections.data?.type]?.[selections.id]}
+            timeWindow={playbackTimeWindow.current}
           />
         ),
         status: selections.data?.status,
@@ -283,7 +286,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     } else {
       closeSidebar();
     }
-  }, [selections, closeSidebarHandler]);
+  }, [selections, statuses, closeSidebarHandler]);
 
   const markSelection = useCallback((type, id, data) => {
     if (!type || !id) return;
@@ -351,6 +354,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       },
       seek: async (timeWindow) => {
         if (!timeWindow) return;
+        playbackTimeWindow.current = timeWindow;
         const key = keyFromTimeWindow(timeWindow);
         const timeWindowCachedData = timeBandDataCache.current.get(key);
         if (timeWindowCachedData) {
@@ -361,6 +365,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
           }));
         }
       },
+      clearPlaybackTimeWindow: () => (playbackTimeWindow.current = null),
     }),
     [fetchStatuses, guids, stages]
   );
