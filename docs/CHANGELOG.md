@@ -1,3 +1,10 @@
+# [1.77.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.3...v1.77.0) (2024-06-24)
+
+
+### Features
+
+* update nerdpack name and icon ([3772238](https://github.com/newrelic/nr-labs-hedgehog/commit/3772238e512d8dc619fc040c252acc881171c371))
+
 ## [1.76.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.2...v1.76.3) (2024-06-18)
 
 
