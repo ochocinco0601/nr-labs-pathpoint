@@ -146,7 +146,7 @@ const HomeNerdlet = () => {
       actionControls: true,
       actionControlButtons,
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
-      headerTitle: 'Project Hedgehog 🦔',
+      headerTitle: 'Pathpoint',
     });
   }, [currentFlowId, flows, mode]);
 
