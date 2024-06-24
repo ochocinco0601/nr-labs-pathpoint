@@ -52,7 +52,7 @@ const ProductTourNerdlet = () => {
         },
       ],
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
-      headerTitle: step === 1 ? 'Project Hedgehog 🦔' : flows[0].document.name,
+      headerTitle: step === 1 ? 'Pathpoint' : flows[0].document.name,
     });
   }, [step]);
 
