@@ -1,9 +1,9 @@
 {
-  "tagline": "Project Hedgehog",
+  "tagline": "Pathpoint",
   "repository": "https://github.com/newrelic/nr-labs-hedgehog.git",
   "details": "Monitor workflows using New Relic service levels",
   "categoryTerms": [],
-  "keywords": ["hedgehog", "sli"],
+  "keywords": ["pathpoint", "sli"],
   "support": {
     "issues": {
       "url": "https://github.com/newrelic/nr-labs-hedgehog/issues"

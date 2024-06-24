@@ -1,7 +1,7 @@
 {
   "schemaType": "LAUNCHER",
   "id": "launcher",
-  "displayName": "Project Hedgehog",
+  "displayName": "Pathpoint",
   "description": "Monitor workflows using New Relic service levels",
   "rootNerdletId": "home"
 }
