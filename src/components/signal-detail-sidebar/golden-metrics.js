@@ -10,7 +10,12 @@ import {
   NrqlQuery,
 } from 'nr1';
 
-const GoldenMetrics = ({ data }) => {
+const cardSubtitle = ({ since = '', until } = {}) =>
+  until
+    ? `${since.replace(/since /i, '')} - ${until.replace(/until /i, '')}`
+    : since || '';
+
+const GoldenMetrics = ({ data, timeWindow }) => {
   const [entityAcctId, setEntityAcctId] = useState();
   const [metrics, setMetrics] = useState([]);
 
@@ -31,9 +36,19 @@ const GoldenMetrics = ({ data }) => {
         </HeadingText>
       ) : null}
       <div className="golden-metrics">
-        {metrics.map(({ query, title }) =>
+        {metrics.map(({ query, title }, idx) =>
           entityAcctId && query ? (
-            <NrqlQuery key={title} accountIds={[entityAcctId]} query={query}>
+            <NrqlQuery
+              key={title}
+              accountIds={[entityAcctId]}
+              query={query}
+              timeRange={
+                timeWindow?.start && timeWindow?.end
+                  ? { begin_time: timeWindow.start, end_time: timeWindow.end }
+                  : null
+              }
+              // offset={(new Date()).getTimezoneOffset() * 60000}
+            >
               {({ data: queryData }) => (
                 <Card
                   key={`${title.replace(/\s+/g, '')}`}
@@ -41,8 +56,8 @@ const GoldenMetrics = ({ data }) => {
                 >
                   <CardHeader
                     className="golden-metric-card-header"
-                    title={title || ''}
-                    subtitle={queryData?.metadata?.since || ''}
+                    title={title || `Golden metric ${idx}`}
+                    subtitle={cardSubtitle(queryData?.metadata)}
                   />
                   <CardBody className="golden-metric-card-body">
                     <LineChart data={queryData} />
@@ -59,6 +74,7 @@ const GoldenMetrics = ({ data }) => {
 
 GoldenMetrics.propTypes = {
   data: PropTypes.object,
+  timeWindow: PropTypes.object,
 };
 
 export default GoldenMetrics;

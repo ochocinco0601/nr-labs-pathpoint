@@ -32,9 +32,9 @@ export const formatForDisplay = (timeRange) => {
   return '';
 };
 
-export const durationStringForViolation = (closed = Date.now(), opened) => {
+export const durationStringForViolation = (closed, opened) => {
   if (!opened) return '';
-  const duration = (closed - opened) / 1000;
+  const duration = ((closed || Date.now()) - opened) / 1000;
   if (duration < 60) return 'less than 1 m';
   if (duration < 3600) {
     const mins = Number(duration / 60).toFixed();

@@ -90,7 +90,7 @@ const SignalDetailSidebar = ({ guid, name, type, data, timeWindow }) => {
         <>
           <Incidents type={type} data={data} timeWindow={timeWindow} />
           {type === SIGNAL_TYPES.ENTITY ? (
-            <GoldenMetrics guid={guid} data={data} />
+            <GoldenMetrics guid={guid} data={data} timeWindow={timeWindow} />
           ) : null}
         </>
       ) : (

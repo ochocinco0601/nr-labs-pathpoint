@@ -60,36 +60,33 @@ const Incidents = ({ type, data, timeWindow }) => {
   useEffect(() => {
     if (!data) return;
 
-    let openIssues = [],
-      issuesToDisplay = [];
+    let issuesToDisplay = [],
+      maxIssuesDisplayed = 1;
     if (type === SIGNAL_TYPES.ENTITY) {
-      const issuesArr = data.recentAlertViolations || [];
+      const issuesArr = timeWindow
+        ? data.alertViolations || []
+        : data.recentAlertViolations || [];
       if (issuesArr.length) {
-        openIssues = issuesArr.filter(filterListForOpenOnly);
-        issuesToDisplay = openIssues.length
-          ? openIssues.map(incidentFromViolation)
-          : [incidentFromViolation(issuesArr[0])];
+        issuesToDisplay = issuesArr
+          .filter(filterListForOpenOnly)
+          .map(incidentFromViolation);
       }
     } else if (type === SIGNAL_TYPES.ALERT) {
       const issuesArr = data.incidents || [];
       if (issuesArr.length) {
-        openIssues = issuesArr.filter(filterListForOpenOnly);
-        issuesToDisplay = openIssues.length
-          ? openIssues.map(incidentFromIncident)
-          : [incidentFromIncident(issuesArr[0])];
+        issuesToDisplay = issuesArr
+          .filter(filterListForOpenOnly)
+          .map(incidentFromIncident);
       }
+      maxIssuesDisplayed = issuesToDisplay.length;
     }
     if (!issuesToDisplay.length) {
       setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_RECENT_INCIDENTS);
-    } else if (!openIssues.length) {
-      setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.LATEST_RECENT_INCIDENT);
     } else {
       setBannerMessage('');
     }
     setIncidentsList(issuesToDisplay);
-    setMaxIncidentsShown(
-      type === SIGNAL_TYPES.ALERT ? issuesToDisplay.length : 1
-    );
+    setMaxIncidentsShown(maxIssuesDisplayed);
   }, [type, data, timeWindow]);
 
   return (

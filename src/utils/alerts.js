@@ -14,7 +14,7 @@ export const ALERT_STATUSES = {
 };
 
 export const alertStatus = ({ enabled, inferredPriority } = {}) => {
-  if (!enabled || !inferredPriority) return UNKNOWN;
+  if (!enabled) return UNKNOWN;
   switch (inferredPriority) {
     case ALERT_STATUSES.NOT_ALERTING: {
       return SUCCESS;

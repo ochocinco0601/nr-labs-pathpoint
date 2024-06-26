@@ -122,6 +122,8 @@ const Flow = forwardRef(
       if (document) setLastSavedTimestamp(Date.now());
     }, [flowWriter.data]);
 
+    useEffect(closeSidebar, [isPlayback]);
+
     const updateKpisHandler = (updatedKpis) =>
       flowUpdateHandler({ kpis: updatedKpis });
 
