@@ -75,28 +75,40 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
 
   const loadDataCache = useCallback(async (tbs) => {
     if (!onPreload) return;
-    await onPreload(tbs, (idx, status) =>
+    await onPreload(tbs, (idx, status) => {
       setDisplayBands((dbs) =>
         dbs.map((db, i) => (i === idx ? { ...db, status } : db))
-      )
-    );
+      );
+      if (seekX.current === 0 && idx === 0 && onSeek) {
+        onSeek(showingTimeWindow.current);
+      }
+    });
   }, []);
 
-  const redrawBands = useCallback(() => {
+  const redrawBands = useCallback((isResized = false) => {
     if (seekBandsCount.current && seekBandWidth.current) {
       const width = seekBandWidth.current;
-      setDisplayBands(
-        Array.from({ length: seekBandsCount.current }, (_, i) => ({
-          key: uuid(),
-          style: { left: i * width, width: width - 1 },
-        }))
+      setDisplayBands((dbs) =>
+        isResized
+          ? dbs.map((db, i) => ({
+              ...db,
+              style: {
+                ...db.style,
+                left: i * width,
+                width: width - 1,
+              },
+            }))
+          : Array.from({ length: seekBandsCount.current }, (_, i) => ({
+              key: uuid(),
+              style: { left: i * width, width: width - 1 },
+            }))
       );
-      const newSeekX = Math.round(seekX.current / width) * width;
-      seekX.current = newSeekX;
+      const newX = isResized ? Math.round(seekX.current / width) * width : 0;
+      seekX.current = newX;
       setSeekerStyle((sty) => ({
         ...sty,
         width,
-        transform: `translateX(${newSeekX}px)`,
+        transform: `translateX(${newX}px)`,
       }));
     }
   }, []);
@@ -145,7 +157,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
         const bandWidth = widthPerBand(width, seekBandsCount.current);
         seekBandWidth.current = bandWidth;
         setSeekerStyle((sty) => ({ ...sty, width: bandWidth }));
-        redrawBands();
+        redrawBands(true);
       }
     );
     document.addEventListener('mouseup', mouseUpHandler, true);
@@ -228,7 +240,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
   const bandClickHandler = useCallback(
     (idx) => {
       const { style: { left } = {} } = displayBands[idx] || {};
-      if (!left) return;
+      if (!Number.isFinite(left)) return;
       seekX.current = left;
       setSeekerStyle((sty) => ({
         ...sty,
