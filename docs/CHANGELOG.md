@@ -1,3 +1,16 @@
+# [1.78.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.77.0...v1.78.0) (2024-06-28)
+
+
+### Bug Fixes
+
+* playback statuses after resizing ([998f02e](https://github.com/newrelic/nr-labs-hedgehog/commit/998f02e54736de39911f27fe67f4d70b660f416b))
+
+
+### Features
+
+* update sidebar to support time window ([6a8d581](https://github.com/newrelic/nr-labs-hedgehog/commit/6a8d581536b2ec14a5e65e242c38c0a1b6723d82))
+* update sidebar to use status data from stage ([5d59e9b](https://github.com/newrelic/nr-labs-hedgehog/commit/5d59e9beaa01024ddde634ac448f94a4280ebc4c))
+
 # [1.77.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.76.3...v1.77.0) (2024-06-24)
 
 
