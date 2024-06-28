@@ -10,7 +10,7 @@ import {
   navigation,
 } from 'nr1';
 
-import { SIGNAL_TYPES, STATUSES } from '../../constants';
+import { SIGNAL_TYPES } from '../../constants';
 
 import Incidents from './incidents';
 import GoldenMetrics from './golden-metrics';
@@ -30,9 +30,8 @@ const entityTypeFromGuid = (guid) => {
   );
 };
 
-const SignalDetailSidebar = ({ guid, name, type, status }) => {
+const SignalDetailSidebar = ({ guid, name, type, data, timeWindow }) => {
   const { account = {}, accounts = [] } = useContext(AppContext);
-  const [conditionId, setConditionId] = useState();
   const [hasAccessToEntity, setHasAccessToEntity] = useState(false);
   const [signalAccount, setSignalAccount] = useState();
   const [detailLinkText, setDetailLinkText] = useState('View entity details');
@@ -53,14 +52,8 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
       }
     }
     if (type === SIGNAL_TYPES.ALERT) {
-      if (condId) {
-        setConditionId(condId);
-        setDetailLinkText('View alert condition');
-      } else {
-        setConditionId('');
-        setDetailLinkText('');
-      }
-    } else {
+      setDetailLinkText(condId ? 'View alert condition' : '');
+    } else if (type === SIGNAL_TYPES.ENTITY) {
       setDetailLinkText('View entity details');
     }
   }, [guid, type, account, accounts]);
@@ -95,14 +88,10 @@ const SignalDetailSidebar = ({ guid, name, type, status }) => {
       </div>
       {hasAccessToEntity ? (
         <>
-          <Incidents
-            guid={guid}
-            type={type}
-            conditionId={conditionId}
-            accountId={signalAccount.id}
-            status={status}
-          />
-          {type === SIGNAL_TYPES.ENTITY ? <GoldenMetrics guid={guid} /> : null}
+          <Incidents type={type} data={data} timeWindow={timeWindow} />
+          {type === SIGNAL_TYPES.ENTITY ? (
+            <GoldenMetrics guid={guid} data={data} timeWindow={timeWindow} />
+          ) : null}
         </>
       ) : (
         <SectionMessage
@@ -118,7 +107,8 @@ SignalDetailSidebar.propTypes = {
   guid: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.oneOf(Object.values(SIGNAL_TYPES)),
-  status: PropTypes.oneOf(Object.values(STATUSES)),
+  data: PropTypes.object,
+  timeWindow: PropTypes.object,
 };
 
 export default SignalDetailSidebar;

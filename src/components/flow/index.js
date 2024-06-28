@@ -59,7 +59,7 @@ const Flow = forwardRef(
     const [isPlayback, setIsPlayback] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
-    const { closeSidebar, isOpen: sidebarIsOpen, openSidebar } = useSidebar();
+    const { closeSidebar, openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
     const stagesRef = useRef();
     const flowIdRef = useRef();
@@ -71,8 +71,9 @@ const Flow = forwardRef(
         updates: flowDoc,
       });
       if (flowIdRef.current !== flowDoc.id) {
-        if (sidebarIsOpen) closeSidebar();
+        closeSidebar();
         setIsPlayback(false);
+        stagesRef.current?.clearPlaybackTimeWindow?.();
         flowIdRef.current = flowDoc.id;
       }
     }, [flowDoc]);
@@ -120,6 +121,8 @@ const Flow = forwardRef(
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
       if (document) setLastSavedTimestamp(Date.now());
     }, [flowWriter.data]);
+
+    useEffect(closeSidebar, [isPlayback]);
 
     const updateKpisHandler = (updatedKpis) =>
       flowUpdateHandler({ kpis: updatedKpis });

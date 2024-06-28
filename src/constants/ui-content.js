@@ -68,6 +68,9 @@ export const UI_CONTENT = {
         'No incidents were found for the selected time period.',
       FOUND_RECENT:
         'The incident displayed below is the most recent incident located.',
+      NO_RECENT_INCIDENTS: 'No open incidents to display.',
+      LATEST_RECENT_INCIDENT:
+        'No open incidents. Showing the most recent incident.',
     },
   },
   KPI_BAR: {

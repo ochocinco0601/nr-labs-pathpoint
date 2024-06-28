@@ -155,6 +155,7 @@ const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
             ) {
               incidents {
                 ... on AiIssuesNewRelicIncident {
+                  accountIds
                   closedAt
                   conditionFamilyId
                   createdAt

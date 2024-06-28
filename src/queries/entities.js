@@ -30,16 +30,36 @@ const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
       e${idx}: entities(
         guids: ["${arr.join('", "')}"]
       ) {
+        accountId
         ${
           timeWindow?.start && timeWindow?.end
             ? `alertViolations(startTime: ${timeWindow.start}, endTime: ${timeWindow.end}) {
                 alertSeverity
+                closedAt
+                label
+                openedAt
+                violationId
+                violationUrl
               }`
-            : 'alertSeverity'
+            : `alertSeverity
+              recentAlertViolations {
+                alertSeverity
+                closedAt
+                label
+                openedAt
+                violationId
+                violationUrl
+              }`
         }
         guid
         name
         reporting
+        goldenMetrics {
+          metrics {
+            query
+            title
+          }
+        }
       }
     `
     )}
