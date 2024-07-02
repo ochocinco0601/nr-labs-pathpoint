@@ -15,11 +15,16 @@ const playbackIncrementOptions = [
   { display: '60 minutes', timeInMs: 3600000 },
 ];
 
-const playbackIncrementForSelectedDuration = ({ duration } = {}) => {
-  if (!duration || duration <= 3600000) return playbackIncrementOptions[0];
-  if (duration <= 21600000) return playbackIncrementOptions[1];
-  if (duration <= 86400000) return playbackIncrementOptions[2];
-  if (duration <= 259200000) return playbackIncrementOptions[3];
+const playbackIncrementForSelectedDuration = ({
+  begin_time,
+  duration,
+  end_time,
+} = {}) => {
+  const dur = duration || (end_time ?? 0) - (begin_time ?? 0);
+  if (!dur || dur <= 3600000) return playbackIncrementOptions[0];
+  if (dur <= 21600000) return playbackIncrementOptions[1];
+  if (dur <= 86400000) return playbackIncrementOptions[2];
+  if (dur <= 259200000) return playbackIncrementOptions[3];
   return playbackIncrementOptions[4];
 };
 
@@ -255,6 +260,8 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
     <div className="playback-bar">
       <TimeRangePicker
         timeRange={timeRange}
+        hideDefault={true}
+        maxRangeMins={10080} // 7 days
         onChange={timeRangeChangeHandler}
       />
       <Dropdown

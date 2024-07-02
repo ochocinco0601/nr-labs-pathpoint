@@ -147,6 +147,7 @@ const HomeNerdlet = () => {
       actionControlButtons,
       headerType: nerdlet.HEADER_TYPE.CUSTOM,
       headerTitle: 'Pathpoint',
+      timePicker: false,
     });
   }, [currentFlowId, flows, mode]);
 
