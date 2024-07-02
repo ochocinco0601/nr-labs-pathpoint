@@ -9,6 +9,7 @@ import React, {
 
 import {
   Button,
+  EmptyState,
   Icon,
   navigation,
   nerdlet,
@@ -104,42 +105,45 @@ const HomeNerdlet = () => {
   );
 
   useEffect(() => {
-    const defaultButtons = currentFlowId
-      ? [
-          {
-            ...ACTION_BTN_ATTRIBS.EDIT_FLOW_SETTINGS,
-            onClick: () => setEditFlowSettings(true),
-          },
-        ]
-      : [
-          {
-            ...ACTION_BTN_ATTRIBS.CREATE_FLOW,
-            onClick: newFlowHandler,
-          },
-        ];
-
-    const actionControlButtons =
-      currentFlowId && mode !== MODES.EDIT
+    let actionControlButtons;
+    if (!flowsError?.message) {
+      const defaultButtons = currentFlowId
         ? [
             {
-              ...ACTION_BTN_ATTRIBS.EDIT_FLOW,
-              onClick: () => changeMode(MODES.EDIT),
+              ...ACTION_BTN_ATTRIBS.EDIT_FLOW_SETTINGS,
+              onClick: () => setEditFlowSettings(true),
             },
-            {
-              ...ACTION_BTN_ATTRIBS.EXPORT_FLOW,
-              onClick: () => exportFlowDoc(flows, currentFlowId),
-            },
-            {
-              ...ACTION_BTN_ATTRIBS.AUDIT_LOG,
-              onClick: () => setisAuditLogShown(true),
-            },
-            ...defaultButtons,
+          ]
+        : [
             {
               ...ACTION_BTN_ATTRIBS.CREATE_FLOW,
               onClick: newFlowHandler,
             },
-          ]
-        : [...defaultButtons];
+          ];
+
+      actionControlButtons =
+        currentFlowId && mode !== MODES.EDIT
+          ? [
+              {
+                ...ACTION_BTN_ATTRIBS.EDIT_FLOW,
+                onClick: () => changeMode(MODES.EDIT),
+              },
+              {
+                ...ACTION_BTN_ATTRIBS.EXPORT_FLOW,
+                onClick: () => exportFlowDoc(flows, currentFlowId),
+              },
+              {
+                ...ACTION_BTN_ATTRIBS.AUDIT_LOG,
+                onClick: () => setisAuditLogShown(true),
+              },
+              ...defaultButtons,
+              {
+                ...ACTION_BTN_ATTRIBS.CREATE_FLOW,
+                onClick: newFlowHandler,
+              },
+            ]
+          : [...defaultButtons];
+    }
 
     nerdlet.setConfig({
       accountPicker: true,
@@ -149,7 +153,7 @@ const HomeNerdlet = () => {
       headerTitle: 'Pathpoint',
       timePicker: false,
     });
-  }, [currentFlowId, flows, mode]);
+  }, [currentFlowId, flows, flowsError, mode]);
 
   useEffect(() => setCurrentFlowId(nerdletState.flow?.id), [nerdletState.flow]);
 
@@ -167,10 +171,6 @@ const HomeNerdlet = () => {
   }, [nerdletState.refreshFlows]);
 
   useEffect(() => setFlows(flowsData || []), [flowsData]);
-
-  useEffect(() => {
-    if (flowsError) console.error('Error fetching flows', flowsError);
-  }, [flowsError]);
 
   const newFlowHandler = () =>
     navigation.openStackedNerdlet({
@@ -215,12 +215,28 @@ const HomeNerdlet = () => {
   );
 
   const currentView = useMemo(() => {
+    if (flowsLoading) return <Spinner />;
+
     if (
       nerdletState?.redirfrom !== 'product-tour' &&
       !userPreferencesLoading &&
       !userPreferences?.tour?.skipped
     )
       return <GetStarted />;
+
+    if (flowsError?.message)
+      return (
+        <EmptyState
+          fullHeight
+          fullWidth
+          type={EmptyState.TYPE.ERROR}
+          iconType={
+            EmptyState.ICON_TYPE.INTERFACE__SIGN__EXCLAMATION__V_ALTERNATE
+          }
+          title="Error fetching flows!"
+          description={flowsError.message}
+        />
+      );
 
     if (currentFlowDoc)
       return (
@@ -248,13 +264,10 @@ const HomeNerdlet = () => {
     if (flows && flows.length)
       return <FlowList flows={flows} onClick={flowClickHandler} />;
 
-    if (flowsLoading) {
-      return <Spinner />;
-    } else {
-      return <NoFlows newFlowHandler={newFlowHandler} />;
-    }
+    return <NoFlows newFlowHandler={newFlowHandler} />;
   }, [
     flows,
+    flowsError,
     flowsLoading,
     currentFlowDoc,
     accountId,
