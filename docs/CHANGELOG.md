@@ -1,3 +1,15 @@
+# [1.79.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.78.0...v1.79.0) (2024-07-02)
+
+
+### Bug Fixes
+
+* issues with custom time in playback ([20c68b4](https://github.com/newrelic/nr-labs-hedgehog/commit/20c68b4c761398626954bfec5bdb3f442c428bb3))
+
+
+### Features
+
+* remove platform timepicker ([fddcb3e](https://github.com/newrelic/nr-labs-hedgehog/commit/fddcb3eff396ebebb746e881f025c86abc2210dd))
+
 # [1.78.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.77.0...v1.78.0) (2024-06-28)
 
 
