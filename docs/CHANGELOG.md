@@ -1,3 +1,10 @@
+# [1.80.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.79.0...v1.80.0) (2024-07-03)
+
+
+### Features
+
+* error page when access denied to flows ([a28c4e0](https://github.com/newrelic/nr-labs-hedgehog/commit/a28c4e0390b94b0c82fbc6235569b26025b8a9ef))
+
 # [1.79.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.78.0...v1.79.0) (2024-07-02)
 
 
