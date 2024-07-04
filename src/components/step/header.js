@@ -75,7 +75,7 @@ const StepHeader = ({
       />
     </div>
   ) : (
-    <div className="step-header" onClick={handleStepHeaderClick}>
+    <div className="step-header" onClick={handleStepHeaderClick} title={title}>
       <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
         {title}
       </HeadingText>
