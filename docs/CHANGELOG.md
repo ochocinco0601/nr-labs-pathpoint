@@ -1,3 +1,10 @@
+## [1.80.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.0...v1.80.1) (2024-07-04)
+
+
+### Bug Fixes
+
+* add tooltip for step names ([8738533](https://github.com/newrelic/nr-labs-hedgehog/commit/8738533482dd9ee7ddd2a3d013e1b1ea89636446))
+
 # [1.80.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.79.0...v1.80.0) (2024-07-03)
 
 
