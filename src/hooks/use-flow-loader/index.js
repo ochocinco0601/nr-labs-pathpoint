@@ -18,7 +18,10 @@ const useFlowLoader = ({ accountId, flowId }) => {
       documentId: docId.current,
     });
     setLoading(false);
-    setFlows(() => data?.map(({ __typename, ...flow }) => flow) || []); // eslint-disable-line no-unused-vars
+    setFlows(() =>
+      // eslint-disable-next-line no-unused-vars
+      Array.isArray(data) ? data?.map(({ __typename, ...flow }) => flow) : data
+    );
     setError(err);
   }, []);
 

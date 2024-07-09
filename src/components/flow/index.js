@@ -43,6 +43,7 @@ const Flow = forwardRef(
       prevNonEditMode,
       setMode = () => null,
       flows = [],
+      onRefetch,
       onSelectFlow = () => null,
       onTransition,
       isAuditLogShown = false,
@@ -90,11 +91,15 @@ const Flow = forwardRef(
         });
     }, [isAuditLogShown, flowDoc]);
 
-    const saveFlow = useCallback(async (document) => {
-      setLastSavedTimestamp(0);
-      const documentId = document.id;
-      await flowWriter.write({ documentId, document });
-    }, []);
+    const saveFlow = useCallback(
+      async (document) => {
+        setLastSavedTimestamp(0);
+        const documentId = document.id;
+        await flowWriter.write({ documentId, document });
+        onRefetch?.();
+      },
+      [onRefetch]
+    );
 
     const flowUpdateHandler = (updates = {}) =>
       dispatch({
@@ -233,8 +238,9 @@ Flow.propTypes = {
   prevNonEditMode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
-  onTransition: PropTypes.func,
+  onRefetch: PropTypes.func,
   onSelectFlow: PropTypes.func,
+  onTransition: PropTypes.func,
   isAuditLogShown: PropTypes.bool,
   onAuditLogClose: PropTypes.func,
   editFlowSettings: PropTypes.bool,

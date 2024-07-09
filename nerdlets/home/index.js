@@ -215,7 +215,7 @@ const HomeNerdlet = () => {
   );
 
   const currentView = useMemo(() => {
-    if (flowsLoading) return <Spinner />;
+    if (flowsLoading || transitionToFlow) return <Spinner />;
 
     if (
       nerdletState?.redirfrom !== 'product-tour' &&
@@ -249,6 +249,7 @@ const HomeNerdlet = () => {
               setMode={changeMode}
               prevNonEditMode={prevNonEditMode}
               flows={flows}
+              onRefetch={flowsRefetch}
               onSelectFlow={flowClickHandler}
               onTransition={transitionToMode}
               isAuditLogShown={isAuditLogShown}
@@ -269,19 +270,17 @@ const HomeNerdlet = () => {
     flows,
     flowsError,
     flowsLoading,
+    flowsRefetch,
     currentFlowDoc,
     accountId,
     mode,
     flowClickHandler,
     isAuditLogShown,
     editFlowSettings,
+    transitionToFlow,
   ]);
 
-  return transitionToFlow ? (
-    <Spinner />
-  ) : (
-    <div className="container">{currentView}</div>
-  );
+  return <div className="container">{currentView}</div>;
 };
 
 export default HomeNerdlet;

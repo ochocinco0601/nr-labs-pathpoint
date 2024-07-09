@@ -5,7 +5,7 @@ import { NERD_STORAGE } from '../../constants';
 
 const useFlowWriter = ({ accountId, user }) => {
   const write = useCallback(async ({ documentId, document }) => {
-    const { data: flowData, error: flowWriteError } =
+    const { data: { nerdStorageWriteDocument } = {}, error: flowWriteError } =
       await AccountStorageMutation.mutate({
         actionType: AccountStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
         collection: NERD_STORAGE.FLOWS_COLLECTION,
@@ -19,7 +19,7 @@ const useFlowWriter = ({ accountId, user }) => {
       return;
     }
 
-    if (flowData) {
+    if (nerdStorageWriteDocument) {
       const { data: logsData, error: logReadError } =
         await AccountStorageQuery.query({
           accountId,
