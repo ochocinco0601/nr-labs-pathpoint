@@ -1,3 +1,10 @@
+## [1.80.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.1...v1.80.2) (2024-07-09)
+
+
+### Bug Fixes
+
+* issue with updated flow loader ([cacd098](https://github.com/newrelic/nr-labs-hedgehog/commit/cacd09834fe3c0b8218f90d4070ed4ee63c1a883))
+
 ## [1.80.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.0...v1.80.1) (2024-07-04)
 
 
