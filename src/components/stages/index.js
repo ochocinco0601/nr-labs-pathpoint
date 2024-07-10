@@ -125,26 +125,26 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         if (error || !condsResp) return;
         const { conditionsLookup = {}, acctIncidentIds = {} } =
           conditionsAndIncidentsFromResponse(condsResp, MAX_GUIDS_PER_CALL);
+        let incidentsObj = {};
         if (Object.keys(acctIncidentIds).length) {
           query = incidentsByAccountsQuery(acctIncidentIds, timeWindow);
           const {
             data: { actor: { __typename, ...incidsResp } = {} } = {}, //eslint-disable-line no-unused-vars
-            error,
           } = await NerdGraphQuery.query({
             query,
           });
-          if (error || !incidsResp) return;
-          const incidentsLookup = incidentsByAccountsConditions(incidsResp);
-          const alertsStatusesObj = alertStatusesObject(
-            conditionsLookup,
-            incidentsLookup
-          );
-          if (isForCache) return alertsStatusesObj;
-          setStatuses((s) => ({
-            ...s,
-            [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
-          }));
+          incidentsObj = incidsResp ? incidsResp : {};
         }
+        const incidentsLookup = incidentsByAccountsConditions(incidentsObj);
+        const alertsStatusesObj = alertStatusesObject(
+          conditionsLookup,
+          incidentsLookup
+        );
+        if (isForCache) return alertsStatusesObj;
+        setStatuses((s) => ({
+          ...s,
+          [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
+        }));
       }
     },
     []
