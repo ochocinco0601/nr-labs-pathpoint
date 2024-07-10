@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { AccountStorageMutation, Spinner } from 'nr1';
+import { Spinner } from 'nr1';
 
 import {
   KpiBar,
@@ -20,7 +20,6 @@ import {
   PlaybackBar,
 } from '../';
 import FlowHeader from './header';
-import { MODES, NERD_STORAGE } from '../../constants';
 import { useFlowWriter } from '../../hooks';
 import {
   AppContext,
@@ -33,6 +32,7 @@ import {
   FLOW_DISPATCH_TYPES,
   flowReducer,
 } from '../../reducers';
+import { MODES } from '../../constants';
 
 const Flow = forwardRef(
   (
@@ -133,20 +133,11 @@ const Flow = forwardRef(
       flowUpdateHandler({ kpis: updatedKpis });
 
     const deleteFlowHandler = useCallback(async () => {
+      if (!flowIdRef.current) return;
       setIsDeletingFlow(true);
-      const {
-        data: { nerdStorageDeleteDocument: { deleted } = {} } = {},
-        error,
-      } = await AccountStorageMutation.mutate({
-        actionType: AccountStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
-        collection: NERD_STORAGE.FLOWS_COLLECTION,
-        accountId,
-        documentId: flow.id,
-      });
-      setIsDeletingFlow(false);
-      if (error) console.error('Error deleting flow', error);
-      if (deleted) onClose();
-    }, [flow]);
+      await flowWriter?.deleteFlow(flowIdRef.current);
+      onClose?.();
+    }, [flowWriter, onClose]);
 
     const togglePlayback = useCallback(() => setIsPlayback((p) => !p), []);
 

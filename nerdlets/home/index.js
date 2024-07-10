@@ -190,14 +190,13 @@ const HomeNerdlet = () => {
     []
   );
 
-  const backToFlowsHandler = useCallback(
-    () =>
-      setNerdletState({
-        flow: {},
-        mode: MODES.INLINE,
-      }),
-    []
-  );
+  const backToFlowsHandler = useCallback(() => {
+    setNerdletState({
+      flow: {},
+      mode: MODES.INLINE,
+    });
+    flowsRefetch?.();
+  }, [flowsRefetch]);
 
   const transitionToMode = useCallback((newMode) => {
     setTransitionToFlow(true);
