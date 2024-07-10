@@ -1,3 +1,10 @@
+## [1.80.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.2...v1.80.3) (2024-07-10)
+
+
+### Bug Fixes
+
+* delete flow bug ([90991ec](https://github.com/newrelic/nr-labs-hedgehog/commit/90991ecced5cb55f176397220ee765e5704c1825))
+
 ## [1.80.2](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.1...v1.80.2) (2024-07-09)
 
 
