@@ -55,7 +55,7 @@ const Stage = ({
     signalsWithNoStatus = {},
   } = useContext(SignalsClassificationsContext);
   const { maxEntitiesInStep } = useContext(AppContext);
-  const [name, setName] = useState('Stage');
+  const [name, setName] = useState('');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
   const [signals, setSignals] = useState({});
@@ -71,7 +71,7 @@ const Stage = ({
 
   useEffect(() => {
     const stage = (stages || []).find(({ id }) => id === stageId) || {};
-    setName(stage.name || 'Stage');
+    setName(stage.name || '');
     setLevels(stage.levels || []);
     setRelated(stage.related || {});
     setStatus(stage.status || STATUSES.UNKNOWN);
