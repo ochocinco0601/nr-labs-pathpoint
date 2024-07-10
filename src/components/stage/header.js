@@ -7,11 +7,11 @@ import { EditInPlace } from '@newrelic/nr-labs-components';
 import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import ChangeShapeModal from '../change-shape-modal';
-import { MODES, STATUSES } from '../../constants';
+import { MODES, STATUSES, UI_CONTENT } from '../../constants';
 import { stageHeaderShapeClassName } from '../../utils';
 
 const StageHeader = ({
-  name = 'Stage',
+  name,
   related = {},
   status = STATUSES.UNKNOWN,
   onUpdate,
@@ -35,6 +35,15 @@ const StageHeader = ({
     }
   }, []);
 
+  const updateStageNameHandler = useCallback(
+    (newName) => {
+      if (newName === name || newName === UI_CONTENT.STAGE.FALLBACK_NAME)
+        return;
+      onUpdate?.({ name: newName });
+    },
+    [name, onUpdate]
+  );
+
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
       <span
@@ -46,10 +55,8 @@ const StageHeader = ({
       </span>
       <HeadingText className="name">
         <EditInPlace
-          value={name}
-          setValue={(newName) =>
-            newName !== name && onUpdate ? onUpdate({ name: newName }) : null
-          }
+          value={name || UI_CONTENT.STAGE.FALLBACK_NAME}
+          setValue={updateStageNameHandler}
         />
       </HeadingText>
       <span className="last-col">
