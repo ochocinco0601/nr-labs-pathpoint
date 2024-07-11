@@ -195,6 +195,8 @@ jobs:
             console.log("Result:", result)
 
       - name: Run semantic-release
+        with:
+          github-token: ${{ secrets.OPENSOURCE_BOT_TOKEN }}
         env:
           # Use nr-opensource-bot for authoring commits done by
           # semantic-release (rather than using @semantic-release-bot)
