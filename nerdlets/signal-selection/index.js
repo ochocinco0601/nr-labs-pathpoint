@@ -46,18 +46,8 @@ const SignalSelectionNerdlet = () => {
   const [lazyLoadingProps, setLazyLoadingProps] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [{ accountId }] = usePlatformState();
-  const [
-    {
-      flowId,
-      levelId,
-      levelOrder,
-      stageId,
-      stageName,
-      stepId,
-      stepTitle,
-      step,
-    },
-  ] = useNerdletState();
+  const [{ flowId, levelId, levelOrder, stageId, stageName, step }] =
+    useNerdletState();
   const { entitiesCount, entitiesTypesList } = useEntitiesTypesList({
     accountId: acctId,
   });
@@ -245,7 +235,7 @@ const SignalSelectionNerdlet = () => {
         staging: {
           stageId,
           levelId,
-          stepId,
+          stepId: step?.id,
           signals: [
             ...(selectedEntities || []).map(({ guid, name }) => ({
               guid,
@@ -268,7 +258,7 @@ const SignalSelectionNerdlet = () => {
         <Header
           stageName={stageName}
           levelOrder={levelOrder}
-          stepTitle={stepTitle}
+          stepTitle={step?.title}
         />
         <TabBar
           currentTab={currentTab}

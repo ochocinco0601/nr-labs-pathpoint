@@ -70,11 +70,8 @@ const StageNotifyModal = forwardRef(
       (stageId, levelId, stepId) => {
         closeHandler();
         updateStagesDataRef?.();
-        const {
-          stageName,
-          levelOrder,
-          title: stepTitle,
-        } = itemNames[stageId]?.[levelId]?.[stepId] || {};
+        const { stageName, levelOrder } =
+          itemNames[stageId]?.[levelId]?.[stepId] || {};
         const { levels } = stages?.find(({ id }) => id === stageId) || {};
         const { steps } = levels?.find(({ id }) => id === levelId) || {};
         const step = steps?.find(({ id }) => id === stepId);
@@ -86,8 +83,6 @@ const StageNotifyModal = forwardRef(
             stageName,
             levelId,
             levelOrder,
-            stepId,
-            stepTitle,
             step,
           },
         });
