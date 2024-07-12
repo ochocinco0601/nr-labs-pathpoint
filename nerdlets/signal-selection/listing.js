@@ -14,7 +14,6 @@ const Listing = ({
   alerts = [],
   selectedEntities = [],
   selectedAlerts = [],
-  signalsDetails = {},
   rowCount,
   isLoading,
   onLoadMore,
@@ -59,7 +58,7 @@ const Listing = ({
             {selectedEntities.map(({ name, guid, alertSeverity }) => (
               <Signal
                 key={guid}
-                name={signalsDetails[guid]?.name || name}
+                name={name}
                 status={signalStatus({
                   type: SIGNAL_TYPES.ENTITY,
                   alertSeverity,
@@ -78,7 +77,7 @@ const Listing = ({
             {selectedAlerts.map(({ name, guid }) => (
               <Signal
                 key={guid}
-                name={signalsDetails[guid]?.name || name}
+                name={name}
                 type={SIGNAL_TYPES.ALERT}
                 status={STATUSES.UNKNOWN}
                 mode={MODES.EDIT}
@@ -98,7 +97,6 @@ Listing.propTypes = {
   alerts: PropTypes.array,
   selectedEntities: PropTypes.array,
   selectedAlerts: PropTypes.array,
-  signalsDetails: PropTypes.object,
   rowCount: PropTypes.number,
   isLoading: PropTypes.bool,
   onLoadMore: PropTypes.func,

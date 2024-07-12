@@ -5,13 +5,7 @@ import { Button } from 'nr1';
 
 import { UI_CONTENT } from '../../src/constants';
 
-const Footer = ({
-  noFlow,
-  entitiesCount,
-  alertsCount,
-  saveHandler,
-  cancelHandler,
-}) => (
+const Footer = ({ entitiesCount, alertsCount, saveHandler, cancelHandler }) => (
   <footer>
     <div className="message-bar">
       {entitiesCount > 25 || alertsCount > 50
@@ -25,7 +19,6 @@ const Footer = ({
       <Button
         type={Button.TYPE.PRIMARY}
         disabled={
-          noFlow ||
           !(entitiesCount || alertsCount) ||
           entitiesCount > 25 ||
           alertsCount > 50
@@ -39,7 +32,6 @@ const Footer = ({
 );
 
 Footer.propTypes = {
-  noFlow: PropTypes.bool,
   entitiesCount: PropTypes.number,
   alertsCount: PropTypes.number,
   saveHandler: PropTypes.func,
