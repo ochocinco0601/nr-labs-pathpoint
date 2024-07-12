@@ -51,15 +51,17 @@ const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
                 violationUrl
               }`
         }
+        domain
         guid
-        name
-        reporting
         goldenMetrics {
           metrics {
             query
             title
           }
         }
+        name
+        reporting
+        type
       }
     `
     )}

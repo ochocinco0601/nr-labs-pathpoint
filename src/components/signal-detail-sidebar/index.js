@@ -20,9 +20,7 @@ import typesList from '../../../nerdlets/signal-selection/types.json';
 
 const NO_ENTITY_TYPE = '(unknown entity type)';
 
-const entityTypeFromGuid = (guid) => {
-  if (!guid) return NO_ENTITY_TYPE;
-  const [, domain, type] = atob(guid)?.split('|') || [];
+const entityTypeFromData = ({ domain, type }) => {
   if (!domain || !type) return NO_ENTITY_TYPE;
   return (
     typesList.find((t) => t.domain === domain && t.type === type)
@@ -70,7 +68,7 @@ const SignalDetailSidebar = ({ guid, name, type, data, timeWindow }) => {
             <HeadingText type={HeadingText.TYPE.HEADING_5}>
               {`${signalAccount?.name || '(unknown account)'} | ${
                 type === SIGNAL_TYPES.ENTITY
-                  ? entityTypeFromGuid(guid)
+                  ? entityTypeFromData(data)
                   : 'Alert condition'
               }`}
             </HeadingText>

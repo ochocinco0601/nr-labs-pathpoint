@@ -114,36 +114,40 @@ const condsDetailsNrql = (conds = [], timeWindow) =>
 
 const conditionsDetailsByAccountQuery = (accounts = [], timeWindow) => `{
   actor {
-    ${Object.keys(accounts).map(
-      (acct) => `
+    ${Object.keys(accounts)
+      .map(
+        (acct) => `
       a${acct}: account(id: ${acct}) {
         alerts {
-          ${Object.keys(accounts[acct]).map(
-            (condId) => `
+          ${Object.keys(accounts[acct])
+            .map(
+              (condId) => `
             c${condId}: nrqlCondition(id: ${condId}) {
               enabled
               entityGuid
               id
               name
-            }
-          `
-          )}
+            }`
+            )
+            .join('')}
         }
         id
         ${condsDetailsNrql(Object.keys(accounts[acct]), timeWindow)}
-      }
-    `
-    )}
+      }`
+      )
+      .join('')}
   }
 }`;
 
 const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
   actor {
-    ${Object.keys(acctIncidentIds).map(
-      (acct) => `
+    ${Object.keys(acctIncidentIds)
+      .map(
+        (acct) => `
       a${acct}: account(id: ${acct}) {
-        ${acctIncidentIds[acct].map(
-          (incidentIds, idx) => `
+        ${acctIncidentIds[acct]
+          .map(
+            (incidentIds, idx) => `
           a${idx}: aiIssues {
             incidents(
               filter: {ids: ["${incidentIds.join('", "')}"]}
@@ -167,12 +171,12 @@ const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
               }
             }
           }
-          id
-        `
-        )}
-      }
-    `
-    )}
+          id`
+          )
+          .join('')}
+      }`
+      )
+      .join('')}
   }
 }`;
 
