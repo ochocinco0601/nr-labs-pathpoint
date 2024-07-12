@@ -20,7 +20,8 @@ import typesList from '../../../nerdlets/signal-selection/types.json';
 
 const NO_ENTITY_TYPE = '(unknown entity type)';
 
-const entityTypeFromData = ({ domain, type }) => {
+const entityTypeFromData = (entityData) => {
+  const { domain, type } = entityData || {};
   if (!domain || !type) return NO_ENTITY_TYPE;
   return (
     typesList.find((t) => t.domain === domain && t.type === type)
