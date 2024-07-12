@@ -16,9 +16,7 @@ const useEntitiesTypesList = ({ accountId }) => {
         query: entityCountByAccountQuery(accountId),
         variables: { cursor: null },
       });
-      const {
-        data: { actor: { entitySearch: { types = [] } = {} } = {} } = {},
-      } = entityCountRes || {};
+      const types = entityCountRes?.data?.actor?.entitySearch?.types || [];
       const { entityTypesWithCount, count } = typesList.reduce(
         (acc, { type, domain, displayName }) => {
           const { count } =
