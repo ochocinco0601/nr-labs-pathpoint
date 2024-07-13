@@ -1,3 +1,11 @@
+## [1.80.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.4...v1.80.5) (2024-07-13)
+
+
+### Bug Fixes
+
+* fallback for missing entity data ([f335238](https://github.com/newrelic/nr-labs-hedgehog/commit/f3352383fda00a2035a5b525e2d029ed807fdf8c))
+* fetch entity type with statuses ([da88a70](https://github.com/newrelic/nr-labs-hedgehog/commit/da88a704037ae54e7c205e1b42f104b2052e5c09))
+
 ## [1.80.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.3...v1.80.4) (2024-07-13)
 
 
