@@ -1,3 +1,19 @@
+## [1.80.4](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.3...v1.80.4) (2024-07-13)
+
+
+### Bug Fixes
+
+* missing statuses for alert conditions when no incidents ([21cb250](https://github.com/newrelic/nr-labs-hedgehog/commit/21cb250a4a2083ca439f866f936b0e38f1a50b8c))
+* remove unused state variables passed to signal selection ([4f54379](https://github.com/newrelic/nr-labs-hedgehog/commit/4f54379c47d72b6fca9455f42dd262be6086c2bb))
+* signals not in sync between nerdlets when in edit mode ([d3da994](https://github.com/newrelic/nr-labs-hedgehog/commit/d3da9949a4b511186b2181906b118641ec6548d9))
+* stage name getting set to default ([ff7c339](https://github.com/newrelic/nr-labs-hedgehog/commit/ff7c339d53fe328b871a7f3167cc3cafad08e051))
+* test branch protection ([11195ae](https://github.com/newrelic/nr-labs-hedgehog/commit/11195ae36db538d2836ca6d50780df7e32f0c017))
+* testing branch protection - removed ([5e54215](https://github.com/newrelic/nr-labs-hedgehog/commit/5e542158822c5c5cb5af400db0320e147b0fb6c4))
+* testing branch protection - removed another ([20a8da4](https://github.com/newrelic/nr-labs-hedgehog/commit/20a8da482d64c325bab3f146098428cca3292018))
+* testing branch protection gh token ([f359cc3](https://github.com/newrelic/nr-labs-hedgehog/commit/f359cc347fedbad858c8a0608e2de049e6ef05d6))
+* testing without local branch protection ([3799564](https://github.com/newrelic/nr-labs-hedgehog/commit/3799564219807478a6ae3e850f8edff173fbf95c))
+* unable to read types error ([3860a71](https://github.com/newrelic/nr-labs-hedgehog/commit/3860a71369bc7ba04d3828637458a97a524211fb))
+
 ## [1.80.3](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.2...v1.80.3) (2024-07-10)
 
 
