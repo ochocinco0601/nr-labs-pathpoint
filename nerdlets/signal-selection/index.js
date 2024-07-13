@@ -15,26 +15,8 @@ import Filters from './filters';
 import Footer from './footer';
 import useFetchSignals from './use-fetch-signals';
 import useEntitiesTypesList from './use-entities-types-list';
-import { useFlowLoader } from '../../src/hooks';
-import {
-  entitiesByDomainTypeAccountQuery,
-  queryFromGuidsArray,
-} from '../../src/queries';
-import { entitiesDetailsFromQueryResults } from '../../src/utils';
+import { entitiesByDomainTypeAccountQuery } from '../../src/queries';
 import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
-
-const MAX_GUIDS_PER_CALL = 25;
-
-const guidsArray = (entities = [], maxArrayLen) =>
-  entities.reduce(
-    (acc, { guid } = {}, i) => {
-      if (!guid) return acc;
-      const insertAtIdx = Math.floor(i / maxArrayLen);
-      acc[insertAtIdx].push(guid);
-      return acc;
-    },
-    Array.from({ length: Math.ceil(entities.length / maxArrayLen) }, () => [])
-  );
 
 const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
   const idx = arr.findIndex(({ guid }) => guid === item.guid);
@@ -59,19 +41,16 @@ const SignalSelectionNerdlet = () => {
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
   const [filteredAlerts, setFilteredAlerts] = useState([]);
-  const [signalsDetails, setSignalsDetails] = useState({});
   const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
   const [searchText, setSearchText] = useState('');
   const [lazyLoadingProps, setLazyLoadingProps] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [{ accountId }] = usePlatformState();
-  const [
-    { flowId, levelId, levelOrder, stageId, stageName, stepId, stepTitle },
-  ] = useNerdletState();
+  const [{ flowId, levelId, levelOrder, stageId, stageName, step }] =
+    useNerdletState();
   const { entitiesCount, entitiesTypesList } = useEntitiesTypesList({
     accountId: acctId,
   });
-  const { flows: flow } = useFlowLoader({ accountId, flowId });
   const { fetchAlerts } = useFetchSignals();
 
   useEffect(() => {
@@ -83,41 +62,26 @@ const SignalSelectionNerdlet = () => {
   useEffect(() => setAcctId(accountId), [accountId]);
 
   useEffect(() => {
-    if (!flow) return;
-
-    const fetchSignalsDetails = async (arrayOfGuids) => {
-      const query = queryFromGuidsArray(arrayOfGuids);
-      const { data: { actor = {} } = {} } = await NerdGraphQuery.query({
-        query,
-      });
-      setSignalsDetails(entitiesDetailsFromQueryResults(actor));
-    };
-    const { levels = [] } =
-      (flow?.stages || []).find(({ id }) => id === stageId) || {};
-    const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
-    const step = steps.find(({ id }) => id === stepId) || {};
-    const [existingEntities, existingAlerts] = (step?.signals || []).reduce(
-      (acc, signal) => {
-        if (signal?.type === SIGNAL_TYPES.ENTITY) {
-          acc[0].push(signal);
-        } else if (signal?.type === SIGNAL_TYPES.ALERT) {
-          acc[1].push(signal);
-        }
+    if (!step?.signals?.length) return;
+    const { ents, alts } = step.signals.reduce(
+      (acc, sig) => {
+        if (sig.type === SIGNAL_TYPES.ENTITY)
+          return {
+            ...acc,
+            ents: [...acc.ents, sig],
+          };
+        if (sig.type === SIGNAL_TYPES.ALERT)
+          return {
+            ...acc,
+            alts: [...acc.alts, sig],
+          };
         return acc;
       },
-      [[], []]
+      { ents: [], alts: [] }
     );
-    const arrayOfGuids = guidsArray(
-      [...existingEntities, ...existingAlerts],
-      MAX_GUIDS_PER_CALL
-    );
-    if (arrayOfGuids.length) fetchSignalsDetails(arrayOfGuids);
-
-    if (existingEntities.length)
-      setSelectedEntities((se) => [...se, ...existingEntities]);
-    if (existingAlerts.length)
-      setSelectedAlerts((sa) => [...sa, ...existingAlerts]);
-  }, [flow]);
+    setSelectedEntities(ents);
+    setSelectedAlerts(alts);
+  }, [step]);
 
   useEffect(() => {
     const getAlertsCount = async (id, searchQuery, countOnly) => {
@@ -262,8 +226,7 @@ const SignalSelectionNerdlet = () => {
 
   const cancelHandler = useCallback(() => navigation.closeNerdlet(), []);
 
-  const saveHandler = useCallback(async () => {
-    if (!flow) return;
+  const saveHandler = () =>
     navigation.openNerdlet({
       id: 'home',
       urlState: {
@@ -272,7 +235,7 @@ const SignalSelectionNerdlet = () => {
         staging: {
           stageId,
           levelId,
-          stepId,
+          stepId: step?.id,
           signals: [
             ...(selectedEntities || []).map(({ guid, name }) => ({
               guid,
@@ -288,7 +251,6 @@ const SignalSelectionNerdlet = () => {
         },
       },
     });
-  }, [flow, stageId, levelId, stepId, selectedEntities, selectedAlerts]);
 
   return (
     <div className="container nerdlet">
@@ -296,7 +258,7 @@ const SignalSelectionNerdlet = () => {
         <Header
           stageName={stageName}
           levelOrder={levelOrder}
-          stepTitle={stepTitle}
+          stepTitle={step?.title}
         />
         <TabBar
           currentTab={currentTab}
@@ -322,14 +284,12 @@ const SignalSelectionNerdlet = () => {
           alerts={filteredAlerts}
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
-          signalsDetails={signalsDetails}
           isLoading={isLoading}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
           {...lazyLoadingProps}
         />
         <Footer
-          noFlow={!flow}
           entitiesCount={selectedEntities.length}
           alertsCount={selectedAlerts.length}
           saveHandler={saveHandler}

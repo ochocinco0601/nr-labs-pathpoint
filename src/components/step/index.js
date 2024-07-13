@@ -87,8 +87,11 @@ const Step = ({
         stageName,
         levelId,
         levelOrder,
-        stepId,
-        stepTitle: title,
+        step: {
+          id: stepId,
+          title,
+          signals,
+        },
       },
     });
   };
