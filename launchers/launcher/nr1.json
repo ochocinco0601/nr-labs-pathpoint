@@ -1,7 +1,7 @@
 {
   "schemaType": "LAUNCHER",
   "id": "launcher",
-  "displayName": "Pathpoint",
-  "description": "Monitor workflows using New Relic service levels",
+  "displayName": "Pathpoint v2",
+  "description": "Mapping business flow to telemetry signals",
   "rootNerdletId": "home"
 }
