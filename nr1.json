@@ -1,6 +1,6 @@
 {
   "schemaType": "NERDPACK",
-  "id": "55230938-9c73-4230-9cce-5fc12ccb0592",
-  "displayName": "Pathpoint",
-  "description": "Monitor workflows"
+  "id": "c62269f8-da36-4c75-abc1-974f8f80c44c",
+  "displayName": "Pathpoint v2",
+  "description": "Mapping business flow to telemetry signals"
 }
