@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v2.0.0...v2.0.1) (2024-07-15)
+
+
+### Bug Fixes
+
+* update uuid for catalog ([429e741](https://github.com/newrelic/nr-labs-hedgehog/commit/429e7417e0192b1a076ca65e1d0900a2b2f0822d))
+
 # [2.0.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.5...v2.0.0) (2024-07-15)
 
 
