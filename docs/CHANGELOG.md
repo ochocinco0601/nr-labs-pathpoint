@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.5...v2.0.0) (2024-07-15)
+
+
+### Features
+
+* updating catalog and app name ([f7db62f](https://github.com/newrelic/nr-labs-hedgehog/commit/f7db62f06f8bfcd36900ff3192bd4781c7ba5f06))
+
+
+### BREAKING CHANGES
+
+* updating to v2
+
 ## [1.80.5](https://github.com/newrelic/nr-labs-hedgehog/compare/v1.80.4...v1.80.5) (2024-07-13)
 
 
