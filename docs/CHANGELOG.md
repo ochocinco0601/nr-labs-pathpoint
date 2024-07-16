@@ -1,3 +1,11 @@
+## [2.0.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.1...v2.0.2) (2024-07-16)
+
+
+### Bug Fixes
+
+* update catalog ([2db02a8](https://github.com/newrelic/nr-labs-pathpoint/commit/2db02a8d3d767e05498603806924cbf1814e5a6e))
+* update repo urls ([e342b72](https://github.com/newrelic/nr-labs-pathpoint/commit/e342b72675a9ae2df1c2f15135252617407f5dfc))
+
 ## [2.0.1](https://github.com/newrelic/nr-labs-hedgehog/compare/v2.0.0...v2.0.1) (2024-07-15)
 
 
