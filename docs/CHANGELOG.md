@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.2...v2.0.3) (2024-07-16)
+
+
+### Bug Fixes
+
+* dummy commit to trigger build ([3c3673f](https://github.com/newrelic/nr-labs-pathpoint/commit/3c3673f77fa31c9ffd7c54e784d4531ce5140607))
+
 ## [2.0.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.1...v2.0.2) (2024-07-16)
 
 
