@@ -13,9 +13,6 @@
         "not ie < 11",
         "not dead"
     ],
-    "nr1": {
-        "uuid": "4873f895-e78c-4cd8-a63a-5e3bd659c5a6"
-    },
     "dependencies": {
         "@newrelic/nr-labs-components": "^1.23.0",
         "dayjs": "^1.11.10",
