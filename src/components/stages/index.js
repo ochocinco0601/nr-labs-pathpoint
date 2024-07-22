@@ -29,6 +29,7 @@ import {
 } from '../../constants';
 import {
   addSignalStatuses,
+  ALERT_STATUSES,
   alertStatusesObject,
   alertsTree,
   annotateStageWithStatuses,
@@ -58,6 +59,11 @@ import {
 } from '../../queries';
 
 const MAX_GUIDS_PER_CALL = 25;
+const WORKLOAD_TYPE = 'WORKLOAD';
+const WORKLOAD_SKIP_SEVERITIES = [
+  ALERT_STATUSES.NOT_CONFIGURED,
+  ALERT_STATUSES.NOT_ALERTING,
+];
 
 const keyFromTimeWindow = ({ start, end }) =>
   start && end ? `${start}:${end}` : null;
@@ -102,6 +108,69 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       });
       if (error) return;
       const entitiesStatusesObj = entitiesDetailsFromQueryResults(actor);
+      const { workloads, workloadEntities } = Object.keys(
+        entitiesStatusesObj
+      ).reduce(
+        (acc, cur) => {
+          const {
+            type: t,
+            alertSeverity,
+            relatedEntities,
+          } = entitiesStatusesObj[cur];
+          if (
+            t !== WORKLOAD_TYPE ||
+            WORKLOAD_SKIP_SEVERITIES.includes(alertSeverity) ||
+            !relatedEntities?.results?.length
+          )
+            return acc;
+          const { workloadEntitiesGuids, guidsWOStatus } =
+            relatedEntities.results.reduce(
+              ({ workloadEntitiesGuids, guidsWOStatus }, re) => {
+                const g = re?.target?.entity?.guid;
+                if (!g) return { workloadEntitiesGuids, guidsWOStatus };
+                return {
+                  workloadEntitiesGuids: [...workloadEntitiesGuids, g],
+                  guidsWOStatus:
+                    g in entitiesStatusesObj || guidsWOStatus.includes(g)
+                      ? guidsWOStatus
+                      : [...guidsWOStatus, g],
+                };
+              },
+              { workloadEntitiesGuids: [], guidsWOStatus: acc.workloadEntities }
+            );
+          return {
+            ...acc,
+            workloads: {
+              ...acc.workloads,
+              [cur]: workloadEntitiesGuids,
+            },
+            workloadEntities: guidsWOStatus,
+          };
+        },
+        { workloads: {}, workloadEntities: [] }
+      );
+      if (Object.keys(workloads).length && workloadEntities.length) {
+        const workloadEntitiesStatuses = await fetchEntitiesStatus(
+          workloadEntities,
+          timeWindow,
+          true
+        );
+        const key =
+          timeWindow?.start && timeWindow?.end
+            ? 'alertViolations'
+            : 'recentAlertViolations';
+        Object.keys(workloads).forEach((wlg) => {
+          entitiesStatusesObj[wlg][key] = workloads[wlg]?.reduce(
+            (acc, cur) => [
+              ...acc,
+              ...(entitesGuidsArray[cur]?.[key] ||
+                workloadEntitiesStatuses[cur]?.[key] ||
+                []),
+            ],
+            entitiesStatusesObj[wlg][key] || []
+          );
+        });
+      }
       if (isForCache) return entitiesStatusesObj;
       setStatuses((s) => ({
         ...s,

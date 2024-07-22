@@ -62,6 +62,19 @@ const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
         name
         reporting
         type
+        ... on WorkloadEntity {
+          relatedEntities(
+            filter: {direction: OUTBOUND, relationshipTypes: {include: CONTAINS}}
+          ) {
+            results {
+              target {
+                entity {
+                  guid
+                }
+              }
+            }
+          }
+        }
       }
     `
     )}
