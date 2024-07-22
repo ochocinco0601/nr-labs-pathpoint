@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.4...v2.0.5) (2024-07-22)
+
+
+### Bug Fixes
+
+* missing violations for workloads ([d429d3f](https://github.com/newrelic/nr-labs-pathpoint/commit/d429d3f9d1dbb3a196dea8a541a722cb98f4af9c))
+
 ## [2.0.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.3...v2.0.4) (2024-07-16)
 
 
