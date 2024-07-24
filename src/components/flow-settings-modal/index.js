@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -13,6 +13,7 @@ import {
 
 import { AppContext, FlowContext } from '../../contexts';
 import { REFRESH_INTERVALS } from '../../constants';
+import { validRefreshInterval } from '../../utils';
 
 const EditFlowSettingsModal = ({
   onUpdate = () => null,
@@ -23,9 +24,15 @@ const EditFlowSettingsModal = ({
   const flow = useContext(FlowContext);
   const { account, accounts = [] } = useContext(AppContext);
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
-    flow?.refreshInterval || REFRESH_INTERVALS[0].value
+    REFRESH_INTERVALS[0].value
   );
   const [updatedName, setupdatedName] = useState(flow.name || '');
+
+  useEffect(
+    () =>
+      setupdatedRefreshInterval(validRefreshInterval(flow?.refreshInterval)),
+    [flow]
+  );
 
   const accountName = useMemo(
     () => (accounts || []).find(({ id }) => id === account?.id)?.name || '',
