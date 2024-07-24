@@ -40,6 +40,7 @@ import {
   signalDetailsObject,
   statusFromStatuses,
   uniqueSignalGuidsInStages,
+  validRefreshInterval,
 } from '../../utils';
 import {
   AppContext,
@@ -69,7 +70,7 @@ const keyFromTimeWindow = ({ start, end }) =>
   start && end ? `${start}:${end}` : null;
 
 const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
-  const { stages = [] } = useContext(FlowContext);
+  const { refreshInterval, stages = [] } = useContext(FlowContext);
   const dispatch = useContext(FlowDispatchContext);
   const { accounts } = useContext(AppContext);
   const [guids, setGuids] = useState({});
@@ -87,11 +88,20 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const noAccessGuidsLastState = useRef([]);
   const timeBandDataCache = useRef(new Map());
   const playbackTimeWindow = useRef(null);
+  const statusTimeoutDelay = useRef(refreshInterval);
+  const entitiesStatusTimeoutId = useRef();
+  const alertsStatusTimeoutId = useRef();
   const { openSidebar, closeSidebar } = useSidebar();
   const [nerdletState, setNerdletState] = useNerdletState();
 
   useEffect(() => {
+    statusTimeoutDelay.current = validRefreshInterval(refreshInterval);
+  }, [refreshInterval]);
+
+  useEffect(() => {
     if (!accounts?.length) return;
+    clearInterval(entitiesStatusTimeoutId.current);
+    clearTimeout(alertsStatusTimeoutId.current);
     setGuids(uniqueSignalGuidsInStages(stages, accounts));
     setStagesData(() => ({ stages: [...stages] }));
   }, [stages, accounts]);
@@ -172,6 +182,12 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         });
       }
       if (isForCache) return entitiesStatusesObj;
+      if (statusTimeoutDelay.current && !timeWindow) {
+        entitiesStatusTimeoutId.current = setTimeout(
+          () => fetchEntitiesStatus(entitiesGuids),
+          statusTimeoutDelay.current
+        );
+      }
       setStatuses((s) => ({
         ...s,
         [SIGNAL_TYPES.ENTITY]: entitiesStatusesObj,
@@ -210,6 +226,12 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
           incidentsLookup
         );
         if (isForCache) return alertsStatusesObj;
+        if (statusTimeoutDelay.current && !timeWindow) {
+          alertsStatusTimeoutId.current = setTimeout(
+            () => fetchAlertsStatus(alertsGuids),
+            statusTimeoutDelay.current
+          );
+        }
         setStatuses((s) => ({
           ...s,
           [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
