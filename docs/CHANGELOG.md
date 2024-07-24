@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.5...v2.0.6) (2024-07-24)
+
+
+### Bug Fixes
+
+* poll for latest statuses ([6f72df2](https://github.com/newrelic/nr-labs-pathpoint/commit/6f72df2efe4e30e643c49897e735a5d219537c47))
+
 ## [2.0.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.4...v2.0.5) (2024-07-22)
 
 
