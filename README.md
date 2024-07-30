@@ -4,7 +4,7 @@
 
 <a href="https://github.com/newrelic?q=nrlabs-viz&amp;type=all&amp;language=&amp;sort="><img src="https://user-images.githubusercontent.com/1786630/214122263-7a5795f6-f4e3-4aa0-b3f5-2f27aff16098.png" height=50 /></a>
 
-This application is maintained by the New Relic Labs team. Connect with us directly by [creating issues](../../issues) or [starting a discussion](../../discussions) in this repo.
+This application is maintained by the New Relic Labs team. Connect with us directly by [creating issues](../../issues) or [starting a discussion](../../discussions) in this repo.   The [following entry in the New Relic docs website]([https://deploy-preview-18180--docs-website-netlify.netlify.app/docs/new-relic-solutions/business-observability/intro-pathpoint/](https://docs.newrelic.com/docs/new-relic-solutions/business-observability/intro-pathpoint/)) provides additional information about using Pathpoint and best practice for modeling your business journeys in Pathpoint.
 
 ## Usage
 
