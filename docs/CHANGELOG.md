@@ -1,3 +1,10 @@
+## [2.0.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.6...v2.0.7) (2024-08-01)
+
+
+### Bug Fixes
+
+* update time-range-picker to allow end date selection for custom time ([30a8c6f](https://github.com/newrelic/nr-labs-pathpoint/commit/30a8c6f6a0e4164aa504ad08bbdd3709db29fce2))
+
 ## [2.0.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.5...v2.0.6) (2024-07-24)
 
 
