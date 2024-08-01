@@ -1,3 +1,10 @@
+## [2.0.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.7...v2.0.8) (2024-08-01)
+
+
+### Bug Fixes
+
+* add 30 min to polling intervals ([3eac1ea](https://github.com/newrelic/nr-labs-pathpoint/commit/3eac1eab49a218177fb9c22aeb3d11bc7fec6bee))
+
 ## [2.0.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.6...v2.0.7) (2024-08-01)
 
 
