@@ -72,6 +72,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
   const intervalId = useRef();
   const shouldLoop = useRef(false);
   const seekX = useRef(0);
+  const bandIndex = useRef(0);
   const seekBandsCount = useRef(0);
   const seekBandWidth = useRef(0);
   const seekDragStartX = useRef(0);
@@ -108,7 +109,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
               style: { left: i * width, width: width - 1 },
             }))
       );
-      const newX = isResized ? Math.round(seekX.current / width) * width : 0;
+      const newX = isResized ? width * bandIndex.current : 0;
       seekX.current = newX;
       setSeekerStyle((sty) => ({
         ...sty,
@@ -199,6 +200,8 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
 
   const seekToBandIndex = useCallback(
     (idx) => {
+      if (idx >= timeBands.length) return;
+      bandIndex.current = idx;
       const { start, end } = timeBands[idx] || {};
       if (
         start &&
@@ -218,12 +221,12 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
 
   useEffect(() => {
     if (isMouseDownOnSeeker.current) return;
-    const bandIndex = Math.round(seekX.current / seekBandWidth.current);
-    seekToBandIndex(bandIndex);
+    seekToBandIndex(bandIndex.current);
   }, [seekerStyle, seekToBandIndex]);
 
   useEffect(() => {
     setIsPlaying(false);
+    bandIndex.current = 0;
     const duration = durationFromTimeRange(timeRange);
     const playheadIncrement = selectedIncrement.timeInMs;
     const numBands = Math.round(duration / playheadIncrement);
