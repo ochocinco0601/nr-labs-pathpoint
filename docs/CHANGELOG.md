@@ -1,3 +1,11 @@
+## [2.0.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.8...v2.0.9) (2024-08-06)
+
+
+### Bug Fixes
+
+* exiting playback did not update data in flow ([7d24001](https://github.com/newrelic/nr-labs-pathpoint/commit/7d240011c9fdd00160df48a6dd97d8b8ab0b6ba0))
+* playback head would not sync on resize ([363f450](https://github.com/newrelic/nr-labs-pathpoint/commit/363f450df2b6f192235482b1b37f25cf936f44da))
+
 ## [2.0.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.7...v2.0.8) (2024-08-01)
 
 
