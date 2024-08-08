@@ -108,6 +108,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
 
   const fetchEntitiesStatus = useCallback(
     async (entitiesGuids, timeWindow, isForCache) => {
+      clearTimeout(entitiesStatusTimeoutId.current);
       const entitesGuidsArray = guidsToArray(
         { entitiesGuids },
         MAX_GUIDS_PER_CALL
@@ -198,6 +199,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
 
   const fetchAlertsStatus = useCallback(
     async (alertsGuids, timeWindow, isForCache) => {
+      clearTimeout(alertsStatusTimeoutId.current);
       const alertsByAccounts = alertsGuids.reduce(alertsTree, {});
       if (Object.keys(alertsByAccounts).length) {
         let query = conditionsDetailsByAccountQuery(alertsByAccounts);
