@@ -1,3 +1,10 @@
+## [2.0.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.10...v2.0.11) (2024-08-08)
+
+
+### Bug Fixes
+
+* cancel timeout on refetch and playback ([41471d2](https://github.com/newrelic/nr-labs-pathpoint/commit/41471d2a24f72b02ddc6e2ec9ab18a9279c71454))
+
 ## [2.0.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.9...v2.0.10) (2024-08-08)
 
 
