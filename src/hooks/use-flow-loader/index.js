@@ -6,7 +6,7 @@ import { NERD_STORAGE } from '../../constants';
 const useFlowLoader = ({ accountId, flowId }) => {
   const [flows, setFlows] = useState([]);
   const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const acctId = useRef();
   const docId = useRef();
 
@@ -26,7 +26,7 @@ const useFlowLoader = ({ accountId, flowId }) => {
   }, []);
 
   useEffect(() => {
-    if (!accountId || !fetchFn) return;
+    if (!accountId || !Number.isInteger(accountId) || !fetchFn) return;
     acctId.current = accountId;
     docId.current = flowId;
     fetchFn();
