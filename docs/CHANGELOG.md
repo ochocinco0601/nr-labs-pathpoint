@@ -1,3 +1,10 @@
+## [2.0.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.9...v2.0.10) (2024-08-08)
+
+
+### Bug Fixes
+
+* error on initial load of flows ([d1f5bff](https://github.com/newrelic/nr-labs-pathpoint/commit/d1f5bffee1cf96b1a345da21b4f4e69bb7942c08))
+
 ## [2.0.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.8...v2.0.9) (2024-08-06)
 
 
