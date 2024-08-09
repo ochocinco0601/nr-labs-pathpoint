@@ -1,3 +1,10 @@
+## [2.0.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.11...v2.0.12) (2024-08-09)
+
+
+### Bug Fixes
+
+* remove opening of product-tour on initial load ([c1ab1f8](https://github.com/newrelic/nr-labs-pathpoint/commit/c1ab1f82e3268094286afb891eed9c4db1cfcc36))
+
 ## [2.0.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.10...v2.0.11) (2024-08-08)
 
 
