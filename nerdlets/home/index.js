@@ -19,18 +19,8 @@ import {
   useNerdletState,
 } from 'nr1';
 
-import {
-  Flow,
-  FlowList,
-  GetStarted,
-  NoFlows,
-  Sidebar,
-} from '../../src/components';
-import {
-  useFlowLoader,
-  useFetchUser,
-  useReadUserPreferences,
-} from '../../src/hooks';
+import { Flow, FlowList, NoFlows, Sidebar } from '../../src/components';
+import { useFlowLoader, useFetchUser } from '../../src/hooks';
 import { exportFlowDoc, flowDocument } from '../../src/utils';
 import { MAX_ENTITIES_IN_STEP, MODES, UI_CONTENT } from '../../src/constants';
 import { AppContext, SidebarProvider } from '../../src/contexts';
@@ -72,8 +62,6 @@ const HomeNerdlet = () => {
   const { accountId } = useContext(PlatformStateContext);
   const [nerdletState, setNerdletState] = useNerdletState();
   const { user } = useFetchUser();
-  const { userPreferences, loading: userPreferencesLoading } =
-    useReadUserPreferences();
   const {
     flows: flowsData,
     error: flowsError,
@@ -215,13 +203,6 @@ const HomeNerdlet = () => {
 
   const currentView = useMemo(() => {
     if (flowsLoading || transitionToFlow) return <Spinner />;
-
-    if (
-      nerdletState?.redirfrom !== 'product-tour' &&
-      !userPreferencesLoading &&
-      !userPreferences?.tour?.skipped
-    )
-      return <GetStarted />;
 
     if (flowsError?.message)
       return (
