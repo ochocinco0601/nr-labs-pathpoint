@@ -1,3 +1,10 @@
+## [2.0.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.12...v2.0.13) (2024-08-13)
+
+
+### Bug Fixes
+
+* playback mode not updating statuses when playing ([29d4bea](https://github.com/newrelic/nr-labs-pathpoint/commit/29d4bead29679509cf168932fcb4fc42077c9b0b))
+
 ## [2.0.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.11...v2.0.12) (2024-08-09)
 
 
