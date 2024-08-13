@@ -180,16 +180,27 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
   useEffect(() => {
     if (isPlaying) {
       intervalId.current = setInterval(() => {
-        setSeekerStyle((sty) => {
-          let newX = seekX.current + seekBandWidth.current;
-          if (newX + seekBandWidth.current > seek.current.offsetWidth)
-            newX = shouldLoop.current ? 0 : seekX.current;
-          seekX.current = newX;
-          return {
-            ...sty,
-            transform: `translateX(${newX}px)`,
-          };
-        });
+        const curBandIdx = bandIndex.current;
+        const maxIdx = seekBandsCount.current - 1;
+        const isLoopOn = shouldLoop.current;
+        const willLoop = isLoopOn && curBandIdx === maxIdx;
+        if (curBandIdx < maxIdx || willLoop) {
+          bandIndex.current = willLoop ? 0 : curBandIdx + 1;
+          setSeekerStyle((sty) => {
+            const bandW = seekBandWidth.current;
+            let newX = seekX.current + bandW;
+            if (newX + bandW > seek.current.offsetWidth)
+              newX = isLoopOn ? 0 : seekX.current;
+            seekX.current = newX;
+            return {
+              ...sty,
+              transform: `translateX(${newX}px)`,
+            };
+          });
+        } else {
+          setIsPlaying(false);
+          clearInterval(intervalId.current);
+        }
       }, 1500);
     } else {
       clearInterval(intervalId.current);
