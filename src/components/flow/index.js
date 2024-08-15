@@ -202,7 +202,6 @@ const Flow = forwardRef(
                   onDiscard={discardFlowHandler}
                   onPersist={persistFlowHandler}
                   onClose={onClose}
-                  // mode={mode}
                   mode={flowMode}
                   setMode={setMode}
                   flows={flows}
