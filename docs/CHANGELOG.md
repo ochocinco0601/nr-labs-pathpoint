@@ -1,3 +1,10 @@
+## [2.0.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.13...v2.0.14) (2024-08-15)
+
+
+### Bug Fixes
+
+* preview not working for empty flow ([6b83c63](https://github.com/newrelic/nr-labs-pathpoint/commit/6b83c63dd2885bb3e3f504e6510a3b098ebd1523))
+
 ## [2.0.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.12...v2.0.13) (2024-08-13)
 
 
