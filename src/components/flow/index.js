@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -161,6 +162,11 @@ const Flow = forwardRef(
       stagesRef.current?.seek?.(timeWindow);
     }, []);
 
+    const flowMode = useMemo(
+      () => (flowDoc?.stages?.length || isPreview ? mode : MODES.EDIT),
+      [mode, flowDoc, isPreview]
+    );
+
     return (
       <FlowContext.Provider value={flow}>
         <FlowDispatchContext.Provider value={dispatch}>
@@ -196,7 +202,7 @@ const Flow = forwardRef(
                   onDiscard={discardFlowHandler}
                   onPersist={persistFlowHandler}
                   onClose={onClose}
-                  mode={mode}
+                  mode={flowMode}
                   setMode={setMode}
                   flows={flows}
                   isPlayback={isPlayback}
@@ -212,8 +218,8 @@ const Flow = forwardRef(
                 {isPlayback ? (
                   <PlaybackBar onPreload={preloadData} onSeek={seekHandler} />
                 ) : null}
-                <Stages mode={mode} ref={stagesRef} />
-                <KpiBar onChange={updateKpisHandler} mode={mode} />
+                <Stages mode={flowMode} ref={stagesRef} />
+                <KpiBar onChange={updateKpisHandler} mode={flowMode} />
               </>
             ) : (
               <Spinner />
