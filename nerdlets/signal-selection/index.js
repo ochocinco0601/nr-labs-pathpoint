@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   NerdGraphQuery,
@@ -41,7 +47,6 @@ const SignalSelectionNerdlet = () => {
   const [alerts, setAlerts] = useState([]);
   const [selectedAlerts, setSelectedAlerts] = useState([]);
   const [filteredAlerts, setFilteredAlerts] = useState([]);
-  const [fetchEntitiesNextCursor, setFetchEntitiesNextCursor] = useState();
   const [searchText, setSearchText] = useState('');
   const [lazyLoadingProps, setLazyLoadingProps] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +57,7 @@ const SignalSelectionNerdlet = () => {
     accountId: acctId,
   });
   const { fetchAlerts } = useFetchSignals();
+  const fetchEntitiesNextCursor = useRef(null);
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -109,7 +115,7 @@ const SignalSelectionNerdlet = () => {
       });
       setIsLoading(false);
       setEntities(() => (e && e.length ? e : []));
-      setFetchEntitiesNextCursor(nextCursor);
+      fetchEntitiesNextCursor.current = nextCursor;
     };
 
     const getAlerts = async (id, searchQuery) => {
@@ -178,7 +184,7 @@ const SignalSelectionNerdlet = () => {
       } = {},
     } = await NerdGraphQuery.query({
       query: entitiesByDomainTypeAccountQuery(selectedEntityType, acctId),
-      variables: { cursor: fetchEntitiesNextCursor },
+      variables: { cursor: fetchEntitiesNextCursor.current },
     });
     setEntities((ent) =>
       e && e.length
@@ -188,8 +194,8 @@ const SignalSelectionNerdlet = () => {
           ]
         : ent
     );
-    setFetchEntitiesNextCursor(nextCursor);
-  }, [acctId, selectedEntityType, fetchEntitiesNextCursor]);
+    fetchEntitiesNextCursor.current = nextCursor;
+  }, [acctId, selectedEntityType]);
 
   const accountChangeHandler = useCallback((_, ai) => {
     setAcctId(ai);
