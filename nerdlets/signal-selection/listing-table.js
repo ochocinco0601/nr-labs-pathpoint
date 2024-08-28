@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
+  AutoSizer,
   DataTable,
   DataTableHeader,
   DataTableHeaderCell,
@@ -83,7 +84,6 @@ const ListingTable = ({
       setTableSettings({
         ariaLabel: 'Entities',
         items: entities,
-        height: `${entities.length}rows`,
         itemCount: rowCount,
         onLoadMoreItems: onLoadMore,
       });
@@ -94,7 +94,6 @@ const ListingTable = ({
       setTableSettings({
         ariaLabel: 'Alert conditions',
         items: alerts,
-        height: `${alerts.length}rows`,
       });
       setTableHeader(alertsTableHeader);
     }
@@ -129,22 +128,27 @@ const ListingTable = ({
     emptyState(true)
   ) : (
     <div className="data-table">
-      <DataTable
-        {...tableSettings}
-        selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
-        selection={selection}
-        onSelectionChange={itemSelectionHandler}
-      >
-        {tableHeader}
-        <DataTableBody>
-          {() => (
-            <DataTableRow>
-              <DataTableRowCell />
-              <DataTableRowCell />
-            </DataTableRow>
-          )}
-        </DataTableBody>
-      </DataTable>
+      <AutoSizer>
+        {({ height }) => (
+          <DataTable
+            {...tableSettings}
+            height={height}
+            selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
+            selection={selection}
+            onSelectionChange={itemSelectionHandler}
+          >
+            {tableHeader}
+            <DataTableBody>
+              {() => (
+                <DataTableRow>
+                  <DataTableRowCell />
+                  <DataTableRowCell />
+                </DataTableRow>
+              )}
+            </DataTableBody>
+          </DataTable>
+        )}
+      </AutoSizer>
     </div>
   );
 };
