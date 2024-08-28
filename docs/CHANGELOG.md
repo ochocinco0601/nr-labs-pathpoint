@@ -1,3 +1,10 @@
+## [2.0.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.14...v2.0.15) (2024-08-28)
+
+
+### Bug Fixes
+
+* sig selection lazy loading not loading past initial ([538b676](https://github.com/newrelic/nr-labs-pathpoint/commit/538b676cf001258a08d3341d986dcb555effac68))
+
 ## [2.0.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.13...v2.0.14) (2024-08-15)
 
 
