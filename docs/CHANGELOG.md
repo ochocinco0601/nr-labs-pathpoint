@@ -1,3 +1,10 @@
+## [2.0.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.15...v2.0.16) (2024-09-05)
+
+
+### Bug Fixes
+
+* fetches alerts using lazy loading; also fetches previously missing conditions ([9216e48](https://github.com/newrelic/nr-labs-pathpoint/commit/9216e4886ba42b77215fc4b079bda34fb0a5df7f))
+
 ## [2.0.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.14...v2.0.15) (2024-08-28)
 
 
