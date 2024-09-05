@@ -17,6 +17,7 @@ const Listing = ({
   rowCount,
   isLoading,
   onLoadMore,
+  onLoadMoreAlerts,
   onSelect,
   onDelete,
 }) => {
@@ -30,6 +31,7 @@ const Listing = ({
         selectedAlerts={selectedAlerts}
         rowCount={rowCount}
         onLoadMore={onLoadMore}
+        onLoadMoreAlerts={onLoadMoreAlerts}
         onSelect={onSelect}
         isLoading={isLoading}
       />
@@ -100,6 +102,7 @@ Listing.propTypes = {
   rowCount: PropTypes.number,
   isLoading: PropTypes.bool,
   onLoadMore: PropTypes.func,
+  onLoadMoreAlerts: PropTypes.func,
   onSelect: PropTypes.func,
   onDelete: PropTypes.func,
 };

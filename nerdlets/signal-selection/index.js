@@ -58,6 +58,7 @@ const SignalSelectionNerdlet = () => {
   });
   const { fetchAlerts } = useFetchSignals();
   const fetchEntitiesNextCursor = useRef(null);
+  const conditionsNextCursor = useRef(null);
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -90,12 +91,12 @@ const SignalSelectionNerdlet = () => {
   }, [step]);
 
   useEffect(() => {
-    const getAlertsCount = async (id, searchQuery, countOnly) => {
-      const { data } = await fetchAlerts({ id, searchQuery, countOnly });
+    const getAlertsCount = async (id, countOnly) => {
+      const { data } = await fetchAlerts({ id, countOnly });
       setAlertCount(data?.totalCount || 0);
     };
 
-    if (acctId) getAlertsCount(acctId, '', true).catch(console.error);
+    if (acctId) getAlertsCount(acctId, true).catch(console.error);
   }, [acctId, fetchAlerts]);
 
   useEffect(() => {
@@ -118,16 +119,15 @@ const SignalSelectionNerdlet = () => {
       fetchEntitiesNextCursor.current = nextCursor;
     };
 
-    const getAlerts = async (id, searchQuery) => {
+    const getAlerts = async (id) => {
       setIsLoading(true);
-      const { data: { nrqlConditions = [] } = {} } = await fetchAlerts({
-        id,
-        searchQuery,
-      });
+      const { data: { alertConditions = [], nextCursor } = {} } =
+        await fetchAlerts({
+          id,
+        });
+      conditionsNextCursor.current = nextCursor;
       setIsLoading(false);
-      setAlerts(() =>
-        nrqlConditions && nrqlConditions.length ? nrqlConditions : []
-      );
+      setAlerts(() => alertConditions || []);
     };
 
     if (currentTab === SIGNAL_TYPES.ENTITY) {
@@ -154,6 +154,12 @@ const SignalSelectionNerdlet = () => {
   }, [entitiesTypesList]);
 
   useEffect(() => {
+    let rowCount = 0;
+    if (currentTab === SIGNAL_TYPES.ENTITY) {
+      rowCount = selectedEntityType?.count;
+    } else if (currentTab === SIGNAL_TYPES.ALERT) {
+      rowCount = alertCount;
+    }
     if (searchText) {
       setFilteredAlerts(nameFilter(alerts, searchText));
       setFilteredEntities(nameFilter(entities, searchText));
@@ -162,8 +168,9 @@ const SignalSelectionNerdlet = () => {
       setFilteredAlerts(alerts);
       setFilteredEntities(entities);
       setLazyLoadingProps({
-        rowCount: selectedEntityType?.count,
+        rowCount,
         onLoadMore,
+        onLoadMoreAlerts,
       });
     }
   }, [
@@ -172,7 +179,9 @@ const SignalSelectionNerdlet = () => {
     entities,
     searchText,
     selectedEntityType,
+    alertCount,
     onLoadMore,
+    onLoadMoreAlerts,
   ]);
 
   const onLoadMore = useCallback(async () => {
@@ -187,7 +196,7 @@ const SignalSelectionNerdlet = () => {
       variables: { cursor: fetchEntitiesNextCursor.current },
     });
     setEntities((ent) =>
-      e && e.length
+      e?.length
         ? [
             ...ent,
             ...e.filter(({ guid }) => !ent.some((en) => en.guid === guid)),
@@ -196,6 +205,19 @@ const SignalSelectionNerdlet = () => {
     );
     fetchEntitiesNextCursor.current = nextCursor;
   }, [acctId, selectedEntityType]);
+
+  const onLoadMoreAlerts = useCallback(async () => {
+    if (!conditionsNextCursor.current) return;
+    const { data: { alertConditions = [], nextCursor } = {} } =
+      await fetchAlerts({
+        id: acctId,
+        cursor: conditionsNextCursor.current,
+      });
+    conditionsNextCursor.current = nextCursor;
+    setAlerts((conds) =>
+      alertConditions?.length ? [...conds, ...alertConditions] : conds
+    );
+  }, [acctId, fetchAlerts]);
 
   const accountChangeHandler = useCallback((_, ai) => {
     setAcctId(ai);

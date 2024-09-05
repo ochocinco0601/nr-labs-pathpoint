@@ -61,6 +61,7 @@ const ListingTable = ({
   selectedAlerts = [],
   rowCount,
   onLoadMore,
+  onLoadMoreAlerts,
   onSelect,
   isLoading,
 }) => {
@@ -94,6 +95,8 @@ const ListingTable = ({
       setTableSettings({
         ariaLabel: 'Alert conditions',
         items: alerts,
+        itemCount: rowCount,
+        onLoadMoreItems: onLoadMoreAlerts,
       });
       setTableHeader(alertsTableHeader);
     }
@@ -161,6 +164,7 @@ ListingTable.propTypes = {
   selectedAlerts: PropTypes.array,
   rowCount: PropTypes.number,
   onLoadMore: PropTypes.func,
+  onLoadMoreAlerts: PropTypes.func,
   onSelect: PropTypes.func,
   isLoading: PropTypes.bool,
 };

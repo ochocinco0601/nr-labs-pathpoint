@@ -1,12 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
-import { EntitiesByDomainTypeQuery, NerdGraphQuery } from 'nr1';
-import {
-  nrqlConditionsSearchQuery,
-  policiesSearchQuery,
-} from '../../src/queries';
+import { EntitiesByDomainTypeQuery, EntitySearchQuery } from 'nr1';
+
+const idFromGuid = (guid) => atob(guid).split('|')[3];
 
 const useFetchSignals = () => {
+  const policiesStore = useRef(new Map());
+  const alertsAccountId = useRef(0);
+
   const fetchEntities = useCallback(
     async ({ entityDomainType, filters, cursor }) => {
       const { data, error, loading } = await EntitiesByDomainTypeQuery.query({
@@ -23,75 +24,69 @@ const useFetchSignals = () => {
     []
   );
 
-  const fetchAlerts = useCallback(async ({ id, searchQuery, countOnly }) => {
-    if (id) {
-      let nrqlConditions = [];
-      let cursor = null;
-      let totalCount = 0;
-      let policyIds = new Set();
-      let policies = {};
+  const fetchAlerts = useCallback(async ({ id, cursor, countOnly }) => {
+    const policiesMap = policiesStore.current;
+
+    if (id !== alertsAccountId.current) {
+      policiesMap.clear();
+      let policiesCursor = null;
 
       do {
         const {
           data: {
-            actor: {
-              account: { alerts: { nrqlConditionsSearch = {} } = {} } = {},
-            } = {},
+            entities: policiesEntities = [],
+            nextCursor: policiesNextCursor = null,
           } = {},
-          error,
-        } = await NerdGraphQuery.query({
-          query: nrqlConditionsSearchQuery(searchQuery, countOnly),
-          variables: { id, cursor },
+        } = await EntitySearchQuery.query({
+          entityDomain: 'AIOPS',
+          entityType: 'POLICY',
+          filters: `accountId = ${id}`,
+          cursor: policiesCursor,
         });
-        if (error) throw error;
-        if (nrqlConditionsSearch?.nrqlConditions?.length) {
-          nrqlConditions = nrqlConditionsSearch.nrqlConditions.reduce(
-            (acc, { guid, id, name, policyId } = {}) => {
-              policyIds.add(policyId);
-              return [...acc, { guid, id, name, policyId }];
-            },
-            nrqlConditions
-          );
-        }
-        cursor = nrqlConditionsSearch?.nextCursor;
-        totalCount = nrqlConditionsSearch?.totalCount;
-      } while (cursor);
-
-      if (policyIds.size) {
-        do {
-          const {
-            data: {
-              actor: {
-                account: { alerts: { policiesSearch = {} } = {} } = {},
-              } = {},
-            } = {},
-            error,
-          } = await NerdGraphQuery.query({
-            query: policiesSearchQuery(`["${[...policyIds].join('", "')}"]`),
-            variables: { id },
-          });
-          if (error) throw error;
-          if (policiesSearch?.policies?.length) {
-            policies = policiesSearch.policies.reduce(
-              (acc, { id, name }) => ({
-                ...acc,
-                [id]: name,
-              }),
-              policies
-            );
-          }
-          cursor = policiesSearch?.nextCursor;
-        } while (cursor);
-
-        nrqlConditions = nrqlConditions.map((condition) => ({
-          ...condition,
-          policyName: policies[condition.policyId] || '',
-        }));
-      }
-      const data = countOnly ? { totalCount } : { nrqlConditions };
-      return { data };
+        policiesEntities.map(({ guid, name = '' }) =>
+          policiesMap.set(idFromGuid(guid), name)
+        );
+        policiesCursor = policiesNextCursor;
+      } while (policiesCursor);
+      alertsAccountId.current = id;
     }
-    return {};
+
+    if (countOnly) {
+      const { data: { count: totalCount = 0 } = {} } =
+        await EntitySearchQuery.query({
+          entityDomain: 'AIOPS',
+          entityType: 'CONDITION',
+          filters: `accountId = ${id}`,
+          includeCount: true,
+          includeResults: false,
+        });
+      return { data: { totalCount } };
+    }
+
+    let alertConditions = [];
+    const { data: { entities = [], nextCursor } = {} } =
+      await EntitySearchQuery.query({
+        entityDomain: 'AIOPS',
+        entityType: 'CONDITION',
+        filters: `accountId = ${id}`,
+        cursor,
+        includeTags: true,
+      });
+    alertConditions = entities.map(({ guid, name, reporting, tags }) => {
+      const policyId = (tags || []).reduce(
+        (acc, { key, values }) => (acc || key !== 'policyId' ? acc : values[0]),
+        null
+      );
+      return {
+        guid,
+        id: Number(idFromGuid(guid)),
+        name,
+        reporting,
+        policyId,
+        policyName: policiesMap?.get(policyId) || '',
+      };
+    });
+    return { data: { alertConditions, nextCursor } };
   }, []);
 
   return { fetchEntities, fetchAlerts };
