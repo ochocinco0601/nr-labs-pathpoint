@@ -1,3 +1,10 @@
+## [2.0.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.16...v2.0.17) (2024-09-05)
+
+
+### Bug Fixes
+
+* couple timepicker issues ([7e5157a](https://github.com/newrelic/nr-labs-pathpoint/commit/7e5157aa5ee107ae55d4bd329ae32650305bf3ff))
+
 ## [2.0.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.15...v2.0.16) (2024-09-05)
 
 
