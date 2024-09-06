@@ -53,7 +53,7 @@ const timesForTimeBand = (firstBandStartTime, timeBandDurationMs, index) => {
 const hintDateTimeFormat = (timestamp) =>
   SHORT_DATETIME_FORMATTER.format(new Date(timestamp));
 
-const PlaybackBar = ({ onPreload, onSeek }) => {
+const PlaybackBar = ({ onPreload, onSeek, onChange }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [shouldLoopCheck, setShouldLoopCheck] = useState(false);
   const [selectedIncrement, setSelectedIncrement] = useState(
@@ -236,6 +236,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
   }, [seekerStyle, seekToBandIndex]);
 
   useEffect(() => {
+    onChange?.({ selectedIncrement, timeRange });
     setIsPlaying(false);
     bandIndex.current = 0;
     const duration = durationFromTimeRange(timeRange);
@@ -350,6 +351,7 @@ const PlaybackBar = ({ onPreload, onSeek }) => {
 PlaybackBar.propTypes = {
   onPreload: PropTypes.func,
   onSeek: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 export default PlaybackBar;
