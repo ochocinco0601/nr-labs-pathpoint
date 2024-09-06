@@ -1,7 +1,14 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { DEFAULT_DATETIME_FORMATTER } from '../constants';
+import {
+  DEFAULT_DATETIME_FORMATTER,
+  SHORT_DATETIME_FORMATTER,
+} from '../constants';
+
+const MINUTE = 60000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
 
 export const formatTimestamp = (timestamp) =>
   DEFAULT_DATETIME_FORMATTER.format(new Date(timestamp));
@@ -48,4 +55,38 @@ export const durationStringForViolation = (closed, opened) => {
   const days = Number(duration / 86400).toFixed();
   const hours = Number((duration % 86400) / 3600).toFixed();
   return `${days} d ${hours} h ${mins} m`;
+};
+
+export const playbackTime = (
+  { begin_time, end_time, duration } = {},
+  { display } = {}
+) => {
+  const incrementStr = display ? `in incements of ${display}` : '';
+  if (begin_time && end_time) {
+    const bTime = SHORT_DATETIME_FORMATTER.format(new Date(begin_time));
+    const eTime = SHORT_DATETIME_FORMATTER.format(new Date(end_time));
+    return {
+      label: 'Showing custom time',
+      description: `
+        From ${bTime} 
+        to ${eTime}
+        ${incrementStr}
+      `,
+    };
+  }
+  if (!duration) return { label: 'Unable to display playback time window' };
+  if (duration <= HOUR)
+    return {
+      label: `Showing last ${duration / MINUTE} minutes`,
+      description: `...${incrementStr}`,
+    };
+  if (duration <= DAY)
+    return {
+      label: `Showing last ${duration / HOUR} hours`,
+      description: `...${incrementStr}`,
+    };
+  return {
+    label: `Showing last ${duration / DAY} days`,
+    description: `...${incrementStr}`,
+  };
 };

@@ -34,6 +34,7 @@ import {
   flowReducer,
 } from '../../reducers';
 import { MODES } from '../../constants';
+import { playbackTime } from '../../utils';
 
 const Flow = forwardRef(
   (
@@ -59,6 +60,9 @@ const Flow = forwardRef(
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
     const [isPlayback, setIsPlayback] = useState(false);
+    const [playbackTimeMessage, setPlaybackTimeMessage] = useState({
+      label: 'Starting playback...',
+    });
     const [isPreview, setIsPreview] = useState(false);
     const { account: { id: accountId } = {}, user } = useContext(AppContext);
     const { closeSidebar, openSidebar } = useSidebar();
@@ -162,6 +166,14 @@ const Flow = forwardRef(
       stagesRef.current?.seek?.(timeWindow);
     }, []);
 
+    const playbackChangeHandler = useCallback(
+      ({ timeRange, selectedIncrement } = {}) => {
+        if (timeRange && selectedIncrement)
+          setPlaybackTimeMessage(playbackTime(timeRange, selectedIncrement));
+      },
+      []
+    );
+
     const flowMode = useMemo(
       () => (flowDoc?.stages?.length || isPreview ? mode : MODES.EDIT),
       [mode, flowDoc, isPreview]
@@ -206,6 +218,7 @@ const Flow = forwardRef(
                   setMode={setMode}
                   flows={flows}
                   isPlayback={isPlayback}
+                  playbackTimeMessage={playbackTimeMessage}
                   togglePlayback={togglePlayback}
                   onSelectFlow={onSelectFlow}
                   onDeleteFlow={() => setDeleteModalHidden(false)}
@@ -216,7 +229,11 @@ const Flow = forwardRef(
                   setEditFlowSettings={setEditFlowSettings}
                 />
                 {isPlayback ? (
-                  <PlaybackBar onPreload={preloadData} onSeek={seekHandler} />
+                  <PlaybackBar
+                    onPreload={preloadData}
+                    onSeek={seekHandler}
+                    onChange={playbackChangeHandler}
+                  />
                 ) : null}
                 <Stages mode={flowMode} ref={stagesRef} />
                 <KpiBar onChange={updateKpisHandler} mode={flowMode} />

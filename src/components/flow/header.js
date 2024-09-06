@@ -6,6 +6,7 @@ import {
   Button,
   HeadingText,
   Icon,
+  InlineMessage,
   Popover,
   PopoverTrigger,
   PopoverBody,
@@ -32,6 +33,7 @@ const FlowHeader = ({
   setMode = () => null,
   flows = [],
   isPlayback,
+  playbackTimeMessage,
   togglePlayback,
   onSelectFlow = () => null,
   onDeleteFlow = () => null,
@@ -206,18 +208,22 @@ const FlowHeader = ({
           {isPlayback ? 'Exit playback' : 'Playback'}
         </Button>
       </div>
-      <div className="flow-status">
-        <Badge type={Badge.TYPE.INFO}>{UI_CONTENT.FLOW.CURRENT_STATUS}</Badge>
-        <Tooltip text="Refresh data in flow">
-          <Button
-            variant={Button.VARIANT.TERTIARY}
-            sizeType={Button.SIZE_TYPE.SMALL}
-            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
-            ariaLabel="Refresh data in flow"
-            onClick={onRefreshFlow}
-          />
-        </Tooltip>
-      </div>
+      {isPlayback ? (
+        <InlineMessage {...playbackTimeMessage} />
+      ) : (
+        <div className="flow-status">
+          <Badge type={Badge.TYPE.INFO}>{UI_CONTENT.FLOW.CURRENT_STATUS}</Badge>
+          <Tooltip text="Refresh data in flow">
+            <Button
+              variant={Button.VARIANT.TERTIARY}
+              sizeType={Button.SIZE_TYPE.SMALL}
+              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
+              ariaLabel="Refresh data in flow"
+              onClick={onRefreshFlow}
+            />
+          </Tooltip>
+        </div>
+      )}
       <div className="flow-header-actions">
         {isPreview ? (
           <>
@@ -245,6 +251,7 @@ FlowHeader.propTypes = {
   setMode: PropTypes.func,
   flows: PropTypes.array,
   isPlayback: PropTypes.bool,
+  playbackTimeMessage: PropTypes.object,
   togglePlayback: PropTypes.func,
   onSelectFlow: PropTypes.func,
   onDeleteFlow: PropTypes.func,
