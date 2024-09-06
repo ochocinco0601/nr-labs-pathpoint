@@ -1,3 +1,10 @@
+## [2.0.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.17...v2.0.18) (2024-09-06)
+
+
+### Bug Fixes
+
+* display playback time window in place of current status ([ff05f9e](https://github.com/newrelic/nr-labs-pathpoint/commit/ff05f9e695174133f4d345b4c41947b0f055b12d))
+
 ## [2.0.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.16...v2.0.17) (2024-09-05)
 
 
