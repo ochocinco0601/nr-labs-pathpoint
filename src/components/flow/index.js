@@ -85,6 +85,10 @@ const Flow = forwardRef(
     }, [flowDoc]);
 
     useEffect(() => {
+      if (mode === MODES.EDIT) setIsPlayback(false);
+    }, [mode]);
+
+    useEffect(() => {
       if (isPreview) setMode(prevNonEditMode);
     }, [isPreview]);
 
