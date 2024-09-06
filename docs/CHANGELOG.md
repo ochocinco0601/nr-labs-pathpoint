@@ -1,3 +1,10 @@
+## [2.0.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.18...v2.0.19) (2024-09-06)
+
+
+### Bug Fixes
+
+* close playback when entering edit mode ([5aa44be](https://github.com/newrelic/nr-labs-pathpoint/commit/5aa44bea4128a9ad6e5b460325e5c762752bc022))
+
 ## [2.0.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.17...v2.0.18) (2024-09-06)
 
 
