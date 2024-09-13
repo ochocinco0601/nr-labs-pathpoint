@@ -1,3 +1,10 @@
+## [2.0.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.19...v2.0.20) (2024-09-13)
+
+
+### Bug Fixes
+
+* update nr-labs-component to use updated nrqleditor ([8bccd72](https://github.com/newrelic/nr-labs-pathpoint/commit/8bccd722276c05eafb50bc53c7096d2566e893f7))
+
 ## [2.0.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.18...v2.0.19) (2024-09-06)
 
 
