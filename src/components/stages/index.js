@@ -205,11 +205,10 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         let query = conditionsDetailsByAccountQuery(alertsByAccounts);
         const {
           data: { actor: { __typename, ...condsResp } = {} } = {}, // eslint-disable-line no-unused-vars
-          error,
         } = await NerdGraphQuery.query({
           query,
         });
-        if (error || !condsResp) return;
+        if (!condsResp) return;
         const { conditionsLookup = {}, acctIncidentIds = {} } =
           conditionsAndIncidentsFromResponse(condsResp, MAX_GUIDS_PER_CALL);
         let incidentsObj = {};
