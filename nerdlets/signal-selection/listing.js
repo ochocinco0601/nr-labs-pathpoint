@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Badge, Button, HeadingText } from 'nr1';
+import { Badge, HeadingText } from 'nr1';
 
 import ListingTable from './listing-table';
 import { Signal } from '../../src/components';
@@ -45,16 +45,6 @@ const Listing = ({
               Entities
             </HeadingText>
             <Badge>{`${selectedEntities.length}/25`}</Badge>
-            <Button
-              type={Button.TYPE.SECONDARY}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              iconType={
-                Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__WORKLOADS
-              }
-              disabled={true}
-            >
-              Convert to workload
-            </Button>
           </div>
           <div className="list">
             {selectedEntities.map(({ name, guid, alertSeverity }) => (
