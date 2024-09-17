@@ -18,6 +18,7 @@ import {
   useAccountsQuery,
   useNerdletState,
 } from 'nr1';
+import { HelpModal } from '@newrelic/nr-labs-components';
 
 import { Flow, FlowList, NoFlows, Sidebar } from '../../src/components';
 import { useFlowLoader, useFetchUser } from '../../src/hooks';
@@ -48,6 +49,10 @@ const ACTION_BTN_ATTRIBS = {
     type: Button.TYPE.TERTIARY,
     label: UI_CONTENT.GLOBAL.BUTTON_LABEL_AUDIT_LOG,
   },
+  HELP: {
+    type: Button.TYPE.TERTIARY,
+    label: UI_CONTENT.GLOBAL.BUTTON_LABEL_HELP,
+  },
 };
 
 const HomeNerdlet = () => {
@@ -57,6 +62,7 @@ const HomeNerdlet = () => {
   const [flows, setFlows] = useState([]);
   const [currentFlowId, setCurrentFlowId] = useState();
   const [isAuditLogShown, setisAuditLogShown] = useState(false);
+  const [isHelpModalShown, setIsHelpModalShown] = useState(false);
   const [editFlowSettings, setEditFlowSettings] = useState(false);
   const [transitionToFlow, setTransitionToFlow] = useState(false);
   const { accountId } = useContext(PlatformStateContext);
@@ -101,11 +107,19 @@ const HomeNerdlet = () => {
               ...ACTION_BTN_ATTRIBS.EDIT_FLOW_SETTINGS,
               onClick: () => setEditFlowSettings(true),
             },
+            {
+              ...ACTION_BTN_ATTRIBS.HELP,
+              onClick: () => setIsHelpModalShown(true),
+            },
           ]
         : [
             {
               ...ACTION_BTN_ATTRIBS.CREATE_FLOW,
               onClick: newFlowHandler,
+            },
+            {
+              ...ACTION_BTN_ATTRIBS.HELP,
+              onClick: () => setIsHelpModalShown(true),
             },
           ];
 
@@ -260,7 +274,19 @@ const HomeNerdlet = () => {
     transitionToFlow,
   ]);
 
-  return <div className="container">{currentView}</div>;
+  return (
+    <div className="container">
+      {currentView}
+      {isHelpModalShown && (
+        <HelpModal
+          isModalOpen={isHelpModalShown}
+          setModalOpen={setIsHelpModalShown}
+          about={UI_CONTENT.HELP_MODAL.ABOUT}
+          urls={UI_CONTENT.HELP_MODAL.URLS}
+        />
+      )}
+    </div>
+  );
 };
 
 export default HomeNerdlet;

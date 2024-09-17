@@ -11,6 +11,26 @@ export const UI_CONTENT = {
     BUTTON_LABEL_PREVIEW_EXIT: 'Keep editing',
     BUTTON_LABEL_INLINE_MODE: 'Inline',
     BUTTON_LABEL_STACKED_MODE: 'Stacked',
+    BUTTON_LABEL_HELP: 'Help',
+  },
+  HELP_MODAL: {
+    ABOUT: {
+      appName: 'Pathpoint',
+      blurb: 'Mapping business flow to telemetry signals',
+      moreInfo: {
+        link: 'https://newrelic.com/platform/pathpoint',
+        text: 'Find out more',
+      },
+    },
+    URLS: {
+      docs: 'https://docs.newrelic.com/docs/new-relic-solutions/business-observability/intro-pathpoint/',
+      createIssue:
+        'https://github.com/newrelic/nr-labs-pathpoint/issues/new?labels=bug&template=bug_report.md',
+      createFeature:
+        'https://github.com/newrelic/nr-labs-pathpoint/issues/new?labels=enhancement&template=enhancement.md',
+      createQuestion:
+        'https://github.com/newrelic/nr-labs-pathpoint/discussions',
+    },
   },
   FLOW: {
     BUTTON_EXPORT: 'Export JSON',
