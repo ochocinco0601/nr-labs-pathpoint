@@ -1,3 +1,10 @@
+## [2.0.23](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.22...v2.0.23) (2024-09-17)
+
+
+### Bug Fixes
+
+* add help modal ([48077ea](https://github.com/newrelic/nr-labs-pathpoint/commit/48077ea41b6dc304f25023ffa94de563ff273866))
+
 ## [2.0.22](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.21...v2.0.22) (2024-09-17)
 
 
