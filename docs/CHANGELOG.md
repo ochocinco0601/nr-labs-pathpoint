@@ -1,3 +1,10 @@
+## [2.0.24](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.23...v2.0.24) (2024-09-17)
+
+
+### Bug Fixes
+
+* move level button to bottom of stage ([063b14f](https://github.com/newrelic/nr-labs-pathpoint/commit/063b14f35b36aa80314206bcac62f811c51f17fc))
+
 ## [2.0.23](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.22...v2.0.23) (2024-09-17)
 
 
