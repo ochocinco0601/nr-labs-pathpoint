@@ -94,7 +94,7 @@ export const conditionsAndIncidentsFromResponse = (resp = {}, maxGuids) =>
       if (id) {
         if (!(id in acc.conditionsLookup)) acc.conditionsLookup[id] = {};
         acc.conditionsLookup[id] = Object.keys(alerts).reduce((conds, cond) => {
-          const { enabled, entityGuid, id, name } = alerts[cond];
+          const { enabled, entityGuid, id, name } = alerts[cond] || {};
           return id ? { ...conds, [id]: { enabled, entityGuid, name } } : conds;
         }, {});
         const iia = incidentIdsArray(incidentIds, maxGuids);
