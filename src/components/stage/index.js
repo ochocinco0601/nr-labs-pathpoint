@@ -1,4 +1,11 @@
-import React, { memo, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  memo,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Icon, Tooltip } from 'nr1';
@@ -226,6 +233,28 @@ const Stage = ({
       saveFlow,
     });
 
+  const addLevel = useMemo(
+    () =>
+      levels.length ? (
+        <Button
+          className="button-tertiary-border"
+          variant={Button.VARIANT.TERTIARY}
+          iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE}
+          onClick={addLevelHandler}
+        >
+          Add a level
+        </Button>
+      ) : (
+        <EmptyBlock
+          title={UI_CONTENT.STAGE.NO_LEVELS.TITLE}
+          description={UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
+          actionButtonText="Add a level"
+          onAdd={addLevelHandler}
+        />
+      ),
+    [levels, addLevelHandler]
+  );
+
   const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
 
   const dragStartHandler = (e) => {
@@ -340,21 +369,6 @@ const Stage = ({
                   </span>
                 </Tooltip>
               ) : null}
-              {mode === MODES.EDIT ? (
-                <span className="add-level">
-                  <Button
-                    className="button-tertiary-border"
-                    variant={Button.VARIANT.TERTIARY}
-                    sizeType={Button.SIZE_TYPE.SMALL}
-                    iconType={
-                      Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
-                    }
-                    onClick={addLevelHandler}
-                  >
-                    Add a level
-                  </Button>
-                </span>
-              ) : null}
             </div>
             <div className={`step-groups ${mode}`}>
               {levels
@@ -385,14 +399,7 @@ const Stage = ({
                     saveFlow={saveFlow}
                   />
                 ))}
-              {mode === MODES.EDIT && !levels.length ? (
-                <EmptyBlock
-                  title={UI_CONTENT.STAGE.NO_LEVELS.TITLE}
-                  description={UI_CONTENT.STAGE.NO_LEVELS.DESCRIPTION}
-                  actionButtonText="Add a level"
-                  onAdd={addLevelHandler}
-                />
-              ) : null}
+              {mode === MODES.EDIT ? addLevel : null}
             </div>
           </div>
           {mode === MODES.STACKED ? (
