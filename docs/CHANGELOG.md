@@ -1,3 +1,10 @@
+## [2.0.22](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.21...v2.0.22) (2024-09-17)
+
+
+### Bug Fixes
+
+* remove workload button in signal selection ([e9eba29](https://github.com/newrelic/nr-labs-pathpoint/commit/e9eba29568dcb525efa596df8f23b00ada235a5f))
+
 ## [2.0.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.20...v2.0.21) (2024-09-17)
 
 
