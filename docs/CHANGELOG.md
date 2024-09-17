@@ -1,3 +1,10 @@
+## [2.0.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.20...v2.0.21) (2024-09-17)
+
+
+### Bug Fixes
+
+* missing signal statuses for alerts ([f74f91b](https://github.com/newrelic/nr-labs-pathpoint/commit/f74f91b466bfef2fd40e7b9efceb52806010d496))
+
 ## [2.0.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.19...v2.0.20) (2024-09-13)
 
 
