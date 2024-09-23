@@ -95,6 +95,13 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const [nerdletState, setNerdletState] = useNerdletState();
 
   useEffect(() => {
+    return () => {
+      clearInterval(entitiesStatusTimeoutId.current);
+      clearTimeout(alertsStatusTimeoutId.current);
+    };
+  }, []);
+
+  useEffect(() => {
     statusTimeoutDelay.current = validRefreshInterval(refreshInterval);
   }, [refreshInterval]);
 
@@ -117,7 +124,10 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       const { data: { actor = {} } = {}, error } = await NerdGraphQuery.query({
         query,
       });
-      if (error) return;
+      if (error) {
+        console.error('Error fetching entities:', error.message);
+        return;
+      }
       const entitiesStatusesObj = entitiesDetailsFromQueryResults(actor);
       const { workloads, workloadEntities } = Object.keys(
         entitiesStatusesObj
@@ -205,9 +215,11 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         let query = conditionsDetailsByAccountQuery(alertsByAccounts);
         const {
           data: { actor: { __typename, ...condsResp } = {} } = {}, // eslint-disable-line no-unused-vars
+          error,
         } = await NerdGraphQuery.query({
           query,
         });
+        if (error) console.error('Error fetching alerts:', error.message);
         if (!condsResp) return;
         const { conditionsLookup = {}, acctIncidentIds = {} } =
           conditionsAndIncidentsFromResponse(condsResp, MAX_GUIDS_PER_CALL);
