@@ -1,3 +1,10 @@
+## [2.0.25](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.24...v2.0.25) (2024-09-23)
+
+
+### Bug Fixes
+
+* timeouts linger after unloading stages ([02d5bda](https://github.com/newrelic/nr-labs-pathpoint/commit/02d5bdabd17e20f99de724b3b05aeef0d543ab0d))
+
 ## [2.0.24](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.23...v2.0.24) (2024-09-17)
 
 
