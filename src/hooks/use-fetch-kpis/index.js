@@ -4,7 +4,7 @@ import { useNerdGraphQuery } from 'nr1';
 import { timeRangeToNrql } from '@newrelic/nr-labs-components';
 import { queriesGQL } from '../../queries';
 
-import { removeDateClauseFromNrql } from '../../utils';
+import { removeDateClauseFromNrql, validRefreshInterval } from '../../utils';
 
 const updateQueryTime = (nrqlQuery, timeRange) => {
   const q1 = removeDateClauseFromNrql(nrqlQuery, 'since');
@@ -45,10 +45,22 @@ const kpisFromData = ({ actor = {} } = {}) =>
     return acc;
   }, []);
 
-const useFetchKpis = ({ kpiData = [], timeRange = {} } = {}) => {
+const useFetchKpis = ({
+  kpiData = [],
+  timeRange = {},
+  refreshInterval,
+} = {}) => {
   const [kpis, setKpis] = useState([]);
   const [query, setQuery] = useState(queriesGQL());
-  const { data, error, loading } = useNerdGraphQuery({ query });
+  const [pollInterval, setPollInterval] = useState(
+    validRefreshInterval(refreshInterval)
+  );
+  const { data, error, loading } = useNerdGraphQuery({ query, pollInterval });
+
+  useEffect(
+    () => setPollInterval(validRefreshInterval(refreshInterval)),
+    [refreshInterval]
+  );
 
   useEffect(() => {
     if (kpiData?.length) {
