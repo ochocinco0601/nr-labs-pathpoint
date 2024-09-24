@@ -88,7 +88,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const noAccessGuidsLastState = useRef([]);
   const timeBandDataCache = useRef(new Map());
   const playbackTimeWindow = useRef(null);
-  const statusTimeoutDelay = useRef(refreshInterval);
+  const statusTimeoutDelay = useRef(validRefreshInterval(refreshInterval));
   const entitiesStatusTimeoutId = useRef();
   const alertsStatusTimeoutId = useRef();
   const { openSidebar, closeSidebar } = useSidebar();

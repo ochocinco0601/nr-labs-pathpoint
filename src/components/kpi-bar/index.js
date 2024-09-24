@@ -49,13 +49,17 @@ const metricFromQuery = (results) => ({
 });
 
 const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
-  const { kpis = [] } = useContext(FlowContext);
+  const { kpis = [], refreshInterval } = useContext(FlowContext);
   const { accountId } = useContext(PlatformStateContext);
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
 
   const [timeRange, setTimeRange] = useState(null);
-  const { kpis: qryResults = [] } = useFetchKpis({ kpiData: kpis, timeRange });
+  const { kpis: qryResults = [] } = useFetchKpis({
+    kpiData: kpis,
+    timeRange,
+    refreshInterval,
+  });
   const selectedKpi = useRef({});
   const selectedKpiMode = useRef(KPI_MODES.VIEW);
 
