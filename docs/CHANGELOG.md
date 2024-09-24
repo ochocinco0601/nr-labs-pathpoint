@@ -1,3 +1,10 @@
+## [2.0.26](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.25...v2.0.26) (2024-09-24)
+
+
+### Bug Fixes
+
+* add polling for kpis ([26a2da4](https://github.com/newrelic/nr-labs-pathpoint/commit/26a2da4ffe413d6a9aed84581d66d08f3e0e12b1))
+
 ## [2.0.25](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.24...v2.0.25) (2024-09-23)
 
 
