@@ -211,21 +211,55 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
     async (alertsGuids, timeWindow, isForCache) => {
       clearTimeout(alertsStatusTimeoutId.current);
       const alertsByAccounts = alertsGuids.reduce(alertsTree, {});
-      if (Object.keys(alertsByAccounts).length) {
-        let query = conditionsDetailsByAccountQuery(alertsByAccounts);
-        const {
-          data: { actor: { __typename, ...condsResp } = {} } = {}, // eslint-disable-line no-unused-vars
-          error,
-        } = await NerdGraphQuery.query({
-          query,
-        });
-        if (error) console.error('Error fetching alerts:', error.message);
+      const alertsBlocks = Object.keys(alertsByAccounts);
+      if (alertsBlocks.length) {
+        const alertsResponses = await Promise.allSettled(
+          alertsBlocks.map(async (acctIdWIdx) => {
+            const acctId = acctIdWIdx.split('_')?.[0],
+              condIds = Object.keys(alertsByAccounts[acctIdWIdx]);
+            const query = conditionsDetailsByAccountQuery(
+              acctId,
+              condIds,
+              timeWindow
+            );
+            const {
+              data: {
+                actor: {
+                  [`a${acctId}`]: {
+                    alerts: { __typename, ...alertsResp }, // eslint-disable-line no-unused-vars
+                    nrql: { results: [{ incidentIds = [] }] = [] },
+                  } = {},
+                } = {},
+              } = {},
+              error,
+            } = await NerdGraphQuery.query({
+              query,
+            });
+            if (error) console.error('Error fetching alerts:', error.message);
+            return { id: acctId, alerts: alertsResp, incidentIds };
+          })
+        );
+        const condsResp = alertsResponses.reduce(
+          (acc, { value: { id, alerts, incidentIds } = {} }) => ({
+            ...acc,
+            [id]: {
+              id,
+              ...acc[id],
+              alerts: {
+                ...(acc[id]?.alerts || {}),
+                ...alerts,
+              },
+              incidentIds: [...(acc[id]?.incidentIds || []), ...incidentIds],
+            },
+          }),
+          {}
+        );
         if (!condsResp) return;
         const { conditionsLookup = {}, acctIncidentIds = {} } =
           conditionsAndIncidentsFromResponse(condsResp, MAX_GUIDS_PER_CALL);
         let incidentsObj = {};
         if (Object.keys(acctIncidentIds).length) {
-          query = incidentsByAccountsQuery(acctIncidentIds, timeWindow);
+          const query = incidentsByAccountsQuery(acctIncidentIds, timeWindow);
           const {
             data: { actor: { __typename, ...incidsResp } = {} } = {}, //eslint-disable-line no-unused-vars
           } = await NerdGraphQuery.query({

@@ -35,11 +35,20 @@ export const alertStatus = ({ enabled, inferredPriority } = {}) => {
 };
 
 export const alertsTree = (acc, guid) => {
-  const guidParts = atob(guid).split('|');
-  if (!guidParts?.length === 4) return acc;
-  const { 0: acctId, 3: condId } = guidParts;
-  if (!(acctId in acc)) acc[acctId] = {};
-  acc[acctId][condId] = guid;
+  const [acctId, , , condId] = atob(guid).split('|');
+  if (!acctId || !condId) return acc;
+  let acctIdSuffix = 1,
+    curAcctBlock = `${acctId}_${acctIdSuffix}`;
+  if (!(curAcctBlock in acc)) {
+    acc[curAcctBlock] = {};
+  } else {
+    while (Object.keys(acc[curAcctBlock]).length > 24) {
+      acctIdSuffix += 1;
+      curAcctBlock = `${acctId}_${acctIdSuffix}`;
+      if (!(curAcctBlock in acc)) acc[curAcctBlock] = {};
+    }
+  }
+  acc[curAcctBlock][condId] = guid;
   return acc;
 };
 
@@ -86,11 +95,7 @@ const incidentIdsArray = (incidentIds = [], maxGuids) => {
 export const conditionsAndIncidentsFromResponse = (resp = {}, maxGuids) =>
   Object.keys(resp).reduce(
     (acc, acct) => {
-      const {
-        alerts,
-        id,
-        nrql: { results: [{ incidentIds }] = [{}] } = {},
-      } = resp[acct] || {};
+      const { alerts, id, incidentIds } = resp[acct] || {};
       if (id) {
         if (!(id in acc.conditionsLookup)) acc.conditionsLookup[id] = {};
         acc.conditionsLookup[id] = Object.keys(alerts).reduce((conds, cond) => {
