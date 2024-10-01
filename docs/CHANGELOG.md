@@ -1,3 +1,10 @@
+## [2.0.27](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.26...v2.0.27) (2024-10-01)
+
+
+### Bug Fixes
+
+* batch fetch alert condition status ([a1cbe1b](https://github.com/newrelic/nr-labs-pathpoint/commit/a1cbe1b2ce4f8c13442edf4dc30b6ddfdc456a14))
+
 ## [2.0.26](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.25...v2.0.26) (2024-09-24)
 
 
