@@ -112,30 +112,25 @@ const condsDetailsNrql = (conds = [], timeWindow) =>
 }`
     : '';
 
-const conditionsDetailsByAccountQuery = (accounts = [], timeWindow) => `{
+const conditionsDetailsByAccountQuery = (acct, condIds, timeWindow) => `{
   actor {
-    ${Object.keys(accounts)
-      .map(
-        (acct) => `
-      a${acct}: account(id: ${acct}) {
-        alerts {
-          ${Object.keys(accounts[acct])
-            .map(
-              (condId) => `
-            c${condId}: nrqlCondition(id: ${condId}) {
-              enabled
-              entityGuid
-              id
-              name
-            }`
-            )
-            .join('')}
-        }
-        id
-        ${condsDetailsNrql(Object.keys(accounts[acct]), timeWindow)}
-      }`
-      )
-      .join('')}
+    a${acct}: account(id: ${acct}) {
+      alerts {
+        ${condIds
+          .map(
+            (condId) => `
+          c${condId}: nrqlCondition(id: ${condId}) {
+            enabled
+            entityGuid
+            id
+            name
+          }`
+          )
+          .join('')}
+      }
+      id
+      ${condsDetailsNrql(condIds, timeWindow)}
+    }
   }
 }`;
 
