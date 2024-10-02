@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.0...v2.1.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* add user name as filter ([9aab4fc](https://github.com/newrelic/nr-labs-pathpoint/commit/9aab4fcfe118eb1a6ed0d985e4a9d064b88a1be3))
+
 # [2.1.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.28...v2.1.0) (2024-10-02)
 
 
