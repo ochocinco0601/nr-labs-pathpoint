@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.28...v2.1.0) (2024-10-02)
+
+
+### Features
+
+* v2.1 bundle; updated catalog details and screenshot ([579bf8a](https://github.com/newrelic/nr-labs-pathpoint/commit/579bf8aeefdabc8fb739431f1d898e08827e86d6))
+
 ## [2.0.28](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.27...v2.0.28) (2024-10-02)
 
 
