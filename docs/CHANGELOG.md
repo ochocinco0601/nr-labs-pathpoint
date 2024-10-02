@@ -1,3 +1,10 @@
+## [2.0.28](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.27...v2.0.28) (2024-10-02)
+
+
+### Bug Fixes
+
+* add debug mode; update help modal version and fix issue ([cb27048](https://github.com/newrelic/nr-labs-pathpoint/commit/cb27048c781c43a06b8c1e80a1d5b2e090044f5a))
+
 ## [2.0.27](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.0.26...v2.0.27) (2024-10-01)
 
 
