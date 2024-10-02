@@ -64,7 +64,11 @@ const Flow = forwardRef(
       label: 'Starting playback...',
     });
     const [isPreview, setIsPreview] = useState(false);
-    const { account: { id: accountId } = {}, user } = useContext(AppContext);
+    const {
+      account: { id: accountId } = {},
+      debugMode,
+      user,
+    } = useContext(AppContext);
     const { closeSidebar, openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
     const stagesRef = useRef();
@@ -83,6 +87,14 @@ const Flow = forwardRef(
         flowIdRef.current = flowDoc.id;
       }
     }, [flowDoc]);
+
+    useEffect(() => {
+      if (debugMode) {
+        console.groupCollapsed('flow changed');
+        console.debug(flowDoc);
+        console.groupEnd();
+      }
+    }, [debugMode, flowDoc]);
 
     useEffect(() => {
       if (mode === MODES.EDIT) setIsPlayback(false);

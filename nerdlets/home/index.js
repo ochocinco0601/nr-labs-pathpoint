@@ -58,6 +58,7 @@ const ACTION_BTN_ATTRIBS = {
 const HomeNerdlet = () => {
   const [app, setApp] = useState({});
   const [mode, setMode] = useState(MODES.INLINE);
+  const [debugMode, setDebugMode] = useState(false);
   const [prevNonEditMode, setPrevNonEditMode] = useState(MODES.INLINE);
   const [flows, setFlows] = useState([]);
   const [currentFlowId, setCurrentFlowId] = useState();
@@ -92,10 +93,11 @@ const HomeNerdlet = () => {
           name: accounts.find(({ id }) => id === accountId)?.name,
         },
         accounts: accounts.map(({ id, name }) => ({ id, name })),
+        debugMode,
         maxEntitiesInStep: MAX_ENTITIES_IN_STEP,
         user,
       }),
-    [accountId, accounts, user]
+    [accountId, accounts, user, debugMode]
   );
 
   useEffect(() => {
@@ -111,6 +113,11 @@ const HomeNerdlet = () => {
               ...ACTION_BTN_ATTRIBS.HELP,
               onClick: () => setIsHelpModalShown(true),
             },
+            {
+              type: Button.TYPE.TERTIARY,
+              label: UI_CONTENT.GLOBAL.BUTTON_LABEL_DEBUG[+debugMode],
+              onClick: () => setDebugMode((dm) => !dm),
+            },
           ]
         : [
             {
@@ -120,6 +127,11 @@ const HomeNerdlet = () => {
             {
               ...ACTION_BTN_ATTRIBS.HELP,
               onClick: () => setIsHelpModalShown(true),
+            },
+            {
+              type: Button.TYPE.TERTIARY,
+              label: UI_CONTENT.GLOBAL.BUTTON_LABEL_DEBUG[+debugMode],
+              onClick: () => setDebugMode((dm) => !dm),
             },
           ];
 
@@ -155,7 +167,7 @@ const HomeNerdlet = () => {
       headerTitle: 'Pathpoint',
       timePicker: false,
     });
-  }, [currentFlowId, flows, flowsError, mode]);
+  }, [currentFlowId, flows, flowsError, mode, debugMode]);
 
   useEffect(() => setCurrentFlowId(nerdletState.flow?.id), [nerdletState.flow]);
 
@@ -283,6 +295,7 @@ const HomeNerdlet = () => {
           setModalOpen={setIsHelpModalShown}
           about={UI_CONTENT.HELP_MODAL.ABOUT}
           urls={UI_CONTENT.HELP_MODAL.URLS}
+          ownerBadge={UI_CONTENT.HELP_MODAL.OWNER_BADGE}
         />
       )}
     </div>
