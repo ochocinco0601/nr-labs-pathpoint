@@ -1,7 +1,7 @@
 {
   "tagline": "Pathpoint v2",
   "repository": "https://github.com/newrelic/nr-labs-pathpoint.git",
-  "details": "Mapping business flow to telemetry signals",
+  "details": "Pathpoint is a visualization application that offers a unique approach to business process observability. It models system health in relation to the actual business journey giving you an optimized view of any problems your digital business may experience.\n\nPathpoint allows organizations to easily identify and resolve issues that impact the journey, optimize internal processes, and improve the overall customer experience.",
   "categoryTerms": [],
   "keywords": ["pathpoint", "v2"],
   "support": {
@@ -15,5 +15,5 @@
       "url": "https://discuss.newrelic.com/"
     }
   },
-  "whatsNew": "- Version 2: rewrite of pathpoint"
+  "whatsNew": "- Version 2: rewrite of pathpoint\n- Version 2.1: fixes and updates"
 }
