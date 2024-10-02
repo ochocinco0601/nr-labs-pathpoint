@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.1...v2.1.2) (2024-10-02)
+
+
+### Bug Fixes
+
+* signal table select all ([c599218](https://github.com/newrelic/nr-labs-pathpoint/commit/c59921805e18b6bfa0948cde5f1105a5ed32e3bf))
+
 ## [2.1.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.0...v2.1.1) (2024-10-02)
 
 
