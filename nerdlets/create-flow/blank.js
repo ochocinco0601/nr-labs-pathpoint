@@ -54,6 +54,7 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
         </HeadingText>
       </div>
       <InlineMessage
+        className="account-inline-message"
         label={
           <>
             This flow will be created in <strong>{selectedAccountName}</strong>.

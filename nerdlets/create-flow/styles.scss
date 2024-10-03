@@ -79,7 +79,7 @@
               font-size: 12px;
               font-weight: 600;
               line-height: 16px;
-              
+
               .visually-hidden {
                 position: absolute !important;
                 height: 1px;
@@ -87,7 +87,7 @@
                 overflow: hidden;
                 clip: rect(1px, 1px, 1px, 1px);
               }
-              
+
               input.visually-hidden:is(:focus, :focus-within) + label {
                 outline: thin dotted;
               }
@@ -217,20 +217,7 @@
   }
 }
 
-.account-picker-option {
-  display: flex;
-  gap: 8px;
-
-  span:first-of-type {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  span:last-of-type {
-    color: #6b757b;
-    text-align: right;
-    white-space: pre;
-    width: 8ch;
-  }
+.account-inline-message {
+  width: 100px;
+  white-space: nowrap;
 }

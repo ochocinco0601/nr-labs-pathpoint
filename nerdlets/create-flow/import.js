@@ -125,6 +125,7 @@ const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
       </div>
       <div className="import-form">
         <InlineMessage
+          className="account-inline-message"
           label={
             <>
               This flow will be created in{' '}
