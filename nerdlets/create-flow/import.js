@@ -8,7 +8,7 @@ import { sanitizeKpis, sanitizeStages } from '../../src/utils';
 const fileReader = new FileReader();
 const UPLOADED_FILE_MSG = 'Uploaded file successfully.';
 
-const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
+const ImportFlow = ({ accountId, accountName, onCreate, onCancel }) => {
   const [jsonText, setJsonText] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState();
   const [selectedAccountName, setSelectedAccountName] = useState();
@@ -17,13 +17,9 @@ const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
   const [structureOnly, setStructureOnly] = useState(false);
 
   useEffect(() => {
-    if (!selectedAccountId) {
-      let accountName = (accounts.find((acc) => acc.id === accountId) || {})
-        .name;
-      setSelectedAccountName(accountName);
-      setSelectedAccountId(accountId);
-    }
-  }, [accountId, selectedAccountId]);
+    if (!selectedAccountId) setSelectedAccountId(accountId);
+    if (!selectedAccountName) setSelectedAccountName(accountName);
+  }, [accountId, selectedAccountId, selectedAccountName]);
 
   fileReader.onload = useCallback(({ target: { result: json } = {} } = {}) => {
     if (!json) return;
@@ -215,7 +211,7 @@ const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
 
 ImportFlow.propTypes = {
   accountId: PropTypes.number,
-  accounts: PropTypes.array,
+  accountName: PropTypes.string,
   onCreate: PropTypes.func,
   onCancel: PropTypes.func,
 };

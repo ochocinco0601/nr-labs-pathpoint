@@ -6,7 +6,7 @@ import { Button, HeadingText, InlineMessage, TextField } from 'nr1';
 import { Select } from '../../src/components';
 import { REFRESH_INTERVALS } from '../../src/constants';
 
-const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
+const BlankFlow = ({ accountId, accountName, onCreate, onCancel }) => {
   const [flowName, setFlowName] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState();
   const [selectedAccountName, setSelectedAccountName] = useState();
@@ -15,13 +15,9 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
   );
 
   useEffect(() => {
-    if (!selectedAccountId) {
-      let accountName = (accounts.find((acc) => acc.id === accountId) || {})
-        .name;
-      setSelectedAccountName(accountName);
-      setSelectedAccountId(accountId);
-    }
-  }, [accountId, selectedAccountId]);
+    if (!selectedAccountId) setSelectedAccountId(accountId);
+    if (!selectedAccountName) setSelectedAccountName(accountName);
+  }, [accountId, selectedAccountId, selectedAccountName]);
 
   const createHandler = () => {
     if (!onCreate) return;
@@ -97,7 +93,7 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
 
 BlankFlow.propTypes = {
   accountId: PropTypes.number,
-  accounts: PropTypes.array,
+  accountName: PropTypes.string,
   onCreate: PropTypes.func,
   onCancel: PropTypes.func,
 };

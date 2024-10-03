@@ -21,7 +21,8 @@ const CreateFlowNerdlet = () => {
   const [page, setPage] = useState('start');
   const [{ accountId }] = usePlatformState();
   const { user } = useFetchUser();
-  const { data: accounts = [] } = useAccountsQuery();
+  const { data: accounts } = useAccountsQuery();
+  const accountName = (accounts.find((acc) => acc.id === accountId) || {}).name;
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -74,7 +75,7 @@ const CreateFlowNerdlet = () => {
       return (
         <BlankFlow
           accountId={accountId}
-          accounts={accounts}
+          accountName={accountName}
           onCreate={createHandler}
           onCancel={cancelHandler}
         />
@@ -83,7 +84,7 @@ const CreateFlowNerdlet = () => {
       return (
         <ImportFlow
           accountId={accountId}
-          accounts={accounts}
+          accountName={accountName}
           onCreate={createHandler}
           onCancel={cancelHandler}
         />
