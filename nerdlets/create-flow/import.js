@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, Icon, Radio } from 'nr1';
+import { Button, HeadingText, Icon, InlineMessage, Radio } from 'nr1';
 
-import { Select } from '../../src/components';
 import { sanitizeKpis, sanitizeStages } from '../../src/utils';
 
 const fileReader = new FileReader();
@@ -12,12 +11,18 @@ const UPLOADED_FILE_MSG = 'Uploaded file successfully.';
 const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
   const [jsonText, setJsonText] = useState('');
   const [selectedAccountId, setSelectedAccountId] = useState();
+  const [selectedAccountName, setSelectedAccountName] = useState();
   const [jsonStatusMsg, setJsonStatusMsg] = useState('');
   const [showDragging, setShowDragging] = useState(false);
   const [structureOnly, setStructureOnly] = useState(false);
 
   useEffect(() => {
-    if (!selectedAccountId) setSelectedAccountId(accountId);
+    if (!selectedAccountId) {
+      let accountName = (accounts.find((acc) => acc.id === accountId) || {})
+        .name;
+      setSelectedAccountName(accountName);
+      setSelectedAccountId(accountId);
+    }
   }, [accountId, selectedAccountId]);
 
   fileReader.onload = useCallback(({ target: { result: json } = {} } = {}) => {
@@ -44,30 +49,6 @@ const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
       setJsonStatusMsg('Error reading file!');
     }
   }, []);
-
-  const accountsSelect = useMemo(
-    () =>
-      accounts.reduce(
-        (acc, { id, name }) => {
-          if (selectedAccountId === id) acc.selected = { id, name };
-
-          acc.items.push({
-            id,
-            selected: selectedAccountId === id,
-            option: (
-              <div className="account-picker-option">
-                <span>{name}</span>
-                <span>{id}</span>
-              </div>
-            ),
-          });
-
-          return acc;
-        },
-        { items: [], selected: null }
-      ),
-    [accounts, selectedAccountId]
-  );
 
   const createHandler = () => {
     if (!onCreate) return;
@@ -142,17 +123,18 @@ const ImportFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
           Flow information
         </HeadingText>
       </div>
-
       <div className="import-form">
+        <InlineMessage
+          label={
+            <>
+              This flow will be created in{' '}
+              <strong>{selectedAccountName}</strong>. To change the account,
+              close this overlay and change the account selected in the account
+              dropdown.
+            </>
+          }
+        />
         <div className="field-row">
-          <div className="account-picker">
-            <Select
-              title={accountsSelect.selected?.name}
-              label="Select your account"
-              items={accountsSelect.items}
-              onSelect={({ id }) => setSelectedAccountId(id)}
-            />
-          </div>
           <div className="import-options">
             <div className="import-options-label">Choose to import...</div>
             <div className="import-options-choices">
