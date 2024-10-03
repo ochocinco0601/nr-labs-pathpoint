@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, InlineMessage, TextField } from 'nr1';
@@ -8,16 +8,9 @@ import { REFRESH_INTERVALS } from '../../src/constants';
 
 const BlankFlow = ({ accountId, accountName, onCreate, onCancel }) => {
   const [flowName, setFlowName] = useState('');
-  const [selectedAccountId, setSelectedAccountId] = useState();
-  const [selectedAccountName, setSelectedAccountName] = useState();
   const [selectedRefreshInterval, setSelectedRefreshInterval] = useState(
     REFRESH_INTERVALS[0]
   );
-
-  useEffect(() => {
-    if (!selectedAccountId) setSelectedAccountId(accountId);
-    if (!selectedAccountName) setSelectedAccountName(accountName);
-  }, [accountId, selectedAccountId, selectedAccountName]);
 
   const createHandler = () => {
     if (!onCreate) return;
@@ -27,7 +20,7 @@ const BlankFlow = ({ accountId, accountName, onCreate, onCancel }) => {
       stages: [],
       kpis: [],
     };
-    onCreate(selectedAccountId, doc);
+    onCreate(accountId, doc);
   };
 
   const refreshIntervalItems = useMemo(
@@ -53,8 +46,8 @@ const BlankFlow = ({ accountId, accountName, onCreate, onCancel }) => {
         className="account-inline-message"
         label={
           <>
-            This flow will be created in <strong>{selectedAccountName}</strong>.
-            To change the account, close this overlay and change the account
+            This flow will be created in <strong>{accountName}</strong>. To
+            change the account, close this overlay and change the account
             selected in the account dropdown.
           </>
         }

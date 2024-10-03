@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Icon, InlineMessage, Radio } from 'nr1';
@@ -10,16 +10,9 @@ const UPLOADED_FILE_MSG = 'Uploaded file successfully.';
 
 const ImportFlow = ({ accountId, accountName, onCreate, onCancel }) => {
   const [jsonText, setJsonText] = useState('');
-  const [selectedAccountId, setSelectedAccountId] = useState();
-  const [selectedAccountName, setSelectedAccountName] = useState();
   const [jsonStatusMsg, setJsonStatusMsg] = useState('');
   const [showDragging, setShowDragging] = useState(false);
   const [structureOnly, setStructureOnly] = useState(false);
-
-  useEffect(() => {
-    if (!selectedAccountId) setSelectedAccountId(accountId);
-    if (!selectedAccountName) setSelectedAccountName(accountName);
-  }, [accountId, selectedAccountId, selectedAccountName]);
 
   fileReader.onload = useCallback(({ target: { result: json } = {} } = {}) => {
     if (!json) return;
@@ -75,7 +68,7 @@ const ImportFlow = ({ accountId, accountName, onCreate, onCancel }) => {
         stages,
         kpis,
       };
-      onCreate(selectedAccountId, doc);
+      onCreate(accountId, doc);
     } else {
       setJsonStatusMsg('Unable to parse JSON!');
     }
@@ -124,10 +117,9 @@ const ImportFlow = ({ accountId, accountName, onCreate, onCancel }) => {
           className="account-inline-message"
           label={
             <>
-              This flow will be created in{' '}
-              <strong>{selectedAccountName}</strong>. To change the account,
-              close this overlay and change the account selected in the account
-              dropdown.
+              This flow will be created in <strong>{accountName}</strong>. To
+              change the account, close this overlay and change the account
+              selected in the account dropdown.
             </>
           }
         />

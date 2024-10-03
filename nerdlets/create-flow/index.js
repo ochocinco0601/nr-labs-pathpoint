@@ -19,10 +19,18 @@ import ImportFlow from './import';
 
 const CreateFlowNerdlet = () => {
   const [page, setPage] = useState('start');
+  const [accountName, setAccountName] = useState();
   const [{ accountId }] = usePlatformState();
   const { user } = useFetchUser();
   const { data: accounts } = useAccountsQuery();
-  const accountName = (accounts.find((acc) => acc.id === accountId) || {}).name;
+
+  useEffect(() => {
+    if (!accountName) {
+      const acctName = (accounts.find((acc) => acc.id === accountId) || {})
+        .name;
+      setAccountName(acctName);
+    }
+  }, [accountId, accounts]);
 
   useEffect(() => {
     nerdlet.setConfig({
