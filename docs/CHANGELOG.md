@@ -1,3 +1,14 @@
+## [2.1.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.2...v2.1.3) (2024-10-04)
+
+
+### Bug Fixes
+
+* flow creation default account to flow list account picker ([506c052](https://github.com/newrelic/nr-labs-pathpoint/commit/506c05228f5c750b8d7d644c5c86b8dd799496b5))
+* inline message styling ([96adf1a](https://github.com/newrelic/nr-labs-pathpoint/commit/96adf1adbf9a94e04fd123ccfb8c1b013688efe3))
+* move accountName to index.js ([ef6f8eb](https://github.com/newrelic/nr-labs-pathpoint/commit/ef6f8ebf836d5226ccbefb14e0fd2b9533793617))
+* move useEffect to parent index ([add710c](https://github.com/newrelic/nr-labs-pathpoint/commit/add710c98d7568b6c17ed247b644f7c139f24a0f))
+* remove unnecessary state check ([f46918a](https://github.com/newrelic/nr-labs-pathpoint/commit/f46918a6b1a4f7858c367ad443f661d4bd15679f))
+
 ## [2.1.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.1...v2.1.2) (2024-10-02)
 
 
