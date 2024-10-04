@@ -1,3 +1,10 @@
+## [2.1.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.4...v2.1.5) (2024-10-04)
+
+
+### Bug Fixes
+
+* log JSON as string in debug mode ([663c1c8](https://github.com/newrelic/nr-labs-pathpoint/commit/663c1c8d17f748617c164f34083393a41048d4e0))
+
 ## [2.1.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.3...v2.1.4) (2024-10-04)
 
 
