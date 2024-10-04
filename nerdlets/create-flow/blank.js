@@ -1,44 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, TextField } from 'nr1';
+import { Button, HeadingText, InlineMessage, TextField } from 'nr1';
 
 import { Select } from '../../src/components';
 import { REFRESH_INTERVALS } from '../../src/constants';
 
-const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
+const BlankFlow = ({ accountId, accountName, onCreate, onCancel }) => {
   const [flowName, setFlowName] = useState('');
-  const [selectedAccountId, setSelectedAccountId] = useState();
   const [selectedRefreshInterval, setSelectedRefreshInterval] = useState(
     REFRESH_INTERVALS[0]
-  );
-
-  useEffect(() => {
-    if (!selectedAccountId) setSelectedAccountId(accountId);
-  }, [accountId, selectedAccountId]);
-
-  const accountsSelect = useMemo(
-    () =>
-      accounts.reduce(
-        (acc, { id, name }) => {
-          if (selectedAccountId === id) acc.selected = { id, name };
-
-          acc.items.push({
-            id,
-            selected: selectedAccountId === id,
-            option: (
-              <div className="account-picker-option">
-                <span>{name}</span>
-                <span>{id}</span>
-              </div>
-            ),
-          });
-
-          return acc;
-        },
-        { items: [], selected: null }
-      ),
-    [accounts, selectedAccountId]
   );
 
   const createHandler = () => {
@@ -49,7 +20,7 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
       stages: [],
       kpis: [],
     };
-    onCreate(selectedAccountId, doc);
+    onCreate(accountId, doc);
   };
 
   const refreshIntervalItems = useMemo(
@@ -71,15 +42,16 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
           Flow information
         </HeadingText>
       </div>
-
-      <div className="account-picker">
-        <Select
-          title={accountsSelect.selected?.name}
-          label="Select your account"
-          items={accountsSelect.items}
-          onSelect={({ id }) => setSelectedAccountId(id)}
-        />
-      </div>
+      <InlineMessage
+        className="account-inline-message"
+        label={
+          <>
+            This flow will be created in <strong>{accountName}</strong>. To
+            change the account, close this overlay and change the account
+            selected in the account dropdown.
+          </>
+        }
+      />
       <TextField
         label="Flow name"
         placeholder="Untitled"
@@ -114,7 +86,7 @@ const BlankFlow = ({ accountId, accounts = [], onCreate, onCancel }) => {
 
 BlankFlow.propTypes = {
   accountId: PropTypes.number,
-  accounts: PropTypes.array,
+  accountName: PropTypes.string,
   onCreate: PropTypes.func,
   onCancel: PropTypes.func,
 };
