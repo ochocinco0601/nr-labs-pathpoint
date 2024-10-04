@@ -25,11 +25,8 @@ const CreateFlowNerdlet = () => {
   const { data: accounts } = useAccountsQuery();
 
   useEffect(() => {
-    if (!accountName) {
-      const acctName = (accounts.find((acc) => acc.id === accountId) || {})
-        .name;
-      setAccountName(acctName);
-    }
+    const acctName = (accounts.find((acc) => acc.id === accountId) || {}).name;
+    setAccountName(acctName);
   }, [accountId, accounts]);
 
   useEffect(() => {
