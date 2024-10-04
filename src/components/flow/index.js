@@ -90,9 +90,14 @@ const Flow = forwardRef(
 
     useEffect(() => {
       if (debugMode) {
-        console.groupCollapsed('flow changed');
-        console.debug(flowDoc);
-        console.groupEnd();
+        try {
+          const flowJsonString = JSON.stringify(flowDoc);
+          console.groupCollapsed('flow changed');
+          console.debug(flowJsonString);
+          console.groupEnd();
+        } catch (e) {
+          console.error('Error: Unable to convert flow to JSON string');
+        }
       }
     }, [debugMode, flowDoc]);
 
