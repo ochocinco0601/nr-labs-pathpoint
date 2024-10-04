@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.3...v2.1.4) (2024-10-04)
+
+
+### Bug Fixes
+
+* add open source verbiage in help modal ([d8c4585](https://github.com/newrelic/nr-labs-pathpoint/commit/d8c4585d0c7da6c8df6bc452f3ea1fc0508bb8ac))
+
 ## [2.1.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.2...v2.1.3) (2024-10-04)
 
 
