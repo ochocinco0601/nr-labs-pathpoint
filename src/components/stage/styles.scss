@@ -73,6 +73,10 @@
       clip-path: polygon(90% 0, 100% 50%, 90% 100%, 0% 100%, 10% 50%, 0% 0%);
       border-radius: 0;
     }
+
+    &.dash {
+      cursor: pointer;
+    }
   }
 
   .body {
@@ -136,7 +140,7 @@
         overflow-y: auto;
       }
     }
-    
+
     .signals {
       display: flex;
       flex-direction: column;

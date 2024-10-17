@@ -6,13 +6,14 @@ import { EditInPlace } from '@newrelic/nr-labs-components';
 
 import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
-import ChangeShapeModal from '../change-shape-modal';
+import StageSettingsModal from '../stage-settings-modal';
 import { MODES, STATUSES, UI_CONTENT } from '../../constants';
 import { stageHeaderShapeClassName } from '../../utils';
 
 const StageHeader = ({
   name,
   related = {},
+  dash,
   status = STATUSES.UNKNOWN,
   onUpdate,
   onDelete,
@@ -20,9 +21,10 @@ const StageHeader = ({
   onDragHandle,
 }) => {
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
-  const [shapeModalHidden, setShapeModalHidden] = useState(true);
+  const [settingsModalHidden, setSettingsModalHidden] = useState(true);
 
   const shape = useMemo(() => stageHeaderShapeClassName(related), [related]);
+  const dashClass = useMemo(() => (dash === '' ? '' : 'dash'), [dash]);
 
   const linkClickHandler = useCallback((e, type) => {
     e.preventDefault();
@@ -30,8 +32,8 @@ const StageHeader = ({
 
     if (type === 'delete') {
       setDeleteModalHidden(false);
-    } else if (type === 'shape') {
-      setShapeModalHidden(false);
+    } else if (type === 'settings') {
+      setSettingsModalHidden(false);
     }
   }, []);
 
@@ -43,6 +45,12 @@ const StageHeader = ({
     },
     [name, onUpdate]
   );
+
+  const handleStageClick = () => {
+    if (dash !== '') {
+      window.open(dash, '_blank');
+    }
+  };
 
   return mode === MODES.EDIT ? (
     <div className={`stage-header edit ${shape}`}>
@@ -66,14 +74,14 @@ const StageHeader = ({
           </PopoverTrigger>
           <PopoverBody placementType={PopoverBody.PLACEMENT_TYPE.BOTTOM_END}>
             <div className="dropdown-links">
+              <div className="dropdown-link">
+                <a href="#" onClick={(e) => linkClickHandler(e, 'settings')}>
+                  Settings
+                </a>
+              </div>
               <div className="dropdown-link destructive">
                 <a href="#" onClick={(e) => linkClickHandler(e, 'delete')}>
                   Delete stage
-                </a>
-              </div>
-              <div className="dropdown-link">
-                <a href="#" onClick={(e) => linkClickHandler(e, 'shape')}>
-                  Change shape
                 </a>
               </div>
             </div>
@@ -87,15 +95,21 @@ const StageHeader = ({
         onConfirm={onDelete}
         onClose={() => setDeleteModalHidden(true)}
       />
-      <ChangeShapeModal
+      <StageSettingsModal
+        name={name}
+        dash={dash}
         related={related}
-        hidden={shapeModalHidden}
+        hidden={settingsModalHidden}
         onChange={onUpdate}
-        onClose={() => setShapeModalHidden(true)}
+        onConfirm={onDelete}
+        onClose={() => setSettingsModalHidden(true)}
       />
     </div>
   ) : (
-    <div className={`stage-header ${status} ${shape}`}>
+    <div
+      onClick={handleStageClick}
+      className={`stage-header ${status} ${shape} ${dashClass}`}
+    >
       <HeadingText className="name">{name}</HeadingText>
     </div>
   );
@@ -107,6 +121,7 @@ StageHeader.propTypes = {
     target: PropTypes.bool,
     source: PropTypes.bool,
   }),
+  dash: PropTypes.string,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
