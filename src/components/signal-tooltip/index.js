@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -11,89 +11,89 @@ import {
 } from 'nr1';
 
 import { latestStatusForAlertConditions, statusFromGuid } from '../../queries';
-import { ALERT_SEVERITY, SIGNAL_TOOLTIP, SIGNAL_TYPES } from '../../constants';
+import { ALERT_SEVERITY, UI_CONTENT, SIGNAL_TYPES } from '../../constants';
 
 const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
   const [data, setData] = useState(null);
   const [alertData, setAlertData] = useState(null);
 
   useEffect(() => {
+    const fetchAndSetSignalData = async (entityGuid) => {
+      const query = statusFromGuid(entityGuid);
+
+      const resp = await NerdGraphQuery.query({ query });
+      if (resp.error) {
+        console.error(`Error fetching entity: `, resp.error);
+        return;
+      }
+      setData(resp.data?.actor?.entity);
+    };
+
+    const fetchAndSetAlertData = async () => {
+      const guidDetail = atob(`${entityGuid}`).split('|');
+      const query = latestStatusForAlertConditions([`${guidDetail[3]}`]);
+      const resp = await NrqlQuery.query({
+        query,
+        accountIds: [parseInt(guidDetail[0])],
+      });
+
+      if (resp.error) {
+        console.error(`Error fetching alert condition: `, resp.error);
+        return;
+      }
+
+      if (resp.data.length > 0) {
+        setAlertData(resp.data[0]?.data);
+      }
+    };
+
     if (entityGuid) {
       fetchAndSetSignalData(entityGuid);
     }
     if (signalType == SIGNAL_TYPES.ALERT) {
       fetchAndSetAlertData();
     }
-  }, [entityGuid]);
+  }, [entityGuid, signalType]);
 
-  const fetchAndSetSignalData = async (entityGuid) => {
-    const query = statusFromGuid(entityGuid);
+  const renderStatus = useMemo(() => {
+    if (signalType === SIGNAL_TYPES.ENTITY && data) {
+      if (data.type === 'WORKLOAD') {
+        if (data.alertSeverity === ALERT_SEVERITY.NOT_CONFIGURED) {
+          return UI_CONTENT.SIGNAL.TOOLTIP.WORKLOAD_UNKNOWN;
+        }
 
-    const resp = await NerdGraphQuery.query({ query });
-    if (resp.error) {
-      console.error(`Error fetching entity: `, resp.error);
-      return;
-    }
-    setData(resp.data?.actor?.entity);
-  };
+        if (
+          data.alertSeverity === ALERT_SEVERITY.CRITICAL ||
+          data.alertSeverity === ALERT_SEVERITY.WARNING
+        ) {
+          return UI_CONTENT.SIGNAL.TOOLTIP.WORKLOAD_DISRUPTED;
+        }
 
-  const fetchAndSetAlertData = async () => {
-    const guidDetail = atob(`${entityGuid}`).split('|');
-    const query = latestStatusForAlertConditions([`${guidDetail[3]}`]);
-    const resp = await NrqlQuery.query({
-      query,
-      accountIds: [parseInt(guidDetail[0])],
-    });
-
-    if (resp.error) {
-      console.error(`Error fetching alert condition: `, resp.error);
-      return;
-    }
-
-    if (resp.data.length > 0) {
-      setAlertData(resp.data[0]?.data);
-    }
-  };
-
-  const renderEntityStatus = () => {
-    if (data.type === 'WORKLOAD') {
-      if (data.alertSeverity === ALERT_SEVERITY.NOT_CONFIGURED) {
-        return SIGNAL_TOOLTIP.WORKLOAD_UNKNOWN;
+        return UI_CONTENT.SIGNAL.TOOLTIP.WORKLOAD_OPERATIONAL;
       }
 
-      if (
-        data.alertSeverity === ALERT_SEVERITY.CRITICAL ||
-        data.alertSeverity === ALERT_SEVERITY.WARNING
-      ) {
-        return SIGNAL_TOOLTIP.WORKLOAD_DISRUPTED;
+      if (data.alertSeverity == ALERT_SEVERITY.NOT_CONFIGURED) {
+        return UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_UNKNOWN;
       }
 
-      return SIGNAL_TOOLTIP.WORKLOAD_OPERATIONAL;
-    }
-
-    if (data.alertSeverity == ALERT_SEVERITY.NOT_CONFIGURED) {
-      return SIGNAL_TOOLTIP.SIGNAL_UNKNOWN;
-    }
-
-    if (data.recentAlertViolations.length > 0) {
-      let openOnlyViolations = data.recentAlertViolations.filter(
-        (a) => a.closedAt == null
-      );
-      if (openOnlyViolations.length > 0) {
-        return `${openOnlyViolations.length} ${SIGNAL_TOOLTIP.SIGNAL_DISRUPTED}`;
+      if (data.recentAlertViolations.length > 0) {
+        let openOnlyViolations = data.recentAlertViolations.filter(
+          (a) => a.closedAt == null
+        );
+        if (openOnlyViolations.length > 0) {
+          return `${openOnlyViolations.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
+        }
       }
+
+      return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
+    } else {
+      if (alertData && alertData.length > 0) {
+        return `${alertData.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
+      }
+
+      return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
     }
-
-    return SIGNAL_TOOLTIP.DEFAULT;
-  };
-
-  const renderAlertStatus = () => {
-    if (alertData && alertData.length > 0) {
-      return `${alertData.length} ${SIGNAL_TOOLTIP.SIGNAL_DISRUPTED}`;
-    }
-
-    return SIGNAL_TOOLTIP.DEFAULT;
-  };
+  }, [data, alertData]);
 
   return (
     <Popover openOnHover>
@@ -132,11 +132,7 @@ const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
                 </span>
               </p>
             </div>
-            <div className="EntityTooltipContent">
-              {signalType === SIGNAL_TYPES.ENTITY
-                ? renderEntityStatus()
-                : renderAlertStatus()}
-            </div>
+            <div className="EntityTooltipContent">{renderStatus}</div>
           </div>
         )}
       </PopoverBody>

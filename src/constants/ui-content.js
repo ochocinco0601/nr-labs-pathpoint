@@ -100,6 +100,14 @@ export const UI_CONTENT = {
       LATEST_RECENT_INCIDENT:
         'No open incidents. Showing the most recent incident.',
     },
+    TOOLTIP: {
+      WORKLOAD_UNKNOWN: 'The status of this workload is unknown',
+      WORKLOAD_DISRUPTED: 'The workload is disrupted',
+      WORKLOAD_OPERATIONAL: 'The workload is operational',
+      SIGNAL_UNKNOWN: 'No alert conditions set up',
+      SIGNAL_DISRUPTED: ' incident(s) in progress',
+      DEFAULT: 'No alerts in progress',
+    },
   },
   KPI_BAR: {
     TITLE: 'Flow KPIs',
