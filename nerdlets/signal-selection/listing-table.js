@@ -1,17 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  AutoSizer,
-  DataTable,
-  DataTableHeader,
-  DataTableHeaderCell,
-  DataTableBody,
-  DataTableRow,
-  DataTableRowCell,
-  EmptyState,
-} from 'nr1';
+import { AutoSizer, EmptyState } from 'nr1';
 import { SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
+import TableWrapper from './table-wrapper';
 
 const emptyState = (hasNoSignals) =>
   hasNoSignals ? (
@@ -31,80 +23,33 @@ const emptyState = (hasNoSignals) =>
     />
   );
 
-const entitiesTableHeader = (
-  <DataTableHeader>
-    <DataTableHeaderCell name="name" value="name">
-      Name
-    </DataTableHeaderCell>
-    <DataTableHeaderCell name="type" value="type">
-      Entity type
-    </DataTableHeaderCell>
-  </DataTableHeader>
-);
-
-const alertsTableHeader = (
-  <DataTableHeader>
-    <DataTableHeaderCell name="condition" value="name">
-      Condition
-    </DataTableHeaderCell>
-    <DataTableHeaderCell name="policy" value="policyName">
-      Policy
-    </DataTableHeaderCell>
-  </DataTableHeader>
-);
-
 const ListingTable = ({
   type,
   entities = [],
-  alerts = [],
-  selectedEntities = [],
-  selectedAlerts = [],
+  selectedItems = [],
   rowCount,
   onLoadMore,
-  onLoadMoreAlerts,
   onSelect,
   isLoading,
 }) => {
-  const [tableSettings, setTableSettings] = useState({});
-  const [tableHeader, setTableHeader] = useState(null);
   const [selection, setSelection] = useState({});
   const selectionsSet = useRef();
 
   useEffect(() => {
-    let selectedItems, sel;
-    if (type === SIGNAL_TYPES.ENTITY) selectedItems = selectedEntities;
-    if (type === SIGNAL_TYPES.ALERT) selectedItems = selectedAlerts;
     const selectionLookup = selectedItems.reduce(
       (acc, { guid }) => ({ ...acc, [guid]: true }),
       {}
     );
-    const selectionReducer = (acc, { guid }, idx) =>
-      selectionLookup[guid] ? { ...acc, [idx]: true } : acc;
-    if (type === SIGNAL_TYPES.ENTITY) {
-      sel = entities.reduce(selectionReducer, {});
-      setTableSettings({
-        ariaLabel: 'Entities',
-        items: entities,
-        itemCount: rowCount,
-        onLoadMoreItems: onLoadMore,
-      });
-      setTableHeader(entitiesTableHeader);
-    }
-    if (type === SIGNAL_TYPES.ALERT) {
-      sel = alerts.reduce(selectionReducer, {});
-      setTableSettings({
-        ariaLabel: 'Alert conditions',
-        items: alerts,
-        itemCount: rowCount,
-        onLoadMoreItems: onLoadMoreAlerts,
-      });
-      setTableHeader(alertsTableHeader);
-    }
+    const sel = entities.reduce(
+      (acc, { guid }, idx) =>
+        selectionLookup[guid] ? { ...acc, [idx]: true } : acc,
+      {}
+    );
     if (sel) {
       setSelection(sel);
       selectionsSet.current = new Set(Object.keys(sel));
     }
-  }, [type, entities, alerts, selectedEntities, selectedAlerts]);
+  }, [entities, selectedItems]);
 
   const itemSelectionHandler = useCallback(
     (sel) => {
@@ -112,9 +57,7 @@ const ListingTable = ({
       const added = curSelectionsSet.difference(selectionsSet.current);
       const removed = selectionsSet.current.difference(curSelectionsSet);
       selectionsSet.current = curSelectionsSet;
-      let items = [];
-      if (type === SIGNAL_TYPES.ENTITY) items = entities;
-      if (type === SIGNAL_TYPES.ALERT) items = alerts;
+      const items = entities;
       if (added.size === 1) {
         onSelect?.(type, true, items[added.keys().next().value]);
       } else if (removed.size === 1) {
@@ -130,35 +73,23 @@ const ListingTable = ({
         });
       }
     },
-    [type, entities, alerts, onSelect]
+    [type, entities, onSelect]
   );
 
-  if (isLoading) return emptyState();
-
-  return (type === SIGNAL_TYPES.ALERT && !alerts.length) ||
-    (type === SIGNAL_TYPES.ENTITY && !entities.length) ? (
+  return !entities.length && !isLoading ? (
     emptyState(true)
   ) : (
     <div className="data-table">
       <AutoSizer>
         {({ height }) => (
-          <DataTable
-            {...tableSettings}
+          <TableWrapper
+            entities={entities}
+            rowCount={rowCount}
+            onLoadMore={onLoadMore}
             height={height}
-            selectionType={DataTable.SELECTION_TYPE.MULTIPLE}
             selection={selection}
-            onSelectionChange={itemSelectionHandler}
-          >
-            {tableHeader}
-            <DataTableBody>
-              {() => (
-                <DataTableRow>
-                  <DataTableRowCell />
-                  <DataTableRowCell />
-                </DataTableRow>
-              )}
-            </DataTableBody>
-          </DataTable>
+            itemSelectionHandler={itemSelectionHandler}
+          />
         )}
       </AutoSizer>
     </div>
@@ -168,12 +99,9 @@ const ListingTable = ({
 ListingTable.propTypes = {
   type: PropTypes.oneOf([SIGNAL_TYPES.ALERT, SIGNAL_TYPES.ENTITY]),
   entities: PropTypes.array,
-  alerts: PropTypes.array,
-  selectedEntities: PropTypes.array,
-  selectedAlerts: PropTypes.array,
+  selectedItems: PropTypes.array,
   rowCount: PropTypes.number,
   onLoadMore: PropTypes.func,
-  onLoadMoreAlerts: PropTypes.func,
   onSelect: PropTypes.func,
   isLoading: PropTypes.bool,
 };

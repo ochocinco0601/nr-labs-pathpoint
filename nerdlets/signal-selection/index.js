@@ -7,9 +7,10 @@ import React, {
 } from 'react';
 
 import {
-  NerdGraphQuery,
   navigation,
   nerdlet,
+  useEntitiesByDomainTypeQuery,
+  useEntitySearchQuery,
   useNerdletState,
   usePlatformState,
 } from 'nr1';
@@ -19,10 +20,14 @@ import Header from './header';
 import TabBar from './tab-bar';
 import Filters from './filters';
 import Footer from './footer';
-import useFetchSignals from './use-fetch-signals';
 import useEntitiesTypesList from './use-entities-types-list';
-import { entitiesByDomainTypeAccountQuery } from '../../src/queries';
-import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
+import {
+  CONDITION_DOMAIN_TYPE,
+  MODES,
+  POLICY_DOMAIN_TYPE,
+  SIGNAL_TYPES,
+  UI_CONTENT,
+} from '../../src/constants';
 
 const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
   const idx = arr.findIndex(({ guid }) => guid === item.guid);
@@ -31,34 +36,70 @@ const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
   return idx < 0 ? [...arr, item] : [...arr];
 };
 
-const nameFilter = (items, searchText) =>
-  items.filter(({ name = '' }) =>
-    name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
-  );
+const entitySearchFilters = (accountId, { domain, type } = {}, name, tag) => {
+  let filters = accountId ? `accountId = ${accountId}` : '';
+  if (domain) filters += `${filters.length ? ' AND ' : ''}domain = '${domain}'`;
+  if (type) filters += `${filters.length ? ' AND ' : ''}type = '${type}'`;
+  if (name) filters += `${filters.length ? ' AND ' : ''}name like '%${name}%'`;
+  if (tag)
+    filters += `${filters.length ? ' AND ' : ''}\`tags.${tag.key}\` = '${
+      tag.value
+    }'`;
+  return filters;
+};
+
+const idFromGuid = (guid) => atob(guid).split('|')[3];
 
 const SignalSelectionNerdlet = () => {
   const [currentTab, setCurrentTab] = useState(SIGNAL_TYPES.ENTITY);
   const [acctId, setAcctId] = useState();
   const [selectedEntityType, setSelectedEntityType] = useState();
-  const [entities, setEntities] = useState([]);
   const [selectedEntities, setSelectedEntities] = useState([]);
-  const [filteredEntities, setFilteredEntities] = useState([]);
-  const [alertCount, setAlertCount] = useState(0);
-  const [alerts, setAlerts] = useState([]);
+  const [selectedPolicy, setSelectedPolicy] = useState();
   const [selectedAlerts, setSelectedAlerts] = useState([]);
-  const [filteredAlerts, setFilteredAlerts] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [lazyLoadingProps, setLazyLoadingProps] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [entitySearchName, setEntitySearchName] = useState('');
   const [{ accountId }] = usePlatformState();
   const [{ flowId, levelId, levelOrder, stageId, stageName, step }] =
     useNerdletState();
   const { entitiesCount, entitiesTypesList } = useEntitiesTypesList({
     accountId: acctId,
   });
-  const { fetchAlerts } = useFetchSignals();
-  const fetchEntitiesNextCursor = useRef(null);
-  const conditionsNextCursor = useRef(null);
+  const lastSelectedDomainType = useRef(null);
+  const searchTimeoutId = useRef(null);
+  const acctPolicies = useRef({});
+  const {
+    data: { count: rowCount = 0, entities = [] } = {},
+    error: entitySearchError,
+    fetchMore,
+    loading: entitySearchLoading,
+  } = useEntitySearchQuery({
+    filters: entitySearchFilters(
+      acctId,
+      selectedEntityType,
+      entitySearchName,
+      currentTab === SIGNAL_TYPES.ALERT &&
+        selectedPolicy && {
+          key: 'policyId',
+          value: idFromGuid(selectedPolicy.guid),
+        }
+    ),
+    includeTags: true,
+  });
+  const { data: { count: alertCount = 0 } = {}, error: alertCountError } =
+    useEntitySearchQuery({
+      filters: entitySearchFilters(acctId, CONDITION_DOMAIN_TYPE),
+      includeCount: true,
+      includeResults: false,
+    });
+  const {
+    data: { entities: policiesData = [] } = {},
+    error: policiesError,
+    fetchMore: policiesFetchMore,
+  } = useEntitiesByDomainTypeQuery({
+    ...POLICY_DOMAIN_TYPE,
+    filters: acctId ? `accountId = ${acctId}` : '',
+  });
 
   useEffect(() => {
     nerdlet.setConfig({
@@ -67,6 +108,30 @@ const SignalSelectionNerdlet = () => {
   }, []);
 
   useEffect(() => setAcctId(accountId), [accountId]);
+
+  useEffect(() => {
+    acctPolicies.current = policiesData.reduce(
+      (acc, { guid, name }) => ({ ...acc, [idFromGuid(guid)]: name }),
+      {}
+    );
+  }, [policiesData]);
+
+  useEffect(() => policiesFetchMore?.(), [policiesFetchMore]);
+
+  useEffect(() => {
+    if (alertCountError)
+      console.log('Error fetching alerts count', alertCountError);
+  }, [alertCountError]);
+
+  useEffect(() => {
+    if (entitySearchError)
+      console.error('Error fetching entities/conditions', entitySearchError);
+  }, [entitySearchError]);
+
+  useEffect(() => {
+    if (policiesError)
+      console.error('Error fetching policies list', policiesError);
+  }, [policiesError]);
 
   useEffect(() => {
     if (!step?.signals?.length) return;
@@ -91,145 +156,34 @@ const SignalSelectionNerdlet = () => {
   }, [step]);
 
   useEffect(() => {
-    const getAlertsCount = async (id, countOnly) => {
-      const { data } = await fetchAlerts({ id, countOnly });
-      setAlertCount(data?.totalCount || 0);
-    };
-
-    if (acctId) getAlertsCount(acctId, true).catch(console.error);
-  }, [acctId, fetchAlerts]);
-
-  useEffect(() => {
-    const getEntities = async (id) => {
-      setIsLoading(true);
-      const {
-        data: {
-          actor: {
-            entitySearch: {
-              results: { entities: e = [], nextCursor } = {},
-            } = {},
-          } = {},
-        } = {},
-      } = await NerdGraphQuery.query({
-        query: entitiesByDomainTypeAccountQuery(selectedEntityType, id),
-        variables: { cursor: null },
-      });
-      setIsLoading(false);
-      setEntities(() => (e && e.length ? e : []));
-      fetchEntitiesNextCursor.current = nextCursor;
-    };
-
-    const getAlerts = async (id) => {
-      setIsLoading(true);
-      const { data: { alertConditions = [], nextCursor } = {} } =
-        await fetchAlerts({
-          id,
-        });
-      conditionsNextCursor.current = nextCursor;
-      setIsLoading(false);
-      setAlerts(() => alertConditions || []);
-    };
-
     if (currentTab === SIGNAL_TYPES.ENTITY) {
-      if (entitiesCount && selectedEntityType) {
-        getEntities(acctId).catch(console.error);
-      } else {
-        setEntities(() => []);
-      }
+      setSelectedEntityType(
+        lastSelectedDomainType.current || entitiesTypesList?.[0]
+      );
     } else if (currentTab === SIGNAL_TYPES.ALERT) {
-      if (acctId && alertCount) {
-        getAlerts(acctId).catch(console.error);
-      } else {
-        setAlerts(() => []);
-      }
-    }
-  }, [currentTab, acctId, selectedEntityType, alertCount, fetchAlerts]);
-
-  useEffect(() => {
-    setSelectedEntityType((et) =>
-      entitiesTypesList?.length ? entitiesTypesList[0] : et
-    );
-    setEntities([]);
-    setAlerts([]);
-  }, [entitiesTypesList]);
-
-  useEffect(() => {
-    let rowCount = 0;
-    if (currentTab === SIGNAL_TYPES.ENTITY) {
-      rowCount = selectedEntityType?.count;
-    } else if (currentTab === SIGNAL_TYPES.ALERT) {
-      rowCount = alertCount;
-    }
-    if (searchText) {
-      setFilteredAlerts(nameFilter(alerts, searchText));
-      setFilteredEntities(nameFilter(entities, searchText));
-      setLazyLoadingProps({});
-    } else {
-      setFilteredAlerts(alerts);
-      setFilteredEntities(entities);
-      setLazyLoadingProps({
-        rowCount,
-        onLoadMore,
-        onLoadMoreAlerts,
+      setSelectedEntityType((et) => {
+        lastSelectedDomainType.current = et;
+        return CONDITION_DOMAIN_TYPE;
       });
     }
-  }, [
-    currentTab,
-    alerts,
-    entities,
-    searchText,
-    selectedEntityType,
-    alertCount,
-    onLoadMore,
-    onLoadMoreAlerts,
-  ]);
+  }, [currentTab, entitiesTypesList]);
 
-  const onLoadMore = useCallback(async () => {
-    const {
-      data: {
-        actor: {
-          entitySearch: { results: { entities: e = [], nextCursor } = {} } = {},
-        } = {},
-      } = {},
-    } = await NerdGraphQuery.query({
-      query: entitiesByDomainTypeAccountQuery(selectedEntityType, acctId),
-      variables: { cursor: fetchEntitiesNextCursor.current },
-    });
-    setEntities((ent) =>
-      e?.length
-        ? [
-            ...ent,
-            ...e.filter(({ guid }) => !ent.some((en) => en.guid === guid)),
-          ]
-        : ent
+  useEffect(async () => {
+    clearTimeout(searchTimeoutId.current);
+    searchTimeoutId.current = setTimeout(
+      async () => setEntitySearchName(searchText),
+      1000
     );
-    fetchEntitiesNextCursor.current = nextCursor;
-  }, [acctId, selectedEntityType]);
+  }, [searchText]);
 
-  const onLoadMoreAlerts = useCallback(async () => {
-    if (!conditionsNextCursor.current) return;
-    const { data: { alertConditions = [], nextCursor } = {} } =
-      await fetchAlerts({
-        id: acctId,
-        cursor: conditionsNextCursor.current,
-      });
-    conditionsNextCursor.current = nextCursor;
-    setAlerts((conds) =>
-      alertConditions?.length ? [...conds, ...alertConditions] : conds
-    );
-  }, [acctId, fetchAlerts]);
+  const accountChangeHandler = useCallback((_, ai) => setAcctId(ai), []);
 
-  const accountChangeHandler = useCallback((_, ai) => {
-    setAcctId(ai);
-    setEntities([]);
-    setAlerts([]);
-  }, []);
+  const entityTypeChangeHandler = useCallback(
+    (e) => setSelectedEntityType(e),
+    []
+  );
 
-  const entityTypeChangeHandler = useCallback((e) => {
-    setSelectedEntityType(e);
-    setEntities([]);
-    setAlerts([]);
-  }, []);
+  const policyChangeHandler = useCallback((e) => setSelectedPolicy(e), []);
 
   const entityTypeTitle = useMemo(
     () =>
@@ -280,6 +234,29 @@ const SignalSelectionNerdlet = () => {
       },
     });
 
+  const conditionsEntities = useCallback(
+    (eee = []) =>
+      eee.reduce((acc, e) => {
+        const ee = {
+          accountId: e.accountId,
+          alertSeverity: e.alertSeverity,
+          domain: e.domain,
+          guid: e.guid,
+          name: e.name,
+          policyId: e.tags?.reduce(
+            (acc, { key, values: [pi] = [] }) =>
+              !acc || key === 'policyId' ? pi : acc,
+            null
+          ),
+          reporting: e.reporting,
+          type: e.type,
+        };
+        ee.policyName = acctPolicies.current?.[ee.policyId] || '';
+        return [...acc, ee];
+      }, []),
+    []
+  );
+
   return (
     <div className="container nerdlet">
       <div className="signal-select">
@@ -301,21 +278,32 @@ const SignalSelectionNerdlet = () => {
           accountId={acctId}
           entityTypeTitle={entityTypeTitle}
           entityTypes={entitiesTypesList}
+          selectedPolicyText={
+            selectedPolicy
+              ? `POLICY: ${selectedPolicy.name}`
+              : '(showing all policies)'
+          }
+          policies={policiesData}
           onAccountChange={accountChangeHandler}
           onEntityTypeChange={entityTypeChangeHandler}
+          onPolicyChange={policyChangeHandler}
           searchText={searchText}
           setSearchText={setSearchText}
         />
         <Listing
           currentTab={currentTab}
-          entities={filteredEntities}
-          alerts={filteredAlerts}
+          entities={
+            currentTab !== SIGNAL_TYPES.ALERT
+              ? entities
+              : conditionsEntities(entities)
+          }
           selectedEntities={selectedEntities}
           selectedAlerts={selectedAlerts}
-          isLoading={isLoading}
+          isLoading={entitySearchLoading}
           onSelect={selectItemHandler}
           onDelete={deleteItemHandler}
-          {...lazyLoadingProps}
+          rowCount={rowCount}
+          onLoadMore={fetchMore}
         />
         <Footer
           entitiesCount={selectedEntities.length}
