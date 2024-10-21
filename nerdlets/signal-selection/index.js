@@ -21,17 +21,13 @@ import TabBar from './tab-bar';
 import Filters from './filters';
 import Footer from './footer';
 import useEntitiesTypesList from './use-entities-types-list';
-import { MODES, SIGNAL_TYPES, UI_CONTENT } from '../../src/constants';
-
-const CONDITION_DOMAIN_TYPE = {
-  domain: 'AIOPS',
-  type: 'CONDITION',
-};
-
-const POLICY_DOMAIN_TYPE = {
-  entityDomain: 'AIOPS',
-  entityType: 'POLICY',
-};
+import {
+  CONDITION_DOMAIN_TYPE,
+  MODES,
+  POLICY_DOMAIN_TYPE,
+  SIGNAL_TYPES,
+  UI_CONTENT,
+} from '../../src/constants';
 
 const uniqueGuidsArray = (arr = [], item = {}, shouldRemove) => {
   const idx = arr.findIndex(({ guid }) => guid === item.guid);
