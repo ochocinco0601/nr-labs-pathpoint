@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Button, HeadingText, Modal, Radio, TextField } from 'nr1';
@@ -12,7 +12,7 @@ const shapeId = (shape) => shape.replace(/\s+/g, '_').toLowerCase();
 
 const StageSettingsModal = ({
   name,
-  dash,
+  link,
   related = {},
   hidden = true,
   onChange,
@@ -20,7 +20,7 @@ const StageSettingsModal = ({
   onClose,
 }) => {
   const [selectedShapeIndex, setSelectedShapeIndex] = useState(0);
-  const [dashboard, setDashboard] = useState('');
+  const [url, setUrl] = useState('');
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [settingsModalHidden, setSettingsModalHidden] = useState(true);
 
@@ -29,29 +29,32 @@ const StageSettingsModal = ({
     [related]
   );
 
-  useEffect(() => setDashboard(dash), [dash]);
+  useEffect(() => setUrl(link), [link]);
 
   useEffect(() => setSettingsModalHidden(hidden), [hidden]);
 
-  const closeHandler = (action) => {
-    switch (action) {
-      case 'update':
-        if (onChange) {
-          onChange({
-            related: stageShapeDataFromIndex(selectedShapeIndex),
-            dash: dashboard,
-          });
-          if (onClose) onClose();
-        }
-        break;
+  const closeHandler = useCallback(
+    (action) => {
+      switch (action) {
+        case 'update':
+          if (onChange) {
+            onChange({
+              related: stageShapeDataFromIndex(selectedShapeIndex),
+              link: url,
+            });
+            if (onClose) onClose();
+          }
+          break;
 
-      case 'delete':
-        setDeleteModalHidden(false);
-        setSettingsModalHidden(true);
-    }
+        case 'delete':
+          setDeleteModalHidden(false);
+          setSettingsModalHidden(true);
+      }
 
-    if (onClose) onClose();
-  };
+      if (onClose) onClose();
+    },
+    [url, selectedShapeIndex]
+  );
 
   return (
     <Modal hidden={settingsModalHidden} onClose={closeHandler}>
@@ -67,8 +70,8 @@ const StageSettingsModal = ({
         <TextField
           description="Link to additional context for this stage (e.g. a dashboard or a document)"
           placeholder="https://one.newrelic.com"
-          value={dashboard || ''}
-          onChange={(e) => setDashboard(e.target.value)}
+          value={url || ''}
+          onChange={(e) => setUrl(e.target.value)}
         />
         <br />
         <div className="header">
@@ -129,7 +132,7 @@ const StageSettingsModal = ({
 
 StageSettingsModal.propTypes = {
   name: PropTypes.string,
-  dash: PropTypes.string,
+  link: PropTypes.string,
   related: PropTypes.shape({
     target: PropTypes.bool,
     source: PropTypes.bool,

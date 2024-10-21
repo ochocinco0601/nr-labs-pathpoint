@@ -13,7 +13,7 @@ import { stageHeaderShapeClassName } from '../../utils';
 const StageHeader = ({
   name,
   related = {},
-  dash,
+  link,
   status = STATUSES.UNKNOWN,
   onUpdate,
   onDelete,
@@ -24,7 +24,7 @@ const StageHeader = ({
   const [settingsModalHidden, setSettingsModalHidden] = useState(true);
 
   const shape = useMemo(() => stageHeaderShapeClassName(related), [related]);
-  const dashClass = useMemo(() => (dash === '' ? '' : 'dash'), [dash]);
+  const linkClass = useMemo(() => (link === '' ? '' : 'link'), [link]);
 
   const linkClickHandler = useCallback((e, type) => {
     e.preventDefault();
@@ -47,8 +47,8 @@ const StageHeader = ({
   );
 
   const handleStageClick = () => {
-    if (dash !== '') {
-      window.open(dash, '_blank');
+    if (link !== '') {
+      window.open(link, '_blank');
     }
   };
 
@@ -97,7 +97,7 @@ const StageHeader = ({
       />
       <StageSettingsModal
         name={name}
-        dash={dash}
+        link={link}
         related={related}
         hidden={settingsModalHidden}
         onChange={onUpdate}
@@ -108,7 +108,7 @@ const StageHeader = ({
   ) : (
     <div
       onClick={handleStageClick}
-      className={`stage-header ${status} ${shape} ${dashClass}`}
+      className={`stage-header ${status} ${shape} ${linkClass}`}
     >
       <HeadingText className="name">{name}</HeadingText>
     </div>
@@ -121,7 +121,7 @@ StageHeader.propTypes = {
     target: PropTypes.bool,
     source: PropTypes.bool,
   }),
-  dash: PropTypes.string,
+  link: PropTypes.string,
   status: PropTypes.oneOf(Object.values(STATUSES)),
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,

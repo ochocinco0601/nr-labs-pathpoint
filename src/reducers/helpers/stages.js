@@ -4,7 +4,7 @@ import { reorderComponent } from './reorder';
 export const addStage = ({ flow, saveFlow }) => {
   const { stages = [] } = flow;
   const related = stages.length ? { source: true } : {};
-  const dash = '';
+  const link = '';
   const updatedFlow = {
     ...flow,
     stages: [
@@ -16,7 +16,7 @@ export const addStage = ({ flow, saveFlow }) => {
                 ...stage.related,
                 target: true,
               },
-              dash: stage.dash || '',
+              link: stage.link || '',
             }
           : stage
       ),
@@ -25,7 +25,7 @@ export const addStage = ({ flow, saveFlow }) => {
         name: 'New Stage',
         levels: [],
         related,
-        dash,
+        link,
       },
     ],
   };
