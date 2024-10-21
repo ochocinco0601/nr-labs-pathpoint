@@ -1,3 +1,10 @@
+## [2.1.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.5...v2.1.6) (2024-10-21)
+
+
+### Bug Fixes
+
+* ability to search entities and conditions in signal selection ([75bd9fe](https://github.com/newrelic/nr-labs-pathpoint/commit/75bd9fed5b63464b19caf9e520be02c28a68ecae))
+
 ## [2.1.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.4...v2.1.5) (2024-10-04)
 
 
