@@ -11,13 +11,11 @@ import { signalStatus } from '../../src/utils';
 const Listing = ({
   currentTab,
   entities = [],
-  alerts = [],
   selectedEntities = [],
   selectedAlerts = [],
   rowCount,
   isLoading,
   onLoadMore,
-  onLoadMoreAlerts,
   onSelect,
   onDelete,
 }) => {
@@ -26,12 +24,11 @@ const Listing = ({
       <ListingTable
         type={currentTab}
         entities={entities}
-        alerts={alerts}
-        selectedEntities={selectedEntities}
-        selectedAlerts={selectedAlerts}
+        selectedItems={
+          currentTab === SIGNAL_TYPES.ALERT ? selectedAlerts : selectedEntities
+        }
         rowCount={rowCount}
         onLoadMore={onLoadMore}
-        onLoadMoreAlerts={onLoadMoreAlerts}
         onSelect={onSelect}
         isLoading={isLoading}
       />
@@ -86,13 +83,11 @@ const Listing = ({
 Listing.propTypes = {
   currentTab: PropTypes.string,
   entities: PropTypes.array,
-  alerts: PropTypes.array,
   selectedEntities: PropTypes.array,
   selectedAlerts: PropTypes.array,
   rowCount: PropTypes.number,
   isLoading: PropTypes.bool,
   onLoadMore: PropTypes.func,
-  onLoadMoreAlerts: PropTypes.func,
   onSelect: PropTypes.func,
   onDelete: PropTypes.func,
 };

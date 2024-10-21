@@ -10,12 +10,16 @@ const Filters = ({
   accountId,
   entityTypeTitle,
   entityTypes,
+  selectedPolicyText,
+  policies,
   onAccountChange,
   onEntityTypeChange,
+  onPolicyChange,
   searchText,
   setSearchText,
 }) => {
   const [entityTypeSearchText, setEntityTypeSearchText] = useState('');
+  const [policyNameSearchText, setPolicyNameSearchText] = useState('');
 
   const filteredEntityTypes = useMemo(() => {
     if (!entityTypeSearchText.trim()) return entityTypes;
@@ -27,6 +31,15 @@ const Filters = ({
         searchDisplayName.includes(est)
     );
   }, [entityTypes, entityTypeSearchText]);
+
+  const filteredPolicies = useMemo(() => {
+    if (!policyNameSearchText.trim()) return policies;
+    return policies.filter(({ name = '' }) =>
+      name
+        .toLocaleLowerCase()
+        .includes(policyNameSearchText.toLocaleLowerCase())
+    );
+  }, [policies, policyNameSearchText]);
 
   const entityTypeChangeHandler = useCallback((e) => {
     setEntityTypeSearchText('');
@@ -46,13 +59,29 @@ const Filters = ({
           setSearchText(value || '')
         }
       />
-      {currentTab === SIGNAL_TYPES.ENTITY ? (
+      {currentTab === SIGNAL_TYPES.ALERT ? (
+        <Dropdown
+          className="entity-type-filter"
+          title={selectedPolicyText}
+          items={filteredPolicies}
+          search={policyNameSearchText}
+          onSearch={({ target: { value = '' } = {} } = {}) =>
+            setPolicyNameSearchText(value)
+          }
+        >
+          {({ item }) => (
+            <DropdownItem key={item.guid} onClick={() => onPolicyChange(item)}>
+              {item.name}
+            </DropdownItem>
+          )}
+        </Dropdown>
+      ) : (
         <Dropdown
           className="entity-type-filter"
           title={entityTypeTitle}
           items={filteredEntityTypes}
           search={entityTypeSearchText}
-          onSearch={({ target: { value } = {} } = {}) =>
+          onSearch={({ target: { value = '' } = {} } = {}) =>
             setEntityTypeSearchText(value)
           }
         >
@@ -65,7 +94,7 @@ const Filters = ({
             </DropdownItem>
           )}
         </Dropdown>
-      ) : null}
+      )}
     </div>
   );
 };
@@ -75,8 +104,11 @@ Filters.propTypes = {
   accountId: PropTypes.any,
   entityTypeTitle: PropTypes.string,
   entityTypes: PropTypes.array,
+  selectedPolicyText: PropTypes.string,
+  policies: PropTypes.array,
   onAccountChange: PropTypes.func,
   onEntityTypeChange: PropTypes.func,
+  onPolicyChange: PropTypes.func,
   searchText: PropTypes.string,
   setSearchText: PropTypes.func,
 };
