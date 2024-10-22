@@ -1,3 +1,13 @@
+## [2.1.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.6...v2.1.7) (2024-10-22)
+
+
+### Bug Fixes
+
+* add link to stage & consolidate settings ([eff2969](https://github.com/newrelic/nr-labs-pathpoint/commit/eff2969a79d677beee3e61f0c03d13cf515f9307))
+* enhanced signal tooltip ([b82746d](https://github.com/newrelic/nr-labs-pathpoint/commit/b82746d435b1c1f6cb45e698eb8df132f84303e7))
+* optimization updates ([d603bba](https://github.com/newrelic/nr-labs-pathpoint/commit/d603bbacd0dd8cee0ee95b5e8fbcf6f1514704a8))
+* rename dash->link ([9c9fd8e](https://github.com/newrelic/nr-labs-pathpoint/commit/9c9fd8e9b8b032b6137ec5bb5972e59b4cd12c88))
+
 ## [2.1.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.5...v2.1.6) (2024-10-21)
 
 
