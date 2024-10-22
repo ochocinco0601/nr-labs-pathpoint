@@ -65,6 +65,7 @@ const Stage = ({
   const [name, setName] = useState('');
   const [levels, setLevels] = useState([]);
   const [related, setRelated] = useState({});
+  const [link, setLink] = useState('');
   const [signals, setSignals] = useState({});
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [tooManyEntitiesInStep, setTooManyEntitiesInStep] = useState([]);
@@ -81,6 +82,7 @@ const Stage = ({
     setName(stage.name || '');
     setLevels(stage.levels || []);
     setRelated(stage.related || {});
+    setLink(stage.link || '');
     setStatus(stage.status || STATUSES.UNKNOWN);
   }, [stageId, stages]);
 
@@ -317,6 +319,7 @@ const Stage = ({
         <StageHeader
           name={name}
           related={related}
+          link={link}
           status={status}
           onUpdate={updateStageHandler}
           onDelete={deleteStageHandler}
