@@ -7,35 +7,31 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { Tooltip } from 'nr1';
-
+import SignalToolTip from '../signal-tooltip';
 import IconsLib from '../icons-lib';
 import { SelectionsContext } from '../../contexts';
-import { COMPONENTS, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+import { COMPONENTS, SIGNAL_TYPES } from '../../constants';
 
 const renderSignalIcon = (
-  {
-    style,
-    name = UI_CONTENT.SIGNAL.DEFAULT_NAME,
-    type,
-    status,
-    isFaded = false,
-    ...statusProps
-  },
+  { style, guid, type, status, isFaded = false, ...statusProps },
   i,
   onClick
 ) => (
-  <Tooltip text={name}>
-    <IconsLib
-      key={i}
-      className={`${status} ${isFaded ? ' faded' : ''}`}
-      type={type}
-      shouldShowTitle={false}
-      {...statusProps}
-      style={style}
-      onClick={onClick}
-    />
-  </Tooltip>
+  <SignalToolTip
+    entityGuid={guid}
+    signalType={type}
+    triggerElement={
+      <IconsLib
+        key={i}
+        className={`${status} ${isFaded ? ' faded' : ''}`}
+        type={type}
+        shouldShowTitle={false}
+        {...statusProps}
+        style={style}
+        onClick={onClick}
+      />
+    }
+  />
 );
 
 const SignalsGridLayout = ({ statuses }) => {
