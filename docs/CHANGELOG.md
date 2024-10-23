@@ -1,3 +1,10 @@
+## [2.1.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.7...v2.1.8) (2024-10-23)
+
+
+### Bug Fixes
+
+* missing alerts in incidents list sidebar when in playback ([9b38c43](https://github.com/newrelic/nr-labs-pathpoint/commit/9b38c43689b6e23499ab0c22b38458bced48e2f6))
+
 ## [2.1.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.6...v2.1.7) (2024-10-22)
 
 
