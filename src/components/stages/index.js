@@ -26,10 +26,10 @@ import {
   SIGNAL_EXPAND,
   COMPONENTS,
   UI_CONTENT,
+  ALERT_STATUSES,
 } from '../../constants';
 import {
   addSignalStatuses,
-  ALERT_STATUSES,
   alertStatusesObject,
   alertsTree,
   annotateStageWithStatuses,
