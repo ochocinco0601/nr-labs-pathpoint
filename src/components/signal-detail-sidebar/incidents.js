@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Card, CardBody, HeadingText, Link, SectionMessage } from 'nr1';
 
 import { durationStringForViolation, formatTimestamp } from '../../utils';
-import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+import { ALERT_STATUSES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 
 const parseIncidentName = (name = '') => {
   try {
@@ -67,9 +67,12 @@ const Incidents = ({ type, data, timeWindow }) => {
         ? data.alertViolations || []
         : data.recentAlertViolations || [];
       if (issuesArr.length) {
-        issuesToDisplay = issuesArr
-          .filter(filterListForOpenOnly)
-          .map(incidentFromViolation);
+        issuesToDisplay = issuesArr.reduce((acc, issue) => {
+          if (!timeWindow && issue.closedAt) return acc;
+          return issue.alertSeverity === ALERT_STATUSES.CRITICAL
+            ? [incidentFromViolation(issue), ...acc]
+            : [...acc, incidentFromViolation(issue)];
+        }, []);
       }
     } else if (type === SIGNAL_TYPES.ALERT) {
       const issuesArr = data.incidents || [];

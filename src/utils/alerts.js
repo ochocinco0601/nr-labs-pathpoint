@@ -1,17 +1,11 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
+
 import { latestStatusForAlertConditions, queriesGQL } from '../queries';
+import { ALERT_STATUSES } from '../constants';
 
 const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
 } = StatusIcon;
-
-export const ALERT_STATUSES = {
-  NOT_ALERTING: 'NOT_ALERTING',
-  WARNING: 'WARNING',
-  HIGH: 'HIGH',
-  CRITICAL: 'CRITICAL',
-  NOT_CONFIGURED: 'NOT_CONFIGURED',
-};
 
 export const alertStatus = ({ enabled, inferredPriority } = {}) => {
   if (!enabled) return UNKNOWN;

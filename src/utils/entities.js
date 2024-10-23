@@ -1,5 +1,6 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
-import { ALERT_STATUSES } from './alerts';
+
+import { ALERT_STATUSES } from '../constants';
 
 const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
