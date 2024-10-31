@@ -17,7 +17,7 @@
   padding-left: 8px;
   display: flex;
 
-  &-statusIndicator {
+  &-status-indicator {
     display: inline-block;
     flex-grow: 0;
     flex-shrink: 0;
@@ -73,7 +73,7 @@
     }
   }
 
-  &-viewRule {
+  &-view-rule {
     margin-left: 4px;
     cursor: pointer;
   }
@@ -96,7 +96,7 @@
     margin-bottom: 8px;
   }
 
-  &.inclusionList {
+  &.inclusion-list {
     display: flex;
 
     p {

@@ -88,7 +88,7 @@ const StepToolTip = memo(
             {includedSignals.length > 0
               ? includedSignals.map((s, i) => {
                   return (
-                    <div key={i} className="view-rule-content inclusionList">
+                    <div key={i} className="view-rule-content inclusion-list">
                       <p>
                         <IconsLib
                           className={`icons-lib ${s.status}`}
@@ -126,7 +126,7 @@ const StepToolTip = memo(
             <div className="step-tooltip">
               <div className="step-tooltip-header">
                 <span
-                  className={`step-tooltip-header-statusIndicator ${stepStatus}`}
+                  className={`step-tooltip-header-status-indicator ${stepStatus}`}
                 ></span>
                 <HeadingText
                   type={HeadingText.TYPE.HEADING_4}
@@ -140,7 +140,7 @@ const StepToolTip = memo(
                   {renderStatus}
                 </span>
                 <Link
-                  className="step-tooltip-content-viewRule"
+                  className="step-tooltip-content-view-rule"
                   onClick={() => setViewRuleModalHidden(false)}
                 >
                   {UI_CONTENT.STEP.CONFIG.TOOLTIPS.VIEW_RULE}
