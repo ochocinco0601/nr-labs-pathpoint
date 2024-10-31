@@ -1,3 +1,12 @@
+## [2.1.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.8...v2.1.9) (2024-10-31)
+
+
+### Bug Fixes
+
+* minor css updates ([348cff2](https://github.com/newrelic/nr-labs-pathpoint/commit/348cff21bc887da8e4d1ef06756d5fa0cbbd6aac))
+* minor step optimizations ([9d9a736](https://github.com/newrelic/nr-labs-pathpoint/commit/9d9a7368f955dafff74be08b3b4a47f1b10cf997))
+* step status weight settings; enhanced tooltip ([58b4499](https://github.com/newrelic/nr-labs-pathpoint/commit/58b44990cafd2ddd7c0cd532285b3b81d0f881ca))
+
 ## [2.1.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.7...v2.1.8) (2024-10-23)
 
 
