@@ -197,7 +197,9 @@ const Step = ({
         isSelected || (selections.type === COMPONENTS.SIGNAL && !isFaded)
           ? 'selected'
           : ''
-      } ${mode !== MODES.INLINE ? status : ''} ${isFaded ? 'faded' : ''}`}
+      } ${[MODES.STACKED, MODES.INLINE].includes(mode) ? status : ''} ${
+        isFaded ? 'faded' : ''
+      }`}
       onClick={() =>
         mode !== MODES.EDIT && markSelection
           ? markSelection(COMPONENTS.STEP, stepId)
@@ -213,6 +215,7 @@ const Step = ({
         stageId={stageId}
         levelId={levelId}
         stepId={stepId}
+        signals={signals}
         onDelete={onDelete}
         onDragHandle={dragHandleHandler}
         mode={mode}

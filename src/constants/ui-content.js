@@ -79,6 +79,35 @@ export const UI_CONTENT = {
       TITLE: 'No signals yet',
       DESCRIPTION:
         'A signal is an entity or alert that reflects the underlying health of its parent step.',
+      EMPTY_STATE: 'No signals attached to step',
+    },
+    CONFIG: {
+      TITLE: 'Step Settings',
+      SELECT_SIGNALS: {
+        TITLE: 'Select Signals',
+        DESCRIPTION:
+          'Signals selected will be included in step status determination. Defaults to all signals.',
+      },
+      STATUS_CONFIG: {
+        TITLE: 'Status Configuration',
+        DESCRIPTION:
+          "Determine step status by the worst or best selected signals' status.",
+        RADIO_WORST_LABEL: 'Rollup the worst status',
+        RADIO_BEST_LABEL: 'Rollup the best status',
+        APPLY_LABEL: 'Apply only when',
+        SELECT: {
+          PERCENT: '% of signals',
+          COUNT: 'signals',
+        },
+      },
+      EMPTY_STATE: 'No signals attached to step',
+      TOOLTIPS: {
+        WORST:
+          'Step status matches signals in a unhealthy state. Optionally, use the toggle below to apply the status only if a minimum percent or count of signals are unhealthy',
+        BEST: 'Step status matches signals in a healthy state first. Use this to keep step status healthy as long as one signal is healthy',
+        SAVE_BTN: 'At least 1 signal must be selected',
+        VIEW_RULE: 'View Rule Details',
+      },
     },
   },
   SIGNAL: {

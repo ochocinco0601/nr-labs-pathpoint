@@ -1,0 +1,154 @@
+.StepTooltip {
+  background-color: #202d32;
+  box-shadow: rgba(#283636, 0.15) 16px 8px 32px;
+  box-sizing: border-box;
+  padding: 4px 0;
+  //width: 324px;
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.StepTooltipHeader {
+  border-bottom: #e7e9ea 1px solid;
+  align-items: baseline;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-bottom: calc(8px);
+  padding-left: 8px;
+  display: flex;
+
+  &-statusIndicator {
+    display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 8px;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+    width: 8px;
+
+    &.success {
+      background-color: #01a76a;
+    }
+
+    &.critical {
+      background-color: #f5554b;
+    }
+
+    &.warning {
+      background-color: #ffd23d;
+    }
+
+    &.unknown {
+      background-color: #9ea5a9;
+    }
+  }
+
+  &-title {
+    color: #f1f5f5;
+    flex: 1;
+    font-size: 12px;
+    margin-left: 4px;
+    display: inline;
+  }
+
+}
+
+.StepTooltipContent {
+  display: inline-flex;
+  margin-top: 4px;
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-bottom: calc(8px);
+  padding-left: 8px;
+  padding-right: 0;
+  color: #f1f5f5;
+
+  &-overview {
+    &::after {
+      border-right: 1px solid;
+      content: '';
+      height: 100%;
+      margin-left: 4px;
+    }
+  }
+
+  &-viewRule {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+}
+
+.view-rule-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.view-rule-content {
+  padding: 4px 0 0 0;
+
+  &.header {
+    margin-bottom: 4px;
+  }
+
+  span {
+    margin-bottom: 8px;
+  }
+
+  &.inclusionList {
+    display: flex;
+
+    p {
+      margin-left: -8px;
+    }
+
+    span {
+      margin-left: 8px;
+      font-size: 12px;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 4px 0 0 0;
+    }
+
+    .icons-lib {
+      width: 16px;
+      height: 16px;
+      @include fill-colors(
+        $critical: 'critical',
+        $success: 'success',
+        $unknown: 'unknown',
+        $warning: 'warning',
+      );
+    }
+  }
+}
+
+.statusIndicatorLarge {
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 16px;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+  width: 16px;
+  margin-right: 8px;
+
+  &.success {
+    background-color: #01a76a;
+  }
+
+  &.critical {
+    background-color: #f5554b;
+  }
+
+  &.warning {
+    background-color: #ffd23d;
+  }
+
+  &.unknown {
+    background-color: #9ea5a9;
+  }
+}

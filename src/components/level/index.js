@@ -123,7 +123,7 @@ const Level = ({
             className={`step-cell ${
               mode === MODES.EDIT
                 ? 'edit'
-                : mode === MODES.STACKED &&
+                : [MODES.STACKED, MODES.INLINE].includes(mode) &&
                   signals?.length &&
                   [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
                 ? status
