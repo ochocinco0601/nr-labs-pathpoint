@@ -97,17 +97,18 @@ const StepSettingsModal = ({
       setStatusWeightValue(stepStatusValue);
       setChecked(true);
     }
-  }, [stepStatusValue]);
+  }, [stepStatusValue, stepStatusOption]);
 
   useEffect(() => {
-    const defaultSignalSelection = signals.filter((s) => {
-      return !s.included || s.included === true || s.included === undefined;
-    });
     setTableSettings({
       ariaLabel: 'Signals',
       items: signals,
     });
-    setSelectedSignals(defaultSignalSelection);
+    setSelectedSignals(() =>
+      signals.filter((s) => {
+        return !s.included || s.included === true || s.included === undefined;
+      })
+    );
 
     const sel = signals.reduce((acc, sig, idx) => {
       acc[idx] = sig.included === undefined ? 'true' : sig.included;
@@ -164,7 +165,7 @@ const StepSettingsModal = ({
 
   const toggleApplySwitch = useCallback(() => {
     setChecked((prevChecked) => !prevChecked);
-  }, [signals]);
+  }, []);
 
   const handleStatusUnitChange = useCallback((e, val) => {
     setStatusWeightUnit(val);

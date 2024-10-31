@@ -106,6 +106,7 @@ export const UI_CONTENT = {
           'Step status matches signals in a unhealthy state. Optionally, use the toggle below to apply the status only if a minimum percent or count of signals are unhealthy',
         BEST: 'Step status matches signals in a healthy state first. Use this to keep step status healthy as long as one signal is healthy',
         SAVE_BTN: 'At least 1 signal must be selected',
+        UNKNOWN: 'No signals',
         VIEW_RULE: 'View Rule Details',
       },
     },

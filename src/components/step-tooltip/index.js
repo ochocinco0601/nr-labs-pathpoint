@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from 'nr1';
 import IconsLib from '../icons-lib';
-import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
+import { SIGNAL_TYPES, STEP_STATUS_UNITS, UI_CONTENT } from '../../constants';
 
 const StepToolTip = memo(
   ({
@@ -27,25 +27,26 @@ const StepToolTip = memo(
 
     useEffect(() => {
       if (signals.length > 0) {
-        const includedSignals = signals.filter((s) => {
-          return s.included === true || s.included === undefined;
-        });
-
-        setIncludedSignals(includedSignals);
+        setIncludedSignals(() =>
+          signals.filter((s) => {
+            return s.included === true || s.included === undefined;
+          })
+        );
       }
     }, [signals]);
 
     const renderStatus = useMemo(() => {
-      if (includedSignals.length === 0) return 'No signals';
+      if (includedSignals.length === 0)
+        return UI_CONTENT.STEP.CONFIG.TOOLTIPS.UNKNOWN;
 
       let defaultMessage = `${
         stepStatusOption.charAt(0).toUpperCase() + stepStatusOption.slice(1)
       } status of ${includedSignals.length} signals`;
 
       if (stepStatusValue !== '') {
-        const unit = stepStatusUnit === 'percent' ? '%' : '';
+        const unit = stepStatusUnit === STEP_STATUS_UNITS.PERCENT ? '%' : '';
         const weightAppliedMessage =
-          stepStatusUnit === 'percent'
+          stepStatusUnit === STEP_STATUS_UNITS.PERCENT
             ? `${stepStatusValue}${unit} of `
             : `${stepStatusValue}/`;
 
@@ -72,7 +73,7 @@ const StepToolTip = memo(
           onClose={() => setViewRuleModalHidden(true)}
         >
           <div className="view-rule-header">
-            <span className={`statusIndicatorLarge ${stepStatus}`}></span>
+            <span className={`status-indicator-large ${stepStatus}`}></span>
             <HeadingText type={HeadingText.TYPE.HEADING_2}>
               {stepTitle}
             </HeadingText>
@@ -122,24 +123,24 @@ const StepToolTip = memo(
         <Popover openOnHover>
           <PopoverTrigger>{triggerElement}</PopoverTrigger>
           <PopoverBody placementType={PopoverBody.PLACEMENT_TYPE.TOP_START}>
-            <div className="StepTooltip">
-              <div className="StepTooltipHeader">
+            <div className="step-tooltip">
+              <div className="step-tooltip-header">
                 <span
-                  className={`StepTooltipHeader-statusIndicator ${stepStatus}`}
+                  className={`step-tooltip-header-statusIndicator ${stepStatus}`}
                 ></span>
                 <HeadingText
                   type={HeadingText.TYPE.HEADING_4}
-                  className="StepTooltipHeader-title"
+                  className="step-tooltip-header-title"
                 >
                   {stepTitle}
                 </HeadingText>
               </div>
-              <div className="StepTooltipContent">
-                <span className="StepTooltipContent-overview">
+              <div className="step-tooltip-content">
+                <span className="step-tooltip-content-overview">
                   {renderStatus}
                 </span>
                 <Link
-                  className="StepTooltipContent-viewRule"
+                  className="step-tooltip-content-viewRule"
                   onClick={() => setViewRuleModalHidden(false)}
                 >
                   {UI_CONTENT.STEP.CONFIG.TOOLTIPS.VIEW_RULE}

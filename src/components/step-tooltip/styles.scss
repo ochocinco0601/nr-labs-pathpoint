@@ -1,15 +1,14 @@
-.StepTooltip {
+.step-tooltip {
   background-color: #202d32;
   box-shadow: rgba(#283636, 0.15) 16px 8px 32px;
   box-sizing: border-box;
   padding: 4px 0;
-  //width: 324px;
   display: inline-block;
   white-space: nowrap;
   z-index: 10;
 }
 
-.StepTooltipHeader {
+.step-tooltip-header {
   border-bottom: #e7e9ea 1px solid;
   align-items: baseline;
   margin-left: 8px;
@@ -55,7 +54,7 @@
 
 }
 
-.StepTooltipContent {
+.step-tooltip-content {
   display: inline-flex;
   margin-top: 4px;
   margin-left: 8px;
@@ -125,7 +124,7 @@
   }
 }
 
-.statusIndicatorLarge {
+.status-indicator-large {
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
