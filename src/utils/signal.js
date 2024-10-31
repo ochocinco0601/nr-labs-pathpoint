@@ -1,4 +1,9 @@
-import { SIGNAL_TYPES, STATUSES } from '../constants';
+import {
+  SIGNAL_TYPES,
+  STATUSES,
+  STEP_STATUS_OPTIONS,
+  STEP_STATUS_UNITS,
+} from '../constants';
 import { alertStatus } from './alerts';
 import { entityStatus } from './entities';
 import { serviceLevelStatus } from './service-levels';
@@ -18,6 +23,21 @@ const statusesOrderIndexLookup = statusesOrder.reduce(
   {}
 );
 
+const countUniqueSignalStatus = (signals) => {
+  const statusCounts = {};
+
+  signals.map((s) => {
+    const { status } = s;
+    if (statusCounts[status]) {
+      statusCounts[status] += 1;
+    } else {
+      statusCounts[status] = 1;
+    }
+  });
+
+  return statusCounts;
+};
+
 export const signalStatus = (signal, entity) => {
   if (!signal?.type) return STATUSES.UNKNOWN;
 
@@ -36,6 +56,70 @@ export const signalStatus = (signal, entity) => {
       return STATUSES.UNKNOWN;
     }
   }
+};
+
+export const calculateStepStatus = (step) => {
+  if (step.signals.length === 0) return STATUSES.UNKNOWN;
+
+  const includedSignals = step.signals.filter((s) => {
+    return s.included === true || s.included === undefined;
+  });
+  const stepStatusCounts = countUniqueSignalStatus(includedSignals);
+  const stepWeightUnit =
+    'statusWeightUnit' in step ? step.statusWeightUnit : 'percent';
+  const stepWeightValue =
+    'statusWeightValue' in step ? step.statusWeightValue : '';
+
+  if ('statusOption' in step) {
+    if (step.statusOption === STEP_STATUS_OPTIONS.BEST) {
+      if ('success' in stepStatusCounts) {
+        if (stepStatusCounts['success'] > 0) {
+          return STATUSES.SUCCESS;
+        }
+      }
+    }
+
+    if (step.statusOption === STEP_STATUS_OPTIONS.WORST) {
+      if (stepWeightValue === '') {
+        return statusFromStatuses(
+          (includedSignals || []).map(({ status }) => ({ status }))
+        );
+      } else {
+        const criticalCount = stepStatusCounts.critical
+          ? stepStatusCounts.critical
+          : 0;
+        const warningCount = stepStatusCounts.warning
+          ? stepStatusCounts.warning
+          : 0;
+        let actualWeightValue;
+
+        if (stepWeightUnit === STEP_STATUS_UNITS.COUNT) {
+          actualWeightValue = warningCount + criticalCount;
+        } else {
+          actualWeightValue = Math.round(
+            ((warningCount + criticalCount) / includedSignals.length) * 100,
+            2
+          );
+        }
+
+        if (actualWeightValue >= Number(stepWeightValue)) {
+          if (criticalCount === 0 && warningCount > 0) {
+            return STATUSES.WARNING;
+          }
+
+          if (criticalCount > warningCount) {
+            return STATUSES.CRITICAL;
+          }
+        } else {
+          return STATUSES.SUCCESS;
+        }
+      }
+    }
+  }
+
+  return statusFromStatuses(
+    (includedSignals || []).map(({ status }) => ({ status }))
+  );
 };
 
 export const statusFromStatuses = (statusesArray = []) => {

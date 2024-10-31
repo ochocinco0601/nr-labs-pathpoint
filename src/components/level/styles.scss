@@ -34,7 +34,7 @@
     &.faded {
       opacity: 0.3;
     }
-    
+
     @include status-colors(
       $critical: 'critical',
       $success: 'success',

@@ -219,15 +219,17 @@ const SignalSelectionNerdlet = () => {
           levelId,
           stepId: step?.id,
           signals: [
-            ...(selectedEntities || []).map(({ guid, name }) => ({
+            ...(selectedEntities || []).map(({ guid, name, included }) => ({
               guid,
               name,
               type: SIGNAL_TYPES.ENTITY,
+              included: included !== undefined ? included : true,
             })),
-            ...(selectedAlerts || []).map(({ guid, name }) => ({
+            ...(selectedAlerts || []).map(({ guid, name, included }) => ({
               guid,
               name,
               type: SIGNAL_TYPES.ALERT,
+              included: included !== undefined ? included : true,
             })),
           ],
         },

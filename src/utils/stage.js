@@ -5,7 +5,11 @@ import {
   UI_CONTENT,
 } from '../constants';
 import { uuid } from './crypto';
-import { signalStatus, statusFromStatuses } from './signal';
+import {
+  signalStatus,
+  statusFromStatuses,
+  calculateStepStatus,
+} from './signal';
 
 export const sanitizeStages = (stages = [], shouldExcludeSignals) =>
   stages.map(({ levels = [], name = 'New Stage', related = {} }) => ({
@@ -65,30 +69,20 @@ export const addSignalStatuses = (stages = [], statuses = {}) => {
       ...level,
       steps: steps.map(({ signals = [], ...step }) => ({
         ...step,
-        signals: signals.reduce((signalsAcc, { guid, name, type }) => {
-          const isEntity = type === SIGNAL_TYPES.ENTITY;
-          if (isEntity)
-            entitiesInStepCount = incrementCountForStep(
-              entitiesInStepCount,
-              stage.id,
-              level.id,
-              step.id
-            );
-          const entity = statuses[type]?.[guid] || {};
-          if (noAccessGuids.includes(guid)) {
-            signalsWithNoAccess = addGuidToObjectTree(
-              signalsWithNoAccess,
-              stage.id,
-              level.id,
-              step.id,
-              guid
-            );
-            return signalsAcc;
-          }
-          if (isEntity) {
-            if (!entity || !Object.keys(entity).length) {
-              signalsWithNoStatus = addGuidToObjectTree(
-                signalsWithNoStatus,
+        signals: signals.reduce(
+          (signalsAcc, { guid, name, type, included }) => {
+            const isEntity = type === SIGNAL_TYPES.ENTITY;
+            if (isEntity)
+              entitiesInStepCount = incrementCountForStep(
+                entitiesInStepCount,
+                stage.id,
+                level.id,
+                step.id
+              );
+            const entity = statuses[type]?.[guid] || {};
+            if (noAccessGuids.includes(guid)) {
+              signalsWithNoAccess = addGuidToObjectTree(
+                signalsWithNoAccess,
                 stage.id,
                 level.id,
                 step.id,
@@ -96,24 +90,38 @@ export const addSignalStatuses = (stages = [], statuses = {}) => {
               );
               return signalsAcc;
             }
-            if (
-              entitiesInStepCount[stage.id][level.id][step.id] >
-              MAX_ENTITIES_IN_STEP
-            ) {
-              return signalsAcc;
+            if (isEntity) {
+              if (!entity || !Object.keys(entity).length) {
+                signalsWithNoStatus = addGuidToObjectTree(
+                  signalsWithNoStatus,
+                  stage.id,
+                  level.id,
+                  step.id,
+                  guid
+                );
+                return signalsAcc;
+              }
+              if (
+                entitiesInStepCount[stage.id][level.id][step.id] >
+                MAX_ENTITIES_IN_STEP
+              ) {
+                return signalsAcc;
+              }
             }
-          }
-          const status = signalStatus({ type }, entity);
-          return [
-            ...signalsAcc,
-            {
-              type,
-              guid,
-              name: name || entity.name || UI_CONTENT.SIGNAL.DEFAULT_NAME,
-              status,
-            },
-          ];
-        }, []),
+            const status = signalStatus({ type }, entity);
+            return [
+              ...signalsAcc,
+              {
+                type,
+                guid,
+                name: name || entity.name || UI_CONTENT.SIGNAL.DEFAULT_NAME,
+                status,
+                included,
+              },
+            ];
+          },
+          []
+        ),
       })),
     })),
   }));
@@ -130,9 +138,7 @@ export const annotateStageWithStatuses = (stage = {}) => {
     ({ levels, levelStatuses }, level = {}) => {
       const { steps, stepStatuses } = (level.steps || []).reduce(
         ({ steps, stepStatuses }, step = {}) => {
-          const status = statusFromStatuses(
-            (step.signals || []).map(({ status }) => ({ status }))
-          );
+          const status = calculateStepStatus(step);
           return {
             steps: [...steps, { ...step, status }],
             stepStatuses: [...stepStatuses, { status }],

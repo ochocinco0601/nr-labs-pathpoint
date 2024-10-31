@@ -26,3 +26,4 @@ export { default as SignalDetailSidebar } from './signal-detail-sidebar';
 export { default as SignalsGridLayout } from './signals-grid-layout';
 export { default as EmptyBlock } from './empty-block';
 export { default as PlaybackBar } from './playback-bar';
+export { default as StepSettingsModal } from './step-settings-modal';

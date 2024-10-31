@@ -1,0 +1,50 @@
+.step-form {
+  margin: 50px 0;
+  display: flex;
+  flex-direction: column;
+
+  .step-config-section {
+    padding: 16px 0;
+  }
+
+  .step-config-header {
+    padding: 8px 0;
+  }
+
+  .signal-settings-table {
+    flex: 1;
+    overflow-y: scroll;
+    margin-top: 8px;
+  }
+
+  .config-radio-btn {
+    display: flex;
+    margin-top: 12px;
+  }
+
+  .config-switch {
+    margin-left: 24px;
+  }
+
+  .worst-status-form {
+    display: inline-flex;
+    margin-right: 8px;
+    padding: 8px 0;
+  }
+
+  .status-weight-value {
+    width: 40px;
+    margin-right: 8px;
+  }
+}
+
+.step-button-bar {
+  display: flex;
+  justify-content: space-between;
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+}
