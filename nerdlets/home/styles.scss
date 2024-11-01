@@ -3,10 +3,21 @@
 
 .container {
   display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: #f3f4f4;
   box-sizing: border-box;
-  justify-content: center;
+
+  .messages-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    overflow-y: hidden;
+  }
 }
 
 .button-tertiary-border {
