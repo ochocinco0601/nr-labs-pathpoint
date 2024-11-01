@@ -1,3 +1,10 @@
+## [2.1.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.10...v2.1.11) (2024-11-01)
+
+
+### Bug Fixes
+
+* signal included type string -> bool ([b102444](https://github.com/newrelic/nr-labs-pathpoint/commit/b1024448352f3ca52aea505165e7327035e36877))
+
 ## [2.1.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.9...v2.1.10) (2024-11-01)
 
 
