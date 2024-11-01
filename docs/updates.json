@@ -3,7 +3,8 @@
     {
       "date": "2024-11-01",
       "level": "warning",
-      "desc": "Alert Links Issue: Be advised that there is an ongoing issue affecting the links to incidents; it is currently being investigated and we will notify here when it has been resolved."
+      "title": "Alert Links Issue",
+      "desc": "Be advised that there is an ongoing issue affecting the links to incidents; it is currently being investigated and we will notify here when it has been resolved."
     }
   ]
 }
