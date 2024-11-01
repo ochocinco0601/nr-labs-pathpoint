@@ -111,7 +111,7 @@ const StepSettingsModal = ({
     );
 
     const sel = signals.reduce((acc, sig, idx) => {
-      acc[idx] = sig.included === undefined ? 'true' : sig.included;
+      acc[idx] = sig.included === undefined ? true : sig.included;
       return acc;
     }, {});
 
