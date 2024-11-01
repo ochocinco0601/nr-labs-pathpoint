@@ -18,7 +18,7 @@ import {
   useAccountsQuery,
   useNerdletState,
 } from 'nr1';
-import { HelpModal } from '@newrelic/nr-labs-components';
+import { HelpModal, Messages } from '@newrelic/nr-labs-components';
 
 import { Flow, FlowList, NoFlows, Sidebar } from '../../src/components';
 import { useFlowLoader, useFetchUser } from '../../src/hooks';
@@ -288,7 +288,17 @@ const HomeNerdlet = () => {
 
   return (
     <div className="container">
-      {currentView}
+      <div className="messages-wrapper">
+        <Messages
+          org="newrelic"
+          repo="nr-labs-pathpoint"
+          branch="main"
+          directory="docs"
+          fileName="updates"
+          timeoutPeriod={604800} // 1 week
+        />
+      </div>
+      <div className="main">{currentView}</div>
       {isHelpModalShown && (
         <HelpModal
           isModalOpen={isHelpModalShown}

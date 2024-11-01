@@ -1,0 +1,10 @@
+{
+  "messages": [
+    {
+      "date": "2024-11-01",
+      "level": "warning",
+      "title": "Alert Links Issue",
+      "desc": "Be advised that there is an ongoing issue affecting the ability to link out to the incidents page; it is currently being investigated and we will notify here when it has been resolved."
+    }
+  ]
+}
