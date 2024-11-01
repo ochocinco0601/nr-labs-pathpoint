@@ -1,3 +1,10 @@
+## [2.1.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.9...v2.1.10) (2024-11-01)
+
+
+### Bug Fixes
+
+* add messages component ([4da9961](https://github.com/newrelic/nr-labs-pathpoint/commit/4da9961f7672e7ec2ea671f5e00a13dc01930b4f))
+
 ## [2.1.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.8...v2.1.9) (2024-10-31)
 
 
