@@ -1,3 +1,10 @@
+## [2.1.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.11...v2.1.12) (2024-11-04)
+
+
+### Bug Fixes
+
+* TESTING - remove space in readme ([1e7f164](https://github.com/newrelic/nr-labs-pathpoint/commit/1e7f164f6b206104c66861e47f4d92ca83fde9ea))
+
 ## [2.1.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.10...v2.1.11) (2024-11-01)
 
 
