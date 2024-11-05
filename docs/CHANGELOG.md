@@ -1,3 +1,10 @@
+## [2.1.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.12...v2.1.13) (2024-11-05)
+
+
+### Bug Fixes
+
+* rename updates.json to messages.json ([b5383a3](https://github.com/newrelic/nr-labs-pathpoint/commit/b5383a3b47c650c1ea98d7410e38ea0dbc66590a))
+
 ## [2.1.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.11...v2.1.12) (2024-11-04)
 
 
