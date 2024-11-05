@@ -294,7 +294,6 @@ const HomeNerdlet = () => {
           repo="nr-labs-pathpoint"
           branch="main"
           directory="docs"
-          fileName="updates"
           timeoutPeriod={604800} // 1 week
         />
       </div>
