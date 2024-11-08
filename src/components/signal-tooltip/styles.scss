@@ -1,67 +1,49 @@
-.EntityTooltip {
-  $self: &;
-  background-color: #202d32;
-  box-shadow: rgba(#283636, 0.15) 16px 8px 32px;
-  box-sizing: border-box;
+.signal-tooltip {
   padding: 4px 0;
-  width: 288px;
-  z-index: 10;
-}
+  min-width: 288px;
 
-.EntityTooltipHeader {
-  border-bottom: #e7e9ea 1px solid;
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-bottom: calc(8px);
-  padding-left: 8px;
-  padding-right: 0;
-
-  &-titleBar {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 calc(-1 * 8px);
+  .signal-tooltip-header, .signal-tooltip-content {
+    margin-left: 8px;
+    margin-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 0;
   }
 
-  &-title {
-    color: #f1f5f5;
-    flex: 1;
-    font-size: 12px;
-  }
+  .signal-tooltip-header {
+    border-bottom: #e7e9ea 1px solid;
+  
+    .signal-tooltip-title-bar {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 calc(-1 * 8px);
 
-}
+      .title {
+        flex: 1;
+        font-size: 12px;
+      }
+    }
 
-.EntityTypeAndAccountLabel {
-  $self: &;
-  color: #f1f5f5;
-
-  &-type {
-    & + #{$self}-account {
-      &::before {
-        border-left: 1px solid;
-        content: '';
-        height: 100%;
-        margin-left: 4px;
-        padding-left: 4px;
+    .signal-tooltip-label {
+      .account {
+        &::before {
+          border-left: 1px solid;
+          content: '';
+          height: 100%;
+          margin-left: 4px;
+          padding-left: 4px;
+        }
+      }
+    
+      .account, .type {
+        display: inline;
+        word-break: break-all;
       }
     }
   }
 
-  &-account,
-  &-type {
-    display: inline;
-    word-break: break-all;
+  .signal-tooltip-content {
+    margin-top: 5px;
   }
-
-}
-
-.EntityTooltipContent {
-  margin-top: 5px;
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-bottom: calc(8px);
-  padding-left: 8px;
-  padding-right: 0;
-  color: #f1f5f5;
-
 }
