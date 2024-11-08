@@ -29,6 +29,7 @@
 
   .step-header {
     display: grid;
+    grid-template-columns: auto min-content;
     align-items: center;
     margin-bottom: 4px;
     cursor: pointer;
@@ -47,12 +48,14 @@
       grid-template-columns: min-content auto min-content min-content;
     }
 
-    .drag-handle {
+    .drag-handle, .delete-btn {
       cursor: pointer;
     }
 
-    .delete-btn {
-      cursor: pointer;
+    .expand-collapse-btn {
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
     }
   }
 
