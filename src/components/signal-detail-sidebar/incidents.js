@@ -137,17 +137,6 @@ const Incidents = ({ type, data, timeWindow }) => {
                           >
                             View incident
                           </Link>
-                          {/* {type === SIGNAL_TYPES.ENTITY && (
-                                <Link
-                                  className="detail-link"
-                                  to={navigation.getOpenEntityLocation(guid)}
-                                  onClick={(e) =>
-                                    e.target.setAttribute('target', '_blank')
-                                  }
-                                >
-                                  View condition
-                                </Link>
-                              )} */}
                         </div>
                         <div>Started: {formatTimestamp(opened)}</div>
                         <div>
@@ -167,7 +156,7 @@ const Incidents = ({ type, data, timeWindow }) => {
       {type === SIGNAL_TYPES.ENTITY && incidentsList?.length > 1 ? (
         <div className="incidents-footer">
           <Button
-            type={Button.TYPE.PLAIN_NEUTRAL}
+            variant={Button.VARIANT.SECONDARY}
             onClick={() => {
               setMaxIncidentsShown((mis) =>
                 mis === 1 ? incidentsList.length : 1
