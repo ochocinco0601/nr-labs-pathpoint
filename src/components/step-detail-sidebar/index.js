@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import { Card, CardBody, HeadingText, Link } from 'nr1';
 
 import IconsLib from '../icons-lib';
-import { SIGNAL_TYPES, STEP_STATUS_UNITS, UI_CONTENT } from '../../constants';
+import {
+  SIGNAL_TYPES,
+  STEP_STATUS_OPTIONS,
+  STEP_STATUS_UNITS,
+  UI_CONTENT,
+} from '../../constants';
 
 const StepDetailSidebar = ({ step: { title, link, signals, ...step } }) => {
   const [includedSignals, setIncludedSignals] = useState([]);
@@ -24,10 +29,14 @@ const StepDetailSidebar = ({ step: { title, link, signals, ...step } }) => {
       return <span>{UI_CONTENT.STEP.CONFIG.TOOLTIPS.UNKNOWN}</span>;
 
     const {
-      statusWeightValue = '',
-      statusOption = 'worst',
-      statusWeightUnit = 'percent',
-    } = step || {};
+      status: {
+        option: statusOption = STEP_STATUS_OPTIONS.WORST,
+        weight: {
+          unit: statusWeightUnit = STEP_STATUS_UNITS.PERCENT,
+          value: statusWeightValue = '',
+        } = {},
+      } = {},
+    } = step?.config || {};
 
     if (statusWeightValue) {
       const unit = statusWeightUnit === STEP_STATUS_UNITS.PERCENT ? '%' : '';

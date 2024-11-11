@@ -29,7 +29,6 @@ const Step = ({
   stepId,
   signals = [],
   signalExpandOption = SIGNAL_EXPAND.NONE,
-  onDelete,
   onDragStart,
   onDragOver,
   onDrop,
@@ -218,8 +217,6 @@ const Step = ({
         levelId={levelId}
         stepId={stepId}
         step={thisStep}
-        signals={signals}
-        onDelete={onDelete}
         onDragHandle={dragHandleHandler}
         mode={mode}
         saveFlow={saveFlow}
@@ -283,7 +280,6 @@ Step.propTypes = {
   stepId: PropTypes.string,
   signals: PropTypes.array,
   signalExpandOption: PropTypes.number,
-  onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,

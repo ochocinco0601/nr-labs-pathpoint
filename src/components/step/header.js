@@ -23,9 +23,8 @@ const StepHeader = ({
   step: {
     title,
     signals,
-    stepStatusValue,
-    stepStatusOption,
-    stepStatusUnit,
+    link,
+    config,
   } = {},
   onDragHandle,
   mode = MODES.INLINE,
@@ -77,6 +76,11 @@ const StepHeader = ({
     }
   }, []);
 
+  const openDeleteModal = useCallback(() => {
+    setDeleteModalHidden(false);
+    setSettingsModalHidden(true);
+  }, []);
+
   return mode === MODES.EDIT ? (
     <div className="step-header edit">
       <span
@@ -119,13 +123,12 @@ const StepHeader = ({
       />
       <StepSettingsModal
         title={title}
-        stepStatusOption={stepStatusOption}
-        stepStatusValue={stepStatusValue}
-        stepStatusUnit={stepStatusUnit}
         signals={signals}
+        link={link}
+        config={config}
         hidden={settingsModalHidden}
-        onConfirm={deleteStepHandler}
         onChange={updateStepHandler}
+        onDelete={openDeleteModal}
         onClose={() => setSettingsModalHidden(true)}
       />
     </div>

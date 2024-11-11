@@ -1,50 +1,77 @@
-.step-form {
-  margin: 50px 0;
+.step-settings-modal {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
 
-  .step-config-section {
-    padding: 16px 0;
-  }
-
-  .step-config-header {
-    padding: 8px 0;
-  }
-
-  .signal-settings-table {
-    flex: 1;
-    overflow-y: scroll;
-    margin-top: 8px;
-  }
-
-  .config-radio-btn {
+  .step-settings-form {
     display: flex;
-    margin-top: 12px;
+    flex-direction: column;
+    gap: 24px;
+
+    .step-settings-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .step-settings-options {
+        display: flex;
+        flex-direction: column;
+
+        .step-settings-option {
+          display: flex;
+        }
+      }
+
+      .settings-worst-options {
+        display: flex;
+        gap: 8px;
+        margin-left: 24px;
+        margin-bottom: 8px;
+        margin-top: -4px;
+
+        .settings-weight-value {
+          width: 40px;
+
+          input {
+            text-align: right;
+          }
+        }
+      }
+
+      .signal-settings-table {
+        display: flex;
+        height: 100%;
+        min-height: 180px;
+
+        .included-signal {
+          box-sizing: border-box;
+          display: grid;
+          grid-template-columns: min-content auto;
+          align-items: center;
+          gap: 8px;
+      
+          .icons-lib {
+            @include fill-colors(
+              $critical: 'critical',
+              $success: 'success',
+              $unknown: 'unknown',
+              $warning: 'warning',
+            );
+          }
+        }
+      }
+    }
   }
 
-  .config-switch {
-    margin-left: 24px;
-  }
-
-  .worst-status-form {
-    display: inline-flex;
-    margin-right: 8px;
-    padding: 8px 0;
-  }
-
-  .status-weight-value {
-    width: 40px;
-    margin-right: 8px;
-  }
-}
-
-.step-button-bar {
-  display: flex;
-  justify-content: space-between;
-
-  .right {
+  .step-settings-button-bar {
     display: flex;
-    flex-direction: row;
-    gap: 10px;
+
+    .right {
+      margin-left: auto;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
   }
 }
