@@ -20,12 +20,7 @@ const StepHeader = ({
   stageId,
   levelId,
   stepId,
-  step: {
-    title,
-    signals,
-    link,
-    config,
-  } = {},
+  step: { title, signals, link, config } = {},
   onDragHandle,
   mode = MODES.INLINE,
   saveFlow,
