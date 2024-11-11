@@ -84,9 +84,14 @@ export const UI_CONTENT = {
     CONFIG: {
       TITLE: 'Step Settings',
       SELECT_SIGNALS: {
-        TITLE: 'Select Signals',
+        TITLE: 'Included Signals',
         DESCRIPTION:
           'Signals selected will be included in step status determination. Defaults to all signals.',
+      },
+      LINK: {
+        DESCRIPTION:
+          'Link to additional context for this step (e.g. a dashboard or a document)',
+        PLACEHOLDER: 'https://one.newrelic.com',
       },
       STATUS_CONFIG: {
         TITLE: 'Status Configuration',

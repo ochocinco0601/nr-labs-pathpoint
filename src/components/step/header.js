@@ -1,49 +1,35 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { HeadingText, Icon, Popover, PopoverBody, PopoverTrigger } from 'nr1';
+import {
+  Button,
+  HeadingText,
+  Icon,
+  Popover,
+  PopoverBody,
+  PopoverTrigger,
+} from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import IconsLib from '../icons-lib';
-import DeleteConfirmModal from '../delete-confirm-modal';
-import StepSettingsModal from '../step-settings-modal';
-import StepToolTip from '../step-tooltip';
-import { MODES, STATUSES } from '../../constants';
-import { FlowDispatchContext, StagesContext } from '../../contexts';
+import { IconsLib, DeleteConfirmModal, StepSettingsModal } from '../';
+import { MODES } from '../../constants';
+import { FlowDispatchContext } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
 const StepHeader = ({
   stageId,
   levelId,
   stepId,
+  step: { title, signals, link, config } = {},
   onDragHandle,
   mode = MODES.INLINE,
   saveFlow,
-  handleStepHeaderClick = () => null,
+  isStepExpanded,
+  onStepExpandCollapse,
 }) => {
-  const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
-  const [title, setTitle] = useState();
-  const [status, setStatus] = useState(STATUSES.UNKNOWN);
-  const [signals, setSignals] = useState([]);
-  const [stepStatusValue, setStepStatusValue] = useState(null);
-  const [stepStatusOption, setStepStatusOption] = useState(null);
-  const [stepStatusUnit, setStepStatusUnit] = useState(null);
   const [settingsModalHidden, setSettingsModalHidden] = useState(true);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
-
-  useEffect(() => {
-    const { levels = [] } =
-      (stages || []).find(({ id }) => id === stageId) || {};
-    const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
-    const step = steps.find(({ id }) => id === stepId) || {};
-    setTitle(step.title);
-    setStatus(step.status || STATUSES.UNKNOWN);
-    setSignals(step.signals || []);
-    setStepStatusValue(step.statusWeightValue || '');
-    setStepStatusOption(step.statusOption || 'worst');
-    setStepStatusUnit(step.statusWeightUnit || 'percent');
-  }, [stageId, levelId, stepId, stages]);
 
   const updateTitleHandler = (newTitle) => {
     if (newTitle === title) return;
@@ -83,6 +69,11 @@ const StepHeader = ({
     } else if (type === 'settings') {
       setSettingsModalHidden(false);
     }
+  }, []);
+
+  const openDeleteModal = useCallback(() => {
+    setDeleteModalHidden(false);
+    setSettingsModalHidden(true);
   }, []);
 
   return mode === MODES.EDIT ? (
@@ -127,31 +118,33 @@ const StepHeader = ({
       />
       <StepSettingsModal
         title={title}
-        stepStatusOption={stepStatusOption}
-        stepStatusValue={stepStatusValue}
-        stepStatusUnit={stepStatusUnit}
         signals={signals}
+        link={link}
+        config={config}
         hidden={settingsModalHidden}
-        onConfirm={deleteStepHandler}
         onChange={updateStepHandler}
+        onDelete={openDeleteModal}
         onClose={() => setSettingsModalHidden(true)}
       />
     </div>
   ) : (
-    <div className="step-header" onClick={handleStepHeaderClick}>
-      <StepToolTip
-        stepTitle={title}
-        stepStatus={status}
-        stepStatusOption={stepStatusOption}
-        stepStatusValue={stepStatusValue}
-        stepStatusUnit={stepStatusUnit}
-        signals={signals}
-        triggerElement={
-          <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
-            {title}
-          </HeadingText>
-        }
-      />
+    <div className="step-header" title={title}>
+      <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
+        {title}
+      </HeadingText>
+      {mode === MODES.INLINE ? (
+        <Button
+          className="expand-collapse-btn"
+          iconType={
+            isStepExpanded
+              ? Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_BOTTOM
+              : Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT
+          }
+          ariaLabel="Expand/collapse step"
+          variant={Button.VARIANT.TERTIARY}
+          onClick={onStepExpandCollapse}
+        />
+      ) : null}
     </div>
   );
 };
@@ -160,10 +153,12 @@ StepHeader.propTypes = {
   stageId: PropTypes.string,
   levelId: PropTypes.string,
   stepId: PropTypes.string,
+  step: PropTypes.object,
   onDragHandle: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
   saveFlow: PropTypes.func,
-  handleStepHeaderClick: PropTypes.func,
+  isStepExpanded: PropTypes.bool,
+  onStepExpandCollapse: PropTypes.func,
 };
 
 export default StepHeader;

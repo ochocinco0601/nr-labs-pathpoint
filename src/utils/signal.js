@@ -61,36 +61,42 @@ export const signalStatus = (signal, entity) => {
 export const calculateStepStatus = (step) => {
   if (step.signals.length === 0) return STATUSES.UNKNOWN;
 
+  const {
+    status: {
+      option: statusOption,
+      weight: {
+        unit: stepWeightUnit = STEP_STATUS_UNITS.PERCENT,
+        value: stepWeightValue = '',
+      } = {},
+    } = {},
+  } = step?.config || {};
+
   const includedSignals = step.signals.filter((s) => {
     return s.included === true || s.included === undefined;
   });
   const stepStatusCounts = countUniqueSignalStatus(includedSignals);
-  const stepWeightUnit =
-    'statusWeightUnit' in step ? step.statusWeightUnit : 'percent';
-  const stepWeightValue =
-    'statusWeightValue' in step ? step.statusWeightValue : '';
+  if (statusOption) {
+    const {
+      [STATUSES.CRITICAL]: criticalCount = 0,
+      [STATUSES.WARNING]: warningCount = 0,
+      [STATUSES.SUCCESS]: successCount = 0,
+    } = stepStatusCounts || {};
 
-  if ('statusOption' in step) {
-    if (step.statusOption === STEP_STATUS_OPTIONS.BEST) {
-      if ('success' in stepStatusCounts) {
-        if (stepStatusCounts['success'] > 0) {
-          return STATUSES.SUCCESS;
-        }
+    if (statusOption === STEP_STATUS_OPTIONS.BEST) {
+      if (successCount > 0) {
+        return STATUSES.SUCCESS;
+      } else if (warningCount > 0) {
+        return STATUSES.WARNING;
       }
+      return STATUSES.CRITICAL;
     }
 
-    if (step.statusOption === STEP_STATUS_OPTIONS.WORST) {
+    if (statusOption === STEP_STATUS_OPTIONS.WORST) {
       if (stepWeightValue === '') {
         return statusFromStatuses(
           (includedSignals || []).map(({ status }) => ({ status }))
         );
       } else {
-        const criticalCount = stepStatusCounts.critical
-          ? stepStatusCounts.critical
-          : 0;
-        const warningCount = stepStatusCounts.warning
-          ? stepStatusCounts.warning
-          : 0;
         let actualWeightValue;
 
         if (stepWeightUnit === STEP_STATUS_UNITS.COUNT) {

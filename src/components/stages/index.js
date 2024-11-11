@@ -19,7 +19,7 @@ import {
   useNerdletState,
 } from 'nr1';
 
-import { EmptyBlock, SignalDetailSidebar, Stage } from '../';
+import { EmptyBlock, SignalDetailSidebar, Stage, StepDetailSidebar } from '../';
 import {
   MODES,
   SIGNAL_TYPES,
@@ -421,10 +421,22 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         status: selections.data?.status,
         onClose: closeSidebarHandler,
       });
+    } else if (selections.type === COMPONENTS.STEP && selections.id) {
+      const { stageId, levelId } = selections.data || {};
+      const { levels = [] } =
+        (stagesData.stages || []).find(({ id }) => id === stageId) || {};
+      const { steps = [] } = levels.find(({ id }) => id === levelId) || {};
+      const step = steps.find(({ id }) => id === selections.id) || {};
+      if (step)
+        openSidebar({
+          content: <StepDetailSidebar step={step} />,
+          status: step?.status,
+          onClose: closeSidebarHandler,
+        });
     } else {
       closeSidebar();
     }
-  }, [selections, statuses, closeSidebarHandler]);
+  }, [selections, statuses, stagesData, closeSidebarHandler]);
 
   const markSelection = useCallback((type, id, data) => {
     if (!type || !id) return;

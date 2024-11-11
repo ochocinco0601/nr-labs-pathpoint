@@ -7,8 +7,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import SignalToolTip from '../signal-tooltip';
-import IconsLib from '../icons-lib';
+import { IconsLib, SignalTooltip } from '../';
 import { SelectionsContext } from '../../contexts';
 import { COMPONENTS, SIGNAL_TYPES } from '../../constants';
 
@@ -17,7 +16,7 @@ const renderSignalIcon = (
   i,
   onClick
 ) => (
-  <SignalToolTip
+  <SignalTooltip
     entityGuid={guid}
     signalType={type}
     triggerElement={

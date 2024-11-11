@@ -13,7 +13,7 @@ import {
 import { latestStatusForAlertConditions, statusFromGuid } from '../../queries';
 import { ALERT_SEVERITY, UI_CONTENT, SIGNAL_TYPES } from '../../constants';
 
-const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
+const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
   const [data, setData] = useState(null);
   const [alertData, setAlertData] = useState(null);
 
@@ -102,21 +102,21 @@ const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
         {data === null ? (
           ''
         ) : (
-          <div className="EntityTooltip">
-            <div className="EntityTooltipHeader">
-              <div className="EntityTooltipHeader-titleBar">
+          <div className="signal-tooltip">
+            <div className="signal-tooltip-header">
+              <div className="signal-tooltip-title-bar">
                 <HeadingText
                   tagType={HeadingText.TAG_TYPE.H4}
                   type={HeadingText.TYPE.HEADING_4}
-                  className="EntityTooltipHeader-title"
+                  className="title"
                 >
                   {data.name.length > 35
                     ? `${data.name.substring(0, 35)}...`
                     : data.name}
                 </HeadingText>
               </div>
-              <p className="EntityTypeAndAccountLabel">
-                <span className="EntityTypeAndAccountLabel-type">
+              <div className="signal-tooltip-label">
+                <span className="type">
                   {data.type
                     .toLowerCase()
                     .split(/[\s_]+/)
@@ -127,12 +127,10 @@ const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
                     })
                     .join(' ')}
                 </span>
-                <span className="EntityTypeAndAccountLabel-account">
-                  {data.account.name}
-                </span>
-              </p>
+                <span className="account">{data.account.name}</span>
+              </div>
             </div>
-            <div className="EntityTooltipContent">{renderStatus}</div>
+            <div className="signal-tooltip-content">{renderStatus}</div>
           </div>
         )}
       </PopoverBody>
@@ -140,10 +138,10 @@ const SignalToolTip = ({ entityGuid, signalType, triggerElement }) => {
   );
 };
 
-SignalToolTip.propTypes = {
+SignalTooltip.propTypes = {
   entityGuid: PropTypes.string,
   signalType: PropTypes.string,
   triggerElement: PropTypes.element,
 };
 
-export default SignalToolTip;
+export default SignalTooltip;

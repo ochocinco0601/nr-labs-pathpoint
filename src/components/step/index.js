@@ -29,7 +29,6 @@ const Step = ({
   stepId,
   signals = [],
   signalExpandOption = SIGNAL_EXPAND.NONE,
-  onDelete,
   onDragStart,
   onDragOver,
   onDrop,
@@ -41,6 +40,7 @@ const Step = ({
   const signalsDetails = useContext(SignalsContext);
   const { selections, markSelection } = useContext(SelectionsContext);
   const dispatch = useContext(FlowDispatchContext);
+  const [thisStep, setThisStep] = useState();
   const [title, setTitle] = useState();
   const [status, setStatus] = useState(STATUSES.UNKNOWN);
   const [stageName, setStageName] = useState('');
@@ -70,6 +70,7 @@ const Step = ({
     setStageName(name);
     setTitle(step.title);
     setStatus(step.status || STATUSES.UNKNOWN);
+    setThisStep(step);
   }, [stageId, levelId, stepId, stages, signals, selections]);
 
   useEffect(() => {
@@ -184,7 +185,7 @@ const Step = ({
   );
   SignalsList.displayName = 'SignalsList';
 
-  const handleStepHeaderClick = (e) => {
+  const handleStepExpandCollapse = (e) => {
     if (mode === MODES.INLINE) {
       e.stopPropagation();
       if (signals.length) setSignalsListView((slw) => !slw);
@@ -202,7 +203,7 @@ const Step = ({
       }`}
       onClick={() =>
         mode !== MODES.EDIT && markSelection
-          ? markSelection(COMPONENTS.STEP, stepId)
+          ? markSelection(COMPONENTS.STEP, stepId, { stageId, levelId })
           : null
       }
       draggable={mode === MODES.EDIT}
@@ -215,12 +216,12 @@ const Step = ({
         stageId={stageId}
         levelId={levelId}
         stepId={stepId}
-        signals={signals}
-        onDelete={onDelete}
+        step={thisStep}
         onDragHandle={dragHandleHandler}
         mode={mode}
         saveFlow={saveFlow}
-        handleStepHeaderClick={handleStepHeaderClick}
+        isStepExpanded={signalsListView}
+        onStepExpandCollapse={handleStepExpandCollapse}
       />
       {mode === MODES.EDIT ? (
         <>
@@ -279,7 +280,6 @@ Step.propTypes = {
   stepId: PropTypes.string,
   signals: PropTypes.array,
   signalExpandOption: PropTypes.number,
-  onDelete: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,

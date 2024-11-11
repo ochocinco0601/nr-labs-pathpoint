@@ -1,0 +1,62 @@
+.step-detail-sidebar {
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .step-header {
+    .step-header-card-body {
+      margin: 0;
+    }
+  }
+
+  .detail-link {
+    color: #0C74DF;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+  }
+
+  .signals-status-rule {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .status-calculation {
+      display: inline-flex;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #535E65;
+
+      .status-option {
+        text-transform: capitalize;
+      }
+    }
+
+    .included-signals-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .included-signal {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: min-content auto;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 2px;
+
+        .icons-lib {
+          @include fill-colors(
+            $critical: 'critical',
+            $success: 'success',
+            $unknown: 'unknown',
+            $warning: 'warning',
+          );
+        }
+      }
+    }
+  }
+}
