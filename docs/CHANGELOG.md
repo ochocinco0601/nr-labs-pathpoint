@@ -1,3 +1,12 @@
+## [2.1.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.13...v2.1.14) (2024-11-11)
+
+
+### Bug Fixes
+
+* add step detail sidebar component ([6048e72](https://github.com/newrelic/nr-labs-pathpoint/commit/6048e7227179eb6d45a6872a62236b0af1b2e5fd))
+* replace step tooltip with step sidebar; expand and collapse steps ([9a96ffa](https://github.com/newrelic/nr-labs-pathpoint/commit/9a96ffa5f1cccf26f5a48e59d74f831d7248d668))
+* update signal tooltip to be compliant with project code style ([7b89d12](https://github.com/newrelic/nr-labs-pathpoint/commit/7b89d12c53ebac7081393aeecadd4f55d4b112d1))
+
 ## [2.1.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.12...v2.1.13) (2024-11-05)
 
 
