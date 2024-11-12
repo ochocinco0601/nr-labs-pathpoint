@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import { HeadingText, Icon, Popover, PopoverTrigger, PopoverBody } from 'nr1';
 import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import IconsLib from '../icons-lib';
-import DeleteConfirmModal from '../delete-confirm-modal';
-import StageSettingsModal from '../stage-settings-modal';
+import { IconsLib, DeleteConfirmModal, StageSettingsModal } from '../';
 import { MODES, STATUSES, UI_CONTENT } from '../../constants';
 import { stageHeaderShapeClassName } from '../../utils';
 
@@ -111,6 +109,9 @@ const StageHeader = ({
       className={`stage-header ${status} ${shape} ${linkClass}`}
     >
       <HeadingText className="name">{name}</HeadingText>
+      {link ? (
+        <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK} />
+      ) : null}
     </div>
   );
 };
