@@ -46,25 +46,30 @@ const StepSettingsModal = ({
 
   useEffect(() => setIsModalHidden(hidden), [hidden]);
 
-  useEffect(() => setUrl(link), [link]);
+  const modalShowEndHandler = () => {
+    setUrl(link);
+    configSetup(config);
+    stepSignalsSetup(signals);
+  };
 
-  useEffect(() => {
-    const { status: { option, weight: { unit, value } = {} } = {} } =
-      config || {};
-
-    setStatusOption(option || STEP_STATUS_OPTIONS.WORST);
-    setStatusWeightUnit(unit || STEP_STATUS_UNITS.PERCENT);
-    setStatusWeightValue(value || '');
-  }, [config]);
-
-  useEffect(
-    () =>
+  const stepSignalsSetup = useCallback(
+    (sigs) =>
       setStepSignals(() =>
-        (signals || []).map((s) =>
+        (sigs || []).map((s) =>
           s.included === undefined ? { ...s, included: true } : s
         )
       ),
-    [signals]
+    []
+  );
+
+  const configSetup = useCallback(
+    ({ status: { option, weight: { unit, value } = {} } = {} } = {}) => {
+      setStatusOption(option || STEP_STATUS_OPTIONS.WORST);
+      setStatusWeightUnit(unit || STEP_STATUS_UNITS.PERCENT);
+      setStatusWeightValue(value || '');
+      if (value) setHasWorstStatusArgs(true);
+    },
+    []
   );
 
   const saveHandler = useCallback(() => {
@@ -119,7 +124,11 @@ const StepSettingsModal = ({
   );
 
   return (
-    <Modal hidden={isModalHidden} onClose={onClose}>
+    <Modal
+      hidden={isModalHidden}
+      onClose={onClose}
+      onShowEnd={modalShowEndHandler}
+    >
       <div className="step-settings-modal">
         <div className="modal-heading">
           <HeadingText type={HeadingText.TYPE.HEADING_1}>
