@@ -1,3 +1,10 @@
+## [2.1.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.16...v2.1.17) (2024-11-14)
+
+
+### Bug Fixes
+
+* couple minor issues in step settings modal ([1c00e4b](https://github.com/newrelic/nr-labs-pathpoint/commit/1c00e4b771a004d25d815f697b238f071db57e23))
+
 ## [2.1.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.15...v2.1.16) (2024-11-14)
 
 
