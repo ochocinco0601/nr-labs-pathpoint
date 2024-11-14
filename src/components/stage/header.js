@@ -2,11 +2,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { HeadingText, Icon, Popover, PopoverTrigger, PopoverBody } from 'nr1';
-import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import { IconsLib, DeleteConfirmModal, StageSettingsModal } from '../';
-import { MODES, STATUSES, UI_CONTENT } from '../../constants';
+import {
+  IconsLib,
+  DeleteConfirmModal,
+  StageSettingsModal,
+  EditInPlace,
+} from '../';
 import { stageHeaderShapeClassName } from '../../utils';
+import { MODES, STATUSES, UI_CONTENT } from '../../constants';
 
 const StageHeader = ({
   name,
