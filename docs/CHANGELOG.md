@@ -1,3 +1,10 @@
+## [2.1.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.15...v2.1.16) (2024-11-14)
+
+
+### Bug Fixes
+
+* add link icon for stages with links ([f178bea](https://github.com/newrelic/nr-labs-pathpoint/commit/f178bea951d93b2a6516cd0090ed07cf5778bfbe))
+
 ## [2.1.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.14...v2.1.15) (2024-11-14)
 
 
