@@ -1,3 +1,10 @@
+## [2.1.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.14...v2.1.15) (2024-11-14)
+
+
+### Bug Fixes
+
+* update button in signal detail sidebar ([fb6c58f](https://github.com/newrelic/nr-labs-pathpoint/commit/fb6c58f1c961c503110bf584be28d8a80f163b5a))
+
 ## [2.1.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.13...v2.1.14) (2024-11-11)
 
 
