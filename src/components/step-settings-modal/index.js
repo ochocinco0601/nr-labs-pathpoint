@@ -79,10 +79,16 @@ const StepSettingsModal = ({
       config: {
         status: {
           option: statusOption,
-          weight: {
-            unit: statusWeightUnit,
-            value: statusWeightValue,
-          },
+          weight:
+            statusOption === STEP_STATUS_OPTIONS.WORST && hasWorstStatusArgs
+              ? {
+                  unit: statusWeightUnit,
+                  value: statusWeightValue,
+                }
+              : {
+                  unit: STEP_STATUS_UNITS.PERCENT,
+                  value: '',
+                },
         },
       },
     });
@@ -95,6 +101,7 @@ const StepSettingsModal = ({
     statusOption,
     statusWeightUnit,
     statusWeightValue,
+    hasWorstStatusArgs,
   ]);
 
   const statusOptionChangeHandler = useCallback((_, value) => {
