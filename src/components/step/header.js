@@ -9,12 +9,16 @@ import {
   PopoverBody,
   PopoverTrigger,
 } from 'nr1';
-import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import { IconsLib, DeleteConfirmModal, StepSettingsModal } from '../';
-import { MODES } from '../../constants';
-import { FlowDispatchContext } from '../../contexts';
+import {
+  IconsLib,
+  DeleteConfirmModal,
+  StepSettingsModal,
+  EditInPlace,
+} from '../';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
+import { FlowDispatchContext } from '../../contexts';
+import { MODES } from '../../constants';
 
 const StepHeader = ({
   stageId,
