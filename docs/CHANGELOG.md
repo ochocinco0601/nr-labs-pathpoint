@@ -1,3 +1,10 @@
+## [2.1.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.19...v2.1.20) (2024-11-15)
+
+
+### Bug Fixes
+
+* display message when alerting service level has no incidents ([109296f](https://github.com/newrelic/nr-labs-pathpoint/commit/109296f5e7eccf24837d7f2afb285058ee13d597))
+
 ## [2.1.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.18...v2.1.19) (2024-11-15)
 
 
