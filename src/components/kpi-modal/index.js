@@ -11,17 +11,14 @@ import {
   PopoverBody,
 } from 'nr1';
 
-import {
-  EditInPlace,
-  NrqlEditor,
-  SimpleBillboard,
-} from '@newrelic/nr-labs-components';
+import { NrqlEditor, SimpleBillboard } from '@newrelic/nr-labs-components';
 
 import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
+import { EditInPlace } from '../';
 import { useFetchKpis } from '../../hooks';
-import { KPI_MODES, UI_CONTENT } from '../../constants';
 import { lexer, NRQL_STYLES, formatKpiHoverDatime } from '../../utils';
+import { KPI_MODES, UI_CONTENT } from '../../constants';
 
 const metricFromQuery = (results) => ({
   value: results?.value || 0,

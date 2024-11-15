@@ -14,10 +14,14 @@ import {
   SegmentedControlItem,
   Tooltip,
 } from 'nr1';
-import { EditInPlace } from '@newrelic/nr-labs-components';
 
-import IconsLib from '../icons-lib';
-import { FlowListDropdown, ImageUploadModal, LastSavedMessage } from '../';
+import {
+  EditInPlace,
+  IconsLib,
+  FlowListDropdown,
+  ImageUploadModal,
+  LastSavedMessage,
+} from '../';
 import { MODES, UI_CONTENT } from '../../constants';
 
 const FlowHeader = ({

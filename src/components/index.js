@@ -29,3 +29,4 @@ export { default as PlaybackBar } from './playback-bar';
 export { default as StepSettingsModal } from './step-settings-modal';
 export { default as SignalTooltip } from './signal-tooltip';
 export { default as StepDetailSidebar } from './step-detail-sidebar';
+export { default as EditInPlace } from './edit-in-place';
