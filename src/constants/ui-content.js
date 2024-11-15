@@ -137,6 +137,8 @@ export const UI_CONTENT = {
       NO_RECENT_INCIDENTS: 'No open incidents to display.',
       LATEST_RECENT_INCIDENT:
         'No open incidents. Showing the most recent incident.',
+      ALERTING_SL_NO_INCIDENT:
+        "This Service Level is in an unhealthy state, however we can't find any correlated incidents. It is likely that the Service Level is out of compliance - to investigate further, please open the entity view (linked above).",
     },
     TOOLTIP: {
       WORKLOAD_UNKNOWN: 'The status of this workload is unknown',

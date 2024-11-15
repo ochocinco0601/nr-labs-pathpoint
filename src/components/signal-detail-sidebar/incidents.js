@@ -102,6 +102,14 @@ const Incidents = ({ type, data, timeWindow }) => {
       </HeadingText>
       <div className="alert-incidents">
         {bannerMessage && <SectionMessage description={bannerMessage} />}
+        {data?.type === 'SERVICE_LEVEL' &&
+        data?.alertSeverity !== 'NOT_ALERTING' &&
+        !incidentsList?.length ? (
+          <SectionMessage
+            type={SectionMessage.TYPE.WARNING}
+            description={UI_CONTENT.SIGNAL.DETAILS.ALERTING_SL_NO_INCIDENT}
+          />
+        ) : null}
         {incidentsList.reduce(
           (
             acc,
