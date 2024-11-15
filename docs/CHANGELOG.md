@@ -1,3 +1,10 @@
+## [2.1.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.17...v2.1.18) (2024-11-15)
+
+
+### Bug Fixes
+
+* replace edit-in-place component to support i18n ([4e174b6](https://github.com/newrelic/nr-labs-pathpoint/commit/4e174b63fc1e6733f820bec3e30006c591b4c461))
+
 ## [2.1.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.16...v2.1.17) (2024-11-14)
 
 
