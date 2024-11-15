@@ -1,3 +1,10 @@
+## [2.1.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.18...v2.1.19) (2024-11-15)
+
+
+### Bug Fixes
+
+* step settings weight not updated on changes ([0d9f59f](https://github.com/newrelic/nr-labs-pathpoint/commit/0d9f59f06d7bb19624299ce334c1be6795b0dca2))
+
 ## [2.1.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.17...v2.1.18) (2024-11-15)
 
 
