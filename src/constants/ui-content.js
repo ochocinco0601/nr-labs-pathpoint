@@ -137,6 +137,7 @@ export const UI_CONTENT = {
       NO_RECENT_INCIDENTS: 'No open incidents to display.',
       LATEST_RECENT_INCIDENT:
         'No open incidents. Showing the most recent incident.',
+      ALERTING_SL_NO_INCIDENT: 'No incidents for this alerting service level!',
     },
     TOOLTIP: {
       WORKLOAD_UNKNOWN: 'The status of this workload is unknown',
