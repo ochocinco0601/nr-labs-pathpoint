@@ -1,3 +1,10 @@
+## [2.1.22](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.21...v2.1.22) (2024-11-18)
+
+
+### Bug Fixes
+
+* bump version ([f7fbf77](https://github.com/newrelic/nr-labs-pathpoint/commit/f7fbf77bce63f7b4c734ddfe78848e96f5440005))
+
 ## [2.1.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.20...v2.1.21) (2024-11-18)
 
 
