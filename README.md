@@ -16,7 +16,7 @@ Requires no specific data or additional features.
 
 ## Enabling this App
 
-This App is available via the New Relic Catalog.
+This App is available via the New Relic Catalog. 
 
 To enable it in your account: 
 1. go to `Integrations & Agents > Apps and Visualzations` and search for "Pathpoint v2"
