@@ -168,47 +168,6 @@ const incidentsSearchQuery = (acctId, incidentIds, timeWindow) => `{
   }
 }`;
 
-const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
-  actor {
-    ${Object.keys(acctIncidentIds)
-      .map(
-        (acct) => `
-      a${acct}: account(id: ${acct}) {
-        ${acctIncidentIds[acct]
-          .map(
-            (incidentIds, idx) => `
-          a${idx}: aiIssues {
-            incidents(
-              filter: {ids: ["${incidentIds.join('", "')}"]}
-              ${
-                timeWindow?.start && timeWindow?.end
-                  ? `timeWindow: {startTime: ${timeWindow.start}, endTime: ${timeWindow.end}}`
-                  : ''
-              }
-            ) {
-              incidents {
-                ... on AiIssuesNewRelicIncident {
-                  accountIds
-                  closedAt
-                  conditionFamilyId
-                  createdAt
-                  incidentId
-                  priority
-                  state
-                  title
-                }
-              }
-            }
-          }
-          id`
-          )
-          .join('')}
-      }`
-      )
-      .join('')}
-  }
-}`;
-
 export {
   nrqlConditionsSearchQuery,
   policiesSearchQuery,
@@ -217,5 +176,4 @@ export {
   conditionsDetailsQuery,
   issuesForConditionsQuery,
   incidentsSearchQuery,
-  incidentsByAccountsQuery,
 };
