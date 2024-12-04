@@ -20,28 +20,7 @@ import {
 } from 'nr1';
 
 import { EmptyBlock, SignalDetailSidebar, Stage, StepDetailSidebar } from '../';
-import {
-  MODES,
-  SIGNAL_TYPES,
-  SIGNAL_EXPAND,
-  COMPONENTS,
-  UI_CONTENT,
-  ALERT_STATUSES,
-} from '../../constants';
-import {
-  addSignalStatuses,
-  alertStatusesObject,
-  alertsTree,
-  annotateStageWithStatuses,
-  conditionsAndIncidentsFromResponse,
-  entitiesDetailsFromQueryResults,
-  guidsToArray,
-  incidentsByAccountsConditions,
-  signalDetailsObject,
-  statusFromStatuses,
-  uniqueSignalGuidsInStages,
-  validRefreshInterval,
-} from '../../utils';
+import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 import {
   AppContext,
   FlowContext,
@@ -52,14 +31,35 @@ import {
   StagesContext,
   useSidebar,
 } from '../../contexts';
-import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 import {
-  conditionsDetailsByAccountQuery,
-  incidentsByAccountsQuery,
+  conditionsDetailsQuery,
+  incidentsSearchQuery,
+  issuesForConditionsQuery,
   statusesFromGuidsArray,
 } from '../../queries';
+import {
+  addSignalStatuses,
+  annotateStageWithStatuses,
+  batchAlertConditionsByAccount,
+  batchedIncidentIdsFromIssuesQuery,
+  entitiesDetailsFromQueryResults,
+  guidsToArray,
+  incidentsFromIncidentsBlocks,
+  signalDetailsObject,
+  statusFromStatuses,
+  uniqueSignalGuidsInStages,
+  validRefreshInterval,
+} from '../../utils';
+import {
+  MODES,
+  SIGNAL_TYPES,
+  SIGNAL_EXPAND,
+  COMPONENTS,
+  UI_CONTENT,
+  ALERT_STATUSES,
+  MAX_PARAMS_IN_QUERY,
+} from '../../constants';
 
-const MAX_GUIDS_PER_CALL = 25;
 const WORKLOAD_TYPE = 'WORKLOAD';
 const WORKLOAD_SKIP_SEVERITIES = [
   ALERT_STATUSES.NOT_CONFIGURED,
@@ -118,7 +118,7 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
       clearTimeout(entitiesStatusTimeoutId.current);
       const entitesGuidsArray = guidsToArray(
         { entitiesGuids },
-        MAX_GUIDS_PER_CALL
+        MAX_PARAMS_IN_QUERY
       );
       const query = statusesFromGuidsArray(entitesGuidsArray, timeWindow);
       const { data: { actor = {} } = {}, error } = await NerdGraphQuery.query({
@@ -210,80 +210,106 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
   const fetchAlertsStatus = useCallback(
     async (alertsGuids, timeWindow, isForCache) => {
       clearTimeout(alertsStatusTimeoutId.current);
-      const alertsByAccounts = alertsGuids.reduce(alertsTree, {});
-      const alertsBlocks = Object.keys(alertsByAccounts);
-      if (alertsBlocks.length) {
-        const alertsResponses = await Promise.allSettled(
-          alertsBlocks.map(async (acctIdWIdx) => {
-            const acctId = acctIdWIdx.split('_')?.[0],
-              condIds = Object.keys(alertsByAccounts[acctIdWIdx]);
-            const query = conditionsDetailsByAccountQuery(
-              acctId,
-              condIds,
-              timeWindow
-            );
-            const {
-              data: {
-                actor: {
-                  [`a${acctId}`]: {
-                    alerts: { __typename, ...alertsResp }, // eslint-disable-line no-unused-vars
-                    nrql: { results: [{ incidentIds = [] }] = [] },
-                  } = {},
+
+      const batchedConditions = alertsGuids.reduce(
+        batchAlertConditionsByAccount,
+        []
+      );
+      const conditionsResponses = await Promise.allSettled(
+        batchedConditions?.map(async ({ acctId, condIds }) => {
+          const query = conditionsDetailsQuery(acctId, condIds);
+          const {
+            data: { actor: { account: { alerts } = {} } = {} } = {},
+            error,
+          } = await NerdGraphQuery.query({ query });
+          if (error)
+            console.error('Error fetching conditions details:', error.message);
+          return { acctId, alerts };
+        })
+      );
+      const issuesBlocks = await Promise.allSettled(
+        batchedConditions?.map(async ({ acctId, condIds }) => {
+          let query = issuesForConditionsQuery(acctId, condIds, timeWindow);
+          const {
+            data: {
+              actor: {
+                account: { aiIssues: { issues: { issues } = {} } = {} } = {},
+              } = {},
+            } = {},
+            error,
+          } = await NerdGraphQuery.query({ query });
+          if (error) console.error('Error fetching issues:', error.message);
+          return { acctId, issues };
+        })
+      );
+      const batchedIncidentIds =
+        batchedIncidentIdsFromIssuesQuery(issuesBlocks);
+
+      const incidentsBlocks = await Promise.allSettled(
+        batchedIncidentIds?.map(async ({ acctId, incidentIds }) => {
+          const query = incidentsSearchQuery(acctId, incidentIds, timeWindow);
+          const {
+            data: {
+              actor: {
+                account: {
+                  aiIssues: { incidents: { incidents } = {} } = {},
                 } = {},
               } = {},
-              error,
-            } = await NerdGraphQuery.query({
-              query,
-            });
-            if (error) console.error('Error fetching alerts:', error.message);
-            return { id: acctId, alerts: alertsResp, incidentIds };
-          })
-        );
-        const condsResp = alertsResponses.reduce(
-          (acc, { value: { id, alerts, incidentIds } = {} }) => ({
-            ...acc,
-            [id]: {
-              id,
-              ...acc[id],
-              alerts: {
-                ...(acc[id]?.alerts || {}),
-                ...alerts,
-              },
-              incidentIds: [...(acc[id]?.incidentIds || []), ...incidentIds],
-            },
-          }),
-          {}
-        );
-        if (!condsResp) return;
-        const { conditionsLookup = {}, acctIncidentIds = {} } =
-          conditionsAndIncidentsFromResponse(condsResp, MAX_GUIDS_PER_CALL);
-        let incidentsObj = {};
-        if (Object.keys(acctIncidentIds).length) {
-          const query = incidentsByAccountsQuery(acctIncidentIds, timeWindow);
-          const {
-            data: { actor: { __typename, ...incidsResp } = {} } = {}, //eslint-disable-line no-unused-vars
-          } = await NerdGraphQuery.query({
-            query,
+            } = {},
+            error,
+          } = await NerdGraphQuery.query({ query });
+          if (error) console.error('Error fetching incidents:', error.message);
+          return { acctId, incidents };
+        })
+      );
+      const acctCondIncidents = incidentsBlocks?.reduce(
+        incidentsFromIncidentsBlocks,
+        {}
+      );
+
+      const alertsStatusesObj = conditionsResponses.reduce(
+        (acc, { value: { acctId, alerts = {} } = {} } = {}) => {
+          Object.keys(alerts).forEach((key) => {
+            const {
+              id: conditionId,
+              entityGuid,
+              enabled,
+              name,
+            } = alerts[key] || {};
+            if (entityGuid) {
+              const {
+                inferredPriority = ALERT_STATUSES.NOT_ALERTING,
+                incidents = [],
+              } = acctCondIncidents?.[acctId]?.[conditionId] || {};
+              acc = {
+                ...acc,
+                [entityGuid]: {
+                  conditionId,
+                  name,
+                  entityGuid,
+                  enabled,
+                  inferredPriority,
+                  incidents,
+                },
+              };
+            }
           });
-          incidentsObj = incidsResp ? incidsResp : {};
-        }
-        const incidentsLookup = incidentsByAccountsConditions(incidentsObj);
-        const alertsStatusesObj = alertStatusesObject(
-          conditionsLookup,
-          incidentsLookup
+          return acc;
+        },
+        {}
+      );
+
+      if (isForCache) return alertsStatusesObj;
+      if (statusTimeoutDelay.current && !timeWindow) {
+        alertsStatusTimeoutId.current = setTimeout(
+          () => fetchAlertsStatus(alertsGuids),
+          statusTimeoutDelay.current
         );
-        if (isForCache) return alertsStatusesObj;
-        if (statusTimeoutDelay.current && !timeWindow) {
-          alertsStatusTimeoutId.current = setTimeout(
-            () => fetchAlertsStatus(alertsGuids),
-            statusTimeoutDelay.current
-          );
-        }
-        setStatuses((s) => ({
-          ...s,
-          [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
-        }));
       }
+      setStatuses((s) => ({
+        ...s,
+        [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
+      }));
     },
     []
   );
