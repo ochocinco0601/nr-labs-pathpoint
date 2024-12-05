@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.22...v2.2.0) (2024-12-05)
+
+
+### Features
+
+* updated alert condition querying ([45e6347](https://github.com/newrelic/nr-labs-pathpoint/commit/45e63472617f2f73301eba0a6a791652a0ffe0ff))
+
 ## [2.1.22](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.21...v2.1.22) (2024-11-18)
 
 
