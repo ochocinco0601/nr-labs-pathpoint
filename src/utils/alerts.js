@@ -1,7 +1,7 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
 
 import { latestStatusForAlertConditions, queriesGQL } from '../queries';
-import { ALERT_STATUSES } from '../constants';
+import { ALERT_STATUSES, MAX_PARAMS_IN_QUERY } from '../constants';
 
 const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
@@ -28,21 +28,101 @@ export const alertStatus = ({ enabled, inferredPriority } = {}) => {
   }
 };
 
-export const alertsTree = (acc, guid) => {
-  const [acctId, , , condId] = atob(guid).split('|');
+export const batchAlertConditionsByAccount = (acc, cur) => {
+  const [acctId, , , condId] = atob(cur)?.split('|') || [];
   if (!acctId || !condId) return acc;
-  let acctIdSuffix = 1,
-    curAcctBlock = `${acctId}_${acctIdSuffix}`;
-  if (!(curAcctBlock in acc)) {
-    acc[curAcctBlock] = {};
+
+  const accountBatches = acc.filter((a) => a.acctId === acctId);
+  if (!accountBatches.length) {
+    acc.push({
+      acctId,
+      condIds: [condId],
+    });
   } else {
-    while (Object.keys(acc[curAcctBlock]).length > 24) {
-      acctIdSuffix += 1;
-      curAcctBlock = `${acctId}_${acctIdSuffix}`;
-      if (!(curAcctBlock in acc)) acc[curAcctBlock] = {};
+    const lastAcctBatch = accountBatches[accountBatches.length - 1];
+    if (lastAcctBatch.condIds.length < 25) {
+      lastAcctBatch.condIds.push(condId);
+    } else {
+      acc.push({
+        acctId,
+        condIds: [condId],
+      });
     }
   }
-  acc[curAcctBlock][condId] = guid;
+  return acc;
+};
+
+const arrayToBlocks = (array = [], blockSize = MAX_PARAMS_IN_QUERY) => {
+  const ret = [];
+  for (let i = 0; i < array.length; i += blockSize) {
+    ret.push(array.slice(i, i + blockSize));
+  }
+  return ret;
+};
+
+export const batchedIncidentIdsFromIssuesQuery = (issuesBlocks) => {
+  const uniqueIncidentIds = issuesBlocks?.reduce(
+    (acc, { value: { acctId, issues = [] } = {} }) => {
+      if (!(acctId in acc)) acc[acctId] = new Set();
+      issues.forEach(({ incidentIds = [] }) =>
+        incidentIds.forEach((ii) => acc[acctId].add(ii))
+      );
+      return acc;
+    },
+    {}
+  );
+
+  return Object.keys(uniqueIncidentIds).reduce(
+    (acc, acctId) => [
+      ...acc,
+      ...arrayToBlocks([...uniqueIncidentIds[acctId]]).map((incidentIds) => ({
+        acctId,
+        incidentIds,
+      })),
+    ],
+    []
+  );
+};
+
+const calculatePriority = (
+  { priority: incidentPriority, closedAt } = {},
+  prevPriority = ALERT_STATUSES.NOT_ALERTING
+) => {
+  if (!incidentPriority) return prevPriority;
+  const priority = closedAt ? ALERT_STATUSES.NOT_ALERTING : incidentPriority;
+  if (
+    priority === ALERT_STATUSES.CRITICAL ||
+    prevPriority === ALERT_STATUSES.CRITICAL
+  )
+    return ALERT_STATUSES.CRITICAL;
+  if (
+    priority === ALERT_STATUSES.HIGH ||
+    priority === ALERT_STATUSES.WARNING ||
+    prevPriority === ALERT_STATUSES.HIGH ||
+    prevPriority === ALERT_STATUSES.WARNING
+  )
+    return ALERT_STATUSES.WARNING;
+  return ALERT_STATUSES.NOT_ALERTING;
+};
+
+export const incidentsFromIncidentsBlocks = (
+  acc,
+  { value: { acctId, incidents = [] } = {} }
+) => {
+  if (!(acctId in acc)) acc[acctId] = {};
+  incidents.forEach((incident) => {
+    const condId = incident.conditionFamilyId;
+    if (!condId) return;
+    acc[acctId][condId] = {
+      inferredPriority: calculatePriority(
+        incident,
+        acc[acctId][condId]?.inferredPriority
+      ),
+      incidents: acc[acctId][condId]?.incidents
+        ? [...acc[acctId][condId].incidents, incident]
+        : [incident],
+    };
+  });
   return acc;
 };
 
@@ -75,71 +155,6 @@ export const alertsStatusFromQueryResults = (alerts = {}, queryResult = {}) => {
 
   return statuses;
 };
-
-const incidentIdsArray = (incidentIds = [], maxGuids) => {
-  if (!incidentIds.length) return [];
-  let arr = [];
-  for (let i = 0; i < incidentIds.length; i += maxGuids) {
-    const iids = incidentIds.slice(i, i + maxGuids);
-    if (iids.length) arr.push(iids);
-  }
-  return arr;
-};
-
-export const conditionsAndIncidentsFromResponse = (resp = {}, maxGuids) =>
-  Object.keys(resp).reduce(
-    (acc, acct) => {
-      const { alerts, id, incidentIds } = resp[acct] || {};
-      if (id) {
-        if (!(id in acc.conditionsLookup)) acc.conditionsLookup[id] = {};
-        acc.conditionsLookup[id] = Object.keys(alerts).reduce((conds, cond) => {
-          const { enabled, entityGuid, id, name } = alerts[cond] || {};
-          return id ? { ...conds, [id]: { enabled, entityGuid, name } } : conds;
-        }, {});
-        const iia = incidentIdsArray(incidentIds, maxGuids);
-        if (iia.length) {
-          acc.acctIncidentIds[id] = iia;
-        }
-      }
-      return acc;
-    },
-    { conditionsLookup: {}, acctIncidentIds: {} }
-  );
-
-export const incidentsByAccountsConditions = (resp) =>
-  Object.keys(resp).reduce((acc, key) => {
-    const { __typename, id: acctId, ...indexes } = resp[key]; // eslint-disable-line no-unused-vars
-    Object.keys(indexes).forEach((idx) => {
-      indexes[idx].incidents?.incidents?.forEach(
-        // eslint-disable-next-line no-unused-vars
-        ({ __typename, conditionFamilyId, ...incident }) => {
-          if (conditionFamilyId) {
-            if (!(acctId in acc)) acc[acctId] = {};
-            if (!(conditionFamilyId in acc[acctId]))
-              acc[acctId][conditionFamilyId] = {
-                conditionId: conditionFamilyId,
-                incidents: [],
-                inferredPriority: ALERT_STATUSES.NOT_ALERTING,
-              };
-            acc[acctId][conditionFamilyId].incidents.push(incident);
-            if (!incident.closedAt) {
-              if (incident.priority === ALERT_STATUSES.CRITICAL) {
-                acc[acctId][conditionFamilyId].inferredPriority =
-                  ALERT_STATUSES.CRITICAL;
-              } else if (
-                acc[acctId][conditionFamilyId].inferredPriority !==
-                ALERT_STATUSES.CRITICAL
-              ) {
-                acc[acctId][conditionFamilyId].inferredPriority =
-                  incident.priority;
-              }
-            }
-          }
-        }
-      );
-    });
-    return acc;
-  }, {});
 
 export const alertStatusesObject = (conditionsLookup, incidentsLookup) =>
   Object.keys(conditionsLookup).reduce(

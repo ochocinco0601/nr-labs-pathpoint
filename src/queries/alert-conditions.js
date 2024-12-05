@@ -1,5 +1,7 @@
 import { ngql } from 'nr1';
 
+const threeDaysAgo = (d = new Date()) => d.setDate(d.getDate() - 3);
+
 const nrqlConditions = `
   nextCursor
   nrqlConditions {
@@ -90,31 +92,9 @@ latest(durationSeconds) as durationSeconds FROM NrAiIncident where event in ('op
 where latestEvent = 'open'
   ${timeClause} order by openTime desc ${limitStatement}`.replace(/\s+/g, ' ');
 
-const condsDetailsNrql = (conds = [], timeWindow) =>
-  conds.length
-    ? `nrql(
-  query: ${`"
-    SELECT uniques(incidentId) AS incidentIds 
-    FROM NrAiIncident 
-    WHERE conditionId IN (${conds.join(', ')}) 
-    ${
-      timeWindow?.start && timeWindow?.end
-        ? `
-          SINCE ${timeWindow.start}
-          UNTIL ${timeWindow.end}
-        `
-        : 'SINCE 10 days ago'
-    }
-    LIMIT MAX
-  "`.replace(/\s\s+/g, ' ')}
-) {
-  results
-}`
-    : '';
-
-const conditionsDetailsByAccountQuery = (acct, condIds, timeWindow) => `{
+const conditionsDetailsQuery = (acctId, condIds) => `{
   actor {
-    a${acct}: account(id: ${acct}) {
+    account(id: ${acctId}) {
       alerts {
         ${condIds
           .map(
@@ -128,50 +108,63 @@ const conditionsDetailsByAccountQuery = (acct, condIds, timeWindow) => `{
           )
           .join('')}
       }
-      id
-      ${condsDetailsNrql(condIds, timeWindow)}
     }
   }
 }`;
 
-const incidentsByAccountsQuery = (acctIncidentIds = {}, timeWindow) => `{
+const issuesForConditionsQuery = (acctId, condIds, timeWindow) => `{
   actor {
-    ${Object.keys(acctIncidentIds)
-      .map(
-        (acct) => `
-      a${acct}: account(id: ${acct}) {
-        ${acctIncidentIds[acct]
-          .map(
-            (incidentIds, idx) => `
-          a${idx}: aiIssues {
-            incidents(
-              filter: {ids: ["${incidentIds.join('", "')}"]}
-              ${
-                timeWindow?.start && timeWindow?.end
-                  ? `timeWindow: {startTime: ${timeWindow.start}, endTime: ${timeWindow.end}}`
-                  : ''
-              }
-            ) {
-              incidents {
-                ... on AiIssuesNewRelicIncident {
-                  accountIds
-                  closedAt
-                  conditionFamilyId
-                  createdAt
-                  incidentId
-                  priority
-                  state
-                  title
-                }
-              }
+    account(id: ${acctId}) {
+      aiIssues {
+        issues(
+          filter: {
+            conditionIds: [${condIds.join(
+              ', '
+            )}], states: [ACTIVATED, CREATED]} 
+            ${
+              timeWindow?.start && timeWindow?.end
+                ? `timeWindow: {endTime: ${timeWindow.end}, startTime: ${timeWindow.start}}`
+                : `timeWindow: {endTime: ${Date.now()}, startTime: ${threeDaysAgo()}}`
+            }
+        ) {
+          issues {
+            closedAt
+            incidentIds
+          }
+        }
+      }
+    }
+  }
+}`;
+
+const incidentsSearchQuery = (acctId, incidentIds, timeWindow) => `{
+  actor {
+    account(id: ${acctId}) {
+      aiIssues {
+        incidents(
+          filter: {ids: ["${incidentIds.join('", "')}"], states: CREATED}
+          ${
+            timeWindow?.start && timeWindow?.end
+              ? `timeWindow: {endTime: ${timeWindow.end}, startTime: ${timeWindow.start}}`
+              : `timeWindow: {endTime: ${Date.now()}, startTime: ${threeDaysAgo()}}`
+          }
+        ) {
+          incidents {
+            ... on AiIssuesNewRelicIncident {
+              accountIds
+              closedAt
+              conditionFamilyId
+              createdAt
+              incidentId
+              priority
+              state
+              title
             }
           }
-          id`
-          )
-          .join('')}
-      }`
-      )
-      .join('')}
+          nextCursor
+        }
+      }
+    }
   }
 }`;
 
@@ -180,6 +173,7 @@ export {
   policiesSearchQuery,
   latestStatusForAlertConditions,
   incidentsQuery,
-  conditionsDetailsByAccountQuery,
-  incidentsByAccountsQuery,
+  conditionsDetailsQuery,
+  issuesForConditionsQuery,
+  incidentsSearchQuery,
 };
