@@ -1,6 +1,6 @@
 import { ngql } from 'nr1';
 
-const threeDaysAgo = (d = new Date()) => d.setDate(d.getDate() - 3);
+import { threeDaysAgo } from '../utils';
 
 const nrqlConditions = `
   nextCursor
@@ -118,9 +118,9 @@ const issuesForConditionsQuery = (acctId, condIds, timeWindow) => `{
       aiIssues {
         issues(
           filter: {
-            conditionIds: [${condIds.join(
-              ', '
-            )}], states: [ACTIVATED, CREATED]} 
+            conditionIds: [${condIds.join(', ')}]${
+  timeWindow ? '' : `, states: [ACTIVATED, CREATED]`
+}} 
             ${
               timeWindow?.start && timeWindow?.end
                 ? `timeWindow: {endTime: ${timeWindow.end}, startTime: ${timeWindow.start}}`
@@ -142,7 +142,9 @@ const incidentsSearchQuery = (acctId, incidentIds, timeWindow) => `{
     account(id: ${acctId}) {
       aiIssues {
         incidents(
-          filter: {ids: ["${incidentIds.join('", "')}"], states: CREATED}
+          filter: {ids: ["${incidentIds.join('", "')}"]${
+  timeWindow ? '' : `, states: CREATED`
+}}
           ${
             timeWindow?.start && timeWindow?.end
               ? `timeWindow: {endTime: ${timeWindow.end}, startTime: ${timeWindow.start}}`
