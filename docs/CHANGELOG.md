@@ -1,3 +1,11 @@
+## [2.2.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.0...v2.2.1) (2024-12-12)
+
+
+### Bug Fixes
+
+* issue in playback with no entities or alerts ([9ebc2f7](https://github.com/newrelic/nr-labs-pathpoint/commit/9ebc2f7c647f8c1c126aa21890f55364c88ca962))
+* playback mode uses updated alerts statuses method ([8171230](https://github.com/newrelic/nr-labs-pathpoint/commit/8171230cebbc72b0c66c1501ce6b3b0b634eaf12))
+
 # [2.2.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.1.22...v2.2.0) (2024-12-05)
 
 
