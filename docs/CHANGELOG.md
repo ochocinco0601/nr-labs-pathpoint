@@ -1,3 +1,11 @@
+## [2.2.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.1...v2.2.2) (2024-12-12)
+
+
+### Bug Fixes
+
+* missing color for high issue; also change verbiage for link ([c242e76](https://github.com/newrelic/nr-labs-pathpoint/commit/c242e7619c7770c3b2ef32d90477075337fb0b46))
+* text color for high status alerts ([dd37609](https://github.com/newrelic/nr-labs-pathpoint/commit/dd37609aca2a4f06cb2a4026e5d46e2671a03514))
+
 ## [2.2.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.0...v2.2.1) (2024-12-12)
 
 
