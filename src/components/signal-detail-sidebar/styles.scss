@@ -92,7 +92,7 @@
               color: $critical;
             }
 
-            &.warning {
+            &.warning, &.high {
               color: $alt-warning;
             }
 
