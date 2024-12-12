@@ -499,11 +499,9 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
         const timeWindowCachedAlerts = timeWindowAlertsCache.current.get(key);
         let timeBandsDataArray;
         if (!timeWindowCachedAlerts) {
-          const alertsData = await fetchAlertsStatus(
-            alertsGuids,
-            timeWindow,
-            true
-          );
+          const alertsData = alertsGuids.length
+            ? await fetchAlertsStatus(alertsGuids, timeWindow, true)
+            : {};
           timeBandsDataArray = timeBands.map((timeWindow) => ({
             key: keyFromTimeWindow(timeWindow),
             alertsStatusesObj: alertsStatusesObjFromData(
@@ -521,11 +519,9 @@ const Stages = forwardRef(({ mode = MODES.INLINE, saveFlow }, ref) => {
           const timeWindowCachedData = timeBandDataCache.current.get(key);
           if (!timeWindowCachedData) {
             const { [SIGNAL_TYPES.ENTITY]: entitiesGuids = [] } = guids;
-            const entitiesStatusesObj = await fetchEntitiesStatus(
-              entitiesGuids,
-              timeWindow,
-              true
-            );
+            const entitiesStatusesObj = entitiesGuids.length
+              ? await fetchEntitiesStatus(entitiesGuids, timeWindow, true)
+              : {};
             const timeWindowStatuses = {
               [SIGNAL_TYPES.ENTITY]: entitiesStatusesObj,
               [SIGNAL_TYPES.ALERT]: alertsStatusesObj,
