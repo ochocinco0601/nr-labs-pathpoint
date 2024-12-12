@@ -143,7 +143,7 @@ const Incidents = ({ type, data, timeWindow }) => {
                               e.target.setAttribute('target', '_blank')
                             }
                           >
-                            View incident
+                            View issue
                           </Link>
                         </div>
                         <div>Started: {formatTimestamp(opened)}</div>
