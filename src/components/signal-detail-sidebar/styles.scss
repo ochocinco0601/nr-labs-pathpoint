@@ -70,7 +70,7 @@
               background: $critical;
             }
 
-            &.warning {
+            &.warning, &.high {
               background: $warning;
             }
 
