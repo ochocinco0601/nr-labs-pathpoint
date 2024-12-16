@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.2...v2.2.3) (2024-12-16)
+
+
+### Bug Fixes
+
+* disable checking for open incidents for playback in sidebar ([2ad4dba](https://github.com/newrelic/nr-labs-pathpoint/commit/2ad4dbae7cf11727c4c6f0ad69b8c933b90fdf27))
+
 ## [2.2.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.1...v2.2.2) (2024-12-12)
 
 
