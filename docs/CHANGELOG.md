@@ -1,3 +1,10 @@
+## [2.2.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.4...v2.2.5) (2024-12-16)
+
+
+### Bug Fixes
+
+* playback timewindow remains after exit ([ef22d93](https://github.com/newrelic/nr-labs-pathpoint/commit/ef22d93f4818adf1e970677b9acafd527f9b9e3b))
+
 ## [2.2.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.3...v2.2.4) (2024-12-16)
 
 
