@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.3...v2.2.4) (2024-12-16)
+
+
+### Bug Fixes
+
+* display time period in sidebar when in playback ([ff37774](https://github.com/newrelic/nr-labs-pathpoint/commit/ff377746c1dc1c8747cea899767c2175f5d913f0))
+
 ## [2.2.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.2...v2.2.3) (2024-12-16)
 
 
