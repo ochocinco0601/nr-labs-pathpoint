@@ -50,8 +50,6 @@ const incidentFromIncident = ({
   classname: priority.toLowerCase(),
 });
 
-const filterListForOpenOnly = ({ closedAt }) => !closedAt;
-
 const Incidents = ({ type, data, timeWindow }) => {
   const [bannerMessage, setBannerMessage] = useState('');
   const [incidentsList, setIncidentsList] = useState([]);
@@ -77,9 +75,11 @@ const Incidents = ({ type, data, timeWindow }) => {
     } else if (type === SIGNAL_TYPES.ALERT) {
       const issuesArr = data.incidents || [];
       if (issuesArr.length) {
-        issuesToDisplay = issuesArr
-          .filter(filterListForOpenOnly)
-          .map(incidentFromIncident);
+        issuesToDisplay = (
+          timeWindow?.end
+            ? issuesArr
+            : issuesArr.filter(({ closedAt }) => !closedAt)
+        ).map(incidentFromIncident);
       }
       maxIssuesDisplayed = issuesToDisplay.length;
     }
@@ -172,7 +172,7 @@ const Incidents = ({ type, data, timeWindow }) => {
             }}
           >
             {maxIncidentsShown === 1
-              ? `Show ${incidentsList.length - 1} more open incidents`
+              ? `Show ${incidentsList.length - 1} more incidents`
               : 'Show less incidents'}
           </Button>
         </div>
