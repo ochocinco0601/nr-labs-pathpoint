@@ -155,7 +155,10 @@ const Flow = forwardRef(
 
     useEffect(() => {
       closeSidebar?.();
-      if (!isPlayback) stagesRef.current?.refresh?.();
+      if (!isPlayback) {
+        stagesRef.current?.clearPlaybackTimeWindow?.();
+        stagesRef.current?.refresh?.();
+      }
     }, [isPlayback]);
 
     const updateKpisHandler = (updatedKpis) =>
