@@ -5,6 +5,7 @@ import {
   Card,
   CardBody,
   HeadingText,
+  InlineMessage,
   Link,
   SectionMessage,
   navigation,
@@ -17,6 +18,7 @@ import GoldenMetrics from './golden-metrics';
 import { AppContext } from '../../contexts';
 
 import typesList from '../../../nerdlets/signal-selection/types.json';
+import { formatTimestamp } from '../../utils';
 
 const NO_ENTITY_TYPE = '(unknown entity type)';
 
@@ -81,6 +83,15 @@ const SignalDetailSidebar = ({ guid, name, type, data, timeWindow }) => {
               >
                 {detailLinkText}
               </Link>
+            ) : null}
+            {timeWindow ? (
+              <InlineMessage
+                className="detail-time-info"
+                description="Showing data for the specified time period."
+                label={`${formatTimestamp(
+                  timeWindow.start
+                )} - ${formatTimestamp(timeWindow.end)}`}
+              />
             ) : null}
           </CardBody>
         </Card>
