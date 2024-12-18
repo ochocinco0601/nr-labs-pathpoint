@@ -59,6 +59,7 @@ const Flow = forwardRef(
     const [isDeletingFlow, setIsDeletingFlow] = useState(false);
     const [deleteModalHidden, setDeleteModalHidden] = useState(true);
     const [lastSavedTimestamp, setLastSavedTimestamp] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const [isPlayback, setIsPlayback] = useState(false);
     const [playbackTimeMessage, setPlaybackTimeMessage] = useState({
       label: 'Starting playback...',
@@ -241,6 +242,7 @@ const Flow = forwardRef(
                   mode={flowMode}
                   setMode={setMode}
                   flows={flows}
+                  isLoading={isLoading}
                   isPlayback={isPlayback}
                   playbackTimeMessage={playbackTimeMessage}
                   togglePlayback={togglePlayback}
@@ -254,12 +256,17 @@ const Flow = forwardRef(
                 />
                 {isPlayback ? (
                   <PlaybackBar
+                    isLoading={isLoading}
                     onPreload={preloadData}
                     onSeek={seekHandler}
                     onChange={playbackChangeHandler}
                   />
                 ) : null}
-                <Stages mode={flowMode} ref={stagesRef} />
+                <Stages
+                  mode={flowMode}
+                  setIsLoading={setIsLoading}
+                  ref={stagesRef}
+                />
                 <KpiBar onChange={updateKpisHandler} mode={flowMode} />
               </>
             ) : (
