@@ -47,6 +47,7 @@ const Stage = ({
   mode = MODES.INLINE,
   signalExpandOption = 0,
   stageIndex = -1,
+  isLoading,
   onDragStart,
   onDragOver,
   onDrop,
@@ -257,6 +258,44 @@ const Stage = ({
     [levels, addLevelHandler]
   );
 
+  const statusIcons = useMemo(() => {
+    if (isLoading) return null;
+
+    const si = [];
+    if (missingSignals?.length)
+      si.push(
+        <Tooltip text={UI_CONTENT.STAGE.MISSING_SIGNALS}>
+          <span
+            className="notify missing-signals"
+            onClick={() => missingSignalsModal.current?.open?.()}
+          >
+            <Icon type={Icon.TYPE.INTERFACE__STATE__WARNING} />
+          </span>
+        </Tooltip>
+      );
+    if (tooManyEntitiesInStep.length)
+      si.push(
+        <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
+          <span
+            className="notify too-many-signals"
+            onClick={() => tooManySignalsModal.current?.open?.()}
+          >
+            <Icon type={Icon.TYPE.INTERFACE__STATE__CRITICAL} />
+          </span>
+        </Tooltip>
+      );
+    if (Object.keys(signalsWithNoAccess?.[stageId] || {}).length)
+      si.push(
+        <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
+          <span className="notify no-access">
+            <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
+          </span>
+        </Tooltip>
+      );
+
+    return si;
+  }, [isLoading, missingSignals, tooManyEntitiesInStep, signalsWithNoAccess]);
+
   const dragHandleHandler = (b) => (isDragHandleClicked.current = b);
 
   const dragStartHandler = (e) => {
@@ -344,34 +383,7 @@ const Stage = ({
               ) : (
                 <div className="empty-header"></div>
               )}
-              {missingSignals.length ? (
-                <Tooltip text={UI_CONTENT.STAGE.MISSING_SIGNALS}>
-                  <span
-                    className="notify missing-signals"
-                    onClick={() => missingSignalsModal.current?.open?.()}
-                  >
-                    <Icon type={Icon.TYPE.INTERFACE__STATE__WARNING} />
-                  </span>
-                </Tooltip>
-              ) : null}
-              {tooManyEntitiesInStep.length ? (
-                <Tooltip text={UI_CONTENT.STAGE.TOO_MANY_SIGNALS}>
-                  <span
-                    className="notify too-many-signals"
-                    onClick={() => tooManySignalsModal.current?.open?.()}
-                  >
-                    <Icon type={Icon.TYPE.INTERFACE__STATE__CRITICAL} />
-                  </span>
-                </Tooltip>
-              ) : null}
-              {stageId in signalsWithNoAccess &&
-              Object.keys(signalsWithNoAccess[stageId]).length ? (
-                <Tooltip text={UI_CONTENT.STAGE.NO_ACCESS_SIGNALS}>
-                  <span className="notify no-access">
-                    <Icon type={Icon.TYPE.INTERFACE__STATE__UNAVAILABLE} />
-                  </span>
-                </Tooltip>
-              ) : null}
+              {statusIcons}
             </div>
             <div className={`step-groups ${mode}`}>
               {levels
@@ -450,6 +462,7 @@ Stage.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   signalExpandOption: PropTypes.number,
   stageIndex: PropTypes.number,
+  isLoading: PropTypes.bool,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,

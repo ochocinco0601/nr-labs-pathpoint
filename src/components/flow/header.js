@@ -12,6 +12,7 @@ import {
   PopoverBody,
   SegmentedControl,
   SegmentedControlItem,
+  Spinner,
   Tooltip,
 } from 'nr1';
 
@@ -36,6 +37,7 @@ const FlowHeader = ({
   mode = MODES.INLINE,
   setMode = () => null,
   flows = [],
+  isLoading,
   isPlayback,
   playbackTimeMessage,
   togglePlayback,
@@ -217,15 +219,19 @@ const FlowHeader = ({
       ) : (
         <div className="flow-status">
           <Badge type={Badge.TYPE.INFO}>{UI_CONTENT.FLOW.CURRENT_STATUS}</Badge>
-          <Tooltip text="Refresh data in flow">
-            <Button
-              variant={Button.VARIANT.TERTIARY}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
-              ariaLabel="Refresh data in flow"
-              onClick={onRefreshFlow}
-            />
-          </Tooltip>
+          {isLoading ? (
+            <Spinner inline />
+          ) : (
+            <Tooltip text="Refresh data in flow">
+              <Button
+                variant={Button.VARIANT.TERTIARY}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__REFRESH}
+                ariaLabel="Refresh data in flow"
+                onClick={onRefreshFlow}
+              />
+            </Tooltip>
+          )}
         </div>
       )}
       <div className="flow-header-actions">
@@ -254,6 +260,7 @@ FlowHeader.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
   flows: PropTypes.array,
+  isLoading: PropTypes.bool,
   isPlayback: PropTypes.bool,
   playbackTimeMessage: PropTypes.object,
   togglePlayback: PropTypes.func,
