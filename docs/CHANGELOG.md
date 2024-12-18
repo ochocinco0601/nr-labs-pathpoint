@@ -1,3 +1,10 @@
+## [2.2.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.5...v2.2.6) (2024-12-18)
+
+
+### Bug Fixes
+
+* add loading indicators ([d7b84e8](https://github.com/newrelic/nr-labs-pathpoint/commit/d7b84e8d1989697acf591b9adae15b7f9cf23eb7))
+
 ## [2.2.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.4...v2.2.5) (2024-12-16)
 
 
