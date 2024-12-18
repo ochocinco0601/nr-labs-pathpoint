@@ -53,7 +53,7 @@ const timesForTimeBand = (firstBandStartTime, timeBandDurationMs, index) => {
 const hintDateTimeFormat = (timestamp) =>
   SHORT_DATETIME_FORMATTER.format(new Date(timestamp));
 
-const PlaybackBar = ({ onPreload, onSeek, onChange }) => {
+const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [shouldLoopCheck, setShouldLoopCheck] = useState(false);
   const [selectedIncrement, setSelectedIncrement] = useState(
@@ -166,14 +166,15 @@ const PlaybackBar = ({ onPreload, onSeek, onChange }) => {
         redrawBands(true);
       }
     );
+    const seekElm = seek.current;
     document.addEventListener('mouseup', mouseUpHandler, true);
     document.addEventListener('mousemove', mouseMoveHandler, true);
-    seekResizeObserver.observe(seek.current);
+    seekResizeObserver.observe(seekElm);
 
     return () => {
       document.removeEventListener('mouseup', mouseUpHandler, true);
       document.removeEventListener('mousemove', mouseMoveHandler, true);
-      seekResizeObserver.unobserve(seek.current);
+      seekResizeObserver.unobserve(seekElm);
     };
   }, []);
 
@@ -323,6 +324,7 @@ const PlaybackBar = ({ onPreload, onSeek, onChange }) => {
             ? Button.ICON_TYPE.INTERFACE__OPERATIONS__PAUSE
             : Button.ICON_TYPE.INTERFACE__OPERATIONS__PLAY
         }
+        loading={isLoading}
         ariaLabel="Toggle playback"
         onClick={() => setIsPlaying((p) => !p)}
       />
@@ -349,6 +351,7 @@ const PlaybackBar = ({ onPreload, onSeek, onChange }) => {
 };
 
 PlaybackBar.propTypes = {
+  isLoading: PropTypes.bool,
   onPreload: PropTypes.func,
   onSeek: PropTypes.func,
   onChange: PropTypes.func,
