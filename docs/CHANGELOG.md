@@ -1,3 +1,10 @@
+## [2.2.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.6...v2.2.7) (2024-12-18)
+
+
+### Bug Fixes
+
+* issue with unloading resize observer; also includes loading indicator for playback ([10429be](https://github.com/newrelic/nr-labs-pathpoint/commit/10429beb2152436874aa09180dc07be5396f70a9))
+
 ## [2.2.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.5...v2.2.6) (2024-12-18)
 
 
