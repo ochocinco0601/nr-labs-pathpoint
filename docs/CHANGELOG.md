@@ -1,3 +1,10 @@
+## [2.2.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.7...v2.2.8) (2024-12-19)
+
+
+### Bug Fixes
+
+* remove async fn returned in useeffect ([663c8cc](https://github.com/newrelic/nr-labs-pathpoint/commit/663c8ccbe1471d2adfe788082c4d3af352dc9102))
+
 ## [2.2.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.6...v2.2.7) (2024-12-18)
 
 
