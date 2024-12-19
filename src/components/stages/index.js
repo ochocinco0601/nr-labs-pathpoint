@@ -133,6 +133,13 @@ const Stages = forwardRef(
         );
         if (error) {
           console.error('Error fetching entities:', error.message);
+          setIsLoading?.(false);
+          if (statusTimeoutDelay.current && !timeWindow) {
+            entitiesStatusTimeoutId.current = setTimeout(
+              () => fetchEntitiesStatus(entitiesGuids),
+              statusTimeoutDelay.current
+            );
+          }
           return;
         }
         const entitiesStatusesObj = entitiesDetailsFromQueryResults(actor);
