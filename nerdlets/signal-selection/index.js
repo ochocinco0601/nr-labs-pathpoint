@@ -168,10 +168,10 @@ const SignalSelectionNerdlet = () => {
     }
   }, [currentTab, entitiesTypesList]);
 
-  useEffect(async () => {
+  useEffect(() => {
     clearTimeout(searchTimeoutId.current);
     searchTimeoutId.current = setTimeout(
-      async () => setEntitySearchName(searchText),
+      () => setEntitySearchName(searchText),
       1000
     );
   }, [searchText]);
