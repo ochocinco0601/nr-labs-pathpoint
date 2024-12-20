@@ -131,8 +131,15 @@ const Stages = forwardRef(
             query,
           }
         );
+        setIsLoading?.(false);
         if (error) {
           console.error('Error fetching entities:', error.message);
+          if (statusTimeoutDelay.current && !timeWindow) {
+            entitiesStatusTimeoutId.current = setTimeout(
+              () => fetchEntitiesStatus(entitiesGuids),
+              statusTimeoutDelay.current
+            );
+          }
           return;
         }
         const entitiesStatusesObj = entitiesDetailsFromQueryResults(actor);
@@ -202,7 +209,7 @@ const Stages = forwardRef(
             );
           });
         }
-        setIsLoading?.(false);
+
         if (isForCache) return entitiesStatusesObj;
         if (statusTimeoutDelay.current && !timeWindow) {
           entitiesStatusTimeoutId.current = setTimeout(
