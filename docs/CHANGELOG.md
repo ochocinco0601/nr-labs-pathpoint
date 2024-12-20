@@ -1,3 +1,11 @@
+## [2.2.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.8...v2.2.9) (2024-12-20)
+
+
+### Bug Fixes
+
+* consolidate loading end when fetching entities statuses ([5a30480](https://github.com/newrelic/nr-labs-pathpoint/commit/5a304808fa94d6fdf67eeda9004441bf63a34515))
+* retry on entities status error ([5a2b5a4](https://github.com/newrelic/nr-labs-pathpoint/commit/5a2b5a4695b71c71bcae44c3770500106fda5b4a))
+
 ## [2.2.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.7...v2.2.8) (2024-12-19)
 
 
