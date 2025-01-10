@@ -75,7 +75,7 @@ const HomeNerdlet = () => {
     loading: flowsLoading,
     refetch: flowsRefetch,
   } = useFlowLoader({ accountId });
-  const { data: accounts = [] } = useAccountsQuery();
+  const { data: accounts = [], loading: isAcctsLoading } = useAccountsQuery();
   const transitionTimeoutId = useRef();
 
   useEffect(() => {
@@ -85,8 +85,8 @@ const HomeNerdlet = () => {
     };
   }, []);
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    if (!isAcctsLoading) {
       setApp({
         account: {
           id: accountId,
@@ -96,9 +96,9 @@ const HomeNerdlet = () => {
         debugMode,
         maxEntitiesInStep: MAX_ENTITIES_IN_STEP,
         user,
-      }),
-    [accountId, accounts, user, debugMode]
-  );
+      });
+    }
+  }, [accountId, accounts, user, debugMode, isAcctsLoading]);
 
   useEffect(() => {
     let actionControlButtons;

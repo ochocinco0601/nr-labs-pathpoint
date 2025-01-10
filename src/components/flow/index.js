@@ -65,6 +65,7 @@ const Flow = forwardRef(
       label: 'Starting playback...',
     });
     const [isPreview, setIsPreview] = useState(false);
+    const [activateTransition, setActivateTransition] = useState(false);
     const {
       account: { id: accountId } = {},
       debugMode,
@@ -141,8 +142,15 @@ const Flow = forwardRef(
         component: FLOW_DISPATCH_COMPONENTS.FLOW,
         saveFlow,
       });
-      if (onTransition && prevNonEditMode) onTransition(prevNonEditMode);
+      setActivateTransition(true);
     };
+
+    useEffect(() => {
+      if (activateTransition) {
+        if (onTransition && prevNonEditMode) onTransition(prevNonEditMode);
+        setActivateTransition(false);
+      }
+    }, [activateTransition]);
 
     const discardFlowHandler = useCallback(() => {
       setIsPreview(false);
