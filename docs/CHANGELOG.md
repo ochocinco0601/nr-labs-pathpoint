@@ -1,3 +1,10 @@
+## [2.2.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.9...v2.2.10) (2025-01-10)
+
+
+### Bug Fixes
+
+* migrating to React 18 ([b79fdfe](https://github.com/newrelic/nr-labs-pathpoint/commit/b79fdfe70f536c0c7564e756f81582ec1bc70f9e))
+
 ## [2.2.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.8...v2.2.9) (2024-12-20)
 
 
