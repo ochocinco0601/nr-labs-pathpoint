@@ -140,7 +140,7 @@ const HomeNerdlet = () => {
           ? [
               {
                 ...ACTION_BTN_ATTRIBS.EDIT_FLOW,
-                onClick: () => changeMode(MODES.EDIT),
+                onClick: () => transitionToMode(MODES.EDIT),
               },
               {
                 ...ACTION_BTN_ATTRIBS.EXPORT_FLOW,
@@ -191,14 +191,6 @@ const HomeNerdlet = () => {
       id: 'create-flow',
     });
 
-  const changeMode = useCallback(
-    (newMode = MODES.INLINE) =>
-      setNerdletState({
-        mode: newMode,
-      }),
-    []
-  );
-
   const flowClickHandler = useCallback(
     (id) => setNerdletState({ flow: { id } }),
     []
@@ -216,8 +208,11 @@ const HomeNerdlet = () => {
     setTransitionToFlow(true);
     transitionTimeoutId.current = setTimeout(() => {
       setTransitionToFlow(false);
-    }, 3000);
-    if (newMode) changeMode(newMode);
+    }, 1000);
+    if (newMode)
+      setNerdletState({
+        mode: newMode,
+      });
   }, []);
 
   const auditLogCloseHandler = () => setisAuditLogShown(false);
@@ -252,7 +247,7 @@ const HomeNerdlet = () => {
               flowDoc={currentFlowDoc}
               onClose={backToFlowsHandler}
               mode={mode}
-              setMode={changeMode}
+              setMode={transitionToMode}
               prevNonEditMode={prevNonEditMode}
               flows={flows}
               onRefetch={flowsRefetch}
