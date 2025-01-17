@@ -89,80 +89,109 @@ const Level = ({
           validStatuses.includes(step.status))
     );
 
-    return filteredSteps.reduce(
-      (acc, { id, signals = [], status }, index, arr) => {
-        let startNextRow = false;
-        if (
-          mode === MODES.INLINE &&
-          ((signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
-            [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) ||
-            (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
-              status === STATUSES.CRITICAL) ||
-            signalExpandOption & SIGNAL_EXPAND.ALL)
-        ) {
-          startNextRow = true;
-        }
+    return (
+      filteredSteps.reduce(
+        (acc, { id, signals = [], status }, index, arr) => {
+          let startNextRow = false;
+          if (
+            mode === MODES.INLINE &&
+            ((signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
+              [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)) ||
+              (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
+                status === STATUSES.CRITICAL) ||
+              signalExpandOption & SIGNAL_EXPAND.ALL)
+          ) {
+            startNextRow = true;
+          }
 
-        const filteredSortedSignals = signals
-          .filter(({ status }) => validStatuses.includes(status))
-          .sort((a, b) => {
-            const a1 =
-              orderedStatuses.indexOf(a.status) +
-              signalTypes.indexOf(a.type) * 0.1;
+          const filteredSortedSignals = signals
+            .filter(({ status }) => validStatuses.includes(status))
+            .sort((a, b) => {
+              const a1 =
+                orderedStatuses.indexOf(a.status) +
+                signalTypes.indexOf(a.type) * 0.1;
 
-            const b1 =
-              orderedStatuses.indexOf(b.status) +
-              signalTypes.indexOf(b.type) * 0.1;
+              const b1 =
+                orderedStatuses.indexOf(b.status) +
+                signalTypes.indexOf(b.type) * 0.1;
 
-            return a1 - b1;
-          });
+              return a1 - b1;
+            });
 
-        const isLastStep = index + 1 === arr.length;
-        const cell = (
-          <div
-            className={`step-cell ${
-              mode === MODES.EDIT
-                ? 'edit'
-                : [MODES.STACKED, MODES.INLINE].includes(mode) &&
-                  signals?.length &&
-                  [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
-                ? status
-                : ''
-            }`}
-            key={id}
-          >
-            <Step
-              stageId={stageId}
-              levelId={levelId}
-              levelOrder={order}
-              stepId={id}
-              signals={filteredSortedSignals}
-              signalExpandOption={signalExpandOption}
-              onDragStart={(e) => stepDragStartHandler(e, index)}
-              onDragOver={(e) => stepDragOverHandler(e, index)}
-              onDrop={(e) => stepDropHandler(e)}
-              mode={mode}
-              saveFlow={saveFlow}
-            />
-          </div>
-        );
-        if (mode === MODES.EDIT) {
-          acc.rows.push(
+          const isLastStep = index + 1 === arr.length;
+          const cell = (
             <div
-              className="steps-row cols-1"
-              key={`steps_row_${order}_${index}`}
+              className={`step-cell ${
+                mode === MODES.EDIT
+                  ? 'edit'
+                  : [MODES.STACKED, MODES.INLINE].includes(mode) &&
+                    signals?.length &&
+                    [STATUSES.CRITICAL, STATUSES.WARNING].includes(status)
+                  ? status
+                  : ''
+              }`}
+              key={id}
             >
-              {cell}
+              <Step
+                stageId={stageId}
+                levelId={levelId}
+                levelOrder={order}
+                stepId={id}
+                signals={filteredSortedSignals}
+                signalExpandOption={signalExpandOption}
+                onDragStart={(e) => stepDragStartHandler(e, index)}
+                onDragOver={(e) => stepDragOverHandler(e, index)}
+                onDrop={(e) => stepDropHandler(e)}
+                mode={mode}
+                saveFlow={saveFlow}
+              />
             </div>
           );
-        } else {
-          if (
-            (signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
-              !['critical', 'warning'].includes(status)) ||
-            (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
-              status !== 'critical')
-          ) {
-            if (mode === MODES.STACKED && acc.cols.length) {
+          if (mode === MODES.EDIT) {
+            acc.rows.push(
+              <div
+                className="steps-row cols-1"
+                key={`steps_row_${order}_${index}`}
+              >
+                {cell}
+              </div>
+            );
+          } else {
+            if (
+              (signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY &&
+                !['critical', 'warning'].includes(status)) ||
+              (signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY &&
+                status !== 'critical')
+            ) {
+              if (mode === MODES.STACKED && acc.cols.length) {
+                acc.rows.push(
+                  <div
+                    className={`steps-row cols-${acc.cols.length}`}
+                    key={`steps_row_${order}_${index}`}
+                  >
+                    {[...acc.cols]}
+                  </div>
+                );
+                acc.cols = [];
+              }
+              return isLastStep ? acc.rows : acc;
+            }
+
+            acc.cols.push(cell);
+
+            if (acc.cols.length === 2) startNextRow = true;
+            if (isLastStep) startNextRow = true;
+            if (mode === MODES.INLINE) {
+              if (['critical', 'warning'].includes(status)) startNextRow = true;
+              if (
+                !isLastStep &&
+                ['critical', 'warning'].includes(arr[index + 1].status)
+              ) {
+                startNextRow = true;
+              }
+            }
+
+            if (startNextRow) {
               acc.rows.push(
                 <div
                   className={`steps-row cols-${acc.cols.length}`}
@@ -173,38 +202,11 @@ const Level = ({
               );
               acc.cols = [];
             }
-            return isLastStep ? acc.rows : acc;
           }
-
-          acc.cols.push(cell);
-
-          if (acc.cols.length === 2) startNextRow = true;
-          if (isLastStep) startNextRow = true;
-          if (mode === MODES.INLINE) {
-            if (['critical', 'warning'].includes(status)) startNextRow = true;
-            if (
-              !isLastStep &&
-              ['critical', 'warning'].includes(arr[index + 1].status)
-            ) {
-              startNextRow = true;
-            }
-          }
-
-          if (startNextRow) {
-            acc.rows.push(
-              <div
-                className={`steps-row cols-${acc.cols.length}`}
-                key={`steps_row_${order}_${index}`}
-              >
-                {[...acc.cols]}
-              </div>
-            );
-            acc.cols = [];
-          }
-        }
-        return isLastStep ? acc.rows : acc;
-      },
-      { rows: [], cols: [] }
+          return acc;
+        },
+        { rows: [], cols: [] }
+      )?.rows || []
     );
   }, [steps, mode, signalExpandOption]);
 
