@@ -1,3 +1,10 @@
+## [2.2.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.10...v2.2.11) (2025-01-17)
+
+
+### Bug Fixes
+
+* force transition when switching modes ([1a07c0b](https://github.com/newrelic/nr-labs-pathpoint/commit/1a07c0b0506729ed4718350b22fc39385e70004b))
+
 ## [2.2.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.9...v2.2.10) (2025-01-10)
 
 
