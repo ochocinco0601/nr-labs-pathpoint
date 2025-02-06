@@ -8,12 +8,13 @@ import React, {
 import PropTypes from 'prop-types';
 
 import { IconsLib, SignalTooltip } from '../';
-import { SelectionsContext } from '../../contexts';
+import { PlaybackContext, SelectionsContext } from '../../contexts';
 import { COMPONENTS, SIGNAL_TYPES } from '../../constants';
 
 const renderSignalIcon = (
   { style, guid, type, status, isFaded = false, ...statusProps },
   i,
+  timeWindow,
   onClick
 ) => (
   <SignalTooltip
@@ -30,6 +31,7 @@ const renderSignalIcon = (
         onClick={onClick}
       />
     }
+    timeWindow={timeWindow}
   />
 );
 
@@ -37,6 +39,7 @@ const SignalsGridLayout = ({ statuses }) => {
   const [grid, setGrid] = useState({ entities: [], alerts: [] });
   const [width, setWidth] = useState(null);
   const { markSelection } = useContext(SelectionsContext);
+  const { timeWindow } = useContext(PlaybackContext);
   const wrapperRef = useRef();
 
   useEffect(() => {
@@ -44,10 +47,15 @@ const SignalsGridLayout = ({ statuses }) => {
       setGrid(
         statuses.reduce(
           (acc, signal, index) => {
-            const signalIcon = renderSignalIcon(signal, index, (e) => {
-              e.stopPropagation();
-              markSelection(COMPONENTS.SIGNAL, signal.guid, signal);
-            });
+            const signalIcon = renderSignalIcon(
+              signal,
+              index,
+              timeWindow,
+              (e) => {
+                e.stopPropagation();
+                markSelection(COMPONENTS.SIGNAL, signal.guid, signal);
+              }
+            );
             if (signal.type === SIGNAL_TYPES.ENTITY) {
               acc.entities = [...acc.entities, signalIcon];
             }
@@ -60,7 +68,7 @@ const SignalsGridLayout = ({ statuses }) => {
         )
       );
     }
-  }, [statuses]);
+  }, [statuses, timeWindow]);
 
   useLayoutEffect(() => {
     const { width } = wrapperRef.current.getBoundingClientRect();

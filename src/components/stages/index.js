@@ -25,6 +25,7 @@ import {
   AppContext,
   FlowContext,
   FlowDispatchContext,
+  PlaybackContext,
   SelectionsContext,
   SignalsClassificationsContext,
   SignalsContext,
@@ -83,6 +84,8 @@ const Stages = forwardRef(
     const [selections, setSelections] = useState({});
     const [classifications, setClassifications] = useState({});
     const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
+    const [currentPlaybackTimeWindow, setCurrentPlaybackTimeWindow] =
+      useState(null);
     const dragItemIndex = useRef();
     const dragOverItemIndex = useRef();
     const stagesDataRef = useRef(stages);
@@ -581,6 +584,7 @@ const Stages = forwardRef(
         seek: async (timeWindow) => {
           if (!timeWindow) return;
           playbackTimeWindow.current = timeWindow;
+          setCurrentPlaybackTimeWindow?.(timeWindow);
           const key = keyFromTimeWindow(timeWindow);
           const timeWindowCachedData = timeBandDataCache.current.get(key);
           if (timeWindowCachedData) {
@@ -591,9 +595,12 @@ const Stages = forwardRef(
             }));
           }
         },
-        clearPlaybackTimeWindow: () => (playbackTimeWindow.current = null),
+        clearPlaybackTimeWindow: () => {
+          playbackTimeWindow.current = null;
+          setCurrentPlaybackTimeWindow?.(null);
+        },
       }),
-      [fetchStatuses, guids, stages]
+      [fetchStatuses, guids, stages, setCurrentPlaybackTimeWindow]
     );
 
     const addStageHandler = () =>
@@ -636,88 +643,94 @@ const Stages = forwardRef(
         <SignalsContext.Provider value={signalsDetails}>
           <SelectionsContext.Provider value={{ selections, markSelection }}>
             <SignalsClassificationsContext.Provider value={classifications}>
-              <div className="stages-header">
-                <div className="heading">
-                  <HeadingText type={HeadingText.TYPE.HEADING_5}>
-                    Stages
-                  </HeadingText>
-                  <Tooltip text={UI_CONTENT.STAGE.TOOLTIP}>
-                    <Icon
-                      className="info-icon"
-                      type={Icon.TYPE.INTERFACE__INFO__INFO}
+              <PlaybackContext.Provider
+                value={{ timeWindow: currentPlaybackTimeWindow }}
+              >
+                <div className="stages-header">
+                  <div className="heading">
+                    <HeadingText type={HeadingText.TYPE.HEADING_5}>
+                      Stages
+                    </HeadingText>
+                    <Tooltip text={UI_CONTENT.STAGE.TOOLTIP}>
+                      <Icon
+                        className="info-icon"
+                        type={Icon.TYPE.INTERFACE__INFO__INFO}
+                      />
+                    </Tooltip>
+                  </div>
+                  {mode === MODES.EDIT ? (
+                    <Button
+                      className="button-tertiary-border"
+                      variant={Button.VARIANT.TERTIARY}
+                      sizeType={Button.SIZE_TYPE.SMALL}
+                      iconType={
+                        Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
+                      }
+                      onClick={addStageHandler}
+                    >
+                      Add a stage
+                    </Button>
+                  ) : (
+                    <>
+                      <Switch
+                        checked={
+                          signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY
+                        }
+                        label="Unhealthy only"
+                        onChange={() =>
+                          setSignalExpandOption(
+                            (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
+                          )
+                        }
+                      />
+                      <Switch
+                        checked={
+                          signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY
+                        }
+                        label="Critical only"
+                        onChange={() =>
+                          setSignalExpandOption(
+                            (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
+                          )
+                        }
+                      />
+                    </>
+                  )}
+                  {mode === MODES.INLINE && (
+                    <Switch
+                      checked={signalExpandOption & SIGNAL_EXPAND.ALL}
+                      label="Expand all steps"
+                      onChange={() =>
+                        setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
+                      }
                     />
-                  </Tooltip>
+                  )}
                 </div>
-                {mode === MODES.EDIT ? (
-                  <Button
-                    className="button-tertiary-border"
-                    variant={Button.VARIANT.TERTIARY}
-                    sizeType={Button.SIZE_TYPE.SMALL}
-                    iconType={
-                      Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
-                    }
-                    onClick={addStageHandler}
-                  >
-                    Add a stage
-                  </Button>
-                ) : (
-                  <>
-                    <Switch
-                      checked={
-                        signalExpandOption & SIGNAL_EXPAND.UNHEALTHY_ONLY
-                      }
-                      label="Unhealthy only"
-                      onChange={() =>
-                        setSignalExpandOption(
-                          (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
-                        )
-                      }
+                <div className="stages">
+                  {(stagesData.stages || []).map(({ id }, i) => (
+                    <Stage
+                      key={id}
+                      stageId={id}
+                      mode={mode}
+                      signalExpandOption={signalExpandOption}
+                      stageIndex={i}
+                      onDragStart={(e) => dragStartHandler(e, i)}
+                      onDragOver={(e) => dragOverHandler(e, i)}
+                      onDrop={(e) => dropHandler(e)}
+                      saveFlow={saveFlow}
                     />
-                    <Switch
-                      checked={signalExpandOption & SIGNAL_EXPAND.CRITICAL_ONLY}
-                      label="Critical only"
-                      onChange={() =>
-                        setSignalExpandOption(
-                          (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
-                        )
-                      }
+                  ))}
+                  {mode === MODES.EDIT && !stagesData.stages.length ? (
+                    <EmptyBlock
+                      title={UI_CONTENT.FLOW.NO_STAGES.TITLE}
+                      description={UI_CONTENT.FLOW.NO_STAGES.DESCRIPTION}
+                      actionButtonText="Add a stage"
+                      onAdd={addStageHandler}
+                      fullWidth
                     />
-                  </>
-                )}
-                {mode === MODES.INLINE && (
-                  <Switch
-                    checked={signalExpandOption & SIGNAL_EXPAND.ALL}
-                    label="Expand all steps"
-                    onChange={() =>
-                      setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
-                    }
-                  />
-                )}
-              </div>
-              <div className="stages">
-                {(stagesData.stages || []).map(({ id }, i) => (
-                  <Stage
-                    key={id}
-                    stageId={id}
-                    mode={mode}
-                    signalExpandOption={signalExpandOption}
-                    stageIndex={i}
-                    onDragStart={(e) => dragStartHandler(e, i)}
-                    onDragOver={(e) => dragOverHandler(e, i)}
-                    onDrop={(e) => dropHandler(e)}
-                    saveFlow={saveFlow}
-                  />
-                ))}
-                {mode === MODES.EDIT && !stagesData.stages.length ? (
-                  <EmptyBlock
-                    title={UI_CONTENT.FLOW.NO_STAGES.TITLE}
-                    description={UI_CONTENT.FLOW.NO_STAGES.DESCRIPTION}
-                    actionButtonText="Add a stage"
-                    onAdd={addStageHandler}
-                    fullWidth
-                  />
-                ) : null}
-              </div>
+                  ) : null}
+                </div>
+              </PlaybackContext.Provider>
             </SignalsClassificationsContext.Provider>
           </SelectionsContext.Provider>
         </SignalsContext.Provider>
