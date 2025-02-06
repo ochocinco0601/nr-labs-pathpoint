@@ -1,62 +1,48 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  HeadingText,
-  NerdGraphQuery,
-  NrqlQuery,
-  Popover,
-  PopoverBody,
-  PopoverTrigger,
-} from 'nr1';
+import { HeadingText, Popover, PopoverBody, PopoverTrigger } from 'nr1';
 
-import { latestStatusForAlertConditions, statusFromGuid } from '../../queries';
+import { AppContext, SignalsContext } from '../../contexts';
+import { generateIncidentsList } from '../../utils';
 import { ALERT_SEVERITY, UI_CONTENT, SIGNAL_TYPES } from '../../constants';
 
+import typesList from '../../../nerdlets/signal-selection/types.json';
+
 const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
+  const { accounts } = useContext(AppContext);
+  const signalsDetails = useContext(SignalsContext);
   const [data, setData] = useState(null);
-  const [alertData, setAlertData] = useState(null);
+  const [sigType, setSigType] = useState('');
+  const [acctName, setAcctName] = useState('');
+
+  useEffect(
+    () => setData(() => signalsDetails[entityGuid]),
+    [entityGuid, signalsDetails]
+  );
 
   useEffect(() => {
-    const fetchAndSetSignalData = async (entityGuid) => {
-      const query = statusFromGuid(entityGuid);
+    if (!data) return;
+    const acctId =
+      data.accountId ||
+      Number((atob(data.entityGuid || '').split('|') || [])?.[0]);
+    setAcctName(
+      acctId ? accounts.find(({ id }) => id === acctId)?.name || '' : ''
+    );
+    setSigType(
+      signalType === SIGNAL_TYPES.ALERT
+        ? 'Alert condition'
+        : typesList.find(
+            ({ domain, type }) => domain === data.domain && type === data.type
+          )?.displayName || ''
+    );
+  }, [accounts, data, signalType]);
 
-      const resp = await NerdGraphQuery.query({ query });
-      if (resp.error) {
-        console.error(`Error fetching entity: `, resp.error);
-        return;
-      }
-      setData(resp.data?.actor?.entity);
-    };
+  const incidentsStatus = useMemo(() => {
+    if (!data) return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
 
-    const fetchAndSetAlertData = async () => {
-      const guidDetail = atob(`${entityGuid}`).split('|');
-      const query = latestStatusForAlertConditions([`${guidDetail[3]}`]);
-      const resp = await NrqlQuery.query({
-        query,
-        accountIds: [parseInt(guidDetail[0])],
-      });
-
-      if (resp.error) {
-        console.error(`Error fetching alert condition: `, resp.error);
-        return;
-      }
-
-      if (resp.data.length > 0) {
-        setAlertData(resp.data[0]?.data);
-      }
-    };
-
-    if (entityGuid) {
-      fetchAndSetSignalData(entityGuid);
-    }
-    if (signalType == SIGNAL_TYPES.ALERT) {
-      fetchAndSetAlertData();
-    }
-  }, [entityGuid, signalType]);
-
-  const renderStatus = useMemo(() => {
-    if (signalType === SIGNAL_TYPES.ENTITY && data) {
+    const incidentsList = generateIncidentsList({ type: signalType, data });
+    if (signalType === SIGNAL_TYPES.ENTITY) {
       if (data.type === 'WORKLOAD') {
         if (data.alertSeverity === ALERT_SEVERITY.NOT_CONFIGURED) {
           return UI_CONTENT.SIGNAL.TOOLTIP.WORKLOAD_UNKNOWN;
@@ -76,32 +62,25 @@ const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
         return UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_UNKNOWN;
       }
 
-      if (data.recentAlertViolations.length > 0) {
-        let openOnlyViolations = data.recentAlertViolations.filter(
-          (a) => a.closedAt == null
-        );
-        if (openOnlyViolations.length > 0) {
-          return `${openOnlyViolations.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
-        }
+      if (incidentsList.length) {
+        return `${incidentsList.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
       }
 
       return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
     } else {
-      if (alertData && alertData.length > 0) {
-        return `${alertData.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
+      if (incidentsList.length) {
+        return `${incidentsList.length} ${UI_CONTENT.SIGNAL.TOOLTIP.SIGNAL_DISRUPTED}`;
       }
 
       return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
     }
-  }, [data, alertData]);
+  }, [data, signalType]);
 
   return (
     <Popover openOnHover>
       <PopoverTrigger>{triggerElement}</PopoverTrigger>
       <PopoverBody>
-        {data === null ? (
-          ''
-        ) : (
+        {data ? (
           <div className="signal-tooltip">
             <div className="signal-tooltip-header">
               <div className="signal-tooltip-title-bar">
@@ -116,23 +95,13 @@ const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
                 </HeadingText>
               </div>
               <div className="signal-tooltip-label">
-                <span className="type">
-                  {data.type
-                    .toLowerCase()
-                    .split(/[\s_]+/)
-                    .map((w, i) => {
-                      if (i === 0)
-                        return w.charAt(0).toUpperCase() + w.slice(1);
-                      return w.charAt(0).toUpperCase() + w.slice(1);
-                    })
-                    .join(' ')}
-                </span>
-                <span className="account">{data.account.name}</span>
+                <span className="type">{sigType}</span>
+                <span className="account">{acctName}</span>
               </div>
             </div>
-            <div className="signal-tooltip-content">{renderStatus}</div>
+            <div className="signal-tooltip-content">{incidentsStatus}</div>
           </div>
-        )}
+        ) : null}
       </PopoverBody>
     </Popover>
   );

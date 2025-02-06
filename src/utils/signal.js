@@ -1,12 +1,14 @@
+import { alertStatus } from './alerts';
+import { entityStatus } from './entities';
+import { serviceLevelStatus } from './service-levels';
+
 import {
+  ALERT_STATUSES,
   SIGNAL_TYPES,
   STATUSES,
   STEP_STATUS_OPTIONS,
   STEP_STATUS_UNITS,
 } from '../constants';
-import { alertStatus } from './alerts';
-import { entityStatus } from './entities';
-import { serviceLevelStatus } from './service-levels';
 
 const statusesOrder = [
   STATUSES.UNKNOWN,
@@ -140,12 +142,6 @@ export const statusFromStatuses = (statusesArray = []) => {
   return statusesOrder[leastStatusValue];
 };
 
-const signalDetailsFromStatuses = (statuses = {}) =>
-  Object.keys(statuses).reduce(
-    (acc, guid) => ({ ...acc, [guid]: statuses[guid].name }),
-    {}
-  );
-
 export const signalDetailsObject = (statuses = {}) => {
   if (!statuses || !Object.keys(statuses).length) return;
   const {
@@ -153,7 +149,74 @@ export const signalDetailsObject = (statuses = {}) => {
     [SIGNAL_TYPES.ALERT]: alertsStatuses = {},
   } = statuses;
   return {
-    ...signalDetailsFromStatuses(entitiesStatuses),
-    ...signalDetailsFromStatuses(alertsStatuses),
+    ...entitiesStatuses,
+    ...alertsStatuses,
   };
+};
+
+const parseIncidentName = (name = '') => {
+  try {
+    return JSON.parse(name);
+  } catch (_) {
+    return name;
+  }
+};
+
+const incidentFromViolation = ({
+  alertSeverity = '',
+  closedAt,
+  label,
+  openedAt,
+  violationId,
+  violationUrl,
+} = {}) => ({
+  id: violationId,
+  name: label,
+  closed: closedAt,
+  opened: openedAt,
+  link: violationUrl,
+  state: closedAt ? 'closed' : 'open',
+  curStatus: alertSeverity,
+  classname: alertSeverity.toLowerCase(),
+});
+
+const incidentFromIncident = ({
+  priority = '',
+  closedAt,
+  title,
+  createdAt,
+  incidentId,
+  accountIds,
+} = {}) => ({
+  id: incidentId,
+  name: parseIncidentName(title),
+  closed: closedAt,
+  opened: createdAt,
+  link: `https://aiops.service.newrelic.com/accounts/${accountIds}/incidents/${incidentId}/redirect`,
+  state: closedAt ? 'closed' : 'open',
+  curStatus: priority,
+  classname: priority.toLowerCase(),
+});
+
+export const generateIncidentsList = ({ type, data = {}, timeWindow }) => {
+  if (type === SIGNAL_TYPES.ENTITY) {
+    const violations = timeWindow
+      ? data.alertViolations || []
+      : data.recentAlertViolations || [];
+    if (!violations?.length) return [];
+    return violations.reduce((acc, violation) => {
+      if (!timeWindow && violation.closedAt) return acc;
+      return violation.alertSeverity === ALERT_STATUSES.CRITICAL
+        ? [incidentFromViolation(violation), ...acc]
+        : [...acc, incidentFromViolation(violation)];
+    }, []);
+  } else if (type === SIGNAL_TYPES.ALERT) {
+    const { incidents = [] } = data;
+    if (!incidents?.length) return [];
+    return (
+      timeWindow?.end
+        ? incidents
+        : incidents.filter(({ closedAt }) => !closedAt)
+    ).map(incidentFromIncident);
+  }
 };

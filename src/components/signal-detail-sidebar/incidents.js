@@ -3,52 +3,12 @@ import PropTypes from 'prop-types';
 
 import { Button, Card, CardBody, HeadingText, Link, SectionMessage } from 'nr1';
 
-import { durationStringForViolation, formatTimestamp } from '../../utils';
-import { ALERT_STATUSES, SIGNAL_TYPES, UI_CONTENT } from '../../constants';
-
-const parseIncidentName = (name = '') => {
-  try {
-    return JSON.parse(name);
-  } catch (_) {
-    return name;
-  }
-};
-
-const incidentFromViolation = ({
-  alertSeverity = '',
-  closedAt,
-  label,
-  openedAt,
-  violationId,
-  violationUrl,
-} = {}) => ({
-  id: violationId,
-  name: label,
-  closed: closedAt,
-  opened: openedAt,
-  link: violationUrl,
-  state: closedAt ? 'closed' : 'open',
-  curStatus: alertSeverity,
-  classname: alertSeverity.toLowerCase(),
-});
-
-const incidentFromIncident = ({
-  priority = '',
-  closedAt,
-  title,
-  createdAt,
-  incidentId,
-  accountIds,
-} = {}) => ({
-  id: incidentId,
-  name: parseIncidentName(title),
-  closed: closedAt,
-  opened: createdAt,
-  link: `https://aiops.service.newrelic.com/accounts/${accountIds}/incidents/${incidentId}/redirect`,
-  state: closedAt ? 'closed' : 'open',
-  curStatus: priority,
-  classname: priority.toLowerCase(),
-});
+import {
+  durationStringForViolation,
+  formatTimestamp,
+  generateIncidentsList,
+} from '../../utils';
+import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 
 const Incidents = ({ type, data, timeWindow }) => {
   const [bannerMessage, setBannerMessage] = useState('');
@@ -58,38 +18,13 @@ const Incidents = ({ type, data, timeWindow }) => {
   useEffect(() => {
     if (!data) return;
 
-    let issuesToDisplay = [],
-      maxIssuesDisplayed = 1;
-    if (type === SIGNAL_TYPES.ENTITY) {
-      const issuesArr = timeWindow
-        ? data.alertViolations || []
-        : data.recentAlertViolations || [];
-      if (issuesArr.length) {
-        issuesToDisplay = issuesArr.reduce((acc, issue) => {
-          if (!timeWindow && issue.closedAt) return acc;
-          return issue.alertSeverity === ALERT_STATUSES.CRITICAL
-            ? [incidentFromViolation(issue), ...acc]
-            : [...acc, incidentFromViolation(issue)];
-        }, []);
-      }
-    } else if (type === SIGNAL_TYPES.ALERT) {
-      const issuesArr = data.incidents || [];
-      if (issuesArr.length) {
-        issuesToDisplay = (
-          timeWindow?.end
-            ? issuesArr
-            : issuesArr.filter(({ closedAt }) => !closedAt)
-        ).map(incidentFromIncident);
-      }
-      maxIssuesDisplayed = issuesToDisplay.length;
-    }
-    if (!issuesToDisplay.length) {
-      setBannerMessage(UI_CONTENT.SIGNAL.DETAILS.NO_RECENT_INCIDENTS);
-    } else {
-      setBannerMessage('');
-    }
-    setIncidentsList(issuesToDisplay);
-    setMaxIncidentsShown(maxIssuesDisplayed);
+    const incids = generateIncidentsList({ type, data, timeWindow });
+
+    setBannerMessage(
+      incids.length ? '' : UI_CONTENT.SIGNAL.DETAILS.NO_RECENT_INCIDENTS
+    );
+    setMaxIncidentsShown(type === SIGNAL_TYPES.ALERT ? incids.length || 0 : 1);
+    setIncidentsList(incids);
   }, [type, data, timeWindow]);
 
   return (
