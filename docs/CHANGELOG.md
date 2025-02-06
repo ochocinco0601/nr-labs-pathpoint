@@ -1,3 +1,10 @@
+## [2.2.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.12...v2.2.13) (2025-02-06)
+
+
+### Bug Fixes
+
+* missing incidents in tooltip on playback ([4e9a93e](https://github.com/newrelic/nr-labs-pathpoint/commit/4e9a93e5fc48e825c12bbd6faee43d619efee36a))
+
 ## [2.2.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.11...v2.2.12) (2025-02-06)
 
 
