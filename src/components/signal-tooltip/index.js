@@ -9,7 +9,12 @@ import { ALERT_SEVERITY, UI_CONTENT, SIGNAL_TYPES } from '../../constants';
 
 import typesList from '../../../nerdlets/signal-selection/types.json';
 
-const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
+const SignalTooltip = ({
+  entityGuid,
+  signalType,
+  triggerElement,
+  timeWindow,
+}) => {
   const { accounts } = useContext(AppContext);
   const signalsDetails = useContext(SignalsContext);
   const [data, setData] = useState(null);
@@ -41,7 +46,11 @@ const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
   const incidentsStatus = useMemo(() => {
     if (!data) return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
 
-    const incidentsList = generateIncidentsList({ type: signalType, data });
+    const incidentsList = generateIncidentsList({
+      type: signalType,
+      data,
+      timeWindow,
+    });
     if (signalType === SIGNAL_TYPES.ENTITY) {
       if (data.type === 'WORKLOAD') {
         if (data.alertSeverity === ALERT_SEVERITY.NOT_CONFIGURED) {
@@ -74,7 +83,7 @@ const SignalTooltip = ({ entityGuid, signalType, triggerElement }) => {
 
       return UI_CONTENT.SIGNAL.TOOLTIP.DEFAULT;
     }
-  }, [data, signalType]);
+  }, [data, signalType, timeWindow]);
 
   return (
     <Popover openOnHover>
@@ -111,6 +120,7 @@ SignalTooltip.propTypes = {
   entityGuid: PropTypes.string,
   signalType: PropTypes.string,
   triggerElement: PropTypes.element,
+  timeWindow: PropTypes.object,
 };
 
 export default SignalTooltip;

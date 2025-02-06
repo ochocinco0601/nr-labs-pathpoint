@@ -5,3 +5,4 @@ export { AppContext } from './app';
 export { SignalsContext } from './signals';
 export { SelectionsContext } from './selections';
 export { SignalsClassificationsContext } from './signals-classifications';
+export { PlaybackContext } from './playback';
