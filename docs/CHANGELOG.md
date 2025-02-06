@@ -1,3 +1,10 @@
+## [2.2.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.11...v2.2.12) (2025-02-06)
+
+
+### Bug Fixes
+
+* get signal tooltip to use data from context ([62da725](https://github.com/newrelic/nr-labs-pathpoint/commit/62da725434ca1ec26f7f75baf6d49c6d959749b0))
+
 ## [2.2.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.10...v2.2.11) (2025-01-17)
 
 
