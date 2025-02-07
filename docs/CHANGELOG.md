@@ -1,3 +1,10 @@
+## [2.2.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.14...v2.2.15) (2025-02-07)
+
+
+### Bug Fixes
+
+* preview not working issue ([f21115b](https://github.com/newrelic/nr-labs-pathpoint/commit/f21115b0abd4da118a7ede3cae45fa1ad5594b5a))
+
 ## [2.2.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.13...v2.2.14) (2025-02-07)
 
 
