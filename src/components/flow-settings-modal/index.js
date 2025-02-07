@@ -5,12 +5,12 @@ import {
   BlockText,
   Button,
   HeadingText,
-  Modal,
   Select,
   SelectItem,
   TextField,
 } from 'nr1';
 
+import Modal from '../modal';
 import { AppContext, FlowContext } from '../../contexts';
 import { REFRESH_INTERVALS } from '../../constants';
 import { validRefreshInterval } from '../../utils';

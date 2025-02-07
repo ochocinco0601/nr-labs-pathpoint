@@ -9,8 +9,9 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Icon, Modal, navigation } from 'nr1';
+import { BlockText, Button, HeadingText, Icon, navigation } from 'nr1';
 
+import Modal from '../modal';
 import { FlowContext, StagesContext } from '../../contexts';
 
 const StageNotifyModal = forwardRef(

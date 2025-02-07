@@ -1,6 +1,5 @@
 export { default as IconsLib } from './icons-lib';
 export { default as NoFlows } from './no-flows';
-export { default as EditStepModal } from './edit-step-modal';
 export { default as Signal } from './signal';
 export { default as Step } from './step';
 export { default as Level } from './level';
@@ -30,3 +29,4 @@ export { default as StepSettingsModal } from './step-settings-modal';
 export { default as SignalTooltip } from './signal-tooltip';
 export { default as StepDetailSidebar } from './step-detail-sidebar';
 export { default as EditInPlace } from './edit-in-place';
+export { default as Modal } from './modal';

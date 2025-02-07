@@ -5,47 +5,36 @@
 }
 
 .kpi-modal-buttons {
-  height: 40px;
-
   &.add {
     color: #9EA5A9;
     background-color: #ECEDED;
-    margin: 9.5rem 0rem 0rem;
-    padding: 0.75rem 1rem;
+    margin: 0;
   }
 
   &.save {
     color: #FAFBFB;
     background-color: #293338;
-    margin: 9.5rem 0rem 0rem;
-    padding: 0.75rem 1rem;
+    margin: 0;
   }
 
   &.delete {
-    margin: 9.5rem 0rem 0rem;
-    padding: 0.75rem 1rem;
+    margin: 0;
   }
 
   &.cancel {
-    margin: 9.5rem 0rem 0rem;
-    padding: 0rem 1.75rem;
+    margin: 0;
   }
 }
 
 .modal-component {
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
 }
 
-.modal-component-kpi-title {
-  margin-bottom: 6.25rem;
-  text-align: center;
-  font-size: 2rem;
-}
-
 .modal-component-detail {
-  height: 500px;
+  flex: 1;
 }
 
 .modal-component-edit-in-place {

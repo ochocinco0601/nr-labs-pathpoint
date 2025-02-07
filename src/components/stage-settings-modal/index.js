@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, HeadingText, Modal, Radio, TextField } from 'nr1';
+import { Button, HeadingText, Radio, TextField } from 'nr1';
 
+import Modal from '../modal';
 import IconsLib from '../icons-lib';
 import DeleteConfirmModal from '../delete-confirm-modal';
 import { STAGE_SHAPES_ARRAY, STAGE_SHAPES_ICON } from '../../constants';
