@@ -36,6 +36,7 @@ const FlowHeader = ({
   onClose,
   mode = MODES.INLINE,
   setMode = () => null,
+  setModeInPreview = () => null,
   flows = [],
   isLoading,
   isPlayback,
@@ -106,7 +107,9 @@ const FlowHeader = ({
             : SegmentedControl.TYPE.NORMAL
         }
         value={mode}
-        onChange={(_, value) => setMode(value)}
+        onChange={(_, value) =>
+          isPreview ? setModeInPreview(value) : setMode(value)
+        }
       >
         <SegmentedControlItem
           label={capitalize(MODES.STACKED)}
@@ -122,7 +125,7 @@ const FlowHeader = ({
         />
       </SegmentedControl>
     ),
-    [isPreview]
+    [isPreview, setMode, setModeInPreview]
   );
   ViewModeSegmentedControl.displayName = 'ViewModeSegmentedControl';
 
@@ -259,6 +262,7 @@ FlowHeader.propTypes = {
   onClose: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
   setMode: PropTypes.func,
+  setModeInPreview: PropTypes.func,
   flows: PropTypes.array,
   isLoading: PropTypes.bool,
   isPlayback: PropTypes.bool,
