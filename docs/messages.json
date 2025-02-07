@@ -1,10 +1,3 @@
 {
-  "messages": [
-    {
-      "date": "2025-01-27",
-      "level": "warning",
-      "title": "Issue with preview functionality",
-      "desc": "We have identified an issue with the preview functionality when editing a flow, which could cause the app to crash. We will post updates as we have them."
-    }
-  ]
+  "messages": []
 }

@@ -65,6 +65,7 @@ const Flow = forwardRef(
       label: 'Starting playback...',
     });
     const [isPreview, setIsPreview] = useState(false);
+    const [modeInPreview, setModeInPreview] = useState(null);
     const [activateTransition, setActivateTransition] = useState(false);
     const {
       account: { id: accountId } = {},
@@ -107,9 +108,7 @@ const Flow = forwardRef(
       if (mode === MODES.EDIT) setIsPlayback(false);
     }, [mode]);
 
-    useEffect(() => {
-      if (isPreview) setMode(prevNonEditMode);
-    }, [isPreview]);
+    useEffect(() => setModeInPreview(prevNonEditMode), [prevNonEditMode]);
 
     useEffect(() => {
       if (isAuditLogShown)
@@ -147,15 +146,15 @@ const Flow = forwardRef(
 
     useEffect(() => {
       if (activateTransition) {
-        if (onTransition && prevNonEditMode) onTransition(prevNonEditMode);
+        onTransition?.(prevNonEditMode || MODES.INLINE);
         setActivateTransition(false);
       }
-    }, [activateTransition]);
+    }, [activateTransition, onTransition, prevNonEditMode]);
 
     const discardFlowHandler = useCallback(() => {
       setIsPreview(false);
-      if (onTransition) onTransition(prevNonEditMode);
-    }, [prevNonEditMode]);
+      onTransition?.(prevNonEditMode || MODES.INLINE);
+    }, [onTransition, prevNonEditMode]);
 
     useEffect(() => {
       const { nerdStorageWriteDocument: document } = flowWriter?.data || {};
@@ -207,10 +206,11 @@ const Flow = forwardRef(
       []
     );
 
-    const flowMode = useMemo(
-      () => (flowDoc?.stages?.length || isPreview ? mode : MODES.EDIT),
-      [mode, flowDoc, isPreview]
-    );
+    const flowMode = useMemo(() => {
+      if (isPreview) return modeInPreview || MODES.EDIT;
+      if (flowDoc?.stages?.length) return mode || MODES.INLINE;
+      return MODES.EDIT;
+    }, [flowDoc, isPreview, mode, modeInPreview]);
 
     return (
       <FlowContext.Provider value={flow}>
@@ -249,6 +249,7 @@ const Flow = forwardRef(
                   onClose={onClose}
                   mode={flowMode}
                   setMode={setMode}
+                  setModeInPreview={setModeInPreview}
                   flows={flows}
                   isLoading={isLoading}
                   isPlayback={isPlayback}
