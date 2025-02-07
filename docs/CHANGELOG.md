@@ -1,3 +1,10 @@
+## [2.2.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.13...v2.2.14) (2025-02-07)
+
+
+### Bug Fixes
+
+* new modal component; update components to use new modal ([e773db0](https://github.com/newrelic/nr-labs-pathpoint/commit/e773db09f426a6261dc8696c6f03c99a8191aa11))
+
 ## [2.2.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.12...v2.2.13) (2025-02-06)
 
 
