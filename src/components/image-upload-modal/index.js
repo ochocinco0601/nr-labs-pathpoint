@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Icon, Modal, TextField } from 'nr1';
+import { BlockText, Button, HeadingText, Icon, TextField } from 'nr1';
+
+import Modal from '../modal';
 
 const ImageUploadModal = ({ imageUrl, hidden = true, onChange, onClose }) => {
   const [urlText, setUrlText] = useState('');

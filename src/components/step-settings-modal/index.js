@@ -5,7 +5,6 @@ import {
   Button,
   EmptyState,
   HeadingText,
-  Modal,
   RadioGroup,
   Radio,
   Select,
@@ -14,6 +13,7 @@ import {
   TextField,
 } from 'nr1';
 
+import Modal from '../modal';
 import SignalStatusSelectionTable from './signal-status-selection-table';
 import {
   STEP_STATUS_OPTIONS,
@@ -134,7 +134,7 @@ const StepSettingsModal = ({
     <Modal
       hidden={isModalHidden}
       onClose={onClose}
-      onShowEnd={modalShowEndHandler}
+      onShow={modalShowEndHandler}
     >
       <div className="step-settings-modal">
         <div className="modal-heading">

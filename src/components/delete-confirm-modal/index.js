@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, Modal } from 'nr1';
+import { BlockText, Button, HeadingText } from 'nr1';
+
+import Modal from '../modal';
 
 const DeleteConfirmModal = ({
   name = '',

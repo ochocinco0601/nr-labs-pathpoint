@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   Button,
   HeadingText,
-  Modal,
   PlatformStateContext,
   Popover,
   PopoverTrigger,
@@ -13,6 +12,7 @@ import {
 
 import { NrqlEditor, SimpleBillboard } from '@newrelic/nr-labs-components';
 
+import Modal from '../modal';
 import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { EditInPlace } from '../';
@@ -95,7 +95,6 @@ const KpiModal = ({
           />
         ) : (
           <>
-            <div className="modal-component-kpi-title"></div>
             <div className="modal-component-detail">
               <>
                 <div className="modal-component-edit-in-place">
