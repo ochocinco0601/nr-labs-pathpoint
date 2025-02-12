@@ -1,3 +1,10 @@
+## [2.2.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.15...v2.2.16) (2025-02-12)
+
+
+### Bug Fixes
+
+* nrql editor and other kpi modal issues ([7623dbe](https://github.com/newrelic/nr-labs-pathpoint/commit/7623dbe76f2033b293ff496dd24ff16f2892a057))
+
 ## [2.2.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.14...v2.2.15) (2025-02-07)
 
 
