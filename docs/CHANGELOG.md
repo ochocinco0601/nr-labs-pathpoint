@@ -1,3 +1,10 @@
+## [2.2.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.16...v2.2.17) (2025-02-12)
+
+
+### Bug Fixes
+
+* add export flow modal ([6a41b8f](https://github.com/newrelic/nr-labs-pathpoint/commit/6a41b8f270e73a157cd26937ed84338b41753d6b))
+
 ## [2.2.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.15...v2.2.16) (2025-02-12)
 
 
