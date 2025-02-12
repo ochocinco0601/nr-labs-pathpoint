@@ -30,3 +30,4 @@ export { default as SignalTooltip } from './signal-tooltip';
 export { default as StepDetailSidebar } from './step-detail-sidebar';
 export { default as EditInPlace } from './edit-in-place';
 export { default as Modal } from './modal';
+export { default as ExportFlowModal } from './export-flow-modal';
