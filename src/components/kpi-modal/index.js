@@ -17,6 +17,7 @@ import KpiModalDeleteContent from './delete';
 import KpiModalEmptyState from './empty';
 import { EditInPlace } from '../';
 import { useFetchKpis } from '../../hooks';
+import { AppContext } from '../../contexts';
 import { lexer, NRQL_STYLES, formatKpiHoverDatime } from '../../utils';
 import { KPI_MODES, UI_CONTENT } from '../../constants';
 
@@ -36,39 +37,47 @@ const KpiModal = ({
   const [accountId, setAccountId] = useState(
     Number.isInteger(platformAcctId) ? platformAcctId : ''
   );
-
-  const [name, setName] = useState(
-    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.name : ''
-  );
-  const [alias, setAlias] = useState(
-    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.alias : ''
-  );
-  const [nrqlQuery, setNrqlQuery] = useState(
-    [KPI_MODES.EDIT, KPI_MODES.DELETE].includes(kpiMode) ? kpi.nrqlQuery : ''
-  );
-
+  const [name, setName] = useState('');
+  const [alias, setAlias] = useState('');
+  const [nrqlQuery, setNrqlQuery] = useState('');
+  const [accountsList, setAccountsList] = useState([]);
+  const [kpiData, setKpiData] = useState([]);
   const [previewOk, setPreviewOk] = useState(false);
   const [kpiResults, setKpiResult] = useState({});
+  const { accounts } = useContext(AppContext);
+  const hookData = useFetchKpis({ kpiData });
 
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
-    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setName(kpi.name);
-    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) && setAlias(kpi.alias);
-    [KPI_MODES.ADD, KPI_MODES.EDIT].includes(kpiMode) &&
+    if (kpiMode === KPI_MODES.ADD || kpiMode === KPI_MODES.EDIT) {
+      setName(kpi.name);
+      setAlias(kpi.alias);
       setNrqlQuery(kpi.nrqlQuery);
+    }
   }, [kpi, kpiMode]);
 
-  const hookData = useFetchKpis({
-    kpiData:
-      Number.isInteger(accountId) && nrqlQuery
-        ? [
-            {
-              accountIds: [accountId],
-              nrqlQuery: nrqlQuery,
-            },
-          ]
-        : [],
-  });
+  useEffect(
+    () =>
+      setKpiData(
+        Number.isInteger(accountId) && nrqlQuery
+          ? [
+              {
+                accountIds: [accountId],
+                nrqlQuery: nrqlQuery,
+              },
+            ]
+          : []
+      ),
+    [accountId, nrqlQuery]
+  );
+
+  useEffect(
+    () =>
+      setAccountsList(
+        accounts?.map(({ id, name }) => ({ value: id, label: name })) || []
+      ),
+    [accounts]
+  );
 
   useEffect(() => {
     if (Number.isInteger(accountId) && nrqlQuery && !hookData?.error) {
@@ -119,17 +128,14 @@ const KpiModal = ({
                 >
                   <NrqlEditor
                     id={'nrqlEditor'}
-                    query={
-                      nrqlQuery ||
-                      kpi.nrqlQuery ||
-                      UI_CONTENT.KPI_MODAL.QUERY_PROMPT
-                    }
+                    query={nrqlQuery || kpi.nrqlQuery}
                     accountId={accountId}
+                    accounts={accountsList}
                     saveButtonText="Preview"
+                    placeholder={UI_CONTENT.KPI_MODAL.QUERY_PROMPT}
                     onSave={(res) => {
                       setAccountId(res.accountId);
-                      if (res.query !== UI_CONTENT.KPI_MODAL.QUERY_PROMPT)
-                        setNrqlQuery(res.query);
+                      setNrqlQuery(res.query);
                     }}
                   />
                   <div className="modal-component-nrql-editor-help">

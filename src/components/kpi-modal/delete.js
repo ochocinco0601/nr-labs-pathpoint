@@ -10,7 +10,7 @@ const KpiModalDeleteContent = ({ kpi, setShowModal, updateKpiArray }) => {
   }, [setShowModal, updateKpiArray]);
 
   return (
-    <>
+    <div className="delete-kpi-modal-content">
       <div>
         <div>
           <HeadingText type={HeadingText.TYPE.HEADING_3}>
@@ -38,7 +38,7 @@ const KpiModalDeleteContent = ({ kpi, setShowModal, updateKpiArray }) => {
           Cancel
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
