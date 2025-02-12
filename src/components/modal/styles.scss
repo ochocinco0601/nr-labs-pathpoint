@@ -4,7 +4,11 @@ dialog.modal-dialog {
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
-    transition: opacity .2s cubic-bezier(.23, 1, .32, 1);
+    transition:
+      opacity .2s cubic-bezier(.23, 1, .32, 1)
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete,
+      background-color 0.2s;
   }
 
   .modal-frame {
