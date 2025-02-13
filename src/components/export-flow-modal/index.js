@@ -18,8 +18,7 @@ const ExportFlowModal = ({ flowDoc, hidden = true, onClose }) => {
     const exportBtn = linkRef.current;
     if (!exportBtn) return;
 
-    const jsonStr = JSON.stringify(data);
-    const blob = new Blob([JSON.stringify(jsonStr)], {
+    const blob = new Blob([JSON.stringify(data)], {
       type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
