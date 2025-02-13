@@ -1,3 +1,10 @@
+## [2.2.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.17...v2.2.18) (2025-02-13)
+
+
+### Bug Fixes
+
+* remove duplicate json stringify ([6b5f6b1](https://github.com/newrelic/nr-labs-pathpoint/commit/6b5f6b1b775e61a97c4515b8ee51bf6f536707f5))
+
 ## [2.2.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.16...v2.2.17) (2025-02-12)
 
 
