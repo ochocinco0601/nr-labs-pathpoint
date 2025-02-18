@@ -10,3 +10,4 @@ export * from './app';
 export * from './datetime';
 export * from './alerts';
 export * from './steps';
+export * from './entities';

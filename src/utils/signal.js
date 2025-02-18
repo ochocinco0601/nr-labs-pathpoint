@@ -8,6 +8,7 @@ import {
   STATUSES,
   STEP_STATUS_OPTIONS,
   STEP_STATUS_UNITS,
+  WORKLOAD_TYPE,
 } from '../constants';
 
 const statusesOrder = [
@@ -45,6 +46,11 @@ export const signalStatus = (signal, entity) => {
 
   switch (signal.type) {
     case SIGNAL_TYPES.ENTITY: {
+      if (entity.type === WORKLOAD_TYPE && entity.alertViolations?.length) {
+        return statusFromStatuses(
+          entity.alertViolations.map((e) => ({ status: entityStatus(e) }))
+        );
+      }
       return entityStatus(entity);
     }
     case SIGNAL_TYPES.ALERT: {
@@ -132,7 +138,7 @@ export const calculateStepStatus = (step) => {
 
 export const statusFromStatuses = (statusesArray = []) => {
   const valuesArray = statusesArray.reduce(
-    (acc, { status } = STATUSES.UNKNOWN) =>
+    (acc, { status = STATUSES.UNKNOWN } = {}) =>
       status !== STATUSES.UNKNOWN
         ? [...acc, statusesOrderIndexLookup[status]]
         : acc,
