@@ -61,13 +61,8 @@ import {
   UI_CONTENT,
   ALERT_STATUSES,
   MAX_PARAMS_IN_QUERY,
+  WORKLOAD_TYPE,
 } from '../../constants';
-
-const WORKLOAD_TYPE = 'WORKLOAD';
-const WORKLOAD_SKIP_SEVERITIES = [
-  ALERT_STATUSES.NOT_CONFIGURED,
-  ALERT_STATUSES.NOT_ALERTING,
-];
 
 const keyFromTimeWindow = ({ start, end }) =>
   start && end ? `${start}:${end}` : null;
@@ -150,43 +145,37 @@ const Stages = forwardRef(
           entitiesStatusesObj
         ).reduce(
           (acc, cur) => {
-            const {
-              type: t,
-              alertSeverity,
-              relatedEntities,
-            } = entitiesStatusesObj[cur];
-            if (
-              t !== WORKLOAD_TYPE ||
-              WORKLOAD_SKIP_SEVERITIES.includes(alertSeverity) ||
-              !relatedEntities?.results?.length
-            )
-              return acc;
-            const { workloadEntitiesGuids, guidsWOStatus } =
-              relatedEntities.results.reduce(
-                ({ workloadEntitiesGuids, guidsWOStatus }, re) => {
-                  const g = re?.target?.entity?.guid;
-                  if (!g) return { workloadEntitiesGuids, guidsWOStatus };
-                  return {
-                    workloadEntitiesGuids: [...workloadEntitiesGuids, g],
-                    guidsWOStatus:
-                      g in entitiesStatusesObj || guidsWOStatus.includes(g)
-                        ? guidsWOStatus
-                        : [...guidsWOStatus, g],
-                  };
+            const { type: t, relatedEntities } = entitiesStatusesObj[cur];
+            if (t === WORKLOAD_TYPE && relatedEntities?.results?.length) {
+              const { workloadEntitiesGuids, guidsWOStatus } =
+                relatedEntities.results.reduce(
+                  ({ workloadEntitiesGuids, guidsWOStatus }, re) => {
+                    const g = re?.target?.entity?.guid;
+                    if (!g) return { workloadEntitiesGuids, guidsWOStatus };
+                    return {
+                      workloadEntitiesGuids: [...workloadEntitiesGuids, g],
+                      guidsWOStatus:
+                        g in entitiesStatusesObj || guidsWOStatus.includes(g)
+                          ? guidsWOStatus
+                          : [...guidsWOStatus, g],
+                    };
+                  },
+                  {
+                    workloadEntitiesGuids: [],
+                    guidsWOStatus: acc.workloadEntities,
+                  }
+                );
+              return {
+                ...acc,
+                workloads: {
+                  ...acc.workloads,
+                  [cur]: workloadEntitiesGuids,
                 },
-                {
-                  workloadEntitiesGuids: [],
-                  guidsWOStatus: acc.workloadEntities,
-                }
-              );
-            return {
-              ...acc,
-              workloads: {
-                ...acc.workloads,
-                [cur]: workloadEntitiesGuids,
-              },
-              workloadEntities: guidsWOStatus,
-            };
+                workloadEntities: guidsWOStatus,
+              };
+            } else {
+              return acc;
+            }
           },
           { workloads: {}, workloadEntities: [] }
         );
