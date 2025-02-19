@@ -1,3 +1,10 @@
+## [2.2.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.18...v2.2.19) (2025-02-19)
+
+
+### Bug Fixes
+
+* workloads not displaying status in playback ([e80d141](https://github.com/newrelic/nr-labs-pathpoint/commit/e80d1415a0c5f2cdb1263e25c22ac2c75470715c))
+
 ## [2.2.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.17...v2.2.18) (2025-02-13)
 
 
