@@ -46,7 +46,7 @@ export const signalStatus = (signal, entity) => {
 
   switch (signal.type) {
     case SIGNAL_TYPES.ENTITY: {
-      if (entity.type === WORKLOAD_TYPE && entity.alertViolations?.length) {
+      if (entity?.type === WORKLOAD_TYPE && entity?.alertViolations?.length) {
         return statusFromStatuses(
           entity.alertViolations.map((e) => ({ status: entityStatus(e) }))
         );
