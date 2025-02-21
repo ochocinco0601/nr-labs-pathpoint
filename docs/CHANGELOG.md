@@ -1,3 +1,10 @@
+## [2.2.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.19...v2.2.20) (2025-02-21)
+
+
+### Bug Fixes
+
+* additing optional check to previous workload fix ([eb1bb7b](https://github.com/newrelic/nr-labs-pathpoint/commit/eb1bb7b315859a3c07530290c3796dd2eefb7372))
+
 ## [2.2.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.18...v2.2.19) (2025-02-19)
 
 
