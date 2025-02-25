@@ -452,6 +452,12 @@ const Stages = forwardRef(
     }, [nerdletState.staging]);
 
     useEffect(() => {
+      if (nerdletState.flow.signalExpandOption) {
+        setSignalExpandOption(nerdletState.flow.signalExpandOption);
+      }
+    }, [nerdletState.flow.signalExpandOption]);
+
+    useEffect(() => {
       if (selections.type === COMPONENTS.SIGNAL && selections.id) {
         openSidebar({
           content: (
@@ -489,6 +495,16 @@ const Stages = forwardRef(
       setSelections((sel) =>
         sel.type === type && sel.id === id ? {} : { type, id, data }
       );
+    }, []);
+
+    const signalChangeHandler = useCallback((seo, expandOption) => {
+      setNerdletState((prevState) => ({
+        flow: {
+          ...prevState.flow,
+          signalExpandOption: seo ^ expandOption,
+        },
+      }));
+      return seo ^ expandOption;
     }, []);
 
     const closeSidebarHandler = useCallback(() => setSelections({}), []);
@@ -667,8 +683,11 @@ const Stages = forwardRef(
                         }
                         label="Unhealthy only"
                         onChange={() =>
-                          setSignalExpandOption(
-                            (seo) => seo ^ SIGNAL_EXPAND.UNHEALTHY_ONLY
+                          setSignalExpandOption((seo) =>
+                            signalChangeHandler(
+                              seo,
+                              SIGNAL_EXPAND.UNHEALTHY_ONLY
+                            )
                           )
                         }
                       />
@@ -678,8 +697,11 @@ const Stages = forwardRef(
                         }
                         label="Critical only"
                         onChange={() =>
-                          setSignalExpandOption(
-                            (seo) => seo ^ SIGNAL_EXPAND.CRITICAL_ONLY
+                          setSignalExpandOption((seo) =>
+                            signalChangeHandler(
+                              seo,
+                              SIGNAL_EXPAND.CRITICAL_ONLY
+                            )
                           )
                         }
                       />
@@ -690,7 +712,9 @@ const Stages = forwardRef(
                       checked={signalExpandOption & SIGNAL_EXPAND.ALL}
                       label="Expand all steps"
                       onChange={() =>
-                        setSignalExpandOption((seo) => seo ^ SIGNAL_EXPAND.ALL)
+                        setSignalExpandOption((seo) =>
+                          signalChangeHandler(seo, SIGNAL_EXPAND.ALL)
+                        )
                       }
                     />
                   )}

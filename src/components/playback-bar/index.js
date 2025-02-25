@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Dropdown, DropdownItem, Icon } from 'nr1';
+import { Button, Dropdown, DropdownItem, Icon, useNerdletState } from 'nr1';
 
 import { TimeRangePicker } from '@newrelic/nr-labs-components';
 import { uuid } from '../../utils';
@@ -78,6 +78,7 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
   const seekDragStartX = useRef(0);
   const isMouseDownOnSeeker = useRef(false);
   const showingTimeWindow = useRef({ start: 0, end: 0 });
+  const [nerdletState, setNerdletState] = useNerdletState();
 
   const loadDataCache = useCallback(async (tbs) => {
     if (!onPreload) return;
@@ -129,7 +130,39 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
     setSelectedIncrement(
       playbackIncrementForSelectedDuration(selectedTimeRange)
     );
+    setNerdletState((prevState) => ({
+      flow: {
+        ...prevState.flow,
+        pb_selectedTimeRange: selectedTimeRange,
+      },
+    }));
   }, []);
+
+  const playheadIncrementChangeHandler = useCallback((item) => {
+    setSelectedIncrement(item);
+    setNerdletState((prevState) => ({
+      flow: {
+        ...prevState.flow,
+        pb_selectedIncrement: item,
+      },
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (nerdletState.flow.pb_selectedTimeRange) {
+      setTimeRange(nerdletState.flow.pb_selectedTimeRange);
+
+      if (nerdletState.flow.pb_selectedIncrement) {
+        setSelectedIncrement(nerdletState.flow.pb_selectedIncrement);
+      } else {
+        setSelectedIncrement(
+          playbackIncrementForSelectedDuration(
+            nerdletState.flow.pb_selectedTimeRange
+          )
+        );
+      }
+    }
+  }, [nerdletState.flow.pb_selectedTimeRange]);
 
   useEffect(() => {
     const mouseUpHandler = () => {
@@ -293,7 +326,7 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
             <DropdownItem
               key={item.timeInSeconds}
               disabled={isPlaybackIncrementDisabled(item, timeRange)}
-              onClick={() => setSelectedIncrement(item)}
+              onClick={() => playheadIncrementChangeHandler(item)}
             >
               {item.display}
             </DropdownItem>
