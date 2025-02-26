@@ -120,10 +120,8 @@ const Flow = forwardRef(
     }, [isAuditLogShown, flowDoc]);
 
     useEffect(() => {
-      if (nerdletState.flow.isPlayback) {
-        setIsPlayback(nerdletState.flow.isPlayback);
-      }
-    }, [nerdletState.flow.isPlayback]);
+      setIsPlayback(nerdletState.isPlayback);
+    }, [nerdletState.isPlayback]);
 
     const saveFlow = useCallback(
       async (document) => {
@@ -187,14 +185,8 @@ const Flow = forwardRef(
     }, [flowWriter, onClose]);
 
     const togglePlayback = useCallback(() => {
-      setIsPlayback((p) => {
-        setNerdletState((prevState) => ({
-          flow: {
-            ...prevState.flow,
-            isPlayback: !p,
-          },
-        }));
-        return !p;
+      setNerdletState((prevState) => {
+        return { isPlayback: !prevState.isPlayback };
       });
     }, []);
 

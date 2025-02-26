@@ -126,43 +126,23 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
   }, []);
 
   const timeRangeChangeHandler = useCallback((selectedTimeRange) => {
-    setTimeRange(selectedTimeRange);
-    setSelectedIncrement(
-      playbackIncrementForSelectedDuration(selectedTimeRange)
-    );
-    setNerdletState((prevState) => ({
-      flow: {
-        ...prevState.flow,
-        pb_selectedTimeRange: selectedTimeRange,
-      },
-    }));
-  }, []);
-
-  const playheadIncrementChangeHandler = useCallback((item) => {
-    setSelectedIncrement(item);
-    setNerdletState((prevState) => ({
-      flow: {
-        ...prevState.flow,
-        pb_selectedIncrement: item,
-      },
-    }));
+    setNerdletState({
+      playbackTimeRange: selectedTimeRange,
+      playbackIncrement:
+        playbackIncrementForSelectedDuration(selectedTimeRange),
+    });
   }, []);
 
   useEffect(() => {
-    if (nerdletState.flow.pb_selectedTimeRange) {
-      setTimeRange(nerdletState.flow.pb_selectedTimeRange);
-
-      if (nerdletState.flow.pb_selectedIncrement) {
-        setSelectedIncrement(nerdletState.flow.pb_selectedIncrement);
-      } else {
-        setSelectedIncrement(
-          playbackIncrementForSelectedDuration(
-            nerdletState.flow.pb_selectedTimeRange
-          )
-        );
-      }
+    if (nerdletState.playbackTimeRange) {
+      setTimeRange(nerdletState.playbackTimeRange);
+      setSelectedIncrement(
+        nerdletState.playbackIncrement
+          ? nerdletState.playbackIncrement
+          : playbackIncrementForSelectedDuration(nerdletState.playbackTimeRange)
+      );
     }
-  }, [nerdletState.flow.pb_selectedTimeRange]);
+  }, [nerdletState.playbackTimeRange]);
 
   useEffect(() => {
     const mouseUpHandler = () => {
@@ -326,7 +306,7 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
             <DropdownItem
               key={item.timeInSeconds}
               disabled={isPlaybackIncrementDisabled(item, timeRange)}
-              onClick={() => playheadIncrementChangeHandler(item)}
+              onClick={() => setNerdletState({ playbackIncrement: item })}
             >
               {item.display}
             </DropdownItem>
