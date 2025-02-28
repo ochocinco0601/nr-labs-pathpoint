@@ -1,3 +1,10 @@
+## [2.2.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.20...v2.2.21) (2025-02-28)
+
+
+### Bug Fixes
+
+* add debug mode support when fetching entity statuses in stages ([a2621cb](https://github.com/newrelic/nr-labs-pathpoint/commit/a2621cbcd3eeb012ea092c985fb5471a34d8811e))
+
 ## [2.2.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.19...v2.2.20) (2025-02-21)
 
 
