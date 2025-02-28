@@ -21,7 +21,7 @@ import {
   PlaybackBar,
 } from '../';
 import FlowHeader from './header';
-import { useFlowWriter } from '../../hooks';
+import { useDebugLogger, useFlowWriter } from '../../hooks';
 import {
   AppContext,
   FlowContext,
@@ -74,6 +74,7 @@ const Flow = forwardRef(
     } = useContext(AppContext);
     const { closeSidebar, openSidebar } = useSidebar();
     const flowWriter = useFlowWriter({ accountId, user });
+    const { debugLogJson } = useDebugLogger({ allowDebug: debugMode });
     const stagesRef = useRef();
     const flowIdRef = useRef();
 
@@ -91,18 +92,10 @@ const Flow = forwardRef(
       }
     }, [flowDoc]);
 
-    useEffect(() => {
-      if (debugMode) {
-        try {
-          const flowJsonString = JSON.stringify(flowDoc);
-          console.groupCollapsed('flow changed');
-          console.debug(flowJsonString);
-          console.groupEnd();
-        } catch (e) {
-          console.error('Error: Unable to convert flow to JSON string');
-        }
-      }
-    }, [debugMode, flowDoc]);
+    useEffect(
+      () => debugLogJson(flowDoc, 'Flow change'),
+      [debugLogJson, flowDoc]
+    );
 
     useEffect(() => {
       if (mode === MODES.EDIT) setIsPlayback(false);

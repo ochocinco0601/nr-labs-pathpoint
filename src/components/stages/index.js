@@ -63,6 +63,7 @@ import {
   MAX_PARAMS_IN_QUERY,
   WORKLOAD_TYPE,
 } from '../../constants';
+import { useDebugLogger } from '../../hooks';
 
 const keyFromTimeWindow = ({ start, end }) =>
   start && end ? `${start}:${end}` : null;
@@ -71,7 +72,7 @@ const Stages = forwardRef(
   ({ mode = MODES.INLINE, setIsLoading, saveFlow }, ref) => {
     const { refreshInterval, stages = [] } = useContext(FlowContext);
     const dispatch = useContext(FlowDispatchContext);
-    const { accounts } = useContext(AppContext);
+    const { accounts, debugMode } = useContext(AppContext);
     const [guids, setGuids] = useState({});
     const [statuses, setStatuses] = useState({});
     const [stagesData, setStagesData] = useState({ stages });
@@ -81,6 +82,7 @@ const Stages = forwardRef(
     const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
     const [currentPlaybackTimeWindow, setCurrentPlaybackTimeWindow] =
       useState(null);
+    const { debugString } = useDebugLogger({ allowDebug: debugMode });
     const dragItemIndex = useRef();
     const dragOverItemIndex = useRef();
     const stagesDataRef = useRef(stages);
@@ -124,6 +126,7 @@ const Stages = forwardRef(
           MAX_PARAMS_IN_QUERY
         );
         const query = statusesFromGuidsArray(entitesGuidsArray, timeWindow);
+        debugString(query, 'Entities query');
         const { data: { actor = {} } = {}, error } = await NerdGraphQuery.query(
           {
             query,
@@ -214,7 +217,7 @@ const Stages = forwardRef(
           [SIGNAL_TYPES.ENTITY]: entitiesStatusesObj,
         }));
       },
-      []
+      [debugString]
     );
 
     const fetchAlertsStatus = useCallback(
