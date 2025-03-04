@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.21...v2.3.0) (2025-03-04)
+
+
+### Features
+
+* refactor workload status calculation and display of incidents ([d6cfcee](https://github.com/newrelic/nr-labs-pathpoint/commit/d6cfceeeceb4632f6d3bc8f1c125c1ac58d1551c))
+
 ## [2.2.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.20...v2.2.21) (2025-02-28)
 
 
