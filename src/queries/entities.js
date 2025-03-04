@@ -85,19 +85,6 @@ const statusesFromGuidsArray = (arrayOfGuids = [], timeWindow) => `{
         name
         reporting
         type
-        ... on WorkloadEntity {
-          relatedEntities(
-            filter: {direction: OUTBOUND, relationshipTypes: {include: CONTAINS}}
-          ) {
-            results {
-              target {
-                entity {
-                  guid
-                }
-              }
-            }
-          }
-        }
       }
     `
     )}
@@ -146,6 +133,45 @@ query($cursor: String){
   }
 }`;
 
+const workloadsStatusesNrql = (guids = [], { start, end }) =>
+  `"SELECT statusValueCode, timestamp, workloadGuid FROM WorkloadStatus
+    WHERE workloadGuid IN ('${guids.join("', '")}')
+    SINCE ${start} UNTIL ${end} LIMIT MAX"`.replace(/\s+/g, ' ');
+
+const workloadsStatusesQuery = (workloads = {}, timeWindow) => `
+{
+  actor {
+    ${Object.keys(workloads).map(
+      (key, i) => `
+      w${i}: nrql(
+        accounts: [${key}], 
+        query: ${workloadsStatusesNrql(workloads[key], timeWindow)}
+      ) {
+        results
+      }
+    `
+    )}
+  }
+}`;
+
+const workloadEntitiesQuery = ngql`query ($guid: EntityGuid!) {
+  actor {
+    entity(guid: $guid) {
+      ... on WorkloadEntity {
+        relatedEntities(
+          filter: {direction: OUTBOUND, relationshipTypes: {include: CONTAINS}}
+        ) {
+          results {
+            target {
+              guid
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
 export {
   entitiesByDomainTypeAccountQuery,
   entityCountByAccountQuery,
@@ -153,4 +179,6 @@ export {
   goldenMetricsForEntityQuery,
   statusesFromGuidsArray,
   statusFromGuid,
+  workloadsStatusesQuery,
+  workloadEntitiesQuery,
 };

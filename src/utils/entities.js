@@ -1,6 +1,6 @@
 import { StatusIcon } from '@newrelic/nr-labs-components';
 
-import { ALERT_STATUSES } from '../constants';
+import { ALERT_STATUSES, WORKLOAD } from '../constants';
 
 const {
   STATUSES: { UNKNOWN, CRITICAL, WARNING, SUCCESS },
@@ -28,6 +28,26 @@ export const entityStatus = ({ alertSeverity } = {}) => {
     }
   }
 };
+
+export const workloadStatus = ({ statusValueCode = -1 }) => {
+  switch (statusValueCode) {
+    case 0: {
+      return SUCCESS;
+    }
+    case 2: {
+      return WARNING;
+    }
+    case 3: {
+      return CRITICAL;
+    }
+    default: {
+      return UNKNOWN;
+    }
+  }
+};
+
+export const isWorkload = ({ domain, type }) =>
+  domain === WORKLOAD.DOMAIN && type === WORKLOAD.TYPE;
 
 export const guidsToArray = (guids = {}, maxArrayLen = 10) =>
   Object.keys(guids).reduce((acc, type) => {
@@ -70,3 +90,17 @@ export const entitiesDetailsFromQueryResults = (res = {}) =>
     );
     return acc;
   }, {});
+
+export const getWorstWorkloadStatusValue = (events = [], { start, end }) => {
+  let worstRank = 0;
+  for (const { statusValueCode, timestamp } of events) {
+    if (timestamp >= start && timestamp <= end) {
+      const rank = [0, 2, 3].includes(statusValueCode) ? statusValueCode : -1;
+      if (rank > worstRank) {
+        worstRank = rank;
+      }
+      if (worstRank === 3) break;
+    }
+  }
+  return worstRank;
+};

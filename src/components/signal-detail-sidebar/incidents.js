@@ -7,6 +7,7 @@ import {
   durationStringForViolation,
   formatTimestamp,
   generateIncidentsList,
+  isWorkload,
 } from '../../utils';
 import { SIGNAL_TYPES, UI_CONTENT } from '../../constants';
 
@@ -14,16 +15,24 @@ const Incidents = ({ type, data, timeWindow }) => {
   const [bannerMessage, setBannerMessage] = useState('');
   const [incidentsList, setIncidentsList] = useState([]);
   const [maxIncidentsShown, setMaxIncidentsShown] = useState(1);
+  const [shouldShowAllIncidents, setShouldShowAllIncidents] = useState(false);
 
   useEffect(() => {
     if (!data) return;
 
     const incids = generateIncidentsList({ type, data, timeWindow });
+    const showAll = type === SIGNAL_TYPES.ALERT || isWorkload(data);
+    let bnrMsg = '';
+    if (isWorkload(data)) {
+      bnrMsg = UI_CONTENT.SIGNAL.DETAILS.WORKLOAD_RULES_DISCLAIMER;
+    }
+    if (!incids.length) {
+      bnrMsg = UI_CONTENT.SIGNAL.DETAILS.NO_RECENT_INCIDENTS;
+    }
 
-    setBannerMessage(
-      incids.length ? '' : UI_CONTENT.SIGNAL.DETAILS.NO_RECENT_INCIDENTS
-    );
-    setMaxIncidentsShown(type === SIGNAL_TYPES.ALERT ? incids.length || 0 : 1);
+    setBannerMessage(bnrMsg);
+    setShouldShowAllIncidents(showAll);
+    setMaxIncidentsShown(() => (showAll ? incids.length || 0 : 1));
     setIncidentsList(incids);
   }, [type, data, timeWindow]);
 
@@ -96,7 +105,7 @@ const Incidents = ({ type, data, timeWindow }) => {
           []
         )}
       </div>
-      {type === SIGNAL_TYPES.ENTITY && incidentsList?.length > 1 ? (
+      {type === !shouldShowAllIncidents && incidentsList?.length > 1 ? (
         <div className="incidents-footer">
           <Button
             variant={Button.VARIANT.SECONDARY}
