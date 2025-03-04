@@ -1,5 +1,5 @@
 import { alertStatus } from './alerts';
-import { entityStatus } from './entities';
+import { entityStatus, isWorkload, workloadStatus } from './entities';
 import { serviceLevelStatus } from './service-levels';
 
 import {
@@ -8,7 +8,6 @@ import {
   STATUSES,
   STEP_STATUS_OPTIONS,
   STEP_STATUS_UNITS,
-  WORKLOAD_TYPE,
 } from '../constants';
 
 const statusesOrder = [
@@ -46,12 +45,9 @@ export const signalStatus = (signal, entity) => {
 
   switch (signal.type) {
     case SIGNAL_TYPES.ENTITY: {
-      if (entity?.type === WORKLOAD_TYPE && entity?.alertViolations?.length) {
-        return statusFromStatuses(
-          entity.alertViolations.map((e) => ({ status: entityStatus(e) }))
-        );
-      }
-      return entityStatus(entity);
+      return isWorkload(entity) && entity?.statusValueCode
+        ? workloadStatus(entity)
+        : entityStatus(entity);
     }
     case SIGNAL_TYPES.ALERT: {
       return alertStatus(entity);

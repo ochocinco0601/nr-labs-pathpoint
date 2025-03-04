@@ -37,6 +37,7 @@ import {
   incidentsSearchQuery,
   issuesForConditionsQuery,
   statusesFromGuidsArray,
+  workloadsStatusesQuery,
 } from '../../queries';
 import {
   addSignalStatuses,
@@ -45,8 +46,11 @@ import {
   batchAlertConditionsByAccount,
   batchedIncidentIdsFromIssuesQuery,
   entitiesDetailsFromQueryResults,
+  fifteenMinutesAgo,
+  getWorstWorkloadStatusValue,
   guidsToArray,
   incidentsFromIncidentsBlocks,
+  isWorkload,
   signalDetailsObject,
   statusFromStatuses,
   threeDaysAgo,
@@ -61,7 +65,6 @@ import {
   UI_CONTENT,
   ALERT_STATUSES,
   MAX_PARAMS_IN_QUERY,
-  WORKLOAD_TYPE,
 } from '../../constants';
 import { useDebugLogger } from '../../hooks';
 
@@ -121,11 +124,11 @@ const Stages = forwardRef(
       async (entitiesGuids, timeWindow, isForCache) => {
         setIsLoading?.(true);
         clearTimeout(entitiesStatusTimeoutId.current);
-        const entitesGuidsArray = guidsToArray(
+        const entitiesGuidsArray = guidsToArray(
           { entitiesGuids },
           MAX_PARAMS_IN_QUERY
         );
-        const query = statusesFromGuidsArray(entitesGuidsArray, timeWindow);
+        const query = statusesFromGuidsArray(entitiesGuidsArray, timeWindow);
         debugString(query, 'Entities query');
         const { data: { actor = {} } = {}, error } = await NerdGraphQuery.query(
           {
@@ -144,66 +147,6 @@ const Stages = forwardRef(
           return;
         }
         const entitiesStatusesObj = entitiesDetailsFromQueryResults(actor);
-        const { workloads, workloadEntities } = Object.keys(
-          entitiesStatusesObj
-        ).reduce(
-          (acc, cur) => {
-            const { type: t, relatedEntities } = entitiesStatusesObj[cur];
-            if (t === WORKLOAD_TYPE && relatedEntities?.results?.length) {
-              const { workloadEntitiesGuids, guidsWOStatus } =
-                relatedEntities.results.reduce(
-                  ({ workloadEntitiesGuids, guidsWOStatus }, re) => {
-                    const g = re?.target?.entity?.guid;
-                    if (!g) return { workloadEntitiesGuids, guidsWOStatus };
-                    return {
-                      workloadEntitiesGuids: [...workloadEntitiesGuids, g],
-                      guidsWOStatus:
-                        g in entitiesStatusesObj || guidsWOStatus.includes(g)
-                          ? guidsWOStatus
-                          : [...guidsWOStatus, g],
-                    };
-                  },
-                  {
-                    workloadEntitiesGuids: [],
-                    guidsWOStatus: acc.workloadEntities,
-                  }
-                );
-              return {
-                ...acc,
-                workloads: {
-                  ...acc.workloads,
-                  [cur]: workloadEntitiesGuids,
-                },
-                workloadEntities: guidsWOStatus,
-              };
-            } else {
-              return acc;
-            }
-          },
-          { workloads: {}, workloadEntities: [] }
-        );
-        if (Object.keys(workloads).length && workloadEntities.length) {
-          const workloadEntitiesStatuses = await fetchEntitiesStatus(
-            workloadEntities,
-            timeWindow,
-            true
-          );
-          const key =
-            timeWindow?.start && timeWindow?.end
-              ? 'alertViolations'
-              : 'recentAlertViolations';
-          Object.keys(workloads).forEach((wlg) => {
-            entitiesStatusesObj[wlg][key] = workloads[wlg]?.reduce(
-              (acc, cur) => [
-                ...acc,
-                ...(entitesGuidsArray[cur]?.[key] ||
-                  workloadEntitiesStatuses[cur]?.[key] ||
-                  []),
-              ],
-              entitiesStatusesObj[wlg][key] || []
-            );
-          });
-        }
 
         if (isForCache) return entitiesStatusesObj;
         if (statusTimeoutDelay.current && !timeWindow) {
@@ -535,14 +478,71 @@ const Stages = forwardRef(
           }
           setIsLoading(true);
 
+          const { [SIGNAL_TYPES.ENTITY]: entitiesGuids = [] } = guids;
+          const workloads = entitiesGuids?.reduce((acc, cur) => {
+            const [acctId, domain, type] = atob(cur)?.split('|') || [];
+            return acctId && isWorkload({ domain, type })
+              ? {
+                  ...acc,
+                  [acctId]: [...(acc[acctId] || []), cur],
+                }
+              : acc;
+          }, {});
+          let workloadsStatuses = {};
+          if (Object.keys(workloads)?.length) {
+            const { data: { actor: w = {} } = {}, error } =
+              await NerdGraphQuery.query({
+                query: workloadsStatusesQuery(workloads, {
+                  start: fifteenMinutesAgo(timeBands?.[0]?.start),
+                  end: timeBands?.[timeBands.length - 1]?.end,
+                }),
+              });
+            if (!error && w) {
+              workloadsStatuses = Object.keys(w)?.reduce((acc, key) => {
+                if (key === '__typename') return acc;
+                const r = w[key].results || [];
+                return {
+                  ...acc,
+                  ...r.reduce(
+                    (acc2, { statusValueCode, timestamp, workloadGuid }) => ({
+                      ...acc2,
+                      [workloadGuid]: [
+                        ...(acc2[workloadGuid] || []),
+                        { statusValueCode, timestamp },
+                      ],
+                    }),
+                    {}
+                  ),
+                };
+              }, {});
+            }
+          }
+
           timeBands.forEach(async (timeWindow, idx) => {
             const { key, alertsStatusesObj } = timeBandsDataArray[idx] || {};
             const timeWindowCachedData = timeBandDataCache.current.get(key);
             if (!timeWindowCachedData) {
-              const { [SIGNAL_TYPES.ENTITY]: entitiesGuids = [] } = guids;
-              const entitiesStatusesObj = entitiesGuids.length
+              let entitiesStatusesObj = entitiesGuids.length
                 ? await fetchEntitiesStatus(entitiesGuids, timeWindow, true)
                 : {};
+              entitiesStatusesObj = Object.keys(entitiesStatusesObj)?.reduce(
+                (acc, cur) => {
+                  const e = entitiesStatusesObj[cur];
+                  if (isWorkload(e))
+                    return {
+                      ...acc,
+                      [cur]: {
+                        ...e,
+                        statusValueCode: getWorstWorkloadStatusValue(
+                          workloadsStatuses[e.guid],
+                          timeWindow
+                        ),
+                      },
+                    };
+                  return { ...acc, [cur]: e };
+                },
+                {}
+              );
               const timeWindowStatuses = {
                 [SIGNAL_TYPES.ENTITY]: entitiesStatusesObj,
                 [SIGNAL_TYPES.ALERT]: alertsStatusesObj,

@@ -1,1 +1,4 @@
-export const WORKLOAD_TYPE = 'WORKLOAD';
+export const WORKLOAD = {
+  DOMAIN: 'NR1',
+  TYPE: 'WORKLOAD',
+};

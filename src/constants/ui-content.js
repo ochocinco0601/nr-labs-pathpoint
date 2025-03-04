@@ -139,6 +139,8 @@ export const UI_CONTENT = {
         'No open incidents. Showing the most recent incident.',
       ALERTING_SL_NO_INCIDENT:
         "This Service Level is in an unhealthy state, however we can't find any correlated incidents. It is likely that the Service Level is out of compliance - to investigate further, please open the entity view (linked above).",
+      WORKLOAD_RULES_DISCLAIMER:
+        'Please note that if your workload has custom health status rules, it is possible that some issues listed here may not be applicable to the workload health. You can review your workload health status rules to confirm.',
     },
     TOOLTIP: {
       WORKLOAD_UNKNOWN: 'The status of this workload is unknown',
