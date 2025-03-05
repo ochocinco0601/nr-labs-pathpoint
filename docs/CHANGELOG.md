@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.0...v2.3.1) (2025-03-05)
+
+
+### Bug Fixes
+
+* add default param for isWorkload fn ([30f548d](https://github.com/newrelic/nr-labs-pathpoint/commit/30f548daa72be51c6242be5a9f9a02771a78b44a))
+
 # [2.3.0](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.2.21...v2.3.0) (2025-03-04)
 
 
