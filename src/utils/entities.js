@@ -46,7 +46,7 @@ export const workloadStatus = ({ statusValueCode = -1 }) => {
   }
 };
 
-export const isWorkload = ({ domain, type }) =>
+export const isWorkload = ({ domain, type } = {}) =>
   domain === WORKLOAD.DOMAIN && type === WORKLOAD.TYPE;
 
 export const guidsToArray = (guids = {}, maxArrayLen = 10) =>
