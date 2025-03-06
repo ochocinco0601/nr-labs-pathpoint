@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.1...v2.3.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* multiple workload issues in sidebar ([82273b9](https://github.com/newrelic/nr-labs-pathpoint/commit/82273b9b877b52986e744d0287b544347558fab8))
+
 ## [2.3.1](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.0...v2.3.1) (2025-03-05)
 
 
