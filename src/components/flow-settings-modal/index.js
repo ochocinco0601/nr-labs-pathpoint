@@ -1,38 +1,34 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  BlockText,
-  Button,
-  HeadingText,
-  Select,
-  SelectItem,
-  TextField,
-} from 'nr1';
+import { BlockText, Button, HeadingText, TextField } from 'nr1';
 
 import Modal from '../modal';
-import { AppContext, FlowContext } from '../../contexts';
-import { REFRESH_INTERVALS } from '../../constants';
+import { AppContext } from '../../contexts';
 import { validRefreshInterval } from '../../utils';
+import { REFRESH_INTERVALS } from '../../constants';
+
+const DEFAULT_REFRESH_INTERVAL_VALUE = REFRESH_INTERVALS[0].value;
 
 const EditFlowSettingsModal = ({
-  onUpdate = () => null,
-  onDeleteFlow = () => null,
+  flow,
+  onUpdate,
+  onDeleteFlow,
   editFlowSettings = false,
-  setEditFlowSettings = () => null,
+  setEditFlowSettings,
 }) => {
-  const flow = useContext(FlowContext);
   const { account, accounts = [] } = useContext(AppContext);
+  const [updatedName, setupdatedName] = useState('');
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
-    REFRESH_INTERVALS[0].value
+    DEFAULT_REFRESH_INTERVAL_VALUE
   );
-  const [updatedName, setupdatedName] = useState(flow.name || '');
 
-  useEffect(
-    () =>
-      setupdatedRefreshInterval(validRefreshInterval(flow?.refreshInterval)),
-    [flow]
-  );
+  useEffect(() => {
+    if (!flow) return;
+    const { name: flowName = '', refreshInterval: flowRefreshInterval } = flow;
+    setupdatedName(flowName);
+    setupdatedRefreshInterval(validRefreshInterval(flowRefreshInterval));
+  }, [flow]);
 
   const accountName = useMemo(
     () => (accounts || []).find(({ id }) => id === account?.id)?.name || '',
@@ -44,7 +40,7 @@ const EditFlowSettingsModal = ({
       case 'update':
         if (
           (updatedName !== flow?.name ||
-            flow?.refreshInterval !== updatedRefreshInterval) &&
+            updatedRefreshInterval !== flow?.refreshInterval) &&
           onUpdate
         ) {
           onUpdate({
@@ -55,16 +51,11 @@ const EditFlowSettingsModal = ({
         break;
 
       case 'delete':
-        onDeleteFlow();
+        onDeleteFlow?.();
     }
 
-    setEditFlowSettings(false);
+    setEditFlowSettings?.(false);
   };
-
-  const handleChange = (event, value) =>
-    value
-      ? setupdatedRefreshInterval(value)
-      : setupdatedName(event?.target?.value);
 
   return (
     <Modal hidden={!editFlowSettings} onClose={closeHandler}>
@@ -75,8 +66,8 @@ const EditFlowSettingsModal = ({
             <TextField
               className="flow-name"
               label="Flow name"
-              defaultValue={flow.name}
-              onChange={(event) => handleChange(event)}
+              value={updatedName}
+              onChange={(e) => setupdatedName(e?.target?.value)}
             />
           </div>
           <div>
@@ -90,18 +81,25 @@ const EditFlowSettingsModal = ({
             <BlockText className="attribute">{accountName}</BlockText>
           </div>
           <div>
-            <Select
-              className="refresh-interval"
-              label="Refresh data every"
-              onChange={handleChange}
-              value={updatedRefreshInterval}
-            >
-              {REFRESH_INTERVALS.map((item, index) => (
-                <SelectItem key={index} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </Select>
+            <label htmlFor="refresh-interval-select">Refresh data every</label>
+            <div>
+              <select
+                className="refresh-interval"
+                id="refresh-interval-select"
+                value={updatedRefreshInterval}
+                onChange={(e) =>
+                  setupdatedRefreshInterval(
+                    e?.target?.value || DEFAULT_REFRESH_INTERVAL_VALUE
+                  )
+                }
+              >
+                {REFRESH_INTERVALS.map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="buttons-bar">
@@ -127,6 +125,7 @@ const EditFlowSettingsModal = ({
 };
 
 EditFlowSettingsModal.propTypes = {
+  flow: PropTypes.object,
   onUpdate: PropTypes.func,
   onDeleteFlow: PropTypes.func,
   editFlowSettings: PropTypes.bool,

@@ -9,6 +9,7 @@
     font-weight: 600;
     line-height: 16px;
     padding: 4px 0;
+    color: #293338;
   }
 
   .flow-name {
@@ -18,7 +19,11 @@
 
   .refresh-interval {
     padding: 4p 8px;
-    width: 120px
+    width: 120px;
+    min-height: 24px;
+    min-width: 24px;
+    padding: 4px 8px;
+    left: 0;
   }
 }
 
