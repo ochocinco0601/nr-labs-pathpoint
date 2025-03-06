@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.2...v2.3.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* refresh interval select not showing in flow settings ([5774b02](https://github.com/newrelic/nr-labs-pathpoint/commit/5774b02e8aea5c6223b0f87cfa48c4ef0197c849))
+
 ## [2.3.2](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.1...v2.3.2) (2025-03-06)
 
 
