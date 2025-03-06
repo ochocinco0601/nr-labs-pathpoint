@@ -137,6 +137,11 @@ const Flow = forwardRef(
       setActivateTransition(true);
     };
 
+    const updateAndPersistFlowHandler = (updates = {}) => {
+      flowUpdateHandler(updates);
+      persistFlowHandler(true);
+    };
+
     useEffect(() => {
       if (activateTransition) {
         onTransition?.(prevNonEditMode || MODES.INLINE);
@@ -221,7 +226,8 @@ const Flow = forwardRef(
                 />
                 {editFlowSettings && (
                   <EditFlowSettingsModal
-                    onUpdate={flowUpdateHandler}
+                    flow={flow}
+                    onUpdate={updateAndPersistFlowHandler}
                     onDeleteFlow={() => setDeleteModalHidden(false)}
                     editFlowSettings={editFlowSettings}
                     setEditFlowSettings={setEditFlowSettings}
