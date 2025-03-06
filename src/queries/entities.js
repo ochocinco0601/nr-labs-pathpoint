@@ -172,6 +172,45 @@ const workloadEntitiesQuery = ngql`query ($guid: EntityGuid!) {
   }
 }`;
 
+const workloadEntitiesViolationsFromGuidsArray = (
+  arrayOfGuids = [],
+  timeWindow
+) => `{
+  actor {
+    ${arrayOfGuids.map(
+      (arr, idx) => `
+      e${idx}: entities(
+        guids: ["${arr.join('", "')}"]
+      ) {
+        ${
+          timeWindow?.start && timeWindow?.end
+            ? `alertViolations(startTime: ${timeWindow.start}, endTime: ${timeWindow.end}) {
+                alertSeverity
+                closedAt
+                label
+                openedAt
+                violationId
+                violationUrl
+              }`
+            : `alertSeverity
+              recentAlertViolations {
+                alertSeverity
+                closedAt
+                label
+                openedAt
+                violationId
+                violationUrl
+              }`
+        }
+        domain
+        guid
+        type
+      }
+    `
+    )}
+  }
+}`;
+
 export {
   entitiesByDomainTypeAccountQuery,
   entityCountByAccountQuery,
@@ -181,4 +220,5 @@ export {
   statusFromGuid,
   workloadsStatusesQuery,
   workloadEntitiesQuery,
+  workloadEntitiesViolationsFromGuidsArray,
 };
