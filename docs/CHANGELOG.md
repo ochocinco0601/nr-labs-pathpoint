@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.3...v2.3.4) (2025-03-24)
+
+
+### Bug Fixes
+
+* additional urlState values for permalink generation ([ae0a101](https://github.com/newrelic/nr-labs-pathpoint/commit/ae0a101578a3f2764a1a6b1f929d4571a97b0948))
+
 ## [2.3.3](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.2...v2.3.3) (2025-03-06)
 
 
