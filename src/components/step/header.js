@@ -18,7 +18,7 @@ import {
 } from '../';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 import { FlowDispatchContext } from '../../contexts';
-import { MODES } from '../../constants';
+import { COMPONENTS, MODES } from '../../constants';
 
 const StepHeader = ({
   stageId,
@@ -26,6 +26,7 @@ const StepHeader = ({
   stepId,
   step: { title, signals, link, config } = {},
   onDragHandle,
+  markSelection,
   mode = MODES.INLINE,
   saveFlow,
   isStepExpanded,
@@ -132,7 +133,15 @@ const StepHeader = ({
       />
     </div>
   ) : (
-    <div className="step-header" title={title}>
+    <div
+      onClick={() =>
+        mode !== MODES.EDIT && markSelection
+          ? markSelection(COMPONENTS.STEP, stepId, { stageId, levelId })
+          : null
+      }
+      className="step-header"
+      title={title}
+    >
       <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
         {title}
       </HeadingText>
@@ -159,6 +168,7 @@ StepHeader.propTypes = {
   stepId: PropTypes.string,
   step: PropTypes.object,
   onDragHandle: PropTypes.func,
+  markSelection: PropTypes.func,
   mode: PropTypes.oneOf(Object.values(MODES)),
   saveFlow: PropTypes.func,
   isStepExpanded: PropTypes.bool,
