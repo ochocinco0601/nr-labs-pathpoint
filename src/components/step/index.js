@@ -48,6 +48,7 @@ const Step = ({
   const [isSelected, setIsSelected] = useState(false);
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [signalsListView, setSignalsListView] = useState(false);
+  const [hideHealthy, setHideHealthy] = useState(true);
   const signalToDelete = useRef({});
   const isDragHandleClicked = useRef(false);
 
@@ -168,9 +169,28 @@ const Step = ({
 
   SignalsGrid.displayName = 'SignalsGrid';
 
-  const SignalsList = memo(
-    () =>
-      signals.map(({ guid, name, status, type }) => (
+  const SignalsList = memo(() => {
+    if (mode === MODES.EDIT) {
+      return signals.map(({ guid, name, status, type }) => {
+        return (
+          <Signal
+            key={guid}
+            guid={guid}
+            type={type}
+            name={signalDisplayName({ name, guid })}
+            onDelete={() => openDeleteModalHandler(guid, name)}
+            status={status}
+            mode={mode}
+          />
+        );
+      });
+    }
+    const filteredSignals = !hideHealthy
+      ? signals
+      : signals.filter((s) => s.status !== 'success' && s.status !== 'unknown');
+
+    return filteredSignals.map(({ guid, name, status, type }) => {
+      return (
         <Signal
           key={guid}
           guid={guid}
@@ -180,9 +200,9 @@ const Step = ({
           status={status}
           mode={mode}
         />
-      )),
-    [signals, mode, signalExpandOption]
-  );
+      );
+    });
+  }, [signals, mode, signalExpandOption, hideHealthy]);
   SignalsList.displayName = 'SignalsList';
 
   const handleStepExpandCollapse = (e) => {
@@ -190,6 +210,15 @@ const Step = ({
       e.stopPropagation();
       if (signals.length) setSignalsListView((slw) => !slw);
     }
+  };
+
+  const renderButtonText = () => {
+    const healthySignalCount = signals.filter(
+      (s) => s.status === 'success' || s.status === 'unknown'
+    ).length;
+    const firstWord = hideHealthy ? 'Show' : 'Hide';
+
+    return `${firstWord} ${healthySignalCount} healthy/unknown signal(s)`;
   };
 
   return (
@@ -201,11 +230,6 @@ const Step = ({
       } ${[MODES.STACKED, MODES.INLINE].includes(mode) ? status : ''} ${
         isFaded ? 'faded' : ''
       }`}
-      onClick={() =>
-        mode !== MODES.EDIT && markSelection
-          ? markSelection(COMPONENTS.STEP, stepId, { stageId, levelId })
-          : null
-      }
       draggable={mode === MODES.EDIT}
       onDragStart={dragStartHandler}
       onDragOver={onDragOver}
@@ -218,6 +242,7 @@ const Step = ({
         stepId={stepId}
         step={thisStep}
         onDragHandle={dragHandleHandler}
+        markSelection={markSelection}
         mode={mode}
         saveFlow={saveFlow}
         isStepExpanded={signalsListView}
@@ -261,6 +286,27 @@ const Step = ({
           signalsListView ? (
             <div className="list">
               <SignalsList />
+              {signals.filter(
+                (s) => s.status === 'success' || s.status === 'unknown'
+              ).length > 0 ? (
+                <Button
+                  className="show-healthy-btn"
+                  iconType={
+                    hideHealthy
+                      ? Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT
+                      : Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_TOP
+                  }
+                  ariaLabel="Expand/collapse signals"
+                  variant={Button.VARIANT.TERTIARY}
+                  onClick={() =>
+                    setHideHealthy((prevHideHealthy) => !prevHideHealthy)
+                  }
+                >
+                  {renderButtonText()}
+                </Button>
+              ) : (
+                ''
+              )}
             </div>
           ) : (
             <div className="grid">
