@@ -1,3 +1,10 @@
+## [2.3.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.4...v2.3.5) (2025-03-25)
+
+
+### Bug Fixes
+
+* add healthy/unknown signal toggle to inline view ([b38a59c](https://github.com/newrelic/nr-labs-pathpoint/commit/b38a59c179a532f116b7354d4f34bdcd7f133915))
+
 ## [2.3.4](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.3...v2.3.4) (2025-03-24)
 
 
