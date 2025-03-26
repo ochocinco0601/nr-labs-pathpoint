@@ -189,6 +189,8 @@ const KpiModal = ({
                           metric={{
                             ...metricFromQuery(kpiResults),
                             className: 'modal-component-metric-value',
+                            compareClassName:
+                              'modal-component-metric-compare-value',
                           }}
                           statusTrend={{
                             className: 'modal-component-status-trend',
