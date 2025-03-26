@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { BlockText, Button, HeadingText, TextField } from 'nr1';
@@ -17,7 +17,7 @@ const EditFlowSettingsModal = ({
   editFlowSettings = false,
   setEditFlowSettings,
 }) => {
-  const { account, accounts = [] } = useContext(AppContext);
+  const { account } = useContext(AppContext);
   const [updatedName, setupdatedName] = useState('');
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
     DEFAULT_REFRESH_INTERVAL_VALUE
@@ -29,11 +29,6 @@ const EditFlowSettingsModal = ({
     setupdatedName(flowName);
     setupdatedRefreshInterval(validRefreshInterval(flowRefreshInterval));
   }, [flow]);
-
-  const accountName = useMemo(
-    () => (accounts || []).find(({ id }) => id === account?.id)?.name || '',
-    [account, accounts]
-  );
 
   const closeHandler = (action) => {
     switch (action) {
@@ -77,8 +72,14 @@ const EditFlowSettingsModal = ({
             </BlockText>
           </div>
           <div>
-            <label>Account name</label>
-            <BlockText className="attribute">{accountName}</BlockText>
+            <label>Account</label>
+            <BlockText className="attribute">{`${account.id || ''} - ${
+              account.name || ''
+            }`}</BlockText>
+          </div>
+          <div>
+            <label>Flow ID</label>
+            <BlockText className="attribute">{flow.id || 'unknown'}</BlockText>
           </div>
           <div>
             <label htmlFor="refresh-interval-select">Refresh data every</label>
