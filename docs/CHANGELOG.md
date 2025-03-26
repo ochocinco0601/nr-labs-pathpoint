@@ -1,3 +1,10 @@
+## [2.3.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.6...v2.3.7) (2025-03-26)
+
+
+### Bug Fixes
+
+* add metadata to flow settings modal ([e8d79cf](https://github.com/newrelic/nr-labs-pathpoint/commit/e8d79cf7a6f7208dd289cba78296226fd252de1c))
+
 ## [2.3.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.5...v2.3.6) (2025-03-26)
 
 
