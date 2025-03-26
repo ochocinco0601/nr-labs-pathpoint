@@ -1,3 +1,10 @@
+## [2.3.6](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.5...v2.3.6) (2025-03-26)
+
+
+### Bug Fixes
+
+* add compare with percent change element to KPIs ([077d8b9](https://github.com/newrelic/nr-labs-pathpoint/commit/077d8b9803c2bf46bdeb274d9305593b235e406d))
+
 ## [2.3.5](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.4...v2.3.5) (2025-03-25)
 
 
