@@ -65,7 +65,8 @@ const StageHeader = ({
       </span>
       <HeadingText className="name">
         <EditInPlace
-          value={name || UI_CONTENT.STAGE.FALLBACK_NAME}
+          value={name}
+          defaultValue={UI_CONTENT.STAGE.FALLBACK_NAME}
           setValue={updateStageNameHandler}
         />
       </HeadingText>

@@ -147,6 +147,7 @@ const FlowHeader = ({
       <HeadingText type={HeadingText.TYPE.HEADING_4}>
         <EditInPlace
           value={name}
+          defaultValue={UI_CONTENT.FLOW.FALLBACK_NAME}
           setValue={(newName) =>
             name !== newName && onUpdate ? onUpdate({ name: newName }) : null
           }

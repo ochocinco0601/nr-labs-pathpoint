@@ -8,10 +8,8 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-const PLACEHOLDER_TEXT = 'Untitled';
-
 const EditInPlace = forwardRef(
-  ({ value, setValue, placeholder, disabled = false }, ref) => {
+  ({ value, defaultValue, setValue, placeholder, disabled = false }, ref) => {
     const [isEditing, setIsEditing] = useState(false);
     const [text, setText] = useState('');
     const [inputWidth, setInputWidth] = useState(0);
@@ -26,40 +24,44 @@ const EditInPlace = forwardRef(
       []
     );
 
-    useEffect(() => setText(value), [value]);
+    useEffect(() => setText(value || defaultValue), [value, defaultValue]);
 
     const editHandler = useCallback(() => {
       setInputWidth(contentRef.current?.offsetWidth || 0);
       setIsEditing(true);
-    }, []);
+      if (text === defaultValue) {
+        setText('');
+      }
+    }, [text, defaultValue]);
 
     const blurHandler = useCallback(() => {
-      setValue?.((text || '').replace(/[\s\u00A0]+/g, ' ').trim());
+      const trimmedText = (text || '').replace(/[\s\u00A0]+/g, ' ').trim();
+      setValue?.(trimmedText || defaultValue);
       setIsEditing(false);
-    }, [text, setValue]);
+    }, [text, setValue, defaultValue]);
 
     return isEditing && !disabled ? (
       <input
         ref={editableRef}
         autoFocus
         className="eip-input u-unstyledInput"
-        placeholder={placeholder || PLACEHOLDER_TEXT}
+        placeholder={placeholder ? placeholder : undefined}
         onBlur={blurHandler}
         onChange={({ target: { value: v = '' } = {} } = {}) => setText(v)}
         onKeyDown={(e) =>
           e?.key === 'Enter' && !e?.isComposing ? blurHandler() : null
         }
-        value={text}
+        value={text || ''}
         style={{ width: inputWidth }}
       />
     ) : (
       <div
         ref={contentRef}
         className="eip-content"
-        data-placeholder={text ? '' : placeholder || PLACEHOLDER_TEXT}
+        data-placeholder={placeholder && value === '' ? placeholder : undefined}
         onClick={editHandler}
       >
-        {value}
+        {value || ''}
       </div>
     );
   }
@@ -67,6 +69,7 @@ const EditInPlace = forwardRef(
 
 EditInPlace.propTypes = {
   value: PropTypes.string,
+  defaultValue: PropTypes.string,
   setValue: PropTypes.func,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
