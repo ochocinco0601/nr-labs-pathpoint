@@ -24,7 +24,7 @@ const EditInPlace = forwardRef(
       []
     );
 
-    useEffect(() => setText(value || defaultValue), [value]);
+    useEffect(() => setText(value || defaultValue), [value, defaultValue]);
 
     const editHandler = useCallback(() => {
       setInputWidth(contentRef.current?.offsetWidth || 0);
@@ -32,13 +32,13 @@ const EditInPlace = forwardRef(
       if (text === defaultValue) {
         setText('');
       }
-    }, [text]);
+    }, [text, defaultValue]);
 
     const blurHandler = useCallback(() => {
       const trimmedText = (text || '').replace(/[\s\u00A0]+/g, ' ').trim();
       setValue?.(trimmedText || defaultValue);
       setIsEditing(false);
-    }, [text, setValue]);
+    }, [text, setValue, defaultValue]);
 
     return isEditing && !disabled ? (
       <input
