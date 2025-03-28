@@ -1,3 +1,10 @@
+## [2.3.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.7...v2.3.8) (2025-03-28)
+
+
+### Bug Fixes
+
+* clear placeholder/default text on EditInPlace refs ([83d1ce1](https://github.com/newrelic/nr-labs-pathpoint/commit/83d1ce1074f81902b541cdb0e94ff362d64f261f))
+
 ## [2.3.7](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.6...v2.3.7) (2025-03-26)
 
 
