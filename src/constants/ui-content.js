@@ -52,7 +52,7 @@ export const UI_CONTENT = {
     },
   },
   STAGE: {
-    FALLBACK_NAME: '(unnamed stage)',
+    FALLBACK_NAME: 'New Stage',
     TOOLTIP: 'A high-level functional category in the flow',
     MISSING_SIGNALS: 'Includes missing signals',
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",
@@ -180,6 +180,8 @@ export const UI_CONTENT = {
       'SELECT count(session) FROM Pageview since 1 hour ago COMPARE WITH 1 day ago',
     ],
     QUERY_PROMPT: 'Enter query here',
+    FALLBACK_NAME: 'Untitled KPI',
+    ALIAS_PLACEHOLDER: 'Alias (optional)',
   },
   GET_STARTED: {
     HEADING: 'Pathpoint',

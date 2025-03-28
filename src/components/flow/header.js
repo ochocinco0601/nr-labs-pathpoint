@@ -147,6 +147,7 @@ const FlowHeader = ({
       <HeadingText type={HeadingText.TYPE.HEADING_4}>
         <EditInPlace
           value={name}
+          defaultValue="New Flow"
           setValue={(newName) =>
             name !== newName && onUpdate ? onUpdate({ name: newName }) : null
           }

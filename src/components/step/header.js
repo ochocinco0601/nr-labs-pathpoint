@@ -18,7 +18,7 @@ import {
 } from '../';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 import { FlowDispatchContext } from '../../contexts';
-import { COMPONENTS, MODES } from '../../constants';
+import { COMPONENTS, MODES, UI_CONTENT } from '../../constants';
 
 const StepHeader = ({
   stageId,
@@ -91,7 +91,11 @@ const StepHeader = ({
         <IconsLib type={IconsLib.TYPES.HANDLE} />
       </span>
       <HeadingText type={HeadingText.TYPE.HEADING_6} className="title">
-        <EditInPlace value={title} setValue={updateTitleHandler} />
+        <EditInPlace
+          value={title}
+          defaultValue={UI_CONTENT.STEP.DEFAULT_TITLE}
+          setValue={updateTitleHandler}
+        />
       </HeadingText>
       <span className="last-col">
         <Popover>

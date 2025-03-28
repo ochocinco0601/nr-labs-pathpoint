@@ -109,16 +109,16 @@ const KpiModal = ({
                 <div className="modal-component-edit-in-place">
                   <div className="modal-component-kpi-name">
                     <EditInPlace
-                      value={name}
+                      value={name || ''}
+                      defaultValue={UI_CONTENT.KPI_MODAL.FALLBACK_NAME}
                       setValue={setName}
-                      placeholder="Untitled KPI"
                     />
                   </div>
                   <div className="modal-component-kpi-alias">
                     <EditInPlace
-                      value={alias}
+                      value={alias || ''}
+                      placeholder={UI_CONTENT.KPI_MODAL.ALIAS_PLACEHOLDER}
                       setValue={setAlias}
-                      placeholder="Alias (optional)"
                     />
                   </div>
                 </div>
