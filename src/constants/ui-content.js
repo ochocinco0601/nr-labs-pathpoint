@@ -50,6 +50,7 @@ export const UI_CONTENT = {
       DESCRIPTION:
         'A stage represents a high-level functional category in the flow, which consists of multiple steps to complete.',
     },
+    FALLBACK_NAME: 'New Flow',
   },
   STAGE: {
     FALLBACK_NAME: 'New Stage',
