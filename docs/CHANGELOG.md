@@ -1,3 +1,10 @@
+## [2.3.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.8...v2.3.9) (2025-04-01)
+
+
+### Bug Fixes
+
+* add tooltip to missing signals names ([0a93c0b](https://github.com/newrelic/nr-labs-pathpoint/commit/0a93c0b73d379ff38ea764f76bcf010b54ccfb52))
+
 ## [2.3.8](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.7...v2.3.8) (2025-03-28)
 
 
