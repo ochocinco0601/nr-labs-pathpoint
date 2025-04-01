@@ -50,7 +50,7 @@ const KpiModal = ({
   useEffect(() => {
     setAccountId(kpi.accountIds?.length ? kpi.accountIds[0] : '');
     if (kpiMode === KPI_MODES.ADD || kpiMode === KPI_MODES.EDIT) {
-      setName(kpi.name);
+      setName(kpi.name || UI_CONTENT.KPI_MODAL.FALLBACK_NAME);
       setAlias(kpi.alias);
       setNrqlQuery(kpi.nrqlQuery);
     }
