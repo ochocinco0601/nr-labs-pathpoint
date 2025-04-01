@@ -29,6 +29,7 @@ const Level = ({
   mode = MODES.INLINE,
   saveFlow,
   signalExpandOption = SIGNAL_EXPAND.NONE,
+  signalCollapseOption,
 }) => {
   const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
@@ -139,6 +140,7 @@ const Level = ({
                 stepId={id}
                 signals={filteredSortedSignals}
                 signalExpandOption={signalExpandOption}
+                signalCollapseOption={signalCollapseOption}
                 onDragStart={(e) => stepDragStartHandler(e, index)}
                 onDragOver={(e) => stepDragOverHandler(e, index)}
                 onDrop={(e) => stepDropHandler(e)}
@@ -208,7 +210,7 @@ const Level = ({
         { rows: [], cols: [] }
       )?.rows || []
     );
-  }, [steps, mode, signalExpandOption]);
+  }, [steps, mode, signalExpandOption, signalCollapseOption]);
 
   const deleteHandler = () => {
     setDeleteModalHidden(true);
@@ -362,6 +364,7 @@ Level.propTypes = {
   mode: PropTypes.oneOf(Object.values(MODES)),
   saveFlow: PropTypes.func,
   signalExpandOption: PropTypes.number,
+  signalCollapseOption: PropTypes.bool,
 };
 
 export default Level;

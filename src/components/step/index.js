@@ -29,6 +29,7 @@ const Step = ({
   stepId,
   signals = [],
   signalExpandOption = SIGNAL_EXPAND.NONE,
+  signalCollapseOption,
   onDragStart,
   onDragOver,
   onDrop,
@@ -171,6 +172,13 @@ const Step = ({
 
   const SignalsList = memo(() => {
     if (mode === MODES.EDIT) {
+      if (signalCollapseOption) {
+        return (
+          <div>{`${
+            signals.length > 0 ? `${signals.length} signals in step` : ''
+          }`}</div>
+        );
+      }
       return signals.map(({ guid, name, status, type }) => {
         return (
           <Signal
@@ -202,7 +210,7 @@ const Step = ({
         />
       );
     });
-  }, [signals, mode, signalExpandOption, hideHealthy]);
+  }, [signals, mode, signalExpandOption, hideHealthy, signalCollapseOption]);
   SignalsList.displayName = 'SignalsList';
 
   const handleStepExpandCollapse = (e) => {
@@ -326,6 +334,7 @@ Step.propTypes = {
   stepId: PropTypes.string,
   signals: PropTypes.array,
   signalExpandOption: PropTypes.number,
+  signalCollapseOption: PropTypes.bool,
   onDragStart: PropTypes.func,
   onDragOver: PropTypes.func,
   onDrop: PropTypes.func,
