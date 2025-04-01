@@ -128,9 +128,12 @@ const StageNotifyModal = forwardRef(
                 ) : null}
                 {items.map(({ stageId, levelId, stepId }, i) => (
                   <Fragment key={i}>
-                    <BlockText className="items-table-cell item-name">
+                    <div
+                      title={displayName(stageId, levelId, stepId)}
+                      className="items-table-cell item-name"
+                    >
                       {displayName(stageId, levelId, stepId)}
-                    </BlockText>
+                    </div>
                     <Button
                       className="items-table-cell"
                       variant={Button.VARIANT.PRIMARY}
