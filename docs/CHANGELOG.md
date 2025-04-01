@@ -1,3 +1,10 @@
+## [2.3.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.9...v2.3.10) (2025-04-01)
+
+
+### Bug Fixes
+
+* blank kpi title ([0de0945](https://github.com/newrelic/nr-labs-pathpoint/commit/0de0945c75f9d2d12d0604a237e9140e3dc0ed97))
+
 ## [2.3.9](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.8...v2.3.9) (2025-04-01)
 
 
