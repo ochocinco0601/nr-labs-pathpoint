@@ -50,6 +50,7 @@ const Step = ({
   const [deleteModalHidden, setDeleteModalHidden] = useState(true);
   const [signalsListView, setSignalsListView] = useState(false);
   const [hideHealthy, setHideHealthy] = useState(true);
+  const [hideSignals, setHideSignals] = useState(false);
   const signalToDelete = useRef({});
   const isDragHandleClicked = useRef(false);
 
@@ -78,6 +79,12 @@ const Step = ({
   useEffect(() => {
     setSignalsListView([STATUSES.CRITICAL, STATUSES.WARNING].includes(status));
   }, [status]);
+
+  useEffect(() => {
+    if (signalCollapseOption) {
+      setHideSignals(false);
+    }
+  }, [signalCollapseOption]);
 
   const updateSignalsHandler = (e) => {
     e.stopPropagation();
@@ -172,13 +179,6 @@ const Step = ({
 
   const SignalsList = memo(() => {
     if (mode === MODES.EDIT) {
-      if (signalCollapseOption) {
-        return (
-          <div>{`${
-            signals.length > 0 ? `${signals.length} signals in step` : ''
-          }`}</div>
-        );
-      }
       return signals.map(({ guid, name, status, type }) => {
         return (
           <Signal
@@ -278,9 +278,40 @@ const Step = ({
               onAdd={updateSignalsHandler}
             />
           )}
-          <div className="edit-signals-list">
-            <SignalsList />
-          </div>
+          {signalCollapseOption && signals.length > 0 ? (
+            <>
+              <Button
+                className="show-signals-btn"
+                iconType={
+                  !hideSignals
+                    ? Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT
+                    : Button.ICON_TYPE.INTERFACE__CHEVRON__CHEVRON_BOTTOM
+                }
+                ariaLabel="step-signal-collapse-edit-mode"
+                variant={Button.VARIANT.TERTIARY}
+                spacingType={[Button.SPACING_TYPE.OMIT]}
+                sizeType={Button.SIZE_TYPE.SMALL}
+                onClick={() =>
+                  setHideSignals((prevHideSignals) => !prevHideSignals)
+                }
+              >
+                {`${!hideSignals ? 'Show' : 'Hide'} ${
+                  signals.length
+                } signal(s)`}
+              </Button>
+              {hideSignals ? (
+                <div className="edit-signals-list">
+                  <SignalsList />
+                </div>
+              ) : (
+                ''
+              )}
+            </>
+          ) : (
+            <div className="edit-signals-list">
+              <SignalsList />
+            </div>
+          )}
           <DeleteConfirmModal
             name={signalToDelete.current.name}
             hidden={deleteModalHidden}

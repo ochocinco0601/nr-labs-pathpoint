@@ -41,6 +41,19 @@
     }
   }
 
+  .show-signals-btn {
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 4px;
+
+    span {
+      font-size: 12px !important;
+      margin-right: 4px !important;
+    }
+  }
+
   .step-header {
     display: grid;
     grid-template-columns: auto min-content;
