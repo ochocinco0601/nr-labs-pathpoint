@@ -83,6 +83,7 @@ const Stages = forwardRef(
     const [selections, setSelections] = useState({});
     const [classifications, setClassifications] = useState({});
     const [signalExpandOption, setSignalExpandOption] = useState(0); // bitwise: (00000001) = unhealthy signals ;; (00000010) = critical signals ;; (00000100)= all signals
+    const [signalCollapseOption, setSignalCollapseOption] = useState(false);
     const [currentPlaybackTimeWindow, setCurrentPlaybackTimeWindow] =
       useState(null);
     const { debugString } = useDebugLogger({ allowDebug: debugMode });
@@ -655,17 +656,28 @@ const Stages = forwardRef(
                     </Tooltip>
                   </div>
                   {mode === MODES.EDIT ? (
-                    <Button
-                      className="button-tertiary-border"
-                      variant={Button.VARIANT.TERTIARY}
-                      sizeType={Button.SIZE_TYPE.SMALL}
-                      iconType={
-                        Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
-                      }
-                      onClick={addStageHandler}
-                    >
-                      Add a stage
-                    </Button>
+                    <>
+                      <Button
+                        className="button-tertiary-border"
+                        variant={Button.VARIANT.TERTIARY}
+                        sizeType={Button.SIZE_TYPE.SMALL}
+                        iconType={
+                          Button.ICON_TYPE.INTERFACE__SIGN__PLUS__V_ALTERNATE
+                        }
+                        onClick={addStageHandler}
+                      >
+                        {UI_CONTENT.STAGE.ADD_STAGE}
+                      </Button>
+                      <Switch
+                        checked={signalCollapseOption}
+                        label="Collapse all signals"
+                        onChange={() =>
+                          setSignalCollapseOption(
+                            (prevCollapseOption) => !prevCollapseOption
+                          )
+                        }
+                      />
+                    </>
                   ) : (
                     <>
                       <Switch
@@ -714,6 +726,7 @@ const Stages = forwardRef(
                       stageId={id}
                       mode={mode}
                       signalExpandOption={signalExpandOption}
+                      signalCollapseOption={signalCollapseOption}
                       stageIndex={i}
                       onDragStart={(e) => dragStartHandler(e, i)}
                       onDragOver={(e) => dragOverHandler(e, i)}

@@ -54,6 +54,7 @@ export const UI_CONTENT = {
   },
   STAGE: {
     FALLBACK_NAME: 'New Stage',
+    ADD_STAGE: 'Add a stage',
     TOOLTIP: 'A high-level functional category in the flow',
     MISSING_SIGNALS: 'Includes missing signals',
     NO_ACCESS_SIGNALS: "Includes signals you don't have access to",

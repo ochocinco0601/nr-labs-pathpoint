@@ -46,6 +46,7 @@ const Stage = ({
   stageId,
   mode = MODES.INLINE,
   signalExpandOption = 0,
+  signalCollapseOption,
   stageIndex = -1,
   isLoading,
   onDragStart,
@@ -411,6 +412,7 @@ const Stage = ({
                     onDrop={(e) => levelDropHandler(e)}
                     mode={mode}
                     signalExpandOption={signalExpandOption}
+                    signalCollapseOption={signalCollapseOption}
                     saveFlow={saveFlow}
                   />
                 ))}
@@ -461,6 +463,7 @@ Stage.propTypes = {
   stageId: PropTypes.string,
   mode: PropTypes.oneOf(Object.values(MODES)),
   signalExpandOption: PropTypes.number,
+  signalCollapseOption: PropTypes.bool,
   stageIndex: PropTypes.number,
   isLoading: PropTypes.bool,
   onDragStart: PropTypes.func,
