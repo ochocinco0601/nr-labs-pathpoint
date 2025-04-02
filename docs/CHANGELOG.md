@@ -1,3 +1,11 @@
+## [2.3.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.10...v2.3.11) (2025-04-02)
+
+
+### Bug Fixes
+
+* added switch to hide all signals in edit mode for a given flow ([f7be524](https://github.com/newrelic/nr-labs-pathpoint/commit/f7be5249039128897d872c45f5894d18a2caa72e))
+* allow signal toggle per step when global collapse enabled ([3b2d39b](https://github.com/newrelic/nr-labs-pathpoint/commit/3b2d39b0a2d4f9b94a511f249add03491e1b35f1))
+
 ## [2.3.10](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.9...v2.3.10) (2025-04-01)
 
 
