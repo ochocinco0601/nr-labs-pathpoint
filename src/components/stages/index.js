@@ -666,7 +666,7 @@ const Stages = forwardRef(
                         }
                         onClick={addStageHandler}
                       >
-                        Add a stage
+                        {UI_CONTENT.STAGE.ADD_STAGE}
                       </Button>
                       <Switch
                         checked={signalCollapseOption}
