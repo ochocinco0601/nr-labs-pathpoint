@@ -16,6 +16,7 @@ import {
   FlowDispatchContext,
   StagesContext,
   SelectionsContext,
+  FlowContext,
 } from '../../contexts';
 import { FLOW_DISPATCH_COMPONENTS, FLOW_DISPATCH_TYPES } from '../../reducers';
 
@@ -31,6 +32,7 @@ const Level = ({
   signalExpandOption = SIGNAL_EXPAND.NONE,
   signalCollapseOption,
 }) => {
+  const { stepRowOverride } = useContext(FlowContext);
   const { stages } = useContext(StagesContext);
   const dispatch = useContext(FlowDispatchContext);
   const { selections } = useContext(SelectionsContext);
@@ -196,7 +198,9 @@ const Level = ({
             if (startNextRow) {
               acc.rows.push(
                 <div
-                  className={`steps-row cols-${acc.cols.length}`}
+                  className={`steps-row cols-${
+                    stepRowOverride ? 1 : acc.cols.length
+                  }`}
                   key={`steps_row_${order}_${index}`}
                 >
                   {[...acc.cols]}
