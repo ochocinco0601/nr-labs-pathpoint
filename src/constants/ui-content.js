@@ -51,6 +51,11 @@ export const UI_CONTENT = {
         'A stage represents a high-level functional category in the flow, which consists of multiple steps to complete.',
     },
     FALLBACK_NAME: 'New Flow',
+    SETTINGS: {
+      STEP_ROW_OVERRIDE_TITLE: 'Show one step per level row',
+      STEP_ROW_OVERRIDE_TOOLTIP:
+        'When enabled, will show one Step per row in Levels with multiple Steps',
+    },
   },
   STAGE: {
     FALLBACK_NAME: 'New Stage',

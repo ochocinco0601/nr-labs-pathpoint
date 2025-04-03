@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, Button, HeadingText, TextField } from 'nr1';
+import { BlockText, Button, HeadingText, Icon, Switch, TextField } from 'nr1';
 
 import Modal from '../modal';
 import { AppContext } from '../../contexts';
 import { validRefreshInterval } from '../../utils';
-import { REFRESH_INTERVALS } from '../../constants';
+import { REFRESH_INTERVALS, UI_CONTENT } from '../../constants';
 
 const DEFAULT_REFRESH_INTERVAL_VALUE = REFRESH_INTERVALS[0].value;
 
@@ -22,12 +22,18 @@ const EditFlowSettingsModal = ({
   const [updatedRefreshInterval, setupdatedRefreshInterval] = useState(
     DEFAULT_REFRESH_INTERVAL_VALUE
   );
+  const [updatedStepRowOverride, setUpdatedStepRowOverride] = useState(false);
 
   useEffect(() => {
     if (!flow) return;
-    const { name: flowName = '', refreshInterval: flowRefreshInterval } = flow;
+    const {
+      name: flowName = '',
+      refreshInterval: flowRefreshInterval,
+      stepRowOverride,
+    } = flow;
     setupdatedName(flowName);
     setupdatedRefreshInterval(validRefreshInterval(flowRefreshInterval));
+    setUpdatedStepRowOverride(stepRowOverride || false);
   }, [flow]);
 
   const closeHandler = (action) => {
@@ -35,12 +41,14 @@ const EditFlowSettingsModal = ({
       case 'update':
         if (
           (updatedName !== flow?.name ||
-            updatedRefreshInterval !== flow?.refreshInterval) &&
+            updatedRefreshInterval !== flow?.refreshInterval ||
+            updatedStepRowOverride !== flow?.stepRowOverride) &&
           onUpdate
         ) {
           onUpdate({
             name: updatedName,
             refreshInterval: Number(updatedRefreshInterval),
+            stepRowOverride: updatedStepRowOverride,
           });
         }
         break;
@@ -100,6 +108,25 @@ const EditFlowSettingsModal = ({
                   </option>
                 ))}
               </select>
+            </div>
+          </div>
+          <div>
+            <Switch
+              className="step-row-override"
+              checked={updatedStepRowOverride}
+              label={UI_CONTENT.FLOW.SETTINGS.STEP_ROW_OVERRIDE_TITLE}
+              onChange={() =>
+                setUpdatedStepRowOverride((prevStepOption) => !prevStepOption)
+              }
+            />
+            <div
+              className="info-icon-container"
+              title={UI_CONTENT.FLOW.SETTINGS.STEP_ROW_OVERRIDE_TOOLTIP}
+            >
+              <Icon
+                className="step-row-override-info-icon"
+                type={Icon.TYPE.INTERFACE__INFO__INFO}
+              />
             </div>
           </div>
         </div>

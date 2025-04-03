@@ -26,6 +26,21 @@
     padding: 4px 8px;
     left: 0;
   }
+
+  .step-row-override {
+    label {
+      padding-left: 8px;
+    }
+  }
+
+  .info-icon-container {
+    display: inline;
+  }
+  
+  .step-row-override-info-icon {
+    margin-left: 4px;
+    margin-top: -4px;
+  }
 }
 
 .buttons-bar{
