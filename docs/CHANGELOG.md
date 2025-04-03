@@ -1,3 +1,10 @@
+## [2.3.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.11...v2.3.12) (2025-04-03)
+
+
+### Bug Fixes
+
+* flow level toggle to override default step wrap behavior within levels ([a6b0c35](https://github.com/newrelic/nr-labs-pathpoint/commit/a6b0c35af6c8a7973f066bef2e344b380264a9b4))
+
 ## [2.3.11](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.10...v2.3.11) (2025-04-02)
 
 
