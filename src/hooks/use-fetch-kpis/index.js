@@ -4,10 +4,15 @@ import { useNerdGraphQuery } from 'nr1';
 import { timeRangeToNrql } from '@newrelic/nr-labs-components';
 import { queriesGQL } from '../../queries';
 
-import { removeDateClauseFromNrql, validRefreshInterval } from '../../utils';
+import {
+  removeDateClauseFromNrql,
+  sanitizeQuery,
+  validRefreshInterval,
+} from '../../utils';
 
 const updateQueryTime = (nrqlQuery, timeRange) => {
-  const q1 = removeDateClauseFromNrql(nrqlQuery, 'since');
+  const sanitizedQuery = sanitizeQuery(nrqlQuery);
+  const q1 = removeDateClauseFromNrql(sanitizedQuery, 'since');
   const newQuery = removeDateClauseFromNrql(q1, 'until');
   return `${newQuery} ${timeRangeToNrql({ timeRange })}`;
 };
@@ -71,7 +76,7 @@ const useFetchKpis = ({
           query:
             timeRange?.begin_time || timeRange?.duration
               ? updateQueryTime(nrqlQuery, timeRange)
-              : nrqlQuery,
+              : sanitizeQuery(nrqlQuery),
         })
       );
       setQuery(queriesGQL(queries));
