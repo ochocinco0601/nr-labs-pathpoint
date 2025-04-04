@@ -45,3 +45,7 @@ export const removeDateClauseFromNrql = (nrql, token) => {
     return nrql;
   }
 };
+
+export const sanitizeQuery = (nrql) => {
+  return nrql.replace(/\s+/g, ' ');
+};
