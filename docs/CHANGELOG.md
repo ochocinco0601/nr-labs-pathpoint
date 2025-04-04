@@ -1,3 +1,10 @@
+## [2.3.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.12...v2.3.13) (2025-04-04)
+
+
+### Bug Fixes
+
+* allow nrql editor to accept new lines/tabs ([3c14dd9](https://github.com/newrelic/nr-labs-pathpoint/commit/3c14dd9044926e37c6ca73219ac9b3ae10ce2ec9))
+
 ## [2.3.12](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.11...v2.3.12) (2025-04-03)
 
 
