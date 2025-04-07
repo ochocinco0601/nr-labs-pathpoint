@@ -178,7 +178,7 @@ const Step = ({
   SignalsGrid.displayName = 'SignalsGrid';
 
   const SignalsList = memo(() => {
-    if (mode === MODES.EDIT) {
+    if (mode === MODES.EDIT || signalExpandOption === SIGNAL_EXPAND.ALL) {
       return signals.map(({ guid, name, status, type }) => {
         return (
           <Signal
@@ -327,7 +327,7 @@ const Step = ({
               <SignalsList />
               {signals.filter(
                 (s) => s.status === 'success' || s.status === 'unknown'
-              ).length > 0 ? (
+              ).length > 0 && signalExpandOption !== SIGNAL_EXPAND.ALL ? (
                 <Button
                   className="show-healthy-btn"
                   iconType={
