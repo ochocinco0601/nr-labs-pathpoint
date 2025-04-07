@@ -1,3 +1,10 @@
+## [2.3.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.13...v2.3.14) (2025-04-07)
+
+
+### Bug Fixes
+
+* expand all toggle overrides step level hide behavior ([d779cf4](https://github.com/newrelic/nr-labs-pathpoint/commit/d779cf40d84cf00c0d0dd8bebea166b36bb8c5da))
+
 ## [2.3.13](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.12...v2.3.13) (2025-04-04)
 
 
