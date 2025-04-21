@@ -1,3 +1,10 @@
+## [2.3.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.14...v2.3.15) (2025-04-21)
+
+
+### Bug Fixes
+
+* show all healthy/unknown signals on step expand [default] ([eb67469](https://github.com/newrelic/nr-labs-pathpoint/commit/eb674690c6ad5cad489358b77b69ed69a72abcf2))
+
 ## [2.3.14](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.13...v2.3.14) (2025-04-07)
 
 
