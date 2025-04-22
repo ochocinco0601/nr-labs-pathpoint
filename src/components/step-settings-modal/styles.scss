@@ -18,12 +18,21 @@
         margin-bottom: 8px;
       }
 
+      .step-info-icon-container {
+        display: inline;
+      }
+
+      .info-icon {
+        margin-left: -4px;
+        margin-top: -8px;
+      }
+
       .step-settings-options {
         display: flex;
         flex-direction: column;
 
         .step-settings-option {
-          display: flex;
+          display: inline-flex;
         }
       }
 
