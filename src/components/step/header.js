@@ -24,7 +24,7 @@ const StepHeader = ({
   stageId,
   levelId,
   stepId,
-  step: { title, signals, link, config } = {},
+  step: { title, signals, link, excluded, config } = {},
   onDragHandle,
   markSelection,
   mode = MODES.INLINE,
@@ -129,6 +129,7 @@ const StepHeader = ({
         title={title}
         signals={signals}
         link={link}
+        excluded={excluded}
         config={config}
         hidden={settingsModalHidden}
         onChange={updateStepHandler}
