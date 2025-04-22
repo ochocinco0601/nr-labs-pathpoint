@@ -98,7 +98,7 @@ export const UI_CONTENT = {
       EXCLUSION: {
         LABEL: 'Exclude Step from Level Status',
         DESCRIPTION:
-          'If checked, step will be excluded from contributing to level health status calculation',
+          'If checked, step will be excluded from level health status calculation.',
       },
       LINK: {
         DESCRIPTION:

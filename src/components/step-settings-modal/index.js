@@ -151,14 +151,6 @@ const StepSettingsModal = ({
         </div>
         <div className="step-settings-form">
           <div className="step-settings-section">
-            <Checkbox
-              checked={isExcluded}
-              onChange={() => setIsExcluded((prevExcluded) => !prevExcluded)}
-              label={UI_CONTENT.STEP.CONFIG.EXCLUSION.LABEL}
-              info={UI_CONTENT.STEP.CONFIG.EXCLUSION.DESCRIPTION}
-            />
-          </div>
-          <div className="step-settings-section">
             <HeadingText type={HeadingText.TYPE.HEADING_4}>
               Step Link
             </HeadingText>
@@ -174,6 +166,15 @@ const StepSettingsModal = ({
             <HeadingText type={HeadingText.TYPE.HEADING_4}>
               {UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.TITLE}
             </HeadingText>
+            <div className="step-settings-section">
+              <Checkbox
+                className="step-exclude-option"
+                checked={isExcluded}
+                onChange={() => setIsExcluded((prevExcluded) => !prevExcluded)}
+                label={UI_CONTENT.STEP.CONFIG.EXCLUSION.LABEL}
+                info={UI_CONTENT.STEP.CONFIG.EXCLUSION.DESCRIPTION}
+              />
+            </div>
             <span>{UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.DESCRIPTION}</span>
             <RadioGroup
               className="step-settings-options"
