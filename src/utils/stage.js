@@ -141,7 +141,9 @@ export const annotateStageWithStatuses = (stage = {}) => {
           const status = calculateStepStatus(step);
           return {
             steps: [...steps, { ...step, status }],
-            stepStatuses: [...stepStatuses, { status }],
+            stepStatuses: step.excluded
+              ? stepStatuses
+              : [...stepStatuses, { status }],
           };
         },
         { steps: [], stepStatuses: [] }

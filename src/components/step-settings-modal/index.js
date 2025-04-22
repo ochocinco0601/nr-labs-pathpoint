@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {
   Button,
+  Checkbox,
   EmptyState,
   HeadingText,
   RadioGroup,
@@ -27,6 +28,7 @@ const StepSettingsModal = ({
   title,
   signals,
   link,
+  excluded,
   config,
   hidden = true,
   onChange,
@@ -42,12 +44,14 @@ const StepSettingsModal = ({
   );
   const [statusWeightValue, setStatusWeightValue] = useState('');
   const [isWeightValInvalid, setIsWeightValInvalid] = useState(false);
+  const [isExcluded, setIsExcluded] = useState(false);
   const [stepSignals, setStepSignals] = useState([]);
 
   useEffect(() => setIsModalHidden(hidden), [hidden]);
 
   const modalShowEndHandler = () => {
     setUrl(link);
+    setIsExcluded(excluded || false);
     configSetup(config);
     stepSignalsSetup(signals);
   };
@@ -76,6 +80,7 @@ const StepSettingsModal = ({
     onChange?.({
       signals: stepSignals.map((s) => ({ ...s, included: !!s.included })),
       link: url?.trim(),
+      excluded: isExcluded,
       config: {
         status: {
           option: statusOption,
@@ -97,6 +102,7 @@ const StepSettingsModal = ({
     onChange,
     onClose,
     url,
+    isExcluded,
     stepSignals,
     statusOption,
     statusWeightUnit,
@@ -160,6 +166,15 @@ const StepSettingsModal = ({
             <HeadingText type={HeadingText.TYPE.HEADING_4}>
               {UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.TITLE}
             </HeadingText>
+            <div className="step-settings-section">
+              <Checkbox
+                className="step-exclude-option"
+                checked={isExcluded}
+                onChange={() => setIsExcluded((prevExcluded) => !prevExcluded)}
+                label={UI_CONTENT.STEP.CONFIG.EXCLUSION.LABEL}
+                info={UI_CONTENT.STEP.CONFIG.EXCLUSION.DESCRIPTION}
+              />
+            </div>
             <span>{UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.DESCRIPTION}</span>
             <RadioGroup
               className="step-settings-options"
@@ -256,6 +271,7 @@ const StepSettingsModal = ({
 
 StepSettingsModal.propTypes = {
   title: PropTypes.string,
+  excluded: PropTypes.bool,
   signals: PropTypes.array,
   link: PropTypes.string,
   config: PropTypes.object,

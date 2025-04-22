@@ -95,6 +95,11 @@ export const UI_CONTENT = {
         DESCRIPTION:
           'Signals selected will be included in step status determination. Defaults to all signals.',
       },
+      EXCLUSION: {
+        LABEL: 'Exclude Step from Level Status',
+        DESCRIPTION:
+          'If checked, step will be excluded from level health status calculation.',
+      },
       LINK: {
         DESCRIPTION:
           'Link to additional context for this step (e.g. a dashboard or a document)',
