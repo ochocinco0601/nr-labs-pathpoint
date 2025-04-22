@@ -98,7 +98,7 @@ export const UI_CONTENT = {
       EXCLUSION: {
         LABEL: 'Exclude Step from Level Status',
         DESCRIPTION:
-          'If checked, step will be excluded from level health status calculation.',
+          'If checked, step will be excluded from level health status calculation',
       },
       LINK: {
         DESCRIPTION:
@@ -120,7 +120,7 @@ export const UI_CONTENT = {
       EMPTY_STATE: 'No signals attached to step',
       TOOLTIPS: {
         WORST:
-          'Step status matches signals in a unhealthy state. Optionally, use the toggle below to apply the status only if a minimum percent or count of signals are unhealthy',
+          'Step status matches signals in an unhealthy state. Optionally, use the toggle below to apply the status only if a minimum percent or count of signals are unhealthy',
         BEST: 'Step status matches signals in a healthy state first. Use this to keep step status healthy as long as one signal is healthy',
         SAVE_BTN: 'At least 1 signal must be selected',
         UNKNOWN: 'No signals',

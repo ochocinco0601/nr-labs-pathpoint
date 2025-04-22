@@ -6,6 +6,7 @@ import {
   Checkbox,
   EmptyState,
   HeadingText,
+  Icon,
   RadioGroup,
   Radio,
   Select,
@@ -167,13 +168,25 @@ const StepSettingsModal = ({
               {UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.TITLE}
             </HeadingText>
             <div className="step-settings-section">
-              <Checkbox
-                className="step-exclude-option"
-                checked={isExcluded}
-                onChange={() => setIsExcluded((prevExcluded) => !prevExcluded)}
-                label={UI_CONTENT.STEP.CONFIG.EXCLUSION.LABEL}
-                info={UI_CONTENT.STEP.CONFIG.EXCLUSION.DESCRIPTION}
-              />
+              <div className="step-exclude-container">
+                <Checkbox
+                  className="step-exclude-option"
+                  checked={isExcluded}
+                  onChange={() =>
+                    setIsExcluded((prevExcluded) => !prevExcluded)
+                  }
+                  label={UI_CONTENT.STEP.CONFIG.EXCLUSION.LABEL}
+                />
+                <div
+                  className="step-info-icon-container"
+                  title={UI_CONTENT.STEP.CONFIG.EXCLUSION.DESCRIPTION}
+                >
+                  <Icon
+                    className="info-icon"
+                    type={Icon.TYPE.INTERFACE__INFO__INFO}
+                  />
+                </div>
+              </div>
             </div>
             <span>{UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.DESCRIPTION}</span>
             <RadioGroup
@@ -185,8 +198,16 @@ const StepSettingsModal = ({
                 className="step-settings-option"
                 label={UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.RADIO_WORST_LABEL}
                 value={STEP_STATUS_OPTIONS.WORST}
-                info={UI_CONTENT.STEP.CONFIG.TOOLTIPS.WORST}
               />
+              <div
+                className="step-info-icon-container"
+                title={UI_CONTENT.STEP.CONFIG.TOOLTIPS.WORST}
+              >
+                <Icon
+                  className="info-icon"
+                  type={Icon.TYPE.INTERFACE__INFO__INFO}
+                />
+              </div>
               <div className="settings-worst-options">
                 <Switch
                   disabled={statusOption === STEP_STATUS_OPTIONS.BEST}
@@ -217,12 +238,22 @@ const StepSettingsModal = ({
                   </SelectItem>
                 </Select>
               </div>
-              <Radio
-                className="step-settings-option"
-                label={UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.RADIO_BEST_LABEL}
-                value={STEP_STATUS_OPTIONS.BEST}
-                info={UI_CONTENT.STEP.CONFIG.TOOLTIPS.BEST}
-              />
+              <div className="step-best-status-container">
+                <Radio
+                  className="step-settings-option"
+                  label={UI_CONTENT.STEP.CONFIG.STATUS_CONFIG.RADIO_BEST_LABEL}
+                  value={STEP_STATUS_OPTIONS.BEST}
+                />
+                <div
+                  className="step-info-icon-container"
+                  title={UI_CONTENT.STEP.CONFIG.TOOLTIPS.BEST}
+                >
+                  <Icon
+                    className="info-icon"
+                    type={Icon.TYPE.INTERFACE__INFO__INFO}
+                  />
+                </div>
+              </div>
             </RadioGroup>
             <HeadingText
               className="step-config-header"
