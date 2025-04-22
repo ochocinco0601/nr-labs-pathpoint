@@ -1,3 +1,10 @@
+## [2.3.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.16...v2.3.17) (2025-04-22)
+
+
+### Bug Fixes
+
+* step settings tooltips display onHover ([57e1de2](https://github.com/newrelic/nr-labs-pathpoint/commit/57e1de2c77529277ce90a5096239ca061fefd850))
+
 ## [2.3.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.15...v2.3.16) (2025-04-22)
 
 
