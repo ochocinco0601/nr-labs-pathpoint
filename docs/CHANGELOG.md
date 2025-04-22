@@ -1,3 +1,10 @@
+## [2.3.16](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.15...v2.3.16) (2025-04-22)
+
+
+### Bug Fixes
+
+* allow steps to be excluded from level health calculation ([972d264](https://github.com/newrelic/nr-labs-pathpoint/commit/972d2649ae42d720998226b6d6fa1960c64ab5c4))
+
 ## [2.3.15](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.14...v2.3.15) (2025-04-21)
 
 
