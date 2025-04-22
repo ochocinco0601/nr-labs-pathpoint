@@ -347,7 +347,6 @@ const Stages = forwardRef(
         signalsWithNoStatus,
         signalsWithStatuses,
       } = addSignalStatuses([...stages], statuses);
-      console.log(signalsWithStatuses);
       setStagesData(() => ({
         stages: signalsWithStatuses.map(annotateStageWithStatuses),
       }));
