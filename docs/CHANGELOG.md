@@ -1,3 +1,10 @@
+## [2.3.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.17...v2.3.18) (2025-04-23)
+
+
+### Bug Fixes
+
+* kpis sync with time picker in playback mode ([36f0855](https://github.com/newrelic/nr-labs-pathpoint/commit/36f08550226406a0331087a5dfd03884d0642344))
+
 ## [2.3.17](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.16...v2.3.17) (2025-04-22)
 
 
