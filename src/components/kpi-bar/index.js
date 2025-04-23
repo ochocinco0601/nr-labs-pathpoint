@@ -17,6 +17,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverBody,
+  useNerdletState,
 } from 'nr1';
 
 import { SimpleBillboard, TimeRangePicker } from '@newrelic/nr-labs-components';
@@ -51,6 +52,7 @@ const metricFromQuery = (results) => ({
 const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
   const { kpis = [], refreshInterval } = useContext(FlowContext);
   const { accountId } = useContext(PlatformStateContext);
+  const [{ isPlayback, playbackTimeRange }] = useNerdletState();
   const [showModal, setShowModal] = useState(false);
   const [queryResults, setQueryResults] = useState([]);
 
@@ -97,6 +99,22 @@ const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
     dragItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
+
+  useEffect(() => {
+    if (isPlayback) {
+      if (playbackTimeRange) {
+        setTimeRange(playbackTimeRange);
+      } else {
+        setTimeRange({
+          begin_time: null,
+          duration: 1800000,
+          end_time: null,
+        });
+      }
+    } else {
+      setTimeRange(null);
+    }
+  }, [isPlayback, playbackTimeRange]);
 
   useEffect(() => {
     selectedKpi.current = {};
@@ -220,7 +238,9 @@ const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
             </Button>
           </div>
         ) : (
-          <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
+          <div className={isPlayback ? 'time-range-disabled' : ''}>
+            <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
+          </div>
         )}
       </div>
       <div
