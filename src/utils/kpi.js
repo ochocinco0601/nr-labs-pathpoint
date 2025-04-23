@@ -13,10 +13,10 @@ export const sanitizeKpis = (kpis = []) =>
 export const formatKpiHoverDatime = (dateClause) => {
   if (!dateClause) {
     return '';
-  } else if (dateClause.startsWith("'")) {
+  } else if (!dateClause.includes('AGO')) {
     let date;
     try {
-      date = new Date(dateClause.slice(1, -1));
+      date = new Date(Number(dateClause));
       return DEFAULT_DATETIME_FORMATTER.format(date).replace(
         /[APM]{2}/,
         (match) => match.toLowerCase()
