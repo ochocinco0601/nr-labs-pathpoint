@@ -237,10 +237,10 @@ const KpiBar = ({ onChange = () => null, mode = MODES.INLINE }) => {
               Create new KPI
             </Button>
           </div>
-        ) : !isPlayback ? (
-          <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
         ) : (
-          ''
+          <div className={isPlayback ? 'time-range-disabled' : ''}>
+            <TimeRangePicker timeRange={timeRange} onChange={setTimeRange} />
+          </div>
         )}
       </div>
       <div

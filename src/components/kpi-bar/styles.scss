@@ -18,6 +18,15 @@ $kpiBarEditModeMaxWidth: calc(99% - 190px);
   box-shadow: 0px 1px 2px 1px rgba(40, 54, 54, 0.1);
 
 
+  .time-range-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    
+    button {
+      color: #9ea5a9;
+    }
+  }
+
   .kpi-bar-heading {
     display: flex;
     flex-direction: column;
