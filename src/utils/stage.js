@@ -148,7 +148,10 @@ export const annotateStageWithStatuses = (stage = {}) => {
         },
         { steps: [], stepStatuses: [] }
       );
-      const status = statusFromStatuses(stepStatuses);
+      const allStepsExcluded = level.steps.every((step) => step.excluded);
+      const status = allStepsExcluded
+        ? 'success'
+        : statusFromStatuses(stepStatuses);
       return {
         levels: [...levels, { ...level, steps, status }],
         levelStatuses: [...levelStatuses, { status }],
