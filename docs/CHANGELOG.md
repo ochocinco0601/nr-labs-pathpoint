@@ -1,3 +1,10 @@
+## [2.3.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.18...v2.3.19) (2025-04-25)
+
+
+### Bug Fixes
+
+* default level status to healthy when all steps excluded ([daaa4f5](https://github.com/newrelic/nr-labs-pathpoint/commit/daaa4f5b832416556757e5b3661f7e1acd93f89b))
+
 ## [2.3.18](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.17...v2.3.18) (2025-04-23)
 
 
