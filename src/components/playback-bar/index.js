@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Dropdown, DropdownItem, Icon, useNerdletState } from 'nr1';
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  Icon,
+  Tooltip,
+  useNerdletState,
+} from 'nr1';
 
 import { TimeRangePicker } from '@newrelic/nr-labs-components';
 import { uuid } from '../../utils';
@@ -84,7 +91,9 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
     if (!onPreload) return;
     await onPreload(tbs, (idx, status) => {
       setDisplayBands((dbs) =>
-        dbs.map((db, i) => (i === idx ? { ...db, status } : db))
+        dbs.map((db, i) =>
+          i === idx ? { ...db, timeBand: tbs[i], status } : db
+        )
       );
       if (seekX.current === 0 && idx === 0 && onSeek) {
         onSeek(showingTimeWindow.current);
@@ -344,13 +353,24 @@ const PlaybackBar = ({ isLoading, onPreload, onSeek, onChange }) => {
       <div className="seek" ref={seek}>
         <div className="seek-hint">{seekHintText}</div>
         <div className="bands">
-          {displayBands.map(({ key, status, style }, idx) => (
-            <div
+          {displayBands.map(({ key, status, style, timeBand }, idx) => (
+            <Tooltip
               key={key}
-              className={`band ${status || STATUSES.UNKNOWN}`}
-              style={style}
-              onClick={() => bandClickHandler(idx)}
-            />
+              text={
+                timeBand
+                  ? `${hintDateTimeFormat(
+                      timeBand.start
+                    )} - ${hintDateTimeFormat(timeBand.end)}`
+                  : ''
+              }
+            >
+              <div
+                key={key}
+                className={`band ${status || STATUSES.UNKNOWN}`}
+                style={style}
+                onClick={() => bandClickHandler(idx)}
+              />
+            </Tooltip>
           ))}
         </div>
         <span
