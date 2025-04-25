@@ -1,3 +1,10 @@
+## [2.3.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.19...v2.3.20) (2025-04-25)
+
+
+### Bug Fixes
+
+* add time range hover to playback bands ([5d43af6](https://github.com/newrelic/nr-labs-pathpoint/commit/5d43af6eb0f3eaeeb8ee72dfdbc978b3b6a6ded1))
+
 ## [2.3.19](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.18...v2.3.19) (2025-04-25)
 
 
