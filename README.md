@@ -2,32 +2,39 @@
 
 # Pathpoint v2
 
-Pathpoint models system health in relation to actual business journies, giving an optimized view of any problems your digital business may have.
+Pathpoint is a New Relic Open Source app used to model business processes end-to-end. It provides an ideal venue to marry the operational state of an entire process with the key business metrics that evaluate the success of that process - using Pathpoint, your dev and operational teams can draw a straight line from the performance health of the process to the business objectives it services.
 
 ## Usage
 
-The [following entry in the New Relic docs website](https://docs.newrelic.com/docs/new-relic-solutions/business-observability/intro-pathpoint/) provides additional information about using Pathpoint and best practice for modeling your business journeys in Pathpoint.
+See [Enabling this App](#enable) for instructions on how to get Pathpoint turned on in your account(s).
 
-![Screenshot #1](catalog/screenshots/screenshot-1.png)
+Refer to the [Usage Guide](docs/guides/usage/index.md) for full details on using Pathpoint.
+
+And finally, [this article in the New Relic docs website](https://docs.newrelic.com/docs/new-relic-solutions/business-observability/intro-pathpoint/) provides additional information about using Pathpoint and best practice for modeling your business journeys in Pathpoint.
+
+<img src="catalog/screenshots/screenshot-1.png" height=500 alt="Pathpoint Screenshot" /></a>
 
 ## Dependencies
 
 Requires no specific data or additional features.
 
-## Enabling this App
+## <a id="enable"></a>Enabling this App
 
 This App is available via the New Relic Catalog.
 
-To enable it in your account: 
+To enable it in your account:
+
 1. go to `Integrations & Agents > Apps and Visualzations` and search for "Pathpoint v2"
 2. Click the `Pathpoint v2` card, and then click the `Add this App` button to add it to your account(s)
 3. Click `Open App` to launch the app (note: on the first time accessing the app, you may be prompted to enable it)
 
 Once you have added your accounts, you can also open the app by:
+
 1. Open the `Apps` left-hand navigation menu item (you may need to click on the `Add More` ellipsis if it doesn't show up by default)
-2. In the `Your Apps` section, locate and click on the `Pathpoint v2` card to open the app 
+2. In the `Your Apps` section, locate and click on the `Pathpoint v2` card to open the app
 
 #### Manual Deployment
+
 If you need to customize the app, fork the codebase and follow the instructions on how to [Customize a Nerdpack](https://docs.newrelic.com/docs/new-relic-solutions/tutorials/customize-nerdpacks/). If you have a change you feel everyone can benefit from, please submit a PR!
 
 ## Support
