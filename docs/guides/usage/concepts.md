@@ -47,7 +47,7 @@ For our example Acme Telco Flow, we are going to include measures that describe 
 
 Using KPIs in this way exposes the business objectives and outcomes of the Flow to the development and operational teams responsible for the service areas in the Flow. Connecting these indicators - and the trends that they expose - to the broader context of the Flow, can inform decision-making on where to focus investment and improve those outcomes.
 
-![Screenshot KPI Bar](concepts-flow-kpi-bar.png)
+![Screenshot KPI Bar](screenshots/concepts-flow-kpi-bar.png)
 
 With the Flow KPIs defined, we can move on to create the Stages.
 
@@ -66,7 +66,7 @@ For instance, in our Acme Telco model, we have identified four major groupings t
 
 We have created a set of Stages in our Flow to represent each of these groupings:
 
-![Screenshot Empty Stages](concepts-flow-empty-stages.png)
+![Screenshot Empty Stages](screenshots/concepts-flow-empty-stages.png)
 
 The Stage headers include a directional indicator, telling us that this business process is initiated by interactions in the Browse Stage, then moves through the Cart and Order Stages, before concluding with the shipment of the order.
 
@@ -96,7 +96,7 @@ The Ship Stage of our example Flow illustrates these concepts well. Within this 
 
 With these additions, the Ship Stage now looks like this:
 
-<img src="concepts-stage-empty-steps.png" height=400 alt="Screenshot Empty Steps" /></a>
+<img src="screenshots/concepts-stage-empty-steps.png" height=400 alt="Screenshot Empty Steps" /></a>
 
 At this point, it's time to add some Signals, and start getting an understanding of the health of these different pieces of the Flow.
 
@@ -112,7 +112,7 @@ Once you have added the desired Signals, the Flow will automatically reflect the
 
 With all the necessary Signals added to the Acme Telco Flow, we can tell at a glance where things are going wrong:
 
-<img src="concepts-flow-complete.png" height=400 alt="Screenshot Complete Flow" /></a>
+<img src="screenshots/concepts-flow-complete.png" height=400 alt="Screenshot Complete Flow" /></a>
 
 In the next section, we'll take a closer look at what these health indicators are telling us.
 
@@ -145,7 +145,7 @@ Pathpoint evaluates the known state of each Signal against the health rules for 
 
 This is illustrated in the sample flow - if we look at the Order stage we see:
 
-<img src="concepts-health-indicators.png" height=400 alt="Screenshot Health Indicators" /></a>
+<img src="screenshots/concepts-health-indicators.png" height=400 alt="Screenshot Health Indicators" /></a>
 
 There are a couple of problems affecting the Stage: the `packing-room` service has an active warning incident, and the `Box` service has a critical incident. The status of each of these Signals is reflected in their Steps (`Boxing` is outline in red; `Packaging Service` is outlined in yellow) and is rolled up to their Levels (1 is red, and 2 is yellow). At the Stage level, the worse case takes precedence, and the Stage is colored red.
 
@@ -188,7 +188,7 @@ If we flip that scenario, and the user has access to 2 accounts but Pathpoint ha
 
 Given that different users may have access to different data scopes, it is possible that a Pathpoint Flow may contain data from accounts you don't have access to - in these cases, an icon will be shown at the top of the Stage column to indicate that you are only seeing partial data within that Stage of the Flow.
 
-![Screenshot No Access to Signals Icon](concepts-signals-no-access.png)
+![Screenshot No Access to Signals Icon](screenshots/concepts-signals-no-access.png)
 
 ---
 

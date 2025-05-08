@@ -26,7 +26,7 @@ When you first launch the Pathpoint app, you will be presented with a list of al
 
 To see Flows created for other accounts, change the active account by using the account dropdown at the top of the screen.
 
-<img src="usage-flows-list.png" height=200 alt="Screenshot Flows Listing"/>
+<img src="screenshots/usage-flows-list.png" height=200 alt="Screenshot Flows Listing"/>
 
 To view a Flow, click on the Flow's row in the table. This will open the Flow in View Mode, which shows the health status of the Flow. Refer to the [View Mode](#view-mode) section for more details on the features available in View Mode.
 
@@ -38,7 +38,7 @@ Edit Mode is the mode you use to customize the Flow definition.
 
 You can enter Edit mode by either clicking the `Create new flow` button, or by clicking the `Pencil` icon (to edit an existing Flow) - both are found in the upper right hand portion of the screen, above the title bar of the flow:
 
-<img src="usage-enter-edit-mode.png" height="75" alt="Screenshot Enter Edit Mode"/>
+<img src="screenshots/usage-enter-edit-mode.png" height="75" alt="Screenshot Enter Edit Mode"/>
 
 By and large, Edit Mode behaves the same regardless of whether you are creating a new Flow, or you are editing an existing one; unless indicated, the sections below are applicable to both create and edit.
 
@@ -62,7 +62,7 @@ Clicking on the **Blank Flow** option will initiate the process to manually defi
 
 Clicking the `Create` button will save a an empty Flow with these properties, and open Edit Mode. The additional sections in **Edit Mode** explain the specific configuration steps for each component in a Flow, starting with [creating a Stage](#create-and-edit-stages).
 
-<img src="usage-empty-flow.png" height=350 alt="Screenshot Edit Mode New Flow" /></a>
+<img src=screenshots/usage-empty-flow.png" height=350 alt="Screenshot Edit Mode New Flow" /></a>
 
 ##### Create a Flow from an existing configuration
 
@@ -82,7 +82,7 @@ Once you are ready, click the `Create` button, which will save the Flow and open
 
 To change the core properties of a Flow, select `Settings` from the `...` menu found in the upper right portion of the screen above the flow (this menu is available in both View and Edit mode).
 
-![Screenshot More Menu Button](usage-more-settings.png)
+![Screenshot More Menu Button](screenshots/usage-more-settings.png)
 
 This will open the **Settings** side bar where you can adjust the Flow name, refresh rate, and the preferred layout for levels with multiple steps.
 
@@ -94,7 +94,7 @@ To edit a Flow, click on the `Pencil` in the upper right portion of the screen w
 
 This will switch the Flow into Edit mode, which enables editing for all components in the Flow:
 
-<img src="usage-edit-mode.png" height=425 alt="Screenshot Edit Mode Existing Flow" />
+<img src="screenshots/usage-edit-mode.png" height=425 alt="Screenshot Edit Mode Existing Flow" />
 
 As you are making changes to the Flow, you can evaluate your progress without saving by using the `Preview` button. You can also choose `Discard changes` to return to View Mode using the previously saved state of the Flow.
 
@@ -102,7 +102,7 @@ When you are ready to save your changes, click `Save changes` to save your edits
 
 When in Edit Mode, by default all elements of the Flow will be displayed. To help manage noise in the UI when editing a Flow, you can click the `Collapse all signals` toggle to hide the Signals and streamline the view to show only the Flow structure (Stages, Levels and Steps). The Signals will be hidden behind an expandable section in each Step - click on the `Show [x] signals` link to expand the Signals in an individual Step.
 
-<img src="usage-edit-show-hide-signals.png" height=200 alt="Screenshot Show and Hide Signals while editing a Flow" />
+<img src="screenshots/usage-edit-show-hide-signals.png" height=200 alt="Screenshot Show and Hide Signals while editing a Flow" />
 
 #### Delete a Flow
 
@@ -117,7 +117,7 @@ Deleting a Flow is permanent and cannot be undone.
 
 [Return to Index](#how-to-guide) | [Concepts: KPIs](concepts.md#kpis)
 
-<img src="usage-edit-kpi.png" alt="Screenshot Edit KPI" />
+<img src="screenshots/usage-edit-kpi.png" alt="Screenshot Edit KPI" />
 
 To create a KPI, click on the `Create new KPI` button in the Flow KPIs bar located at the bottom of the screen.
 
@@ -156,11 +156,11 @@ Click the Query `Preview` button to validate the query - if everything looks goo
 
 To create a Stage, click the `Add Stage` button found below the Flow name. New Stages will be added to the end of the Flow.
 
-<img src="usage-add-stage.png" height=100 alt="Screenshot Add Stage" />
+<img src="screenshots/usage-add-stage.png" height=100 alt="Screenshot Add Stage" />
 
 To delete a Stage, select **Delete stage** from the Stage's `...` menu.
 
-<img src="usage-stage-more.png" height=100 alt="Screenshot Stage More Menu" />
+<img src="screenshots/usage-stage-more.png" height=100 alt="Screenshot Stage More Menu" />
 
 #### Rename the Stage
 
@@ -194,17 +194,17 @@ Once a Level has been added, you can now add a Step. Click the `Add a step` butt
 
 To add an additional Step to the same Level, click the `New step` button at the bottom of the Level.
 
-<img src="usage-add-level-step.png" height=350 alt="Screenshot Add Levels and Steps" />
+<img src="screenshots/usage-add-level-step.png" height=350 alt="Screenshot Add Levels and Steps" />
 
 #### Delete Levels and Steps
 
 To delete a Level, click on the `x` icon found below the Level's Drag handles.
 
-<img src="usage-delete-level.png" height=100 alt="Screenshot Delete a Level" />
+<img src="screenshots/usage-delete-level.png" height=100 alt="Screenshot Delete a Level" />
 
 To delete a Step, select **Delete step** from the Step's `...` menu.
 
-<img src="usage-delete-step.png" height=100 alt="Screenshot Delete a Step" />
+<img src="screenshots/usage-delete-step.png" height=100 alt="Screenshot Delete a Step" />
 
 #### Rename a Step
 
@@ -232,7 +232,7 @@ By default, a Step's health status will roll up to the Level status, and on up t
 
 For instance: imagine you have a Level with two Steps. Step A is configured to be excluded from the Level status, and Step B is configured to contribute to the Level status. If Step A is red and Step B is green, the Level status will be green, and it will report a status of green up to its Stage:
 
-<img src="usage-step-status-exclude.png" height=250 alt="Screenshot Exclude a Step from status" />
+<img src="screenshots/usage-step-status-exclude.png" height=250 alt="Screenshot Exclude a Step from status" />
 
 #### Move Levels and Steps
 
@@ -248,7 +248,7 @@ Signal membership in a Step is managed in the **Select signals** overlay. To ent
 
 Once opened, you will be presented with the set of Entities and Alert Conditions available for selection.
 
-<img src="usage-select-signals.png" height=400 alt="Screenshot Select Signals" />
+<img src="screenshots/usage-select-signals.png" height=400 alt="Screenshot Select Signals" />
 
 By default, you will start on the Entities tab, with the Signals list pre-filtered to APM (Services) entities belonging to the active account. Change the Signals listed by changing the account, the entity type, or by filtering the list by entity name (or Condition/Policy name in the Alerts tab).
 
@@ -262,7 +262,7 @@ If you need to exceed the 25 entity limit, we recommend collecting those entitie
 
 View Mode shows the active health status of the Flow, and is designed to make it simple to identify the areas experiencing issues in the Flow. The KPI bar at the bottom of the Flow reflects the behaviour of the key business measures, enabling you to assess the impact of the Flow performance on these critical outcomes.
 
-<img src="usage-view-mode.png" height=400 alt="Screenshot View Mode" />
+<img src="screenshots/usage-view-mode.png" height=400 alt="Screenshot View Mode" />
 
 The following sections will cover the additional features and capabilities available within View Mode.
 
@@ -274,7 +274,7 @@ With Pathpoint, it is very easy to isolate problem areas in you broader business
 
 If there is a problem that requires further action, Pathpoint helps kick-start investigation by incorporating key data points into the Signal detail panel, accessible by clicking on a Signal in the Flow.
 
-<img src="usage-signal-detail.png" height=400 alt="Screenshot Signal detail panel" />
+<img src="screenshots/usage-signal-detail.png" height=400 alt="Screenshot Signal detail panel" />
 
 The Signal detail panel shows you immediately what incident condition is impacting that Signal. You can drill down further into the specifics of the issue by clicking on the `View issue` link, which gives you rapid access to New Relic's comprehensive Issue overview.
 
@@ -301,7 +301,7 @@ Using these two concepts, Playback allows you to assess how the state of the Flo
 
 When you enter Playback mode, things will look pretty much the same as View mode, except you will see the playback bar and configuration options displayed directly above the Stages of the Flow.
 
-<img src="usage-playback.png" height=400 alt="Screenshot Playback" />
+<img src="screenshots/usage-playback.png" height=400 alt="Screenshot Playback" />
 
 The image above represents the default state for Playback, showing the previous 30 minutes broken up into 1 minute increments, with the first increment selected. The selected time increment is outlined in black in the playback bar, with the time range represented by the increment shown directly above the bar (in this case, the first increment maps to 14:02-14:03 on May 5). Each increment in the bar is colored to show the aggregate status for the Flow in that window of time: if any Stage was red during the increment time range, the increment will be colored red. The Flow itself is showing its health status during the selected time increment. The KPI bar is updated to match the playback window (30 minutes).
 
@@ -334,7 +334,7 @@ First, at the top of the Flow on the right-hand side, you will be able to choose
 
 The Inline layout is selected by default, and presents the Signals in-context with their Steps, making it simple to understand the impact of the Signals on the Flow.
 
-<img src="usage-inline-layout.png" height=400 alt="Screenshot Inline Layout" />
+<img src="screenshots/usage-inline-layout.png" height=400 alt="Screenshot Inline Layout" />
 
 The Inline layout uses a couple of tactics to help manage noise in the display, and allow you to focus on problem areas in the Flow:
 
@@ -351,7 +351,7 @@ The Stacked layout places greater emphasis on the structure of the Flow, offerin
 
 Here is the Flow in the same state as above, but displayed in the Stacked layout:
 
-<img src="usage-stacked-layout.png" height=400 alt="Screenshot Stacked Layout" />
+<img src="screenshots/usage-stacked-layout.png" height=400 alt="Screenshot Stacked Layout" />
 
 To identify which Signals belong to a Step, click on the Step - the associated Signals will bubble to the top of the Signals column, and the Step details panel will be displayed.
 
@@ -375,7 +375,7 @@ Pathpoint provides a very basic audit log to help you understand who made change
 
 Open the audit log by selecting **Audit log** from the `...` menu.
 
-![Screenshot Audit log](usage-audit-log-menu.png)
+![Screenshot Audit log](screenshots/usage-audit-log-menu.png)
 
 ### <a id="how-to-export"></a>Export a Flow
 
@@ -385,7 +385,7 @@ A Flow configuration is stored as a JSON object in a storage space accessible on
 
 In order to share, backup or version control your Flow configuration, you will need to export the underlying JSON. You can do so by selecting the **Export flow as JSON** menu option under the `...` menu at the top of the screen.
 
-![Screenshot Export Flow](usage-export.png)
+![Screenshot Export Flow](screenshots/usage-export.png)
 
 Selecting this option will open the **Epxort flow** modal. Click the `Download` button to generate a file containg the JSON configuration on your local system.
 
@@ -417,11 +417,11 @@ To get assistance, you will need to open an issue or a discussion question in th
 
 Click **Help** in the `...` menu to open the Help modal.
 
-![Screenshot Open Help Modal](usage-help-menu.png)
+![Screenshot Open Help Modal](screenshots/usage-help-menu.png)
 
 The Help modal includes direct links to this documentation, and to the forms to report a bug, reqeust a feature, or to ask a question.
 
-<img src="usage-help-modal.png" height=400 alt="Screenshot Help Modal" />
+<img src="screenshots/usage-help-modal.png" height=400 alt="Screenshot Help Modal" />
 
 The Labs team actively monitors the Github repository for these submissions and will respond to you as soon as possible.
 
@@ -433,16 +433,16 @@ This is slightly more advanced, but if you are comfortable with these steps, it 
 
 To generate verbose log output, select **Enabled debug mode** in the `...` menu.
 
-![Screenshot Enable Debug](usage-enable-debug.png)
+![Screenshot Enable Debug](screenshots/usage-enable-debug.png)
 
 With debug mode enabled, recreate the bug condition you need to report and then open the browser log console by right-clicking anywhere in the screen and selecting "Inspect" from the context menu.
 
 This will open a special section in the browser that contains useful information - here's what it looks like in Chrome, but all browsers are essentially the same. You can see a set of tab along the top of this section - we are interested in the **Console** tab.
 
-<img src="usage-chrome-console-1.png" height=200 alt="Screenshot Chrome Dev Tools" />
+<img src="screenshots/usage-chrome-console-1.png" height=200 alt="Screenshot Chrome Dev Tools" />
 
 Clicking on the **Console** tab will open the view that contains the log output. At this point, look for errors that have been recorded into the log, which are higlighted in red. Take one or more screenshots of the log sections that include the errors, and add them to your bug report.
 
-<img src="usage-chrome-console-2.png" height=200 alt="Screenshot Chrome Dev Tools Console Tab" />
+<img src="screenshots/usage-chrome-console-2.png" height=200 alt="Screenshot Chrome Dev Tools Console Tab" />
 
 Once your bug report is submitted, you can feel free to disable debug mode again via the `...` menu.
