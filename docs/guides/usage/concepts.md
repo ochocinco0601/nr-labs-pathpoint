@@ -126,11 +126,11 @@ The health indicators reported by Pathpoint are the same indicators you see anyw
 
 Fundamentally, health status in New Relic derives from alert definitions.
 The status of an Alert itself obviously reflects whether or not its defined thresholds have been breached.
-For Entities, their health status reflects the state of their connected Alerts - if there are no Alerts attached to an Entity, it effectively has an unknown health status, as Alerts define the parameters for what a healthy and unhealthy state mean for that Entity.
+For Entities, their health status reflects the state of their connected Alerts - if there are no Alerts attached to an Entity, it effectively has an unknown health status, as Alerts define the parameters for what a healthy and unhealthy state mean for that Entity. (Service Levels are an exception to this rule: the status of a Service Level may also be set based on its compliance level, even if there are no alert definitions defined for the SLI.)
 
 These health statuses come in four flavors:
 
-- **Red**: this mean a critical incident is currently open on the Entity or Alert. In the case of Entities, the health status reflects the worst case. In other words, an Entity may have one alert condition in critical state, and ten alert conditions that have no incidents open. In this case, even though the bulk of the attached alerts are fine, the Entity is colored Red.
+- **Red**: this mean a critical incident is currently open on the Entity or Alert. In the case of Entities, the health status reflects the worst case. In other words, an Entity may be attached to one alert condition in critical state, and ten alert conditions that have no incidents open. In this case, even though the bulk of the attached alerts are fine, the Entity is colored Red.
 - **Yellow**: a warning incident is currently open on the Entity or Alert, with no critical incidents open
 - **Green**: there no active incidents for the Entity or Alert
 - **Grey**: this can indicate two possible situations
@@ -151,17 +151,15 @@ There are a couple of problems affecting the Stage: the `packing-room` service h
 
 ### Time Period
 
-You may be wondering what time period the Pathpoint flow is showing. The answer is .. no time period. Pathpoint shows **current state**, meaning the current health status of its underlying Signals.
+You may be wondering what time period the Pathpoint flow is showing. The answer is .. no time period. Pathpoint shows **current state**, meaning the current health status of its underlying Signals. In many parts of New Relic, a dynamic time picker is available to adjust the scope of time under consideration. Since Pathpoint reflects current health, this time picker has no meaning, and is not available.
 
-In our sample Flow, the incident that has turned the `Box` Signal red was opened 3 days ago. The warning incident affecting the `packing-room` service was opened 3 minutes ago. Because both incidents are still active, they are both surfaced in Pathpoint.
+In our sample Flow, the incident that has turned the `Box` Signal red was opened 24 hours ago. The warning incident affecting the `packing-room` service was opened 3 minutes ago. Because both incidents are still active, they are both surfaced in Pathpoint.
 
-In other words: regardless of when an incident was opened, if it is active, it will show up in Pathpoint.
+This holds true 100% of the time for entity-based signals. For alert-based signals, there is a caveat: the incident must have been opened in the **past 3 days** in order to be visible in Pathpoint. The 3 day limit is applied to ensure acceptable performance outcomes, but be aware that very long-lived alerts may not show up in Pathpoint (it should be noted that long-lived alerts are an anti-pattern - see [Manage Alert Quality](http://docs.newrelic.com/docs/tutorial-create-alerts/manage-alert-quality) for guidance on improving the quality and utility of your alert definitions.)
 
-In many parts of New Relic, a dynamic time picker is available to adjust the scope of time under consideration. Since Pathpoint reflects current health, this time picker has no meaning, and is not available.
+That said, the **Playback** feature allows you to review the historical state of a Flow - see [Revisit a period of time](usage.md#how-to-playback) for complete information on selecting the timeframes used in Playback. Since Playback does not look at current state, it also leverages the 3-day offset to capture any incidents that started at most 3 days prior to the start of the Playback window. For instance, if the Playback window is set to 10 AM - 11 AM, it will include any active incidents that started at most 3 days before 10AM.
 
-That said, the Playback feature allows you to review the historical state of a Flow - see [Revisit a period of time](usage.md#how-to-playback) to find out how.
-
-The **KPI bar** represents the exception to this handling of time period. Since KPIs are defined using standard NRQL, they have a time period baked into their definition. The KPI bar by default uses the time periods included the in the underlying NRQL statements, but also allows the time period affecting the bar to be customized. See [Customize the View](usage.md#how-to-change-view) for more information.
+The **KPI bar** also represents an exception to the "current state" handling of time period. Since KPIs are defined using standard NRQL, they have a time period baked into their definition. The KPI bar by default uses the time periods included the in the underlying NRQL statements, but also allows the time period affecting the bar to be changed using its built-in time picker dropdown.
 
 ## <a id="Access"></a>Access Permissions
 
@@ -169,12 +167,12 @@ Pathpoint is a New Relic [custom app](https://docs.newrelic.com/docs/new-relic-s
 
 ### App Access
 
-Access to the Pathpoint app is managed through a combination of account access and user license level:
+Access to the Pathpoint app is managed through a combination of account access and license type:
 
 - first, the app must be specifically enabled on individual accounts (or on a parent account, which automatically enables Pathpoint for all child accounts of the parent).
-- second, the Pathpoint app is only available to licensed (Core or Full) users in New Relic. Basic users will not be able to access Pathpoint.
+- second, if you are not using a compute-based license model, the Pathpoint app is only available to licensed (Core or Full) users in New Relic. Basic users will not be able to access Pathpoint.
 
-Therefore, in order to access Pathpoint, a user must be a licensed user and must have access to the accounts on which it is enabled.
+Therefore, in order to access Pathpoint, a user must have access to the accounts on which it is enabled, and must be either on a compute license or a paid user license.
 
 **Any user that passes these access requirements will have full READ and WRITE privileges within Pathpoint.**
 

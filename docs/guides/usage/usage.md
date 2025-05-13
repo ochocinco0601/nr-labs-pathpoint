@@ -170,6 +170,8 @@ When you add a new Stage, the name will default to "New Stage". To rename the St
 
 It may be helpful to add a logo to the Flow, to help associate it with a brand or with an internal team. To do so, click on the `Camera` icon next to the Flow name and enter the URL of the logo.
 
+If you are having difficulty, it may be advisable to use a Data URI for the image instead of a URL pointing to the image.
+
 #### Change position and shape
 
 To move the Stage's position in the Flow, use the `Drag` handle (the six dots to the left of the Stage name) of the Stage you want to move, and drag and drop it into the desired position.
@@ -361,9 +363,9 @@ To see the details of a Signal, click on the Signal in the Signals column. The S
 
 In addition to the default layout behaviour described above, there are some additional toggles provided to help fine tune the presentation. These toggles are located at the top of the Flow, right above the Stages.
 
-**Unhealthy only**: Toggle this to eliminate any healthy Steps and Signals from the display. Only warning and critical Steps and Signals will be visible in the Flow. This is helpful if you need to streamline the view down only to those elements experiencing issues.
+**Unhealthy only**: Toggle this to eliminate any healthy Steps and Signals from the display. Only warning and critical Steps and Signals will be visible in the Flow.Note that if a Step has been excluded from the rollup health calculation, it will be hidden even if it is in a warning or critical state. This is helpful if you need to streamline the view to include only to those elements that are degrading the state of the Flow.
 
-**Critical only**: Toggle this to show only the elements of the Flow that are in a critical state. This is helpful if you need to streamline the view down only to those elements experiencing critical issues.
+**Critical only**: Toggle this to show only the elements of the Flow that are in a critical state. Note that if a Step has been excluded from the rollup health calculation, it will be hidden even if it is in a critical state. This is helpful if you need to streamline the view down only to those elements that are degrading the state of the Flow.
 
 **Expand all steps**: This toggle is available only in the Inline layout. Clicking it will expand all Steps in the Flow to show their full Signal listings.
 
