@@ -12,7 +12,7 @@
 
 - ### [Usage Guide](usage.md#how-to-guide)
 
-  - [Getting Started]usage.md#getting-started)
+  - [Getting Started](usage.md#getting-started)
   - [Edit Mode](usage.md#how-to-edit)
     - [Create and Edit Flows](usage.md#how-to-flows)
     - [Create and Edit KPIs](usage.md#how-to-kpis)
