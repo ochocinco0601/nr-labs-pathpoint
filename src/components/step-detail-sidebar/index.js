@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Card, CardBody, HeadingText, Link } from 'nr1';
+import { Card, CardBody, HeadingText, Icon, Link } from 'nr1';
 
 import IconsLib from '../icons-lib';
 import {
@@ -72,10 +72,7 @@ const StepDetailSidebar = ({ step: { title, link, signals, ...step } }) => {
             <HeadingText type={HeadingText.TYPE.HEADING_6}>
               STEP DETAILS
             </HeadingText>
-            <HeadingText type={HeadingText.TYPE.HEADING_3}>
-              {title}
-              {step.excluded ? '*' : ''}
-            </HeadingText>
+            <HeadingText type={HeadingText.TYPE.HEADING_3}>{title}</HeadingText>
             {link ? (
               <Link
                 className="detail-link"
@@ -92,6 +89,16 @@ const StepDetailSidebar = ({ step: { title, link, signals, ...step } }) => {
         <HeadingText type={HeadingText.TYPE.HEADING_5}>
           {UI_CONTENT.STEP.PANEL.CONFIG_TITLE}
         </HeadingText>
+        {step.excluded ? (
+          <div className="step-excluded">
+            <Icon color="#f07a0e" type={Icon.TYPE.INTERFACE__STATE__WARNING} />
+            <span className="excluded-message">
+              {UI_CONTENT.STEP.PANEL.EXCLUDE_MESSAGE}
+            </span>
+          </div>
+        ) : (
+          ''
+        )}
         <div className="status-calculation">{signalsStatusRule}</div>
         <div className="included-signals-list">
           {includedSignals.map(({ guid, name, status, type }) => (
@@ -108,10 +115,6 @@ const StepDetailSidebar = ({ step: { title, link, signals, ...step } }) => {
               <span title={name}>{name}</span>
             </div>
           ))}
-        </div>
-        <br />
-        <div className="step-excluded">
-          {step.excluded ? UI_CONTENT.STEP.PANEL.EXCLUDE_MESSAGE : ''}
         </div>
       </div>
     </div>
