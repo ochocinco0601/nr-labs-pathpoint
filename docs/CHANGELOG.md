@@ -1,3 +1,10 @@
+## [2.3.22](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.21...v2.3.22) (2025-05-21)
+
+
+### Bug Fixes
+
+* add debugging output for alert conditions ([3f5e207](https://github.com/newrelic/nr-labs-pathpoint/commit/3f5e2072a16c4b32b89741e9c94892f7b5eb6b7c))
+
 ## [2.3.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.20...v2.3.21) (2025-05-21)
 
 
