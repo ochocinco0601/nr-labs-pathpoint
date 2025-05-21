@@ -1,3 +1,10 @@
+## [2.3.21](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.20...v2.3.21) (2025-05-21)
+
+
+### Bug Fixes
+
+* step panel enhancements ([14e6b19](https://github.com/newrelic/nr-labs-pathpoint/commit/14e6b19d380717d62e64d73bf1d223023c83ab8e))
+
 ## [2.3.20](https://github.com/newrelic/nr-labs-pathpoint/compare/v2.3.19...v2.3.20) (2025-04-25)
 
 
