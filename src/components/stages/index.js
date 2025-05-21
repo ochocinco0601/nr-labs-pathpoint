@@ -173,8 +173,10 @@ const Stages = forwardRef(
           batchAlertConditionsByAccount,
           []
         );
+        debugString(JSON.stringify(batchedConditions), 'Batched conditions');
         const conditionsResponses = await Promise.allSettled(
-          batchedConditions?.map(async ({ acctId, condIds }) => {
+          batchedConditions?.map(async ({ acctId, condIds }, bIdx) => {
+            debugString(JSON.stringify(condIds), `Alerts batch ${bIdx + 1}`);
             const query = conditionsDetailsQuery(acctId, condIds);
             const {
               data: { actor: { account: { alerts } = {} } = {} } = {},
@@ -207,7 +209,8 @@ const Stages = forwardRef(
           batchedIncidentIdsFromIssuesQuery(issuesBlocks);
 
         const incidentsBlocks = await Promise.allSettled(
-          batchedIncidentIds?.map(async ({ acctId, incidentIds }) => {
+          batchedIncidentIds?.map(async ({ acctId, incidentIds }, iIdx) => {
+            debugString(JSON.stringify(incidentIds), `Incidents ${iIdx + 1}`);
             const query = incidentsSearchQuery(acctId, incidentIds, timeWindow);
             const {
               data: {
